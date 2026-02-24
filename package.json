@@ -11,7 +11,8 @@
     "dev:mobile": "cd nativapp && yarn start",
     "build": "concurrently -p '[{name}]' -n gw,user,event -c blue,green,yellow 'cd api-gateway && yarn build' 'cd ms-user && yarn build' 'cd ms-event && yarn build'",
     "lint": "concurrently -p '[{name}]' -n gw,user,event -c blue,green,yellow 'cd api-gateway && yarn lint' 'cd ms-user && yarn lint' 'cd ms-event && yarn lint'",
-    "test": "concurrently -p '[{name}]' -n gw,user,event -c blue,green,yellow 'cd api-gateway && yarn test' 'cd ms-user && yarn test' 'cd ms-event && yarn test'"
+    "test": "concurrently -p '[{name}]' -n gw,user,event -c blue,green,yellow 'cd api-gateway && yarn test' 'cd ms-user && yarn test' 'cd ms-event && yarn test'",
+    "audit:fix": "bash scripts/audit_fix.sh"
   },
   "devDependencies": {
     "concurrently": "^9.1.0"

@@ -31,6 +31,12 @@ for dir in "${ROOT_DIR}"/*/; do
     fi
 
     if [ -f "${dir}package.json" ]; then
+      if [ ! -f "${dir}yarn.lock" ]; then
+        touch "${dir}yarn.lock"
+      fi
+      if [ ! -f "${dir}.yarnrc.yml" ]; then
+        echo "nodeLinker: node-modules" > "${dir}.yarnrc.yml"
+      fi
       echo -e "    📦 Installing dependencies for ${BLUE}${repo_name}${NC}..."
       (cd "${dir}" && yarn install 2>/dev/null || npm install 2>/dev/null || true)
     fi

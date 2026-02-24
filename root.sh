@@ -26,12 +26,13 @@ show_menu() {
   echo -e "  ${BOLD}6)${NC}  🔄  Sync Submodules      ${DIM}— Fetch, rebase & update pointers${NC}"
   echo -e "  ${BOLD}7)${NC}  🧱  NPM Packages Setup   ${DIM}— Install shared packages workspace${NC}"
   echo -e "  ${BOLD}8)${NC}  ➕  Create Package        ${DIM}— Scaffold a new shared package${NC}"
+  echo -e "  ${BOLD}9)${NC}  🛡️   Audit & Fix          ${DIM}— Check and fix vulnerabilities cross-repo${NC}"
   echo ""
   echo -e "  ${BOLD}${CYAN}Development (Turbo)${NC}"
-  echo -e "  ${BOLD}9)${NC}  ⚡  Dev All             ${DIM}— Backend + Mobile app${NC}"
-  echo -e "  ${BOLD}10)${NC} 🌐  Dev Backend          ${DIM}— Gateway + all microservices${NC}"
-  echo -e "  ${BOLD}11)${NC} 🔌  Dev Microservices    ${DIM}— ms-user + ms-event only${NC}"
-  echo -e "  ${BOLD}12)${NC} 📱  Dev Mobile           ${DIM}— Expo dev server (nativapp)${NC}"
+  echo -e "  ${BOLD}10)${NC} ⚡  Dev All             ${DIM}— Backend + Mobile app${NC}"
+  echo -e "  ${BOLD}11)${NC} 🌐  Dev Backend          ${DIM}— Gateway + all microservices${NC}"
+  echo -e "  ${BOLD}12)${NC} 🔌  Dev Microservices    ${DIM}— ms-user + ms-event only${NC}"
+  echo -e "  ${BOLD}13)${NC} 📱  Dev Mobile           ${DIM}— Expo dev server (nativapp)${NC}"
   echo ""
   echo -e "  ${BOLD}0)${NC}  ❌  Exit"
   echo ""
@@ -70,19 +71,20 @@ while true; do
     6) run_script "${SCRIPTS_DIR}/sync-submodules.sh" "Sync Submodules" ;;
     7) run_script "${SCRIPT_DIR}/npm-packages/scripts/setup.sh" "NPM Packages Setup" ;;
     8) run_script "${SCRIPT_DIR}/npm-packages/scripts/create-package.sh" "Create Package" ;;
-    9)
+    9) run_script "${SCRIPTS_DIR}/audit_fix.sh" "Audit & Fix vulnerabilities" ;;
+    10)
       echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev All${NC}${BLUE} ━━━${NC}\n"
       (cd "${SCRIPT_DIR}" && yarn dev)
       ;;
-    10)
+    11)
       echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Backend${NC}${BLUE} ━━━${NC}\n"
       (cd "${SCRIPT_DIR}" && yarn dev:backend)
       ;;
-    11)
+    12)
       echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Microservices${NC}${BLUE} ━━━${NC}\n"
       (cd "${SCRIPT_DIR}" && yarn dev:services)
       ;;
-    12)
+    13)
       echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Mobile${NC}${BLUE} ━━━${NC}\n"
       (cd "${SCRIPT_DIR}" && yarn dev:mobile)
       ;;

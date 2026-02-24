@@ -77,6 +77,39 @@ install_linux() {
   fi
 }
 
+install_cli_tool() {
+  local name="$1"
+  local binary="$2"
+  local brew_formula="$3"
+  local apt_name="$4"
+
+  if command -v "${binary}" &> /dev/null; then
+    echo -e "  ${GREEN}✔${NC} ${name} ${DIM}(already installed)${NC}"
+    return
+  fi
+
+  read -rp "  Install ${name}? [y/N] " answer
+  if [[ "${answer}" =~ ^[Yy]$ ]]; then
+    if [[ "${OS}" == "Darwin" ]]; then
+      if brew install "${brew_formula}" 2>/dev/null; then
+        echo -e "  ${GREEN}✔${NC} ${name} installed"
+      else
+        echo -e "  ${YELLOW}⚠  ${name} could not be installed via Homebrew.${NC}"
+      fi
+    else
+      if [ -n "${apt_name}" ] && command -v apt-get &> /dev/null; then
+        if sudo apt-get install -y "${apt_name}" 2>/dev/null; then
+          echo -e "  ${GREEN}✔${NC} ${name} installed via apt"
+          return
+        fi
+      fi
+      echo -e "  ${YELLOW}⚠  ${name} could not be auto-installed. Install manually.${NC}"
+    fi
+  else
+    echo -e "  ${DIM}⏭  ${name} skipped${NC}"
+  fi
+}
+
 if [[ "${OS}" == "Darwin" ]]; then
   if ! command -v brew &> /dev/null; then
     echo -e "${YELLOW}⚠  Homebrew required on macOS. Run install_runtime.sh first.${NC}"
@@ -105,5 +138,9 @@ else
 
   echo -e "  ${DIM}ℹ  Postico 2 is macOS-only (skipped on Linux)${NC}"
 fi
+
+echo ""
+echo -e "${BLUE}--- CLI Tools ---${NC}"
+install_cli_tool "GitHub CLI" "gh" "gh" "gh"
 
 echo -e "${GREEN}--- Developer tools done ---${NC}"

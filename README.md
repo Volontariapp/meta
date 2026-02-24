@@ -70,6 +70,7 @@ Installs Node.js, Yarn, developer tools, configures Oh My Zsh, inits all submodu
 | `scripts/install_shell.sh` | Oh My Zsh + autosuggestions, syntax highlighting, Powerlevel10k |
 | `scripts/init_repos.sh` | Init submodules, set SSH remotes, install deps |
 | `scripts/sync-submodules.sh` | Fetch + rebase all submodules, update pointers |
+| `scripts/audit_fix.sh` | Check and fix vulnerabilities across all workspaces (skips nativapp) |
 
 ---
 
