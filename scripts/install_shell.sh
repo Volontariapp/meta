@@ -7,7 +7,50 @@ YELLOW='\033[0;33m'
 DIM='\033[2m'
 NC='\033[0m'
 
+OS="$(uname -s)"
+
+sed_inplace() {
+  if [[ "${OS}" == "Darwin" ]]; then
+    sed -i '' "$@"
+  else
+    sed -i "$@"
+  fi
+}
+
 echo -e "${BLUE}--- Shell Environment ---${NC}"
+
+if ! command -v zsh &> /dev/null; then
+  echo -e "${YELLOW}⚠  Zsh is not installed.${NC}"
+  if command -v apt-get &> /dev/null; then
+    read -rp "  Install zsh via apt? [y/N] " zsh_answer
+    if [[ "${zsh_answer}" =~ ^[Yy]$ ]]; then
+      sudo apt-get install -y zsh
+    else
+      echo -e "  ${DIM}⏭  Shell setup skipped (zsh required)${NC}"
+      exit 0
+    fi
+  elif command -v dnf &> /dev/null; then
+    read -rp "  Install zsh via dnf? [y/N] " zsh_answer
+    if [[ "${zsh_answer}" =~ ^[Yy]$ ]]; then
+      sudo dnf install -y zsh
+    else
+      echo -e "  ${DIM}⏭  Shell setup skipped (zsh required)${NC}"
+      exit 0
+    fi
+  elif command -v pacman &> /dev/null; then
+    read -rp "  Install zsh via pacman? [y/N] " zsh_answer
+    if [[ "${zsh_answer}" =~ ^[Yy]$ ]]; then
+      sudo pacman -S --noconfirm zsh
+    else
+      echo -e "  ${DIM}⏭  Shell setup skipped (zsh required)${NC}"
+      exit 0
+    fi
+  else
+    echo -e "  ${YELLOW}Install zsh manually, then re-run this script.${NC}"
+    exit 0
+  fi
+fi
+echo -e "${GREEN}✔${NC} Zsh $(zsh --version | head -1)"
 
 read -rp "  Set up Oh My Zsh with autocompletions and syntax highlighting? [y/N] " answer
 
@@ -59,12 +102,12 @@ ZSHRC="${HOME}/.zshrc"
 if [ -f "${ZSHRC}" ]; then
   if ! grep -q "zsh-autosuggestions" "${ZSHRC}"; then
     echo -e "  ${BLUE}Updating .zshrc plugins...${NC}"
-    sed -i '' 's/^plugins=(.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions)/' "${ZSHRC}"
+    sed_inplace 's/^plugins=(.*/plugins=(git zsh-autosuggestions zsh-syntax-highlighting zsh-completions)/' "${ZSHRC}"
   fi
 
   if ! grep -q "powerlevel10k" "${ZSHRC}"; then
     echo -e "  ${BLUE}Setting Powerlevel10k theme...${NC}"
-    sed -i '' 's/^ZSH_THEME=.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/' "${ZSHRC}"
+    sed_inplace 's/^ZSH_THEME=.*/ZSH_THEME="powerlevel10k\/powerlevel10k"/' "${ZSHRC}"
   fi
 fi
 

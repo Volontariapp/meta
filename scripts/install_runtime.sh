@@ -11,13 +11,59 @@ REQUIRED_NODE="24.14.0"
 REQUIRED_NODE_MAJOR=24
 REQUIRED_NODE_MINOR=14
 
+OS="$(uname -s)"
+
 echo -e "${BLUE}--- Runtime Setup ---${NC}"
 
-if ! command -v brew &> /dev/null; then
-  echo -e "${YELLOW}⚠  Homebrew not found. Installing...${NC}"
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi
-echo -e "${GREEN}✔${NC} Homebrew $(brew --version | head -1 | awk '{print $2}')"
+detect_pkg_manager() {
+  if command -v brew &> /dev/null; then
+    echo "brew"
+  elif command -v apt-get &> /dev/null; then
+    echo "apt"
+  elif command -v dnf &> /dev/null; then
+    echo "dnf"
+  elif command -v pacman &> /dev/null; then
+    echo "pacman"
+  else
+    echo "none"
+  fi
+}
+
+install_pkg() {
+  local name="$1"
+  local pkg_mgr
+  pkg_mgr=$(detect_pkg_manager)
+
+  case "${pkg_mgr}" in
+    brew)   brew install "${name}" ;;
+    apt)    sudo apt-get install -y "${name}" ;;
+    dnf)    sudo dnf install -y "${name}" ;;
+    pacman) sudo pacman -S --noconfirm "${name}" ;;
+    none)
+      echo -e "${RED}✖ No supported package manager found. Install ${name} manually.${NC}"
+      return 1
+      ;;
+  esac
+}
+
+ensure_curl() {
+  if ! command -v curl &> /dev/null; then
+    echo -e "${YELLOW}⚠  curl not found. Installing...${NC}"
+    install_pkg "curl"
+  fi
+}
+
+ensure_curl
+
+install_fnm() {
+  if [[ "${OS}" == "Darwin" ]] && command -v brew &> /dev/null; then
+    brew install fnm
+  else
+    curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
+    export PATH="${HOME}/.local/share/fnm:${PATH}"
+  fi
+  eval "$(fnm env)"
+}
 
 install_node() {
   if command -v fnm &> /dev/null; then
@@ -30,8 +76,7 @@ install_node() {
     nvm use "${REQUIRED_NODE}"
   else
     echo -e "${YELLOW}  No Node version manager found. Installing fnm...${NC}"
-    brew install fnm
-    eval "$(fnm env)"
+    install_fnm
     fnm install "${REQUIRED_NODE}"
     fnm use "${REQUIRED_NODE}"
   fi
