@@ -37,8 +37,9 @@ Each service and `npm-packages` is a **Git submodule**, enabling independent ver
 | **Mobile** | Expo (React Native) | SDK 54 / RN 0.81 |
 | **Language** | TypeScript | 5.7.3 (strict) |
 | **Linting** | ESLint | 9.18 (flat config) |
-| **Database** | PostgreSQL + Sequelize | — |
+| **Database** | PostgreSQL + TypeOrm | — |
 | **Queue** | Redis (BullMQ) | — |
+| **Stream** | Redis Stream | — |
 | **CI/CD** | GitHub Actions | — |
 
 ---
