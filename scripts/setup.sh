@@ -31,7 +31,8 @@ echo -e "${BLUE}[4/4]${NC} Repositories..."
 bash "${SCRIPT_DIR}/init_repos.sh"
 
 echo ""
+echo -e "${BLUE}[5/4]${NC} Installing dependencies..."
+yarn install
+
+echo ""
 echo -e "${BOLD}${GREEN}✅ Volontariapp setup complete!${NC}"
-echo -e "${BLUE}Next steps:${NC}"
-echo -e "  • cd npm-packages && yarn setup   (init shared packages)"
-echo -e "  • yarn create-package              (scaffold a new package)"
