@@ -68,17 +68,21 @@ install_fnm() {
 install_node() {
   if command -v fnm &> /dev/null; then
     echo -e "${BLUE}  Installing Node.js ${REQUIRED_NODE} via fnm...${NC}"
+    eval "$(fnm env)" 2>/dev/null || true
     fnm install "${REQUIRED_NODE}"
     fnm use "${REQUIRED_NODE}"
+    fnm default "${REQUIRED_NODE}"
   elif command -v nvm &> /dev/null; then
     echo -e "${BLUE}  Installing Node.js ${REQUIRED_NODE} via nvm...${NC}"
     nvm install "${REQUIRED_NODE}"
     nvm use "${REQUIRED_NODE}"
+    nvm alias default "${REQUIRED_NODE}"
   else
     echo -e "${YELLOW}  No Node version manager found. Installing fnm...${NC}"
     install_fnm
     fnm install "${REQUIRED_NODE}"
     fnm use "${REQUIRED_NODE}"
+    fnm default "${REQUIRED_NODE}"
   fi
 }
 

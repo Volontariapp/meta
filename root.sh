@@ -17,6 +17,7 @@ show_menu() {
   echo "║          Volontariapp — Command Center       ║"
   echo "╚══════════════════════════════════════════════╝"
   echo -e "${NC}"
+  echo -e "  ${BOLD}${CYAN}Setup${NC}"
   echo -e "  ${BOLD}1)${NC}  🚀  Full Setup          ${DIM}— Install runtime, apps, shell & repos${NC}"
   echo -e "  ${BOLD}2)${NC}  ⚙️   Install Runtime     ${DIM}— Node.js 24.14.0 + Yarn 4${NC}"
   echo -e "  ${BOLD}3)${NC}  🖥   Install Apps        ${DIM}— Rancher, Cursor, VS Code, Postman...${NC}"
@@ -25,6 +26,12 @@ show_menu() {
   echo -e "  ${BOLD}6)${NC}  🔄  Sync Submodules      ${DIM}— Fetch, rebase & update pointers${NC}"
   echo -e "  ${BOLD}7)${NC}  🧱  NPM Packages Setup   ${DIM}— Install shared packages workspace${NC}"
   echo -e "  ${BOLD}8)${NC}  ➕  Create Package        ${DIM}— Scaffold a new shared package${NC}"
+  echo ""
+  echo -e "  ${BOLD}${CYAN}Development (Turbo)${NC}"
+  echo -e "  ${BOLD}9)${NC}  ⚡  Dev All             ${DIM}— Backend + Mobile app${NC}"
+  echo -e "  ${BOLD}10)${NC} 🌐  Dev Backend          ${DIM}— Gateway + all microservices${NC}"
+  echo -e "  ${BOLD}11)${NC} 🔌  Dev Microservices    ${DIM}— ms-user + ms-event only${NC}"
+  echo -e "  ${BOLD}12)${NC} 📱  Dev Mobile           ${DIM}— Expo dev server (nativapp)${NC}"
   echo ""
   echo -e "  ${BOLD}0)${NC}  ❌  Exit"
   echo ""
@@ -63,6 +70,22 @@ while true; do
     6) run_script "${SCRIPTS_DIR}/sync-submodules.sh" "Sync Submodules" ;;
     7) run_script "${SCRIPT_DIR}/npm-packages/scripts/setup.sh" "NPM Packages Setup" ;;
     8) run_script "${SCRIPT_DIR}/npm-packages/scripts/create-package.sh" "Create Package" ;;
+    9)
+      echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev All${NC}${BLUE} ━━━${NC}\n"
+      (cd "${SCRIPT_DIR}" && yarn dev)
+      ;;
+    10)
+      echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Backend${NC}${BLUE} ━━━${NC}\n"
+      (cd "${SCRIPT_DIR}" && yarn dev:backend)
+      ;;
+    11)
+      echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Microservices${NC}${BLUE} ━━━${NC}\n"
+      (cd "${SCRIPT_DIR}" && yarn dev:services)
+      ;;
+    12)
+      echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Mobile${NC}${BLUE} ━━━${NC}\n"
+      (cd "${SCRIPT_DIR}" && yarn dev:mobile)
+      ;;
     0)
       echo -e "\n${DIM}Bye!${NC}\n"
       exit 0
