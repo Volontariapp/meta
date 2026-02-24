@@ -148,4 +148,4 @@ git clone --recurse-submodules git@github.com:Volontariapp/meta.git
 
 ## License
 
-UNLICENSED — Proprietary software. All rights reserved.
+MIT— Proprietary software. All rights reserved.
