@@ -31,5 +31,5 @@ for dir in */; do
 done
 
 git config submodule.recurse true
-
+git submodule foreach git checkout main
 echo -e "\n${BLUE}✅ Setup complete!${NC}"
