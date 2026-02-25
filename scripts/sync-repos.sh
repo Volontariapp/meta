@@ -89,13 +89,14 @@ sync_repo() {
 
     echo -e "  ${BLUE}↓${NC} ${BEHIND} commit(s) behind origin/${DEFAULT_BRANCH}"
 
-    if git rebase "origin/${DEFAULT_BRANCH}" --quiet; then
-      echo -e "  ${GREEN}✔${NC} Rebased successfully"
+    if git pull origin "${DEFAULT_BRANCH}" --quiet; then
+      git submodule update --init --recursive --quiet
+      echo -e "  ${GREEN}✔${NC} Pulled successfully and updated submodules"
       SYNCED=$((SYNCED + 1))
     else
-      echo -e "  ${RED}✖${NC} Rebase conflict detected. Aborting rebase for ${name}."
-      echo -e "    ${DIM}Resolve manually: cd ${name} && git rebase origin/${DEFAULT_BRANCH}${NC}"
-      git rebase --abort 2>/dev/null || true
+      echo -e "  ${RED}✖${NC} Merge conflict detected. Aborting merge for ${name}."
+      echo -e "    ${DIM}Resolve manually: cd ${name} && git pull origin ${DEFAULT_BRANCH}${NC}"
+      git merge --abort 2>/dev/null || git rebase --abort 2>/dev/null || true
       FAILED=$((FAILED + 1))
     fi
   )
