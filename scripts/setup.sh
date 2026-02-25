@@ -15,23 +15,23 @@ echo "║     Volontariapp — Project Initialization    ║"
 echo "╚══════════════════════════════════════════════╝"
 echo -e "${NC}"
 
-echo -e "${BLUE}[1/4]${NC} Runtime (Node.js + Yarn)..."
+echo -e "${BLUE}[1/5]${NC} Runtime (Node.js + Yarn)..."
 bash "${SCRIPT_DIR}/install_runtime.sh"
 
 echo ""
-echo -e "${BLUE}[2/4]${NC} Developer Tools..."
+echo -e "${BLUE}[2/5]${NC} Developer Tools..."
 bash "${SCRIPT_DIR}/install_apps.sh"
 
 echo ""
-echo -e "${BLUE}[3/4]${NC} Shell Environment..."
+echo -e "${BLUE}[3/5]${NC} Shell Environment..."
 bash "${SCRIPT_DIR}/install_shell.sh"
 
 echo ""
-echo -e "${BLUE}[4/4]${NC} Repositories..."
+echo -e "${BLUE}[4/5]${NC} Repositories..."
 bash "${SCRIPT_DIR}/init_repos.sh"
 
 echo ""
-echo -e "${BLUE}[5/4]${NC} Installing dependencies..."
+echo -e "${BLUE}[5/5]${NC} Installing dependencies..."
 yarn install
 
 echo ""
