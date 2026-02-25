@@ -16,6 +16,16 @@ SYNCED=0
 FAILED=0
 SKIPPED=0
 
+REPOS=(
+  "api-gateway"
+  "ci-tools"
+  "ms-event"
+  "ms-post"
+  "ms-user"
+  "nativapp"
+  "npm-packages"
+)
+
 check_dirty() {
   local dir="$1"
   local name="$2"
@@ -28,12 +38,18 @@ check_dirty() {
   return 0
 }
 
-sync_submodule() {
+sync_repo() {
   local dir="$1"
   local name
   name=$(basename "${dir}")
 
   echo -e "${BLUE}▸${NC} Syncing ${BOLD}${name}${NC}..."
+
+  if [ ! -d "${dir}" ]; then
+    echo -e "  ${YELLOW}⚠  Directory not found. Run scripts/init_repos.sh to clone it.${NC}"
+    SKIPPED=$((SKIPPED + 1))
+    return
+  fi
 
   if ! check_dirty "${dir}" "${name}"; then
     SKIPPED=$((SKIPPED + 1))
@@ -87,56 +103,17 @@ sync_submodule() {
 
 echo -e "${BOLD}${BLUE}"
 echo "╔══════════════════════════════════════════════╗"
-echo "║        Git Submodule Sync & Rebase           ║"
+echo "║        Git Repositories Sync & Rebase        ║"
 echo "╚══════════════════════════════════════════════╝"
 echo -e "${NC}"
 
-if ! check_dirty "${ROOT_DIR}" "meta (root)"; then
-  echo -e "${YELLOW}⚠  Root repository has uncommitted changes.${NC}"
-  echo -e "${DIM}   Stash or commit before syncing submodules.${NC}"
-  read -rp "   Continue anyway? [y/N] " answer
-  if [[ ! "${answer}" =~ ^[Yy]$ ]]; then
-    echo -e "${RED}Aborted.${NC}"
-    exit 1
-  fi
-fi
-
-SUBMODULES=$(cd "${ROOT_DIR}" && git submodule --quiet foreach 'echo $toplevel/$sm_path' 2>/dev/null)
-
-if [ -z "${SUBMODULES}" ]; then
-  echo -e "${YELLOW}No submodules found. Run: git submodule update --init --recursive${NC}"
-  exit 1
-fi
-
-while IFS= read -r submodule_path; do
-  if [ -d "${submodule_path}" ]; then
-    sync_submodule "${submodule_path}"
-    echo ""
-  fi
-done <<< "${SUBMODULES}"
+for repo in "${REPOS[@]}"; do
+  sync_repo "${ROOT_DIR}/${repo}"
+  echo ""
+done
 
 echo -e "${BOLD}${BLUE}--- Summary ---${NC}"
 echo -e "  ${GREEN}✔${NC} Synced:  ${SYNCED}"
 echo -e "  ${YELLOW}⏭${NC}  Skipped: ${SKIPPED}"
 echo -e "  ${RED}✖${NC} Failed:  ${FAILED}"
 echo ""
-
-CHANGED_SUBMODULES=$(cd "${ROOT_DIR}" && git diff --name-only 2>/dev/null || true)
-
-if [ -n "${CHANGED_SUBMODULES}" ]; then
-  echo -e "${BLUE}Updated submodule pointers detected:${NC}"
-  echo "${CHANGED_SUBMODULES}" | while IFS= read -r line; do
-    echo -e "  ${DIM}${line}${NC}"
-  done
-  echo ""
-  read -rp "Stage updated submodule pointers? [Y/n] " stage_answer
-  if [[ ! "${stage_answer}" =~ ^[Nn]$ ]]; then
-    (cd "${ROOT_DIR}" && git add .)
-    echo -e "${GREEN}✔${NC} Submodule pointers staged."
-    echo -e "${DIM}   Run: git commit -m \"chore: sync submodule pointers\"${NC}"
-  else
-    echo -e "${DIM}⏭  Skipped staging.${NC}"
-  fi
-else
-  echo -e "${GREEN}All submodule pointers are already in sync.${NC}"
-fi

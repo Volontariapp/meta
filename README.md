@@ -23,7 +23,7 @@ meta/
 └── scripts/              Project-wide automation
 ```
 
-Each service and `npm-packages` is a **Git submodule**, enabling independent versioning and CI/CD pipelines while keeping a unified developer experience.
+Each service and `npm-packages` is a separate repository, enabling independent versioning and CI/CD pipelines while keeping a unified developer experience through this umbrella repository.
 
 ---
 
@@ -60,7 +60,7 @@ This opens the **Command Center** — an interactive menu to run any setup or ma
 bash scripts/setup.sh
 ```
 
-Installs Node.js, Yarn, developer tools, configures Oh My Zsh, inits all submodules and dependencies.
+Installs Node.js, Yarn, developer tools, configures Oh My Zsh, clones all repositories and installs dependencies.
 
 ### Individual Scripts
 
@@ -69,8 +69,8 @@ Installs Node.js, Yarn, developer tools, configures Oh My Zsh, inits all submodu
 | `scripts/install_runtime.sh` | Install Node.js 24.14.0 + Yarn 4 via corepack |
 | `scripts/install_apps.sh` | Interactive install of Rancher, Cursor, VS Code, Postico, Redis Insight, Postman |
 | `scripts/install_shell.sh` | Oh My Zsh + autosuggestions, syntax highlighting, Powerlevel10k |
-| `scripts/init_repos.sh` | Init submodules, set SSH remotes, install deps |
-| `scripts/sync-submodules.sh` | Fetch + rebase all submodules, update pointers |
+| `scripts/init_repos.sh` | Clone repositories, set SSH remotes, install deps |
+| `scripts/sync-repos.sh` | Fetch + rebase all repositories |
 | `scripts/audit_fix.sh` | Check and fix vulnerabilities across all workspaces (skips nativapp) |
 
 ---
@@ -114,24 +114,20 @@ yarn android      # Run on Android emulator
 
 ---
 
-## Submodule Management
+## Repository Management
 
-### Sync all submodules (rebase onto latest main)
+### Sync all repositories (rebase onto latest main)
 
 ```bash
-bash scripts/sync-submodules.sh
+bash scripts/sync-repos.sh
 ```
 
-### Add a new submodule
+### Clone meta and initialize all repositories
 
 ```bash
-git submodule add git@github.com:Volontariapp/<repo>.git <folder>
-```
-
-### Clone with submodules
-
-```bash
-git clone --recurse-submodules git@github.com:Volontariapp/meta.git
+git clone git@github.com:Volontariapp/meta.git
+cd meta
+bash scripts/init_repos.sh
 ```
 
 ---

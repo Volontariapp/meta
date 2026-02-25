@@ -15,9 +15,28 @@ echo -e "${BLUE}--- Repository Initialization ---${NC}"
 (cd "${ROOT_DIR}" && git remote set-url origin "${ORG_SSH}/meta.git" 2>/dev/null || true)
 echo -e "${GREEN}✔${NC} Meta remote set to SSH"
 
-echo -e "${BLUE}  Updating submodules...${NC}"
-(cd "${ROOT_DIR}" && git submodule update --init --recursive)
-echo -e "${GREEN}✔${NC} Submodules initialized"
+REPOS=(
+  "api-gateway"
+  "ci-tools"
+  "ms-event"
+  "ms-post"
+  "ms-user"
+  "nativapp"
+  "npm-packages"
+)
+
+echo -e "${BLUE}  Cloning repositories...${NC}"
+
+for repo in "${REPOS[@]}"; do
+  if [ ! -d "${ROOT_DIR}/${repo}" ]; then
+    echo -e "  🚀 Cloning ${BLUE}${repo}${NC}..."
+    (cd "${ROOT_DIR}" && git clone "${ORG_SSH}/${repo}.git")
+  else
+    echo -e "  ✅ ${BLUE}${repo}${NC} already exists"
+  fi
+done
+
+echo -e "${GREEN}✔${NC} Repositories initialized"
 
 for dir in "${ROOT_DIR}"/*/; do
   if [ -d "${dir}" ] && ([ -d "${dir}.git" ] || [ -f "${dir}.git" ]); then
@@ -42,8 +61,5 @@ for dir in "${ROOT_DIR}"/*/; do
     fi
   fi
 done
-
-(cd "${ROOT_DIR}" && git config submodule.recurse true)
-(cd "${ROOT_DIR}" && git submodule foreach git checkout main 2>/dev/null || true)
 
 echo -e "${GREEN}--- Repositories ready ---${NC}"

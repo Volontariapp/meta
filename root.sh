@@ -22,8 +22,8 @@ show_menu() {
   echo -e "  ${BOLD}2)${NC}  ⚙️   Install Runtime     ${DIM}— Node.js 24.14.0 + Yarn 4${NC}"
   echo -e "  ${BOLD}3)${NC}  🖥   Install Apps        ${DIM}— Rancher, Cursor, VS Code, Postman...${NC}"
   echo -e "  ${BOLD}4)${NC}  🐚  Shell Setup          ${DIM}— Oh My Zsh + plugins${NC}"
-  echo -e "  ${BOLD}5)${NC}  📦  Init Repositories    ${DIM}— Submodules, SSH remotes & deps${NC}"
-  echo -e "  ${BOLD}6)${NC}  🔄  Sync Submodules      ${DIM}— Fetch, rebase & update pointers${NC}"
+  echo -e "  ${BOLD}5)${NC}  📦  Init Repositories    ${DIM}— Clone repos, SSH remotes & deps${NC}"
+  echo -e "  ${BOLD}6)${NC}  🔄  Sync Repositories    ${DIM}— Fetch & rebase all repos${NC}"
   echo -e "  ${BOLD}7)${NC}  🧱  NPM Packages Setup   ${DIM}— Install shared packages workspace${NC}"
   echo -e "  ${BOLD}8)${NC}  ➕  Create Package        ${DIM}— Scaffold a new shared package${NC}"
   echo -e "  ${BOLD}9)${NC}  🛡️   Audit & Fix          ${DIM}— Check and fix vulnerabilities cross-repo${NC}"
@@ -68,7 +68,7 @@ while true; do
     3) run_script "${SCRIPTS_DIR}/install_apps.sh" "Install Apps" ;;
     4) run_script "${SCRIPTS_DIR}/install_shell.sh" "Shell Setup" ;;
     5) run_script "${SCRIPTS_DIR}/init_repos.sh" "Init Repositories" ;;
-    6) run_script "${SCRIPTS_DIR}/sync-submodules.sh" "Sync Submodules" ;;
+    6) run_script "${SCRIPTS_DIR}/sync-repos.sh" "Sync Repositories" ;;
     7) run_script "${SCRIPT_DIR}/npm-packages/scripts/setup.sh" "NPM Packages Setup" ;;
     8) run_script "${SCRIPT_DIR}/npm-packages/scripts/create-package.sh" "Create Package" ;;
     9) run_script "${SCRIPTS_DIR}/audit_fix.sh" "Audit & Fix vulnerabilities" ;;
