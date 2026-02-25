@@ -37,7 +37,6 @@ lerna-debug.log*
 !.yarn/plugins
 .pnp.*
 
-# Ignore sub-repositories (Umbrella repo architecture)
 /api-gateway
 /ci-tools
 /ms-event
