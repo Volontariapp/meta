@@ -44,3 +44,4 @@ lerna-debug.log*
 /ms-user
 /nativapp
 /npm-packages
+/changelog-checker

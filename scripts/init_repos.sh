@@ -23,6 +23,7 @@ REPOS=(
   "ms-user"
   "nativapp"
   "npm-packages"
+  "changelog-checker"
 )
 
 echo -e "${BLUE}  Cloning repositories...${NC}"

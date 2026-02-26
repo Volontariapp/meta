@@ -24,6 +24,7 @@ REPOS=(
   "ms-user"
   "nativapp"
   "npm-packages"
+  "changelog-checker"
 )
 
 
