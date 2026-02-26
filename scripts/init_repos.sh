@@ -45,7 +45,7 @@ for dir in "${ROOT_DIR}"/*/; do
 
     (cd "${dir}" && git remote set-url origin "${ORG_SSH}/${repo_name}.git" 2>/dev/null || true)
 
-    if [ -d "${dir}ci-tools" ]; then
+    if [ -d "${dir}ci-tools" ] && ([ -d "${dir}ci-tools/.git" ] || [ -f "${dir}ci-tools/.git" ]); then
       (cd "${dir}ci-tools" && git remote set-url origin "${ORG_SSH}/ci-tools.git" 2>/dev/null || true)
     fi
 
