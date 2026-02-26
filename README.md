@@ -82,7 +82,6 @@ The `npm-packages/` workspace contains shared libraries published to NPM under t
 ```bash
 cd npm-packages
 
-yarn setup          # Verify config + install deps
 yarn build          # Build all packages
 yarn lint           # Lint all packages
 yarn create-package # Scaffold a new package interactively
