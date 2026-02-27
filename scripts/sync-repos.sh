@@ -25,6 +25,7 @@ REPOS=(
   "nativapp"
   "npm-packages"
   "changelog-checker"
+  "proto-registry"
 )
 
 
@@ -53,7 +54,7 @@ sync_repo() {
     fi
 
     echo -e "  ${DIM}Stashing changes, checking out ${DEFAULT_BRANCH}, and pulling...${NC}"
-    
+
     git stash --quiet
 
     git checkout "${DEFAULT_BRANCH}" --quiet

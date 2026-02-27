@@ -24,6 +24,7 @@ REPOS=(
   "nativapp"
   "npm-packages"
   "changelog-checker"
+  "proto-registry"
 )
 
 echo -e "${BLUE}  Cloning repositories...${NC}"

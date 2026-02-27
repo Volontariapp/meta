@@ -7,7 +7,8 @@
     { "name": "ms-post", "path": "ms-post" },
     { "name": "nativapp", "path": "nativapp" },
     { "name": "npm-packages", "path": "npm-packages" },
-    { "name": "ci-tools", "path": "ci-tools" }
+    { "name": "ci-tools", "path": "ci-tools" },
+    { "name": "proto-registry", "path": "proto-registry" },
   ],
   "settings": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
@@ -24,8 +25,8 @@
     "search.exclude": {
       "**/node_modules": true,
       "**/dist": true,
-      "**/.yarn": true
-    }
+      "**/.yarn": true,
+    },
   },
   "extensions": {
     "recommendations": [
@@ -33,7 +34,7 @@
       "dbaeumer.vscode-eslint",
       "ms-vscode.vscode-typescript-next",
       "firsttris.vscode-jest-runner",
-      "EditorConfig.EditorConfig"
-    ]
-  }
+      "EditorConfig.EditorConfig",
+    ],
+  },
 }
