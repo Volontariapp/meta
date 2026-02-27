@@ -1,0 +1,39 @@
+{
+  "folders": [
+    { "name": "root", "path": "." },
+    { "name": "api-gateway", "path": "api-gateway" },
+    { "name": "ms-user", "path": "ms-user" },
+    { "name": "ms-event", "path": "ms-event" },
+    { "name": "ms-post", "path": "ms-post" },
+    { "name": "nativapp", "path": "nativapp" },
+    { "name": "npm-packages", "path": "npm-packages" },
+    { "name": "ci-tools", "path": "ci-tools" }
+  ],
+  "settings": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "files.eol": "\n",
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "eslint.enable": true,
+    "eslint.useFlatConfig": true,
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/.yarn": true
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "ms-vscode.vscode-typescript-next",
+      "firsttris.vscode-jest-runner",
+      "EditorConfig.EditorConfig"
+    ]
+  }
+}
