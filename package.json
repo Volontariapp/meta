@@ -4,14 +4,14 @@
   "private": true,
   "packageManager": "yarn@4.12.0",
   "scripts": {
-    "dev": "concurrently -k -p '[{name}]' -n gw,user,event,mobile -c blue,green,yellow,magenta 'cd api-gateway && yarn start:dev' 'cd ms-user && yarn start:dev' 'cd ms-event && yarn start:dev' 'cd nativapp && yarn start'",
-    "dev:backend": "concurrently -k -p '[{name}]' -n gw,user,event -c blue,green,yellow 'cd api-gateway && yarn start:dev' 'cd ms-user && yarn start:dev' 'cd ms-event && yarn start:dev'",
+    "dev": "concurrently -k -p '[{name}]' -n gw,user,post,event,mobile -c blue,green,cyan,yellow,magenta 'cd api-gateway && yarn start:dev' 'cd ms-user && yarn start:dev' 'cd ms-post && yarn start:dev' 'cd ms-event && yarn start:dev' 'cd nativapp && yarn start'",
+    "dev:backend": "concurrently -k -p '[{name}]' -n gw,user,post,event -c blue,green,cyan,yellow 'cd api-gateway && yarn start:dev' 'cd ms-user && yarn start:dev' 'cd ms-post && yarn start:dev' 'cd ms-event && yarn start:dev'",
     "dev:gateway": "cd api-gateway && yarn start:dev",
-    "dev:services": "concurrently -k -p '[{name}]' -n user,event -c green,yellow 'cd ms-user && yarn start:dev' 'cd ms-event && yarn start:dev'",
+    "dev:services": "concurrently -k -p '[{name}]' -n user,post,event -c green,cyan,yellow 'cd ms-user && yarn start:dev' 'cd ms-post && yarn start:dev' 'cd ms-event && yarn start:dev'",
     "dev:mobile": "cd nativapp && yarn start",
-    "build": "concurrently -p '[{name}]' -n gw,user,event -c blue,green,yellow 'cd api-gateway && yarn build' 'cd ms-user && yarn build' 'cd ms-event && yarn build'",
-    "lint": "concurrently -p '[{name}]' -n gw,user,event -c blue,green,yellow 'cd api-gateway && yarn lint' 'cd ms-user && yarn lint' 'cd ms-event && yarn lint'",
-    "test": "concurrently -p '[{name}]' -n gw,user,event -c blue,green,yellow 'cd api-gateway && yarn test' 'cd ms-user && yarn test' 'cd ms-event && yarn test'",
+    "build": "concurrently -p '[{name}]' -n gw,user,post,event -c blue,green,cyan,yellow 'cd api-gateway && yarn build' 'cd ms-user && yarn build' 'cd ms-post && yarn build' 'cd ms-event && yarn build'",
+    "lint": "concurrently -p '[{name}]' -n gw,user,post,event -c blue,green,cyan,yellow 'cd api-gateway && yarn lint' 'cd ms-user && yarn lint' 'cd ms-post && yarn lint' 'cd ms-event && yarn lint'",
+    "test": "concurrently -p '[{name}]' -n gw,user,post,event -c blue,green,cyan,yellow 'cd api-gateway && yarn test' 'cd ms-user && yarn test' 'cd ms-post && yarn test' 'cd ms-event && yarn test'",
     "audit:fix": "bash scripts/audit_fix.sh"
   },
   "devDependencies": {
