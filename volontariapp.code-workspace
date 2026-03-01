@@ -1,6 +1,5 @@
 {
   "folders": [
-    { "name": "root", "path": "." },
     { "name": "api-gateway", "path": "api-gateway" },
     { "name": "ms-user", "path": "ms-user" },
     { "name": "ms-event", "path": "ms-event" },
@@ -27,6 +26,8 @@
       "**/dist": true,
       "**/.yarn": true,
     },
+    "protoc.options": ["--proto_path=proto-registry/proto"],
+    "proto3.lint.enable": false
   },
   "extensions": {
     "recommendations": [
@@ -35,6 +36,7 @@
       "ms-vscode.vscode-typescript-next",
       "firsttris.vscode-jest-runner",
       "EditorConfig.EditorConfig",
+      "bufbuild.vscode-buf"
     ],
   },
 }
