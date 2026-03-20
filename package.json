@@ -15,6 +15,7 @@
     "audit:fix": "bash scripts/audit_fix.sh"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.30.0",
     "concurrently": "^9.1.0"
   }
 }
