@@ -33,6 +33,7 @@ show_menu() {
   echo -e "  ${BOLD}11)${NC} 🌐  Dev Backend          ${DIM}— Gateway + all microservices${NC}"
   echo -e "  ${BOLD}12)${NC} 🔌  Dev Microservices    ${DIM}— ms-user + ms-event only${NC}"
   echo -e "  ${BOLD}13)${NC} 📱  Dev Mobile           ${DIM}— Expo dev server (nativapp)${NC}"
+  echo -e "  ${BOLD}14)${NC} 🧹  Reinstall All Deps     ${DIM}— Clear node_modules, locks & reinstall${NC}"
   echo ""
   echo -e "  ${BOLD}0)${NC}  ❌  Exit"
   echo ""
@@ -47,6 +48,7 @@ run_script() {
   echo ""
 
   if [ -f "${script}" ]; then
+    chmod +x "${script}"
     bash "${script}"
   else
     echo -e "\033[0;31m✖ Script not found: ${script}\033[0m"
@@ -72,21 +74,34 @@ while true; do
     7) run_script "${SCRIPT_DIR}/npm-packages/scripts/setup.sh" "NPM Packages Setup" ;;
     8) run_script "${SCRIPT_DIR}/npm-packages/scripts/create-package.sh" "Create Package" ;;
     9) run_script "${SCRIPTS_DIR}/audit_fix.sh" "Audit & Fix vulnerabilities" ;;
+    14) run_script "${SCRIPTS_DIR}/reinstall_deps.sh" "Reinstall All Dependencies" ;;
     10)
       echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev All${NC}${BLUE} ━━━${NC}\n"
-      (cd "${SCRIPT_DIR}" && yarn dev)
+      npx concurrently -k -p '[{name}]' -n gateway,user,post,event,mobile -c blue,green,cyan,yellow,magenta \
+        "cd api-gateway && yarn dev" \
+        "cd ms-user && yarn dev" \
+        "cd ms-post && yarn dev" \
+        "cd ms-event && yarn dev" \
+        "cd nativapp && yarn dev"
       ;;
     11)
       echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Backend${NC}${BLUE} ━━━${NC}\n"
-      (cd "${SCRIPT_DIR}" && yarn dev:backend)
+      npx concurrently -k -p '[{name}]' -n gateway,user,post,event -c blue,green,cyan,yellow \
+        "cd api-gateway && yarn dev" \
+        "cd ms-user && yarn dev" \
+        "cd ms-post && yarn dev" \
+        "cd ms-event && yarn dev"
       ;;
     12)
       echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Microservices${NC}${BLUE} ━━━${NC}\n"
-      (cd "${SCRIPT_DIR}" && yarn dev:services)
+      npx concurrently -k -p '[{name}]' -n user,post,event -c green,cyan,yellow \
+        "cd ms-user && yarn dev" \
+        "cd ms-post && yarn dev" \
+        "cd ms-event && yarn dev"
       ;;
     13)
       echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Mobile${NC}${BLUE} ━━━${NC}\n"
-      (cd "${SCRIPT_DIR}" && yarn dev:mobile)
+      (cd nativapp && yarn dev)
       ;;
     0)
       echo -e "\n${DIM}Bye!${NC}\n"

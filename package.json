@@ -3,24 +3,16 @@
   "version": "0.0.0",
   "private": true,
   "packageManager": "yarn@4.12.0",
-  "workspaces": [
-    "api-gateway",
-    "ci-tools",
-    "ms-*",
-    "npm-packages/packages/*",
-    "nativapp",
-    "proto-registry"
-  ],
   "scripts": {
     "dev": "yarn dev:all",
-    "dev:all": "concurrently -k -p '[{name}]' -n gateway,user,post,event,mobile -c blue,green,cyan,yellow,magenta \"yarn workspace api-gateway dev\" \"yarn workspace ms-user dev\" \"yarn workspace ms-post dev\" \"yarn workspace ms-event dev\" \"yarn workspace @monorepo/mobile dev\"",
-    "dev:backend": "concurrently -k -p '[{name}]' -n gateway,user,post,event -c blue,green,cyan,yellow \"yarn workspace api-gateway dev\" \"yarn workspace ms-user dev\" \"yarn workspace ms-post dev\" \"yarn workspace ms-event dev\"",
-    "dev:gateway": "yarn workspace api-gateway dev",
-    "dev:services": "concurrently -k -p '[{name}]' -n user,post,event -c green,cyan,yellow \"yarn workspace ms-user dev\" \"yarn workspace ms-post dev\" \"yarn workspace ms-event dev\"",
-    "dev:mobile": "yarn workspace @monorepo/mobile dev",
-    "build": "concurrently -p '[{name}]' -n gateway,user,post,event -c blue,green,cyan,yellow \"yarn workspace api-gateway build\" \"yarn workspace ms-user build\" \"yarn workspace ms-post build\" \"yarn workspace ms-event build\"",
-    "lint": "concurrently -p '[{name}]' -n gateway,user,post,event -c blue,green,cyan,yellow \"yarn workspace api-gateway lint\" \"yarn workspace ms-user lint\" \"yarn workspace ms-post lint\" \"yarn workspace ms-event lint\"",
-    "test": "concurrently -p '[{name}]' -n gateway,user,post,event -c blue,green,cyan,yellow \"yarn workspace api-gateway test\" \"yarn workspace ms-user test\" \"yarn workspace ms-post test\" \"yarn workspace ms-event test\"",
+    "dev:all": "concurrently -k -p '[{name}]' -n gateway,user,post,event,mobile -c blue,green,cyan,yellow,magenta \"cd api-gateway && yarn dev\" \"cd ms-user && yarn dev\" \"cd ms-post && yarn dev\" \"cd ms-event && yarn dev\" \"cd nativapp && yarn dev\"",
+    "dev:backend": "concurrently -k -p '[{name}]' -n gateway,user,post,event -c blue,green,cyan,yellow \"cd api-gateway && yarn dev\" \"cd ms-user && yarn dev\" \"cd ms-post && yarn dev\" \"cd ms-event && yarn dev\"",
+    "dev:gateway": "cd api-gateway && yarn dev",
+    "dev:services": "concurrently -k -p '[{name}]' -n user,post,event -c green,cyan,yellow \"cd ms-user && yarn dev\" \"cd ms-post && yarn dev\" \"cd ms-event && yarn dev\"",
+    "dev:mobile": "cd nativapp && yarn dev",
+    "build": "concurrently -p '[{name}]' -n gateway,user,post,event -c blue,green,cyan,yellow \"cd api-gateway && yarn build\" \"cd ms-user && yarn build\" \"cd ms-post && yarn build\" \"cd ms-event && yarn build\"",
+    "lint": "concurrently -p '[{name}]' -n gateway,user,post,event -c blue,green,cyan,yellow \"cd api-gateway && yarn lint\" \"cd ms-user && yarn lint\" \"cd ms-post && yarn lint\" \"cd ms-event && yarn lint\"",
+    "test": "concurrently -p '[{name}]' -n gateway,user,post,event -c blue,green,cyan,yellow \"cd api-gateway && yarn test\" \"cd ms-user && yarn test\" \"cd ms-post && yarn test\" \"cd ms-event && yarn test\"",
     "audit:fix": "bash scripts/audit_fix.sh"
   },
   "devDependencies": {
