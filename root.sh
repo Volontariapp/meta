@@ -3,6 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SCRIPTS_DIR="${SCRIPT_DIR}/scripts"
+cd "${SCRIPT_DIR}"
 
 BOLD='\033[1m'
 GREEN='\033[0;32m'
@@ -35,6 +36,7 @@ show_menu() {
   echo -e "  ${BOLD}13)${NC} 🔌  Dev Microservices    ${DIM}— ms-user + ms-event only${NC}"
   echo -e "  ${BOLD}14)${NC} 📱  Dev Mobile           ${DIM}— Expo dev server (nativapp)${NC}"
   echo -e "  ${BOLD}15)${NC} 🧹  Reinstall All Deps     ${DIM}— Clear node_modules, locks & reinstall${NC}"
+  echo -e "  ${BOLD}16)${NC} 🧠  Nexus All              ${DIM}— Launch all GitNexus servers on separate ports${NC}"
   echo ""
   echo -e "  ${BOLD}0)${NC}  ❌  Exit"
   echo ""
@@ -104,6 +106,17 @@ while true; do
     14)
       echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Mobile${NC}${BLUE} ━━━${NC}\n"
       (cd nativapp && yarn dev)
+      ;;
+    16)
+      echo -e "\n${BLUE}━━━ Running: ${BOLD}Nexus All${NC}${BLUE} ━━━${NC}\n"
+      npx -y gitnexus --version > /dev/null 2>&1 || true
+      npx concurrently -k -p '[{name}]' -n gateway,user,post,event,mobile,pkgs -c blue,green,cyan,yellow,magenta,white \
+        "cd api-gateway && npx -y gitnexus serve --port 4747" \
+        "cd ms-user && npx -y gitnexus serve --port 4748" \
+        "cd ms-post && npx -y gitnexus serve --port 4749" \
+        "cd ms-event && npx -y gitnexus serve --port 4750" \
+        "cd nativapp && npx -y gitnexus serve --port 4751" \
+        "cd npm-packages && npx -y gitnexus serve --port 4752"
       ;;
     0)
       echo -e "\n${DIM}Bye!${NC}\n"

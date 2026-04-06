@@ -52,7 +52,7 @@ Each service and `npm-packages` is a separate repository, enabling independent v
 bash root.sh
 ```
 
-This opens the **Command Center** — an interactive menu to run any setup or maintenance script.
+This opens the **Command Center** — an interactive menu to run any setup, maintenance, or intelligence script.
 
 ### Full Setup (one command)
 
@@ -72,6 +72,34 @@ Installs Node.js, Yarn, developer tools, configures Oh My Zsh, clones all reposi
 | `scripts/init_repos.sh` | Clone repositories, set SSH remotes, install deps |
 | `scripts/sync-repos.sh` | Fetch + rebase all repositories |
 | `scripts/audit_fix.sh` | Check and fix vulnerabilities across all workspaces (skips nativapp) |
+
+---
+
+## GitNexus Intelligence
+
+This repository is powered by **GitNexus** for deep code understanding, impact analysis, and visualization.
+
+### Dashboard & MCP
+
+To visualize the knowledge graph and search across all services simultaneously:
+
+```bash
+bash root.sh
+# Select option 16) 🧠 Nexus All
+```
+
+This launches GitNexus servers on dedicated ports:
+
+| Service | Port |
+|---|---|
+| `api-gateway` | 4747 |
+| `ms-user` | 4748 |
+| `ms-post` | 4749 |
+| `ms-event` | 4750 |
+| `nativapp` | 4751 |
+| `npm-packages` | 4752 |
+
+Access the UI at [https://gitnexus.vercel.app/](https://gitnexus.vercel.app/) or use it as an **MCP (Model Context Protocol)** server for your AI Agent.
 
 ---
 
