@@ -9,9 +9,9 @@ Modular monorepo powering the **Volontariapp** platform — connecting volunteer
 ```
 meta/
 ├── api-gateway/          NestJS API Gateway (HTTP entry point)
-├── ms-user/              User microservice
-├── ms-event/             Event microservice
-├── ms-post/              Post microservice
+├── ms-user/              User microservice (NestJS)
+├── ms-event/             Event microservice (NestJS)
+├── ms-post/              Post microservice (NestJS)
 ├── nativapp/             React Native mobile app (Expo SDK 54)
 ├── npm-packages/         Shared NPM packages (Yarn 4 workspaces)
 │   └── packages/
@@ -19,6 +19,8 @@ meta/
 │       ├── domain-post/        Domain post contracts
 │       ├── domain-user/        Domain user contracts
 │       └── eslint-config/      Shared ESLint flat config
+├── proto-registry/       Centralized Protobuf registry (gRPC via Buf)
+├── changelog-checker/    CI validation tool (Go-based)
 ├── ci-tools/             CI/CD reusable workflows
 └── scripts/              Project-wide automation
 ```
@@ -52,7 +54,19 @@ Each service and `npm-packages` is a separate repository, enabling independent v
 bash root.sh
 ```
 
-This opens the **Command Center** — an interactive menu to run any setup, maintenance, or intelligence script.
+### Command Center Shortcuts
+
+The `root.sh` script is the main entry point for development. You can trigger specific modes without navigating the menu:
+
+| Mode | Command | Description |
+|---|---|---|
+| **Full Setup** | `echo 1 \| ./root.sh` | Fresh install of everything |
+| **Dev Backend** | `echo 12 \| ./root.sh` | Launch Gateway + all microservices |
+| **Dev All** | `echo 11 \| ./root.sh` | Backend + Mobile app |
+| **Nexus All** | `echo 16 \| ./root.sh` | Intelligence dashboard (Ports 4747-4752) |
+| **Clean Install** | `echo 15 \| ./root.sh` | Clear all node_modules/locks and reinstall |
+
+### Full Setup (standard)
 
 ### Full Setup (one command)
 
