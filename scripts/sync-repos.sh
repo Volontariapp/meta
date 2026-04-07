@@ -26,6 +26,7 @@ REPOS=(
   "npm-packages"
   "changelog-checker"
   "proto-registry"
+  "deploy"
 )
 
 

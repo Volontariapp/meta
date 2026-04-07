@@ -25,6 +25,7 @@ REPOS=(
   "npm-packages"
   "changelog-checker"
   "proto-registry"
+  "deploy"
 )
 
 echo -e "${BLUE}  Cloning repositories...${NC}"
