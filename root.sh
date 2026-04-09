@@ -80,13 +80,22 @@ while true; do
     10) run_script "${SCRIPTS_DIR}/add_package.sh" "Add NPM Package" ;;
     15) run_script "${SCRIPTS_DIR}/reinstall_deps.sh" "Reinstall All Dependencies" ;;
     11)
-      echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev All${NC}${BLUE} ━━━${NC}\n"
-      npx concurrently -k -p '[{name}]' -n gateway,user,post,event,mobile -c blue,green,cyan,yellow,magenta \
-        "cd api-gateway && yarn dev" \
-        "cd ms-user && yarn dev" \
-        "cd ms-post && yarn dev" \
-        "cd ms-event && yarn dev" \
-        "cd nativapp && yarn dev"
+      echo -e "\n  ${BOLD}${CYAN}Select Environment:${NC}"
+      echo -e "  ${BOLD}1)${NC} local"
+      echo -e "  ${BOLD}2)${NC} development"
+      echo -e "  ${BOLD}3)${NC} test"
+      echo -e "  ${BOLD}4)${NC} production"
+      read -rp "$(echo -e "  ${CYAN}▸${NC} Choice: ")" env_choice
+      case "${env_choice}" in
+        1) ENV="local" ;;
+        2) ENV="dev" ;;
+        3) ENV="test" ;;
+        4) ENV="prod" ;;
+        *) ENV="local" ;;
+      esac
+
+      echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev All (${ENV})${NC}${BLUE} ━━━${NC}\n"
+      yarn start:${ENV}
       ;;
     12)
       echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Backend${NC}${BLUE} ━━━${NC}\n"
