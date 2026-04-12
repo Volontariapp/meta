@@ -4,6 +4,7 @@
     { "name": "ms-user", "path": "ms-user" },
     { "name": "ms-event", "path": "ms-event" },
     { "name": "ms-post", "path": "ms-post" },
+    { "name": "ms-social", "path": "ms-social" },
     { "name": "nativapp", "path": "nativapp" },
     { "name": "npm-packages", "path": "npm-packages" },
     { "name": "ci-tools", "path": "ci-tools" },

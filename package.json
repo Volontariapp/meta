@@ -5,20 +5,23 @@
   "packageManager": "yarn@4.12.0",
   "scripts": {
     "dev": "yarn start:local",
-    "start:local": "concurrently -k -p '[{name}]' -n gateway,user,post,event,mobile -c blue,green,cyan,yellow,magenta \"cd api-gateway && yarn start:local\" \"cd ms-user && yarn start:local\" \"cd ms-post && yarn start:local\" \"cd ms-event && yarn start:local\" \"cd nativapp && yarn start:local\"",
-    "start:dev": "concurrently -k -p '[{name}]' -n gateway,user,post,event,mobile -c blue,green,cyan,yellow,magenta \"cd api-gateway && yarn start:dev\" \"cd ms-user && yarn start:dev\" \"cd ms-post && yarn start:dev\" \"cd ms-event && yarn start:dev\" \"cd nativapp && yarn start:dev\"",
-    "start:test": "concurrently -k -p '[{name}]' -n gateway,user,post,event,mobile -c blue,green,cyan,yellow,magenta \"cd api-gateway && yarn start:test\" \"cd ms-user && yarn start:test\" \"cd ms-post && yarn start:test\" \"cd ms-event && yarn start:test\" \"cd nativapp && yarn start:test\"",
-    "start:prod": "concurrently -k -p '[{name}]' -n gateway,user,post,event,mobile -c blue,green,cyan,yellow,magenta \"cd api-gateway && yarn start:prod\" \"cd ms-user && yarn start:prod\" \"cd ms-post && yarn start:prod\" \"cd ms-event && yarn start:prod\" \"cd nativapp && yarn start:prod\"",
-    "dev:backend": "concurrently -k -p '[{name}]' -n gateway,user,post,event -c blue,green,cyan,yellow \"cd api-gateway && yarn dev\" \"cd ms-user && yarn dev\" \"cd ms-post && yarn dev\" \"cd ms-event && yarn dev\"",
+    "start:local": "concurrently -k -p '[{name}]' -n gateway,user,post,event,social,mobile -c blue,green,cyan,yellow,red,magenta \"cd api-gateway && yarn start:local\" \"cd ms-user && yarn start:local\" \"cd ms-post && yarn start:local\" \"cd ms-event && yarn start:local\" \"cd ms-social && yarn start:local\" \"cd nativapp && yarn start:local\"",
+    "start:dev": "concurrently -k -p '[{name}]' -n gateway,user,post,event,social,mobile -c blue,green,cyan,yellow,red,magenta \"cd api-gateway && yarn start:dev\" \"cd ms-user && yarn start:dev\" \"cd ms-post && yarn start:dev\" \"cd ms-event && yarn start:dev\" \"cd ms-social && yarn start:dev\" \"cd nativapp && yarn start:dev\"",
+    "start:test": "concurrently -k -p '[{name}]' -n gateway,user,post,event,social,mobile -c blue,green,cyan,yellow,red,magenta \"cd api-gateway && yarn start:test\" \"cd ms-user && yarn start:test\" \"cd ms-post && yarn start:test\" \"cd ms-event && yarn start:test\" \"cd ms-social && yarn start:test\" \"cd nativapp && yarn start:test\"",
+    "start:prod": "concurrently -k -p '[{name}]' -n gateway,user,post,event,social,mobile -c blue,green,cyan,yellow,red,magenta \"cd api-gateway && yarn start:prod\" \"cd ms-user && yarn start:prod\" \"cd ms-post && yarn start:prod\" \"cd ms-event && yarn start:prod\" \"cd ms-social && yarn start:prod\" \"cd nativapp && yarn start:prod\"",
+    "dev:backend": "concurrently -k -p '[{name}]' -n gateway,user,post,event,social -c blue,green,cyan,yellow,red \"cd api-gateway && yarn dev\" \"cd ms-user && yarn dev\" \"cd ms-post && yarn dev\" \"cd ms-event && yarn dev\" \"cd ms-social && yarn dev\"",
     "dev:gateway": "cd api-gateway && yarn dev",
-    "dev:services": "concurrently -k -p '[{name}]' -n user,post,event -c green,cyan,yellow \"cd ms-user && yarn dev\" \"cd ms-post && yarn dev\" \"cd ms-event && yarn dev\"",
+    "dev:services": "concurrently -k -p '[{name}]' -n user,post,event,social -c green,cyan,yellow,red \"cd ms-user && yarn dev\" \"cd ms-post && yarn dev\" \"cd ms-event && yarn dev\" \"cd ms-social && yarn dev\"",
     "dev:mobile": "cd nativapp && yarn dev",
-    "build": "concurrently -p '[{name}]' -n gateway,user,post,event -c blue,green,cyan,yellow \"cd api-gateway && yarn build\" \"cd ms-user && yarn build\" \"cd ms-post && yarn build\" \"cd ms-event && yarn build\"",
-    "lint": "concurrently -p '[{name}]' -n gateway,user,post,event -c blue,green,cyan,yellow \"cd api-gateway && yarn lint\" \"cd ms-user && yarn lint\" \"cd ms-post && yarn lint\" \"cd ms-event && yarn lint\"",
-    "test": "concurrently -p '[{name}]' -n gateway,user,post,event -c blue,green,cyan,yellow \"cd api-gateway && yarn test\" \"cd ms-user && yarn test\" \"cd ms-post && yarn test\" \"cd ms-event && yarn test\"",
-    "audit:fix": "bash scripts/audit_fix.sh"
+    "build": "concurrently -p '[{name}]' -n gateway,user,post,event,social -c blue,green,cyan,yellow,red \"cd api-gateway && yarn build\" \"cd ms-user && yarn build\" \"cd ms-post && yarn build\" \"cd ms-event && yarn build\" \"cd ms-social && yarn build\"",
+    "lint": "concurrently -p '[{name}]' -n gateway,user,post,event,social -c blue,green,cyan,yellow,red \"cd api-gateway && yarn lint\" \"cd ms-user && yarn lint\" \"cd ms-post && yarn lint\" \"cd ms-event && yarn lint\" \"cd ms-social && yarn lint\"",
+    "test": "concurrently -p '[{name}]' -n gateway,user,post,event,social -c blue,green,cyan,yellow,red \"cd api-gateway && yarn test\" \"cd ms-user && yarn test\" \"cd ms-post && yarn test\" \"cd ms-event && yarn test\" \"cd ms-social && yarn test\"",
+    "audit:fix": "bash scripts/audit_fix.sh",
+    "fix:peers": "bash scripts/fix_all_peers.sh"
   },
   "devDependencies": {
+    "@nestjs/common": "11.1.17",
+    "@nestjs/core": "11.1.17",
     "concurrently": "^9.1.0"
   }
 }

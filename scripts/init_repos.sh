@@ -20,6 +20,7 @@ REPOS=(
   "ci-tools"
   "ms-event"
   "ms-post"
+  "ms-social"
   "ms-user"
   "nativapp"
   "npm-packages"
