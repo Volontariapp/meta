@@ -38,6 +38,8 @@ show_menu() {
   echo -e "  ${BOLD}15)${NC} 📱  Dev Mobile           ${DIM}— Expo dev server (nativapp)${NC}"
   echo -e "  ${BOLD}16)${NC} 🧹  Reinstall All Deps   ${DIM}— Clear node_modules, locks & reinstall${NC}"
   echo -e "  ${BOLD}17)${NC} 🧠  Nexus All            ${DIM}— Launch all GitNexus servers on separate ports${NC}"
+  echo -e "  ${BOLD}18)${NC} 🔄  Auto-Rebase All      ${DIM}— Safe merge main & restore stash cross-repo${NC}"
+  echo -e "  ${BOLD}19)${NC} 🔼  Bump Dependencies    ${DIM}— Update @volontariapp deps & create PRs${NC}"
   echo ""
   echo -e "  ${BOLD}0)${NC}  ❌  Exit"
   echo ""
@@ -81,6 +83,8 @@ while true; do
     10) run_script "${SCRIPTS_DIR}/fix_all_peers.sh" "Fix Peer Dependencies" ;;
     11) run_script "${SCRIPTS_DIR}/add_package.sh" "Add NPM Package" ;;
     16) run_script "${SCRIPTS_DIR}/reinstall_deps.sh" "Reinstall All Dependencies" ;;
+    18) run_script "${SCRIPTS_DIR}/auto_rebase_all.sh" "Auto-Rebase All" ;;
+    19) run_script "${SCRIPTS_DIR}/bump_dependencies_all.sh" "Bump Dependencies" ;;
     12)
       echo -e "\n  ${BOLD}${CYAN}Select Environment:${NC}"
       echo -e "  ${BOLD}1)${NC} local"
@@ -100,21 +104,40 @@ while true; do
       yarn start:${ENV}
       ;;
     13)
-      echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Backend${NC}${BLUE} ━━━${NC}\n"
-      npx concurrently -k -p '[{name}]' -n gateway,user,post,event,social -c blue,green,cyan,yellow,red \
-        "cd api-gateway && yarn dev" \
-        "cd ms-user && yarn dev" \
-        "cd ms-post && yarn dev" \
-        "cd ms-event && yarn dev" \
-        "cd ms-social && yarn dev"
+      echo -e "\n  ${BOLD}${CYAN}Select Environment:${NC}"
+      echo -e "  ${BOLD}1)${NC} local"
+      echo -e "  ${BOLD}2)${NC} development"
+      echo -e "  ${BOLD}3)${NC} test"
+      echo -e "  ${BOLD}4)${NC} production"
+      read -rp "$(echo -e "  ${CYAN}▸${NC} Choice: ")" env_choice
+      case "${env_choice}" in
+        1) ENV="local" ;;
+        2) ENV="dev" ;;
+        3) ENV="test" ;;
+        4) ENV="prod" ;;
+        *) ENV="local" ;;
+      esac
+
+      echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Backend (${ENV})${NC}${BLUE} ━━━${NC}\n"
+      yarn start:${ENV}:backend
       ;;
     14)
-      echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Microservices${NC}${BLUE} ━━━${NC}\n"
-      npx concurrently -k -p '[{name}]' -n user,post,event,social -c green,cyan,yellow,red \
-        "cd ms-user && yarn dev" \
-        "cd ms-post && yarn dev" \
-        "cd ms-event && yarn dev" \
-        "cd ms-social && yarn dev"
+      echo -e "\n  ${BOLD}${CYAN}Select Environment:${NC}"
+      echo -e "  ${BOLD}1)${NC} local"
+      echo -e "  ${BOLD}2)${NC} development"
+      echo -e "  ${BOLD}3)${NC} test"
+      echo -e "  ${BOLD}4)${NC} production"
+      read -rp "$(echo -e "  ${CYAN}▸${NC} Choice: ")" env_choice
+      case "${env_choice}" in
+        1) ENV="local" ;;
+        2) ENV="dev" ;;
+        3) ENV="test" ;;
+        4) ENV="prod" ;;
+        *) ENV="local" ;;
+      esac
+
+      echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Microservices (${ENV})${NC}${BLUE} ━━━${NC}\n"
+      yarn start:${ENV}:services
       ;;
     15)
       echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Mobile${NC}${BLUE} ━━━${NC}\n"
