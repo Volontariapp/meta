@@ -1,0 +1,31 @@
+  "settings": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": false,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true,
+    "editor.detectIndentation": false,
+    "files.eol": "\n",
+    "files.trimTrailingWhitespace": true,
+    "files.insertFinalNewline": true,
+    "eslint.enable": true,
+    "eslint.useFlatConfig": true,
+    "search.exclude": {
+      "**/node_modules": true,
+      "**/dist": true,
+      "**/.yarn": true
+    },
+    "protoc.options": ["--proto_path=proto-registry/proto"],
+    "proto3.lint.enable": false
+  },
+  "extensions": {
+    "recommendations": [
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "ms-vscode.vscode-typescript-next",
+      "firsttris.vscode-jest-runner",
+      "EditorConfig.EditorConfig",
+      "bufbuild.vscode-buf"
+    ]
+  }
+}

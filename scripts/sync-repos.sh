@@ -28,6 +28,7 @@ REPOS=(
   "changelog-checker"
   "proto-registry"
   "deploy"
+  "outbox-runners"
 )
 
 
