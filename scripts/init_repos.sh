@@ -27,6 +27,7 @@ REPOS=(
   "changelog-checker"
   "proto-registry"
   "deploy"
+  "outbox-runners"
 )
 
 echo -e "${BLUE}  Cloning repositories...${NC}"

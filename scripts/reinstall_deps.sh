@@ -21,6 +21,10 @@ REPOS=(
   "ms-user"
   "nativapp"
   "npm-packages"
+  "outbox-runners/outbox-user"
+  "outbox-runners/outbox-social"
+  "outbox-runners/outbox-post"
+  "outbox-runners/outbox-event"
 )
 
 for repo in "${REPOS[@]}"; do
