@@ -1,3 +1,4 @@
+{
   "settings": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
@@ -13,10 +14,10 @@
     "search.exclude": {
       "**/node_modules": true,
       "**/dist": true,
-      "**/.yarn": true
+      "**/.yarn": true,
     },
     "protoc.options": ["--proto_path=proto-registry/proto"],
-    "proto3.lint.enable": false
+    "proto3.lint.enable": false,
   },
   "extensions": {
     "recommendations": [
@@ -25,7 +26,18 @@
       "ms-vscode.vscode-typescript-next",
       "firsttris.vscode-jest-runner",
       "EditorConfig.EditorConfig",
-      "bufbuild.vscode-buf"
-    ]
-  }
+      "bufbuild.vscode-buf",
+    ],
+  },
+  "folders": [
+    {
+      "path": "../ms-user",
+    },
+    {
+      "path": "../npm-packages",
+    },
+    {
+      "path": "../api-gateway",
+    },
+  ],
 }
