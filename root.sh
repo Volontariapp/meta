@@ -48,32 +48,33 @@ while true; do
     4)  run_script "${SCRIPTS_DIR}/install_shell.sh" "Shell Setup" ;;
     5)  run_script "${SCRIPTS_DIR}/init_repos.sh" "Init Repositories" ;;
     6)  run_script "${SCRIPTS_DIR}/sync-repos.sh" "Sync Repositories" ;;
-    7)  run_script "${SCRIPT_DIR}/npm-packages/scripts/setup.sh" "NPM Packages Setup" ;;
-    8)  run_script "${SCRIPT_DIR}/npm-packages/scripts/create-package.sh" "Create Package" ;;
-    9)  run_script "${SCRIPTS_DIR}/reinstall_deps.sh" "Reinstall All Dependencies" ;;
+    7)  run_script "${SCRIPTS_DIR}/gen_certs.sh" "Generate Certificates" ;;
+    8)  run_script "${SCRIPT_DIR}/npm-packages/scripts/setup.sh" "NPM Packages Setup" ;;
+    9)  run_script "${SCRIPT_DIR}/npm-packages/scripts/create-package.sh" "Create Package" ;;
+    10) run_script "${SCRIPTS_DIR}/reinstall_deps.sh" "Reinstall All Dependencies" ;;
 
     # --- Development (Turbo) ---
-    10) echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev All (${CURRENT_ENV})${NC}${BLUE} ━━━${NC}\n"
+    11) echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev All (${CURRENT_ENV})${NC}${BLUE} ━━━${NC}\n"
         yarn start:${CURRENT_ENV} ;;
     
-    11) echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev All (No Outbox) (${CURRENT_ENV})${NC}${BLUE} ━━━${NC}\n"
+    12) echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev All (No Outbox) (${CURRENT_ENV})${NC}${BLUE} ━━━${NC}\n"
         yarn start:${CURRENT_ENV}:no-outbox ;;
     
-    12) echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Backend (${CURRENT_ENV})${NC}${BLUE} ━━━${NC}\n"
+    13) echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Backend (${CURRENT_ENV})${NC}${BLUE} ━━━${NC}\n"
         yarn start:${CURRENT_ENV}:backend ;;
 
-    13) echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Backend Core (${CURRENT_ENV})${NC}${BLUE} ━━━${NC}\n"
+    14) echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Backend Core (${CURRENT_ENV})${NC}${BLUE} ━━━${NC}\n"
         yarn start:${CURRENT_ENV}:backend-core ;;
     
-    14) echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Microservices (${CURRENT_ENV})${NC}${BLUE} ━━━${NC}\n"
+    15) echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Microservices (${CURRENT_ENV})${NC}${BLUE} ━━━${NC}\n"
         yarn start:${CURRENT_ENV}:services ;;
     
-    15) echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Mobile${NC}${BLUE} ━━━${NC}\n"
+    16) echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Mobile${NC}${BLUE} ━━━${NC}\n"
         (cd nativapp && yarn dev) ;;
     
-    16) run_script "${SCRIPTS_DIR}/add_package.sh" "Add NPM Package" ;;
+    17) run_script "${SCRIPTS_DIR}/add_package.sh" "Add NPM Package" ;;
     
-    17) echo -e "\n${BLUE}━━━ Running: ${BOLD}Nexus All${NC}${BLUE} ━━━${NC}\n"
+    18) echo -e "\n${BLUE}━━━ Running: ${BOLD}Nexus All${NC}${BLUE} ━━━${NC}\n"
         npx concurrently -k -p '[{name}]' -n gateway,user,post,event,social,mobile,pkgs -c blue,green,cyan,yellow,red,magenta,white \
           "cd api-gateway && npx -y gitnexus serve --port 4747" \
           "cd ms-user && npx -y gitnexus serve --port 4748" \
@@ -84,17 +85,17 @@ while true; do
           "cd npm-packages && npx -y gitnexus serve --port 4752" ;;
 
     # --- Database & Utilities ---
-    18) run_script "${SCRIPT_DIR}/sync-migrations.sh" "Sync Migrations" ;;
-    19) run_script "${SCRIPTS_DIR}/run_migrations.sh ${CURRENT_ENV}" "Run Migrations (${CURRENT_ENV})" ;;
-    20) run_script "${SCRIPTS_DIR}/audit_fix.sh" "Audit & Fix" ;;
-    21) run_script "${SCRIPTS_DIR}/fix_all_peers.sh" "Fix Peer Deps" ;;
-    22) run_script "${SCRIPTS_DIR}/bump_dependencies_all.sh" "Bump Dependencies" ;;
+    19) run_script "${SCRIPT_DIR}/sync-migrations.sh" "Sync Migrations" ;;
+    20) run_script "${SCRIPTS_DIR}/run_migrations.sh ${CURRENT_ENV}" "Run Migrations (${CURRENT_ENV})" ;;
+    21) run_script "${SCRIPTS_DIR}/audit_fix.sh" "Audit & Fix" ;;
+    22) run_script "${SCRIPTS_DIR}/fix_all_peers.sh" "Fix Peer Deps" ;;
+    23) run_script "${SCRIPTS_DIR}/bump_dependencies_all.sh" "Bump Dependencies" ;;
     
     # --- Outbox Runners ---
-    23) echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Outbox All (${CURRENT_ENV})${NC}${BLUE} ━━━${NC}\n"
+    24) echo -e "\n${BLUE}━━━ Running: ${BOLD}Dev Outbox All (${CURRENT_ENV})${NC}${BLUE} ━━━${NC}\n"
         yarn start:${CURRENT_ENV}:outbox ;;
     
-    24) echo -e "\n  ${BOLD}${CYAN}Select Outbox:${NC}"
+    25) echo -e "\n  ${BOLD}${CYAN}Select Outbox:${NC}"
         REPOS=( $(find ../outbox-runners -maxdepth 1 -type d -name "outbox-*" | sed 's|../outbox-runners/||' | sort) )
         for i in "${!REPOS[@]}"; do echo -e "  ${BOLD}$((i+1)))${NC} ${REPOS[$i]}"; done
         read -rp "$(echo -e "  ${CYAN}▸${NC} Choice: ")" outbox_choice
@@ -102,9 +103,9 @@ while true; do
         yarn run-outbox "${TARGET#outbox-}" "start:${CURRENT_ENV}" ;;
     
     # --- Settings & Tools ---
-    25) run_script "${SCRIPTS_DIR}/auto_rebase_all.sh" "Auto-Rebase All" ;;
-    26) change_env ;;
-    27) open_ide ;;
+    26) run_script "${SCRIPTS_DIR}/auto_rebase_all.sh" "Auto-Rebase All" ;;
+    27) change_env ;;
+    28) open_ide ;;
     
     0) echo -e "\n${DIM}Bye!${NC}\n"; exit 0 ;;
     *) echo -e "\n\033[0;31m  Invalid option. Try again.\033[0m\n" ;;
