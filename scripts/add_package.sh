@@ -78,7 +78,7 @@ echo "${SELECTED_SERVICES}" | while read -r service; do
     echo "${SELECTED_PKGS}" | while read -r pkg; do
         [ -z "${pkg}" ] && continue
         echo -e "  Adding ${GREEN}${pkg}${NC}..."
-        yarn add "${pkg}"
+        yarn up "${pkg}"
     done
     
     echo -e "${GREEN}✔ Done for ${service}${NC}\n"
