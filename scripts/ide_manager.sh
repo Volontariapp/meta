@@ -69,7 +69,7 @@ open_ide() {
 
 build_dynamic_workspace() {
   local bin="$1"
-  PROJECT_REPOS=("api-gateway" "ms-user" "ms-social" "ms-post" "ms-event" "nativapp" "npm-packages" "outbox-runners" "proto-registry" "ci-tools" "deploy" "changelog-checker")
+  PROJECT_REPOS=("api-gateway" "ms-user" "ms-social" "ms-post" "ms-event" "nativapp" "npm-packages" "outbox-runners" "workers-runners" "proto-registry" "ci-tools" "deploy" "changelog-checker")
   REPOS=()
   for repo in "${PROJECT_REPOS[@]}"; do
     if [ -d "${SCRIPT_DIR}/$repo" ]; then REPOS+=("$repo"); fi
