@@ -11,9 +11,9 @@ RED='\033[0;31m'
 BOLD='\033[1m'
 NC='\033[0m'
 
-FORCE=false
+FORCE=true
 for arg in "$@"; do
-  [[ "$arg" == "--force" ]] && FORCE=true
+  [[ "$arg" == "--no-force" ]] && FORCE=false
 done
 
 TMPDIR="$(mktemp -d)"
@@ -67,12 +67,15 @@ log "Distributing private keys..."
 place_file "${TMPDIR}/access.key"   "ms-user"     "access.key"
 place_file "${TMPDIR}/refresh.key"  "ms-user"     "refresh.key"
 place_file "${TMPDIR}/internal.key" "api-gateway" "internal.key"
+place_file "${TMPDIR}/access.key"   "api-gateway" "access.key"
+place_file "${TMPDIR}/refresh.key"  "api-gateway" "refresh.key"
 
 # --- Distribute public keys ---
 echo ""
 log "Distributing public keys..."
 place_file "${TMPDIR}/access.pub"   "api-gateway" "access.pub"
 place_file "${TMPDIR}/refresh.pub"  "api-gateway" "refresh.pub"
+place_file "${TMPDIR}/internal.pub" "api-gateway" "internal.pub"
 place_file "${TMPDIR}/refresh.pub"  "ms-user"     "refresh.pub"
 
 for svc in ms-user ms-event ms-post ms-social; do
