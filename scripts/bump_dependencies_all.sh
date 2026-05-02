@@ -24,6 +24,9 @@ if ! command -v jq &> /dev/null; then
 fi
 
 PR_LINKS=()
+PR_LINKS_FILE=$(mktemp)
+trap 'rm -f "${PR_LINKS_FILE}"' EXIT
+
 
 # 1. Scan npm-packages for latest versions
 echo -e "${BLUE}🔍 Scanning latest internal package versions...${NC}"
@@ -51,64 +54,77 @@ for repo in "${REPOS[@]}"; do
     if [ ! -d "${target_dir}" ] || [ ! -f "${target_dir}/package.json" ]; then continue; fi
 
     echo -e "\n${BLUE}📂 Checking ${BOLD}${repo}${NC}..."
-    cd "${target_dir}"
     
-    git stash --include-untracked --quiet
-    ORIG_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-    git checkout main --quiet && git pull origin main --quiet
-
-    UPDATED=false
-    BRANCH_NAME="chore/bump-deps-$(date +%s)"
-
-    for entry in "${LATEST_VERSIONS[@]}"; do
-        pkg_name="${entry%%:*}"
-        latest_v="${entry#*:}"
+    # Run in a subshell to isolate failures and directory changes
+    (
+        set -e
+        cd "${target_dir}"
         
-        # Use jq to get current version in the target package.json
-        current_v=$(jq -r ".dependencies[\"$pkg_name\"] // empty" package.json || echo "")
+        git stash --include-untracked --quiet
+        ORIG_BRANCH=$(git rev-parse --abbrev-ref HEAD)
         
-        if [ -z "$current_v" ]; then
-            current_v=$(jq -r ".devDependencies[\"$pkg_name\"] // empty" package.json || echo "")
-        fi
+        # Cleanup trap for this specific repository
+        repo_cleanup() {
+            git checkout "${ORIG_BRANCH}" --quiet 2>/dev/null || true
+            git stash pop --quiet 2>/dev/null || true
+        }
+        trap repo_cleanup EXIT
 
-        if [ -n "$current_v" ] && [ "$current_v" != "$latest_v" ]; then
-            echo -e "  🔼 Updating ${pkg_name}: ${current_v} -> ${latest_v}"
-            # Perform the update in-place on main (we'll branch later if needed)
-            jq ".dependencies[\"$pkg_name\"] = \"$latest_v\"" package.json > package.json.tmp && mv package.json.tmp package.json
-            jq ".devDependencies[\"$pkg_name\"] = \"$latest_v\"" package.json > package.json.tmp && mv package.json.tmp package.json
-            UPDATED=true
-        fi
-    done
+        git checkout main --quiet && git pull origin main --quiet
 
-    if [ "$UPDATED" = true ]; then
-        echo -e "  📦 Updating lockfile..."
-        yarn install
-        
-        # Only create branch and PR if there are actual diffs
-        if ! git diff --quiet package.json yarn.lock; then
-            echo -e "  🌿 Creating branch and committing changes..."
-            git checkout -b "$BRANCH_NAME" --quiet
-            git add package.json yarn.lock
-            git commit -m "chore: bump internal dependencies to latest" --quiet
-            git push origin "$BRANCH_NAME" --quiet
+        UPDATED=false
+        BRANCH_NAME="chore/bump-deps-$(date +%s)"
+
+        for entry in "${LATEST_VERSIONS[@]}"; do
+            pkg_name="${entry%%:*}"
+            latest_v="${entry#*:}"
             
-            echo -e "  🚀 Creating Pull Request..."
-            PR_URL=$(gh pr create --title "chore: bump internal dependencies" --body "Automated dependency update for @volontariapp packages." --base main --head "$BRANCH_NAME")
-            PR_LINKS+=("${repo}: ${PR_URL}")
-            echo -e "  ${GREEN}✔ PR Created: ${PR_URL}${NC}"
-        else
-            echo -e "  ${GREEN}✔ No changes needed in lockfile. Already up to date.${NC}"
-        fi
-    else
-        echo -e "  ${GREEN}✔ Already up to date.${NC}"
-    fi
+            current_v=$(jq -r ".dependencies[\"$pkg_name\"] // empty" package.json || echo "")
+            if [ -z "$current_v" ]; then
+                current_v=$(jq -r ".devDependencies[\"$pkg_name\"] // empty" package.json || echo "")
+            fi
 
-    # Cleanup: return to original state
-    git checkout "${ORIG_BRANCH}" --quiet
-    git stash pop --quiet || true
+            if [ -n "$current_v" ] && [ "$current_v" != "$latest_v" ]; then
+                echo -e "  🔼 Updating ${pkg_name}: ${current_v} -> ${latest_v}"
+                jq ".dependencies[\"$pkg_name\"] = \"$latest_v\"" package.json > package.json.tmp && mv package.json.tmp package.json
+                jq ".devDependencies[\"$pkg_name\"] = \"$latest_v\"" package.json > package.json.tmp && mv package.json.tmp package.json
+                UPDATED=true
+            fi
+        done
+
+        if [ "$UPDATED" = true ]; then
+            echo -e "  📦 Updating lockfile..."
+            yarn install
+            
+            if ! git diff --quiet package.json yarn.lock; then
+                echo -e "  🌿 Creating branch and committing changes..."
+                git checkout -b "$BRANCH_NAME" --quiet
+                git add package.json yarn.lock
+                git commit -m "chore: bump internal dependencies to latest" --quiet
+                git push origin "$BRANCH_NAME" --quiet
+                
+                echo -e "  🚀 Creating Pull Request..."
+                PR_URL=$(gh pr create --title "chore: bump internal dependencies" --body "Automated dependency update for @volontariapp packages." --base main --head "$BRANCH_NAME")
+                echo "${repo}: ${PR_URL}" >> "${PR_LINKS_FILE}"
+                echo -e "  ${GREEN}✔ PR Created: ${PR_URL}${NC}"
+            else
+                echo -e "  ${GREEN}✔ No changes needed in lockfile. Already up to date.${NC}"
+            fi
+        else
+            echo -e "  ${GREEN}✔ Already up to date.${NC}"
+        fi
+    ) || echo -e "  ${RED}❌ Error: Failed to process ${repo}. Skipping to next repository.${NC}"
 done
 
+# 3. Read back PR links
+if [ -f "${PR_LINKS_FILE}" ]; then
+    while IFS= read -r line; do
+        PR_LINKS+=("$line")
+    done < "${PR_LINKS_FILE}"
+fi
+
 echo -e "\n${BOLD}${GREEN}━━━ Dependency Bump Complete ━━━${NC}"
+
 if [ ${#PR_LINKS[@]} -gt 0 ]; then
     echo -e "\n${BOLD}Created PRs:${NC}"
     for link in "${PR_LINKS[@]}"; do
