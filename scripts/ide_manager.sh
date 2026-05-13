@@ -22,6 +22,7 @@ get_ws_desc() {
     "20-Social-Domain.code-workspace") echo "Social MS + Gateway + NPM Packages + Proto" ;;
     "21-Post-Domain.code-workspace") echo "Post MS + Gateway + NPM Packages (Domain focus)" ;;
     "22-Event-Domain.code-workspace") echo "Event MS + Gateway + NPM Packages (Domain focus)" ;;
+    "23-Workers-Flow.code-workspace") echo "Workers Runners + Outbox Runners" ;;
     *) echo "Custom workspace configuration" ;;
   esac
 }
