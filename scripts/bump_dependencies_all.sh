@@ -47,11 +47,11 @@ git checkout "${ORIGINAL_PKG_BRANCH}" --quiet
 git stash pop --quiet || true
 
 # 2. Iterate over repos to check and update
-REPOS=("api-gateway" "ms-user" "ms-post" "ms-event" "ms-social" "nativapp")
+REPOS=("api-gateway" "ms-user" "ms-post" "ms-event" "ms-social" "nativapp" "workers-runners" "post-processors-runner" "outbox-runners")
 
 for repo in "${REPOS[@]}"; do
     target_dir="${ROOT_DIR}/${repo}"
-    if [ ! -d "${target_dir}" ] || [ ! -f "${target_dir}/package.json" ]; then continue; fi
+    if [ ! -d "${target_dir}" ]; then continue; fi
 
     echo -e "\n${BLUE}📂 Checking ${BOLD}${repo}${NC}..."
     
@@ -75,31 +75,51 @@ for repo in "${REPOS[@]}"; do
         UPDATED=false
         BRANCH_NAME="chore/bump-deps-$(date +%s)"
 
-        for entry in "${LATEST_VERSIONS[@]}"; do
-            pkg_name="${entry%%:*}"
-            latest_v="${entry#*:}"
+        PKG_JSONS=$(find . -name "package.json" -not -path "*/node_modules/*")
+        
+        for pj in ${PKG_JSONS}; do
+            pj_dir=$(dirname "$pj")
             
-            current_v=$(jq -r ".dependencies[\"$pkg_name\"] // empty" package.json || echo "")
-            if [ -z "$current_v" ]; then
-                current_v=$(jq -r ".devDependencies[\"$pkg_name\"] // empty" package.json || echo "")
-            fi
+            PROJ_UPDATED=false
 
-            if [ -n "$current_v" ] && [ "$current_v" != "$latest_v" ]; then
-                echo -e "  🔼 Updating ${pkg_name}: ${current_v} -> ${latest_v}"
-                jq ".dependencies[\"$pkg_name\"] = \"$latest_v\"" package.json > package.json.tmp && mv package.json.tmp package.json
-                jq ".devDependencies[\"$pkg_name\"] = \"$latest_v\"" package.json > package.json.tmp && mv package.json.tmp package.json
-                UPDATED=true
+            for entry in "${LATEST_VERSIONS[@]}"; do
+                pkg_name="${entry%%:*}"
+                latest_v="${entry#*:}"
+                
+                current_v=$(jq -r ".dependencies[\"$pkg_name\"] // empty" "$pj" || echo "")
+                if [ -z "$current_v" ]; then
+                    current_v=$(jq -r ".devDependencies[\"$pkg_name\"] // empty" "$pj" || echo "")
+                fi
+
+                if [ -n "$current_v" ] && [ "$current_v" != "$latest_v" ]; then
+                    echo -e "  🔼 Updating ${pkg_name} in ${pj}: ${current_v} -> ${latest_v}"
+                    
+                    has_dep=$(jq -r ".dependencies[\"$pkg_name\"] // empty" "$pj" || echo "")
+                    if [ -n "$has_dep" ]; then
+                        jq ".dependencies[\"$pkg_name\"] = \"$latest_v\"" "$pj" > "${pj}.tmp" && mv "${pj}.tmp" "$pj"
+                    fi
+                    
+                    has_dev_dep=$(jq -r ".devDependencies[\"$pkg_name\"] // empty" "$pj" || echo "")
+                    if [ -n "$has_dev_dep" ]; then
+                        jq ".devDependencies[\"$pkg_name\"] = \"$latest_v\"" "$pj" > "${pj}.tmp" && mv "${pj}.tmp" "$pj"
+                    fi
+                    
+                    PROJ_UPDATED=true
+                    UPDATED=true
+                fi
+            done
+
+            if [ "$PROJ_UPDATED" = true ]; then
+                echo -e "  📦 Updating lockfile in ${pj_dir}..."
+                (cd "$pj_dir" && yarn install)
             fi
         done
 
         if [ "$UPDATED" = true ]; then
-            echo -e "  📦 Updating lockfile..."
-            yarn install
-            
-            if ! git diff --quiet package.json yarn.lock; then
+            if ! git diff --quiet; then
                 echo -e "  🌿 Creating branch and committing changes..."
                 git checkout -b "$BRANCH_NAME" --quiet
-                git add package.json yarn.lock
+                git add .
                 git commit -m "chore: bump internal dependencies to latest" --quiet
                 git push origin "$BRANCH_NAME" --quiet
                 
@@ -108,7 +128,7 @@ for repo in "${REPOS[@]}"; do
                 echo "${repo}: ${PR_URL}" >> "${PR_LINKS_FILE}"
                 echo -e "  ${GREEN}✔ PR Created: ${PR_URL}${NC}"
             else
-                echo -e "  ${GREEN}✔ No changes needed in lockfile. Already up to date.${NC}"
+                echo -e "  ${GREEN}✔ No changes needed in lockfiles. Already up to date.${NC}"
             fi
         else
             echo -e "  ${GREEN}✔ Already up to date.${NC}"
