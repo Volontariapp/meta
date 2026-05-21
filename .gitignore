@@ -52,3 +52,4 @@ lerna-debug.log*
 .workspaces/dynamic-ws.code-workspace
 /workers-runners
 /post-processors-runner
+/ws-service
