@@ -22,6 +22,7 @@ get_ws_desc() {
     "20-Social-Domain.code-workspace") echo "Social MS + Gateway + NPM Packages + Proto" ;;
     "21-Post-Domain.code-workspace") echo "Post MS + Gateway + NPM Packages (Domain focus)" ;;
     "22-Event-Domain.code-workspace") echo "Event MS + Gateway + NPM Packages (Domain focus)" ;;
+    "23-Workers-Flow.code-workspace") echo "Workers Runners + Outbox Runners" ;;
     *) echo "Custom workspace configuration" ;;
   esac
 }
@@ -69,7 +70,7 @@ open_ide() {
 
 build_dynamic_workspace() {
   local bin="$1"
-  PROJECT_REPOS=("api-gateway" "ms-user" "ms-social" "ms-post" "ms-event" "nativapp" "npm-packages" "outbox-runners" "proto-registry" "ci-tools" "deploy" "changelog-checker")
+  PROJECT_REPOS=("api-gateway" "ms-user" "ms-social" "ms-post" "ms-event" "nativapp" "npm-packages" "outbox-runners" "workers-runners" "proto-registry" "ci-tools" "deploy" "changelog-checker" "post-processors-runner")
   REPOS=()
   for repo in "${PROJECT_REPOS[@]}"; do
     if [ -d "${SCRIPT_DIR}/$repo" ]; then REPOS+=("$repo"); fi

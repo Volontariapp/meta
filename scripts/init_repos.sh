@@ -29,6 +29,7 @@ REPOS=(
   "deploy"
   "outbox-runners"
   "ws-service"
+  "workers-runners"
 )
 
 echo -e "${BLUE}  Cloning repositories...${NC}"

@@ -51,3 +51,6 @@ lerna-debug.log*
 /outbox-runners
 /ws-service
 .workspaces/dynamic-ws.code-workspace
+/workers-runners
+/post-processors-runner
+/ws-service
