@@ -49,6 +49,7 @@ lerna-debug.log*
 /deploy
 /ms-social
 /outbox-runners
+/ws-service
 .workspaces/dynamic-ws.code-workspace
 /workers-runners
 /post-processors-runner

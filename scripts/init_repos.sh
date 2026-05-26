@@ -28,6 +28,7 @@ REPOS=(
   "proto-registry"
   "deploy"
   "outbox-runners"
+  "ws-service"
   "workers-runners"
 )
 
