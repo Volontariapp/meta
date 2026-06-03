@@ -90,11 +90,16 @@ build_dynamic_workspace() {
     done
     IFS= read -rsn1 key
     case "$key" in
-      $'\x1b') read -rsn2 key
-        case "$key" in
-          '[A') ((cursor--)); [ $cursor -lt 0 ] && cursor=$((${#REPOS[@]}-1)) ;;
-          '[B') ((cursor++)); [ $cursor -ge ${#REPOS[@]} ] && cursor=0 ;;
-        esac ;;
+      $'\x1b') 
+        read -rsn1 key2
+        if [[ "$key2" == "[" || "$key2" == "O" ]]; then
+          read -rsn1 key3
+          case "$key3" in
+            'A') ((cursor--)); [ $cursor -lt 0 ] && cursor=$((${#REPOS[@]}-1)) ;;
+            'B') ((cursor++)); [ $cursor -ge ${#REPOS[@]} ] && cursor=0 ;;
+          esac
+        fi
+        ;;
       " ") if [ "${selected[$cursor]}" -eq 1 ]; then selected[$cursor]=0; else selected[$cursor]=1; fi ;;
       "") break ;;
     esac

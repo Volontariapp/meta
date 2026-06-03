@@ -38,11 +38,15 @@ while true; do
   IFS= read -rsn1 key
   case "$key" in
     $'\x1b') 
-      read -rsn2 key
-      case "$key" in
-        '[A') ((cursor--)); [ $cursor -lt 0 ] && cursor=$((${#SERVICES[@]}-1)) ;;
-        '[B') ((cursor++)); [ $cursor -ge ${#SERVICES[@]} ] && cursor=0 ;;
-      esac ;;
+      read -rsn1 key2
+      if [[ "$key2" == "[" || "$key2" == "O" ]]; then
+        read -rsn1 key3
+        case "$key3" in
+          'A') ((cursor--)); [ $cursor -lt 0 ] && cursor=$((${#SERVICES[@]}-1)) ;;
+          'B') ((cursor++)); [ $cursor -ge ${#SERVICES[@]} ] && cursor=0 ;;
+        esac
+      fi
+      ;;
     " ") 
       if [ "${selected[$cursor]}" -eq 1 ]; then selected[$cursor]=0; else selected[$cursor]=1; fi ;;
     "") 
