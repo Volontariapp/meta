@@ -113,7 +113,6 @@ This launches GitNexus servers on dedicated ports:
 | `nativapp` | 4751 |
 | `npm-packages` | 4752 |
 
-Access the UI at [https://gitnexus.vercel.app/](https://gitnexus.vercel.app/) or use it as an **MCP (Model Context Protocol)** server for your AI Agent.
 
 ---
 
