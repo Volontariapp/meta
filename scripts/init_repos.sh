@@ -26,6 +26,7 @@ REPOS=(
   "changelog-checker"
   "proto-registry"
   "deploy"
+  "ws-service"
 )
 
 echo -e "${BLUE}  Cloning repositories...${NC}"
