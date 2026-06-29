@@ -106,6 +106,7 @@ while true; do
     26) run_script "${SCRIPTS_DIR}/auto_rebase_all.sh" "Auto-Rebase All" ;;
     27) change_env ;;
     28) open_ide ;;
+    29) run_script "${SCRIPTS_DIR}/20_start_all_backend.sh" "Dev Backend Sequential" ;;
     
     0) echo -e "\n${DIM}Bye!${NC}\n"; exit 0 ;;
     *) echo -e "\n\033[0;31m  Invalid option. Try again.\033[0m\n" ;;

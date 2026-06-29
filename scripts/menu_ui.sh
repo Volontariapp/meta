@@ -45,5 +45,9 @@ show_menu() {
   echo -e "  ${BOLD}27)${NC} 🌍  Change Environment ${DIM}— Currently: ${ENV_COLOR}${CURRENT_ENV}${NC}"
   echo -e "  ${BOLD}28)${NC} 🖥   Dev IDE            ${DIM}— Open custom workspace (Cursor/VSCode)${NC}"
 
+  echo -e "\n  ${BOLD}${GREEN}Other${NC}"
+  echo -e "  ${BOLD}29)${NC} 🚀  Dev Backend Seq    ${DIM}— Launch all backend sequentially${NC}"
+
+
   echo -e "\n  ${BOLD}0)${NC}  ❌  Exit\n"
 }
