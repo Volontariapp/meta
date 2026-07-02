@@ -7,18 +7,21 @@ Le **System Context** (Niveau 1 du modèle C4) représente Volontariapp comme un
 ## Le Diagramme de Contexte
 
 ```mermaid
-C4Context
-    title System Context diagram for Volontariapp
+flowchart TD
+    %% System Context diagram for Volontariapp
 
-    Person(user, "Utilisateur (Bénévole / Orga)", "Utilise l'application mobile ou web pour interagir, postuler ou créer des événements.")
+    user(["Utilisateur (Bénévole / Orga)
+    Utilise l'application mobile ou web"])
     
-    System_Boundary(c1, "Écosystème Volontariapp") {
-        System(frontend, "Nativapp (Client)", "Application React Native ou Interface Web.")
-        System(backend, "Volontariapp Backend", "Système central gérant l'identité, les événements, le réseau social et le contenu. Gère la charge via une architecture Event-Driven.")
-    }
+    subgraph c1 ["Écosystème Volontariapp"]
+        frontend["Nativapp (Client)
+        Application React Native ou Web"]
+        backend["Volontariapp Backend
+        Système central Event-Driven"]
+    end
 
-    Rel(user, frontend, "Interagit avec l'interface UI (Actions et Feedbacks)")
-    Rel(frontend, backend, "Effectue des appels d'API (REST/GraphQL/gRPC-Web) et maintient une connexion WebSocket", "HTTPS / WSS")
+    user -- "Interagit avec l'interface UI" --> frontend
+    frontend -- "Appels API & WSS" --> backend
 ```
 
 ## Description des Composants

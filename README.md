@@ -1,4 +1,4 @@
-# 🤝 Volontariapp
+# Volontariapp
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com/)
@@ -11,12 +11,12 @@ Le méta-répertoire modulaire qui propulse la plateforme **Volontariapp** — c
 
 ---
 
-## 🏗️ Architecture du Méta-Projet
+## ️ Architecture du Méta-Projet
 
 Ce dépôt ("umbrella repository") centralise l'écosystème Volontariapp. 
 Chaque microservice (API, Workers, Post-Processors), l'application mobile (`nativapp`), ainsi que les librairies partagées (`npm-packages`) sont des dépôts indépendants. Cette approche permet de conserver un versioning et une CI/CD découplés, tout en garantissant une expérience développeur unifiée en local grâce aux scripts d'orchestration.
 
-> 📖 **Architecture Détaillée (Modèle C4)** : 
+> **Architecture Détaillée (Modèle C4)** : 
 > Pour comprendre en profondeur la tuyauterie asynchrone (Outbox, Scatter-Gather), l'isolation des domaines et le déploiement GitOps, **[consultez la documentation complète de l'architecture ici](docs/README.md)**.
 
 ---
@@ -38,7 +38,7 @@ Chaque microservice (API, Workers, Post-Processors), l'application mobile (`nati
 
 ---
 
-## 🚀 Quick Start & Setup
+## Quick Start & Setup
 
 Le point d'entrée central de ce monorepo est le script interactif **`root.sh`**. Il remplace les commandes complexes par un menu CLI intuitif.
 
@@ -66,7 +66,7 @@ Pour démarrer l'environnement de développement, exécutez `bash root.sh` et ch
 
 *Astuce : Vous pouvez utiliser des raccourcis directs sans passer par le menu :*
 ```bash
-echo 11 | ./root.sh  # Lance le Dev All instantanément
+echo 11 | ./root.sh # Lance le Dev All instantanément
 ```
 
 ### 3. Gestion des Migrations de Base de Données
@@ -98,7 +98,7 @@ To visualize the knowledge graph and search across all services simultaneously:
 
 ```bash
 bash root.sh
-# Select option 16) 🧠 Nexus All
+# Select option 16) Nexus All
 ```
 
 This launches GitNexus servers on dedicated ports:
@@ -122,8 +122,8 @@ The `npm-packages/` workspace contains shared libraries published to NPM under t
 ```bash
 cd npm-packages
 
-yarn build          # Build all packages
-yarn lint           # Lint all packages
+yarn build # Build all packages
+yarn lint # Lint all packages
 yarn create-package # Scaffold a new package interactively
 ```
 
@@ -146,9 +146,9 @@ The `nativapp/` directory contains the React Native mobile application built wit
 cd nativapp
 
 yarn install
-yarn start        # Start Expo dev server
-yarn ios          # Run on iOS simulator
-yarn android      # Run on Android emulator
+yarn start # Start Expo dev server
+yarn ios # Run on iOS simulator
+yarn android # Run on Android emulator
 ```
 
 ---

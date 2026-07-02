@@ -24,43 +24,41 @@ Ces composants sont l'infrastructure commune qui permet aux domaines de communiq
 ## Diagramme des Containers (C2)
 
 ```mermaid
-C4Container
-    title Container diagram for Volontariapp Backend
+flowchart TD
+    user(["Client Mobile/Web"])
 
-    Person(user, "Client Mobile/Web", "Utilisateur")
-
-    System_Boundary(backend, "Backend Volontariapp") {
+    subgraph backend ["Backend Volontariapp"]
         
-        Container(api_gateway, "API Gateway", "NestJS", "Point d'entrée HTTPS. Valide l'Auth, gère le routage et expose REST. Communique en gRPC avec les MS.")
-        Container(ws_service, "WS Service", "Socket.io", "Passerelle WebSockets temps réel. Gère les connexions persistantes et écoute les événements.")
+        api_gateway["API Gateway (NestJS)"]
+        ws_service["WS Service (Socket.io)"]
 
-        Boundary(domain_event, "Domaine Événementiel (ex: ms-event)", "Périmètre Isolé") {
-            Container(ms_event, "Microservice API", "NestJS + gRPC", "Exécute les commandes métiers. Écrit de manière transactionnelle dans la DB.")
-            Container(outbox_event, "Outbox Runner", "Node.js Pur", "Scrape la table jobs_outbox et publie vers Redis sans bloquer le MS.")
-            Container(worker_event, "Workers", "NestJS Standalone", "Traite les files BullMQ (ex: Emails, Géocodage) et met à jour l'audit.")
-            Container(pp_event, "Post-Processors", "NestJS Standalone", "Écoute les flux pour finaliser les opérations ou gérer les erreurs.")
-        }
+        subgraph domain_event ["Domaine Événementiel (Isolé)"]
+            ms_event["Microservice API (gRPC)"]
+            outbox_event["Outbox Runner (Node.js)"]
+            worker_event["Workers (BullMQ)"]
+            pp_event["Post-Processors (Streams)"]
+        end
         
-        Boundary(shared_infra, "Infrastructure Partagée") {
-            ContainerDb(db_pg, "PostgreSQL", "Relational DB", "Stocke les entités métiers et les tables Outbox/Audit de chaque MS.")
-            ContainerDb(db_redis, "Redis (Shared)", "In-Memory", "File BullMQ et Streams d'événements pour l'intégration inter-services.")
-            ContainerDb(db_redis_ws, "Redis (Dedicated)", "Pub/Sub", "Réservé au Socket.io Adapter pour la synchronisation multi-pods.")
-            ContainerDb(db_neo4j, "Neo4j", "Graph DB", "Réservé au domaine Social pour les calculs de recommandations.")
-        }
-    }
+        subgraph shared_infra ["Infrastructure Partagée"]
+            db_pg[("PostgreSQL")]
+            db_redis[("Redis (Shared)")]
+            db_redis_ws[("Redis (Dedicated WS)")]
+            db_neo4j[("Neo4j")]
+        end
+    end
 
-    Rel(user, api_gateway, "Requêtes HTTP/REST", "HTTPS")
-    Rel(user, ws_service, "Connexion Temps Réel", "WSS")
+    user -- "HTTPS" --> api_gateway
+    user -- "WSS" --> ws_service
     
-    Rel(api_gateway, ms_event, "Appels Synchrones", "gRPC")
+    api_gateway -- "gRPC" --> ms_event
     
-    Rel(ms_event, db_pg, "Écrit Métier + Outbox (ACID Transaction)", "TCP")
-    Rel(outbox_event, db_pg, "Pull (FOR UPDATE SKIP LOCKED)", "TCP")
-    Rel(outbox_event, db_redis, "Push vers Queues/Streams", "TCP")
+    ms_event -- "Transaction ACID" --> db_pg
+    outbox_event -- "Pull Jobs" --> db_pg
+    outbox_event -- "Push" --> db_redis
     
-    Rel(db_redis, worker_event, "Pull Jobs", "BullMQ")
-    Rel(db_redis, pp_event, "Consomme Streams", "XREADGROUP")
-    Rel(db_redis, ws_service, "Consomme Streams", "XREADGROUP")
+    db_redis -- "Pull Jobs" --> worker_event
+    db_redis -- "Consomme Streams" --> pp_event
+    db_redis -- "Consomme Streams" --> ws_service
 ```
 
 ## Le Rôle de l'API Gateway et la Communication Synchrone

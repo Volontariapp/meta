@@ -39,7 +39,7 @@ sequenceDiagram
     OB_RUN->>DB_OUT: 2. Pull les jobs 'pending'
     OB_RUN->>REDIS_Q: 3. Push vers la Queue Redis
     
-    rect rgb(230, 245, 230)
+    rect
         Note over WORKER, DB_AUD: Exécution du Worker & Magie du Trigger SQL
         REDIS_Q->>WORKER: 4. Consomme le Job
         WORKER->>DB_AUD: 5. Met à jour la table 'job_audit' (DONE ou FAILED)
