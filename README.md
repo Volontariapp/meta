@@ -27,54 +27,64 @@ meta/
 
 Each service and `npm-packages` is a separate repository, enabling independent versioning and CI/CD pipelines while keeping a unified developer experience through this umbrella repository.
 
+> 📖 **Architecture Détaillée (Modèle C4)** : 
+> Pour comprendre en profondeur la tuyauterie asynchrone (Outbox, Scatter-Gather), l'isolation des domaines et le déploiement GitOps, **[consultez la documentation complète de l'architecture ici](docs/README.md)**.
+
 ---
 
 ## Tech Stack
 
-| Layer | Technology | Version |
+| Layer | Technology | Rôle / Usage |
 |---|---|---|
-| **Runtime** | Node.js | 24.14.0 LTS |
-| **Package Manager** | Yarn | 4.12.0 (Berry) |
-| **Backend** | NestJS | 11.x |
-| **Mobile** | Expo (React Native) | SDK 54 / RN 0.81 |
-| **Language** | TypeScript | 5.7.3 (strict) |
-| **Linting** | ESLint | 9.18 (flat config) |
-| **Database** | PostgreSQL + TypeOrm | — |
-| **Queue** | Redis (BullMQ) | — |
-| **Stream** | Redis Stream | — |
-| **CI/CD** | GitHub Actions | — |
+| **Runtime** | Node.js (24.14.0 LTS) | Moteur d'exécution asynchrone ultra-rapide. |
+| **Package Manager** | Yarn (4.12.0 Berry) | Gestion stricte des dépendances via Workspaces. |
+| **Backend API** | NestJS (11.x) | Framework modulaire pour les Microservices (gRPC). |
+| **Backend Workers** | NestJS Standalone | Consommateurs (Background Jobs) à très faible empreinte RAM. |
+| **Mobile** | React Native (Expo 54) | Application frontend unifiée (iOS / Android). |
+| **Real-Time** | Socket.io | Passerelle WebSockets avec Redis Adapter Pub/Sub. |
+| **Persistance** | PostgreSQL (TypeORM) | Bases de données isolées par domaine (ACID). |
+| **Event Broker** | Redis Streams | Bus d'événements persistant pour le backend asynchrone. |
+| **Job Queue** | Redis (BullMQ) | Gestion des files d'attente (Envoi emails, calculs lourds). |
+| **Déploiement** | K3s + ArgoCD | GitOps, Pod Security Admissions, Sealed Secrets. |
 
 ---
 
-## Quick Start
+## 🚀 Quick Start & Setup
 
-### Interactive Menu
+Le point d'entrée central de ce monorepo est le script interactif **`root.sh`**. Il remplace les commandes complexes par un menu CLI intuitif.
+
+### 1. Installation Initiale (Full Setup)
+
+Si vous clonez ce projet pour la première fois, lancez simplement :
 
 ```bash
 bash root.sh
+# Sélectionnez l'option 1) Full Setup
 ```
+Cette commande automatise entièrement l'onboarding :
+- Installation de Node.js, Yarn (Corepack), et des outils (VS Code, Redis Insight).
+- Configuration de votre shell (Oh My Zsh).
+- Clonage et initialisation de **tous les sous-dépôts** (Microservices, NPM Packages, Runners).
+- Installation des dépendances transverses.
 
-### Command Center Shortcuts
+### 2. Lancement au Quotidien (Dev Mode)
 
-The `root.sh` script is the main entry point for development. You can trigger specific modes without navigating the menu:
+Pour démarrer l'environnement de développement, exécutez `bash root.sh` et choisissez l'une des options de la section **Development (Turbo)** :
 
-| Mode | Command | Description |
-|---|---|---|
-| **Full Setup** | `echo 1 \| ./root.sh` | Fresh install of everything |
-| **Dev Backend** | `echo 12 \| ./root.sh` | Launch Gateway + all microservices |
-| **Dev All** | `echo 11 \| ./root.sh` | Backend + Mobile app |
-| **Nexus All** | `echo 16 \| ./root.sh` | Intelligence dashboard (Ports 4747-4752) |
-| **Clean Install** | `echo 15 \| ./root.sh` | Clear all node_modules/locks and reinstall |
+- **`11) Dev All`** : Lance l'intégralité du projet (API Gateway, tous les Microservices, Outbox, Post-Processors, WS-Service ET l'application Mobile). Idéal pour un test end-to-end.
+- **`13) Dev Backend`** : Lance uniquement la partie serveur (sans le Mobile).
+- **`15) Dev Microservices`** : Ne lance que les briques API synchrones.
 
-### Full Setup (standard)
-
-### Full Setup (one command)
-
+*Astuce : Vous pouvez utiliser des raccourcis directs sans passer par le menu :*
 ```bash
-bash scripts/setup.sh
+echo 11 | ./root.sh  # Lance le Dev All instantanément
 ```
 
-Installs Node.js, Yarn, developer tools, configures Oh My Zsh, clones all repositories and installs dependencies.
+### 3. Gestion des Migrations de Base de Données
+
+Le menu intègre également les utilitaires de base de données :
+- **`19) Sync Migrations`** : Synchronise l'état TypeORM avec vos entités.
+- **`20) Run Migrations`** : Joue les scripts SQL sur l'environnement en cours (local, dev, etc.).
 
 ### Individual Scripts
 
