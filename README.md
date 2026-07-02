@@ -1,31 +1,20 @@
-# Volontariapp
+# 🤝 Volontariapp
 
-Modular monorepo powering the **Volontariapp** platform — connecting volunteers with organizations.
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white)](https://nestjs.com/)
+[![React Native](https://img.shields.io/badge/React_Native-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactnative.dev/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Redis](https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=redis&logoColor=white)](https://redis.io/)
+[![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=for-the-badge&logo=kubernetes&logoColor=white)](https://kubernetes.io/)
+
+Le méta-répertoire modulaire qui propulse la plateforme **Volontariapp** — connectant les bénévoles aux organisations.
 
 ---
 
-## Architecture
+## 🏗️ Architecture du Méta-Projet
 
-```
-meta/
-├── api-gateway/          NestJS API Gateway (HTTP entry point)
-├── ms-user/              User microservice (NestJS)
-├── ms-event/             Event microservice (NestJS)
-├── ms-post/              Post microservice (NestJS)
-├── nativapp/             React Native mobile app (Expo SDK 54)
-├── npm-packages/         Shared NPM packages (Yarn 4 workspaces)
-│   └── packages/
-│       ├── domain-event/       Domain event contracts
-│       ├── domain-post/        Domain post contracts
-│       ├── domain-user/        Domain user contracts
-│       └── eslint-config/      Shared ESLint flat config
-├── proto-registry/       Centralized Protobuf registry (gRPC via Buf)
-├── changelog-checker/    CI validation tool (Go-based)
-├── ci-tools/             CI/CD reusable workflows
-└── scripts/              Project-wide automation
-```
-
-Each service and `npm-packages` is a separate repository, enabling independent versioning and CI/CD pipelines while keeping a unified developer experience through this umbrella repository.
+Ce dépôt ("umbrella repository") centralise l'écosystème Volontariapp. 
+Chaque microservice (API, Workers, Post-Processors), l'application mobile (`nativapp`), ainsi que les librairies partagées (`npm-packages`) sont des dépôts indépendants. Cette approche permet de conserver un versioning et une CI/CD découplés, tout en garantissant une expérience développeur unifiée en local grâce aux scripts d'orchestration.
 
 > 📖 **Architecture Détaillée (Modèle C4)** : 
 > Pour comprendre en profondeur la tuyauterie asynchrone (Outbox, Scatter-Gather), l'isolation des domaines et le déploiement GitOps, **[consultez la documentation complète de l'architecture ici](docs/README.md)**.
