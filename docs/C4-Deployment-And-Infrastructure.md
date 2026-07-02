@@ -11,25 +11,25 @@ L'infrastructure est modulaire. ArgoCD déploie une application racine qui elle-
 ```mermaid
 graph TD
     subgraph "GitOps Engine"
-        Git[Git Repo 'deploy'] -- Webhook/Polling --> Argo[ArgoCD Controller]
+        Git["Git Repo 'deploy'"] -- Webhook/Polling --> Argo["ArgoCD Controller"]
     end
 
     subgraph "Core Infrastructure"
-        Argo --> CM[Cert-Manager]
-        Argo --> SS[Sealed Secrets]
-        Argo --> NP[Network Policies]
-        Argo --> TR[Traefik Ingress]
+        Argo --> CM["Cert-Manager"]
+        Argo --> SS["Sealed Secrets"]
+        Argo --> NP["Network Policies"]
+        Argo --> TR["Traefik Ingress"]
     end
 
     subgraph "Persistence Layer (Databases)"
-        Argo --> PG[PostgreSQL Cluster]
-        Argo --> RD[Redis (Shared & Dedicated)]
-        Argo --> NJ[Neo4j Graph DB]
+        Argo --> PG["PostgreSQL Cluster"]
+        Argo --> RD["Redis (Shared & Dedicated)"]
+        Argo --> NJ["Neo4j Graph DB"]
     end
 
     subgraph "Application Layer"
-        Argo --> AG[API Gateway]
-        Argo --> MS[Microservices Ecosystem (Runners, Processors)]
+        Argo --> AG["API Gateway"]
+        Argo --> MS["Microservices Ecosystem (Runners, Processors)"]
     end
 ```
 
