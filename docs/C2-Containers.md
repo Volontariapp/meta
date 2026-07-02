@@ -8,14 +8,17 @@ L'architecture est fondamentalement basée sur un modèle de **Microservices Hau
 
 Une des règles d'or de l'architecture Volontariapp est la distinction entre ce qui appartient en propre à un domaine (Isolé) et ce qui sert de liant à la plateforme (Partagé).
 
-### 1. Le Périmètre Isolé (Par Domaine)
-Pour un domaine donné (ex: le domaine "Event"), les composants suivants sont **totalement isolés** (ils ont leur propre dépôt Git, leur propre processus Node.js, et ne partagent pas leur mémoire ni leur base de données) :
-- **Le Microservice API (`ms-event`)** : Expose des contrats gRPC, exécute la logique métier.
-- **L'Outbox Runner (`outbox-runners`)** : Un daemon Lean Node.js qui extrait les événements métier persistés.
+### 1. Le Périmètre Isolé (L'Anatomie Type d'un Domaine)
+À l'exception de quelques cas particuliers, tous les domaines métiers standards (ex: `ms-event`, `ms-user`, `ms-post`) possèdent une pile d'exécution standardisée et **totalement isolée** (ils ont leur propre dépôt Git, leur propre processus Node.js, et ne partagent pas leur mémoire ni leur base de données) :
+- **Le Microservice API (ex: `ms-event`)** : Expose des contrats gRPC, exécute la logique métier.
+- **La Base de Données (PostgreSQL)** : Chaque domaine possède sa propre base relationnelle.
+- **L'Outbox Runner (`outbox-runners`)** : Un daemon Lean Node.js qui extrait les événements métier persistés de la base de données.
 - **Les Workers (`workers-runners`)** : Exécutent les tâches asynchrones lourdes spécifiques au domaine.
 - **Les Post-Processors (`post-processors-runner`)** : Consomment les Redis Streams pour finaliser les Sagas ou le nettoyage.
-- **La Base de Données (PostgreSQL / Neo4j)** : Chaque domaine possède sa propre base de données. Par exemple, le `ms-social` est le seul à accéder à `Neo4j`. `ms-event` possède sa propre base PostgreSQL.
-- **Le Redis Dédié (WS)** : Le `ws-service` possède son propre Redis (`db_redis_ws`) dédié exclusivement à la gestion de ses sessions et de son state.
+
+**Les Exceptions (Domaines Spécifiques) :**
+- **Le Domaine Social (`ms-social`)** : Possède exactement la même structure (Postgres, Outbox, Workers, Post-Processors), mais intègre **en plus** une base de données **Neo4j** propre pour les algorithmes de graphe.
+- **Le Domaine WebSocket (`ws-service`)** : Possède sa propre base PostgreSQL et son `outbox-ws`. En revanche, il n'a **pas** de Workers et pas de Post-Processors externes. Il possède un **Redis Dédié** (`db_redis_ws`) en plus du Redis partagé, exclusivement pour gérer le state de ses sessions éphémères.
 
 ### 2. Le Périmètre Partagé
 Ces composants sont l'infrastructure commune qui permet aux domaines de communiquer sans couplage fort :
@@ -23,7 +26,6 @@ Ces composants sont l'infrastructure commune qui permet aux domaines de communiq
 - **Le code métier (`domain_npm`)** : Hébergé dans le monorepo `npm-packages`, il garantit que tous les services isolés d'un même domaine parlent le même langage métier (Entités, Value Objects).
 
 ## Diagramme des Containers (C2)
-
 ```mermaid
 flowchart TD
     user(["Client Mobile/Web"])
@@ -32,45 +34,72 @@ flowchart TD
         
         api_gateway["API Gateway (NestJS)"]
         
-        subgraph ws_domain ["Domaine WebSocket (Isolé)"]
+        subgraph ws_domain ["Domaine WebSocket (Exception)"]
             ws_service["WS Service (Socket.io)"]
+            outbox_ws["Outbox Runner"]
+            db_pg_ws[("PostgreSQL")]
             db_redis_ws[("Redis (Dedicated WS)")]
         end
 
-        subgraph domain_event ["Domaine Événementiel (Isolé)"]
+        subgraph domain_event ["Domaine Standard (ex: Event, User)"]
             ms_event["Microservice API (gRPC)"]
-            outbox_event["Outbox Runner (Node.js)"]
-            worker_event["Workers (BullMQ)"]
-            pp_event["Post-Processors (Streams)"]
-            db_pg_event[("PostgreSQL (ms-event)")]
+            outbox_event["Outbox Runner"]
+            worker_event["Workers"]
+            pp_event["Post-Processors"]
+            db_pg_event[("PostgreSQL")]
         end
         
-        subgraph domain_social ["Domaine Social (Isolé)"]
+        subgraph domain_social ["Domaine Social (Exception)"]
             ms_social["Microservice API (gRPC)"]
-            db_neo4j[("Neo4j (ms-social)")]
+            outbox_social["Outbox Runner"]
+            worker_social["Workers"]
+            pp_social["Post-Processors"]
+            db_pg_social[("PostgreSQL")]
+            db_neo4j[("Neo4j")]
+        end
+
+        subgraph shared_infra ["Infrastructure Partagée"]
+            db_redis[("Redis (Shared Pub/Sub & Queues)")]
         end
         
-        subgraph shared_infra ["Infrastructure Partagée"]
-            db_redis[("Redis (Shared)")]
-        end
+        %% --- Alignement forcé vers le bas ---
+        db_pg_ws ~~~ db_redis
+        db_pg_event ~~~ db_redis
+        db_neo4j ~~~ db_redis
     end
 
+    %% --- 1. Trafic Entrant ---
     user -- "HTTPS & WSS" --> api_gateway
     
-    api_gateway -- "WSS (Proxy + Token Interne)" --> ws_service
+    %% --- 2. Routage Interne (Gateway) ---
+    api_gateway -- "WSS (Proxy)" --> ws_service
     api_gateway -- "gRPC" --> ms_event
     api_gateway -- "gRPC" --> ms_social
     
-    ms_event -- "Transaction ACID" --> db_pg_event
-    outbox_event -- "Pull Jobs" --> db_pg_event
-    outbox_event -- "Push" --> db_redis
-    
-    ms_social -- "Cypher Queries" --> db_neo4j
+    %% --- 3. Persistance Isolée (Top-Down) ---
+    ws_service -- "Transaction ACID" --> db_pg_ws
     ws_service -- "Stockage Sessions" --> db_redis_ws
+    ms_event -- "Transaction ACID" --> db_pg_event
+    ms_social -- "Transaction ACID" --> db_pg_social
+    ms_social -- "Cypher Queries" --> db_neo4j
     
-    db_redis -- "Pull Jobs" --> worker_event
-    db_redis -- "Consomme Streams" --> pp_event
-    db_redis -- "Consomme Streams" --> ws_service
+    %% --- 4. Outbox Polling (Local) ---
+    outbox_ws -. "Poll Events" .-> db_pg_ws
+    outbox_event -. "Poll Jobs | Events" .-> db_pg_event
+    outbox_social -. "Poll Jobs | Events" .-> db_pg_social
+    
+    %% --- 5. Bus de Messages Partagé (Redis) ---
+    %% Publication (Top -> Bottom)
+    outbox_ws -- "Push Events" --> db_redis
+    outbox_event -- "Push Jobs | Events" --> db_redis
+    outbox_social -- "Push Jobs | Events" --> db_redis
+    
+    %% Consommation (Top -> Bottom)
+    ws_service -- "Consomme Streams" --> db_redis
+    worker_event -- "Pull Jobs" --> db_redis
+    pp_event -- "Consomme Streams" --> db_redis
+    worker_social -- "Pull Jobs" --> db_redis
+    pp_social -- "Consomme Streams" --> db_redis
 ```
 
 ## Le Rôle de l'API Gateway : Gardien du Temple
