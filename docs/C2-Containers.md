@@ -47,9 +47,9 @@ flowchart TD
         end
     end
 
-    user -- "HTTPS" --> api_gateway
-    user -- "WSS" --> ws_service
+    user -- "HTTPS & WSS" --> api_gateway
     
+    api_gateway -- "WSS (Proxy + Token Interne)" --> ws_service
     api_gateway -- "gRPC" --> ms_event
     
     ms_event -- "Transaction ACID" --> db_pg
@@ -61,13 +61,25 @@ flowchart TD
     db_redis -- "Consomme Streams" --> ws_service
 ```
 
-## Le Rôle de l'API Gateway et la Communication Synchrone
+## Le Rôle de l'API Gateway : Gardien du Temple
 
 L'**API Gateway** est le seul composant exposé sur Internet (via l'Ingress Kubernetes). 
-Son rôle est de protéger le système interne :
+Son rôle est de protéger le système interne en gérant deux flux principaux :
+
+### 1. La Communication Synchrone (HTTP -> gRPC)
 1. Il intercepte le Token JWT (fourni par Auth0, Firebase ou un provider interne).
 2. Il valide l'authentification et génère un **Token Interne** signé, injecté dans les headers gRPC.
 3. Il route la requête vers le bon Microservice (`ms-user`, `ms-event`, etc.) via **gRPC**.
 
+### 2. Le Proxy WebSocket (WS -> WS)
+Le `ws-service` n'est pas exposé directement sur Internet. 
+1. L'API Gateway intercepte les requêtes d'upgrade WebSocket (vers `/socket.io`).
+2. Il valide le Token d'accès (JWT).
+3. S'il est valide, il génère un **Token Interne** qu'il injecte dans les headers de la requête proxy (`x-internal-token`).
+4. Il transfère (proxy) la connexion TCP vers le `ws-service`.
+
 > [!NOTE]
+> Le `ws-service` délègue ainsi la complexité de l'authentification OAuth à la Gateway. Il n'a plus qu'à vérifier cryptographiquement le "Token Interne" (extrêmement rapide, sans appel BDD) pour autoriser le client et tracker sa socket. Les appels gRPC fonctionnent sur le même principe.
+
+> [!TIP]
 > La communication entre l'API Gateway et les Microservices est **synchrone** et ultra-rapide (gRPC). Cependant, dès qu'un Microservice reçoit la requête, il ne fait qu'une validation métier rapide et une insertion en base de données, avant de répondre immédiatement au Gateway. Tout le reste du travail "lourd" est délégué à la tuyauterie asynchrone détaillée dans le niveau **C3**.
