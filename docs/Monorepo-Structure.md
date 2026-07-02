@@ -40,7 +40,7 @@ npm-packages/
 │   ├── domain-user/       # Intelligence fonctionnelle du domaine User
 │   ├── errors/            # Registre centralisé des erreurs (Codes HTTP/gRPC)
 │   ├── logger/            # Wrapper Winston pour la centralisation des logs
-│   ├── messaging/         # Classes pour Kafka / BullMQ / Redis Streams
+│   ├── messaging/         # Classes pour BullMQ / Redis Streams
 │   ├── outbox/            # Le cœur du pattern Transactional Outbox (Polling, Retry)
 │   ├── post-processors/   # Mécanismes de Circuit Breaker et DLQ
 │   ├── shared/            # Utilitaires globaux (Dates, Arrays, Utils)
