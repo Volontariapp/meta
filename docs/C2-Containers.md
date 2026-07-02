@@ -9,16 +9,17 @@ L'architecture est fondamentalement basée sur un modèle de **Microservices Hau
 Une des règles d'or de l'architecture Volontariapp est la distinction entre ce qui appartient en propre à un domaine (Isolé) et ce qui sert de liant à la plateforme (Partagé).
 
 ### 1. Le Périmètre Isolé (Par Domaine)
-Pour un domaine donné (ex: le domaine "Event"), les composants suivants sont **totalement isolés** (ils ont leur propre dépôt Git, leur propre processus Node.js, et ne partagent pas leur mémoire) :
+Pour un domaine donné (ex: le domaine "Event"), les composants suivants sont **totalement isolés** (ils ont leur propre dépôt Git, leur propre processus Node.js, et ne partagent pas leur mémoire ni leur base de données) :
 - **Le Microservice API (`ms-event`)** : Expose des contrats gRPC, exécute la logique métier.
 - **L'Outbox Runner (`outbox-runners`)** : Un daemon Lean Node.js qui extrait les événements métier persistés.
 - **Les Workers (`workers-runners`)** : Exécutent les tâches asynchrones lourdes spécifiques au domaine.
 - **Les Post-Processors (`post-processors-runner`)** : Consomment les Redis Streams pour finaliser les Sagas ou le nettoyage.
+- **La Base de Données (PostgreSQL / Neo4j)** : Chaque domaine possède sa propre base de données. Par exemple, le `ms-social` est le seul à accéder à `Neo4j`. `ms-event` possède sa propre base PostgreSQL.
+- **Le Redis Dédié (WS)** : Le `ws-service` possède son propre Redis (`db_redis_ws`) dédié exclusivement à la gestion de ses sessions et de son state.
 
 ### 2. Le Périmètre Partagé
 Ces composants sont l'infrastructure commune qui permet aux domaines de communiquer sans couplage fort :
-- **PostgreSQL** : Bien que déployé sur un même cluster physique/virtuel, chaque microservice possède logiquement sa propre base/schéma. Il est interdit pour `ms-user` de faire une requête SQL sur la base de `ms-event`.
-- **Redis (Shared)** : Le courtier de messages principal. Il héberge les files d'attente **BullMQ** (pour les Workers) et les **Redis Streams** (pour l'Event-Driven / Post-Processors).
+- **Redis (Shared)** : Le courtier de messages principal. Il est le seul élément d'infrastructure de données partagé. Il héberge les files d'attente **BullMQ** (pour les Workers) et les **Redis Streams** (pour l'Event-Driven / Post-Processors).
 - **Le code métier (`domain_npm`)** : Hébergé dans le monorepo `npm-packages`, il garantit que tous les services isolés d'un même domaine parlent le même langage métier (Entités, Value Objects).
 
 ## Diagramme des Containers (C2)
@@ -30,20 +31,27 @@ flowchart TD
     subgraph backend ["Backend Volontariapp"]
         
         api_gateway["API Gateway (NestJS)"]
-        ws_service["WS Service (Socket.io)"]
+        
+        subgraph ws_domain ["Domaine WebSocket (Isolé)"]
+            ws_service["WS Service (Socket.io)"]
+            db_redis_ws[("Redis (Dedicated WS)")]
+        end
 
         subgraph domain_event ["Domaine Événementiel (Isolé)"]
             ms_event["Microservice API (gRPC)"]
             outbox_event["Outbox Runner (Node.js)"]
             worker_event["Workers (BullMQ)"]
             pp_event["Post-Processors (Streams)"]
+            db_pg_event[("PostgreSQL (ms-event)")]
+        end
+        
+        subgraph domain_social ["Domaine Social (Isolé)"]
+            ms_social["Microservice API (gRPC)"]
+            db_neo4j[("Neo4j (ms-social)")]
         end
         
         subgraph shared_infra ["Infrastructure Partagée"]
-            db_pg[("PostgreSQL")]
             db_redis[("Redis (Shared)")]
-            db_redis_ws[("Redis (Dedicated WS)")]
-            db_neo4j[("Neo4j")]
         end
     end
 
@@ -51,10 +59,14 @@ flowchart TD
     
     api_gateway -- "WSS (Proxy + Token Interne)" --> ws_service
     api_gateway -- "gRPC" --> ms_event
+    api_gateway -- "gRPC" --> ms_social
     
-    ms_event -- "Transaction ACID" --> db_pg
-    outbox_event -- "Pull Jobs" --> db_pg
+    ms_event -- "Transaction ACID" --> db_pg_event
+    outbox_event -- "Pull Jobs" --> db_pg_event
     outbox_event -- "Push" --> db_redis
+    
+    ms_social -- "Cypher Queries" --> db_neo4j
+    ws_service -- "Stockage Sessions" --> db_redis_ws
     
     db_redis -- "Pull Jobs" --> worker_event
     db_redis -- "Consomme Streams" --> pp_event
