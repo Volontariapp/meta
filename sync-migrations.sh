@@ -12,7 +12,7 @@ NC='\033[0m'
 DIM='\033[2m'
 
 # --- Services List ---
-SERVICES=("user" "social" "post" "event")
+SERVICES=("user" "social" "post" "event" "ws")
 
 # --- Selection System (Interactive) ---
 printf "\n  ${BOLD}${MAGENTA}Select Microservices to sync migrations:${NC}\n"
@@ -74,11 +74,19 @@ CHANGES_DETECTED=false
 for i in "${!SERVICES[@]}"; do
   if [ "${selected[$i]}" -eq 1 ]; then
     SERVICE_NAME="${SERVICES[$i]}"
-    SRC_DIR="ms-${SERVICE_NAME}/src/migrations"
-    DEST_DIR="npm-packages/packages/domain-${SERVICE_NAME}/src/test/migrations"
-    WRONG_DIR="npm-packages/packages/domain-${SERVICE_NAME}/src/migrations"
+    if [ "$SERVICE_NAME" = "ws" ]; then
+      SRC_DIR="ws-service/src/migrations"
+      DEST_DIR="npm-packages/packages/domain-ws/src/test/migrations"
+      WRONG_DIR="npm-packages/packages/domain-ws/src/migrations"
+      DISPLAY_NAME="ws-service"
+    else
+      SRC_DIR="ms-${SERVICE_NAME}/src/migrations"
+      DEST_DIR="npm-packages/packages/domain-${SERVICE_NAME}/src/test/migrations"
+      WRONG_DIR="npm-packages/packages/domain-${SERVICE_NAME}/src/migrations"
+      DISPLAY_NAME="ms-${SERVICE_NAME}"
+    fi
 
-    echo -e "${BOLD}${CYAN}━━━ Syncing ms-${SERVICE_NAME} ━━━${NC}"
+    echo -e "${BOLD}${CYAN}━━━ Syncing ${DISPLAY_NAME} ━━━${NC}"
 
     if [ ! -d "$SRC_DIR" ]; then
       echo -e "  ${YELLOW}⚠ Warning: Source directory $SRC_DIR not found. Skipping.${NC}\n"
@@ -120,7 +128,11 @@ if [ "$CHANGES_DETECTED" = true ]; then
   echo -e ""
   for i in "${!SERVICES[@]}"; do
     if [ "${selected[$i]}" -eq 1 ]; then
-      echo -e "  ${CYAN}▸ ms-${SERVICES[$i]}${NC}"
+      if [ "${SERVICES[$i]}" = "ws" ]; then
+        echo -e "  ${CYAN}▸ ws-service${NC}"
+      else
+        echo -e "  ${CYAN}▸ ms-${SERVICES[$i]}${NC}"
+      fi
     fi
   done
   echo -e ""
