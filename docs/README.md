@@ -22,7 +22,7 @@ Tous les services sont hébergés dans l'organisation GitHub **[Volontariapp](ht
 
 ### Les Points d'Entrée (Gateways & Clients)
 - [**nativapp**](https://github.com/Volontariapp/nativapp) : Application mobile React Native.
-- [**api-gateway**](https://github.com/Volontariapp/api-gateway) : Point d'entrée HTTP, GraphQL & REST, gestion de l'authentification.
+- [**api-gateway**](https://github.com/Volontariapp/api-gateway) : Point d'entrée HTTP, & REST, gestion de l'authentification.
 - [**ws-service**](https://github.com/Volontariapp/ws-service) : Microservice externe pour le WebSockets (Pub/Sub, notifications temps réel).
 
 ### Les Microservices Métiers (Synchrones via gRPC)
