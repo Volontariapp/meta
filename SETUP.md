@@ -70,6 +70,9 @@ Ne jamais copier-coller un skill dans plusieurs repos "au cas où" — c'est exa
 
 ## 5. Outils installés
 
+- **RTK (Rust Token Killer)** : proxy CLI qui réécrit `git`/`npm`/`jest`/etc. à la volée pour réduire la consommation de tokens (~80% sur les opérations de dev courantes). Transparent via hook — voir la section "RTK" en bas de chaque `CLAUDE.md`. Commandes directes utiles : `rtk gain` (analytics d'économie), `rtk discover` (recherche d'opportunités manquées), `rtk read/ls/find/grep` (sorties compressées).
 - **ripgrep (`rg`)** : recherche de code, obligatoire (voir `.agents/AGENTS.md` §7).
 - **repomix** (`npx repomix --compress`) : extraction AST à la demande d'un seul repo (signatures sans corps de fonction), pas de génération systématique.
-- **graphify** (`graphify update <repo>`) : graphe de code par repo (`<repo>/graphify-out/graph.json`, ignoré par git, régénérable). Utile pour `graphify query`/`graphify affected`/`graphify god-nodes` sur un repo précis. L'installation du hook `graphify claude install` (qui injecterait une section dans chaque `CLAUDE.md` + un hook pre-tool) n'a volontairement pas été activée — décision à prendre séparément si souhaitée.
+- **graphify** (`graphify update <repo>`) : graphe de code par repo (`<repo>/graphify-out/graph.json`, ignoré par git, régénérable). Utile pour `graphify query`/`graphify affected`/`graphify god-nodes` sur un repo précis.
+  - L'intégration Claude Code (`graphify claude install`) est **activée** dans les 14 repos : une section "graphify" a été ajoutée en bas de chaque `CLAUDE.md`, et un hook `PreToolUse` (`.claude/settings.json`) rappelle d'utiliser `graphify query`/`explain`/`path` avant de grepper ou lire du code brut sur `Bash|Grep|Read|Glob`. Le hook est purement informatif (il ajoute du contexte, il ne bloque jamais un outil).
+  - Après une modif de code dans un repo, lancer `graphify update .` dans ce repo pour garder le graphe à jour (AST seul, pas d'appel LLM).
