@@ -1,0 +1,87 @@
+{
+  "repos": [
+    {
+      "repo": "api-gateway",
+      "responsibility": "Routes REST -> microservice",
+      "deps": ["@volontariapp/auth","@volontariapp/bridge-nest","@volontariapp/config","@volontariapp/contracts","@volontariapp/contracts-nest","@volontariapp/errors","@volontariapp/errors-nest","@volontariapp/eslint-config","@volontariapp/health-check","@volontariapp/health-check-nest","@volontariapp/logger","@volontariapp/monitoring","@volontariapp/shared","@volontariapp/testing"]
+    }
+    ,
+    {
+      "repo": "ms-event",
+      "responsibility": "Domaine ms-event",
+      "deps": ["@volontariapp/auth","@volontariapp/bridge-nest","@volontariapp/config","@volontariapp/contracts","@volontariapp/contracts-nest","@volontariapp/database","@volontariapp/domain-event","@volontariapp/errors","@volontariapp/errors-nest","@volontariapp/eslint-config","@volontariapp/health-check","@volontariapp/health-check-nest","@volontariapp/logger","@volontariapp/messaging","@volontariapp/monitoring","@volontariapp/outbox","@volontariapp/shared","@volontariapp/validation-nest"]
+    }
+    ,
+    {
+      "repo": "ms-post",
+      "responsibility": "ms-post gere les agregats `Post` (id, authorId, title, content, saga_status, eventId?) et `Comment`",
+      "deps": ["@volontariapp/auth","@volontariapp/bridge-nest","@volontariapp/config","@volontariapp/contracts","@volontariapp/contracts-nest","@volontariapp/database","@volontariapp/domain-post","@volontariapp/errors","@volontariapp/errors-nest","@volontariapp/eslint-config","@volontariapp/health-check","@volontariapp/health-check-nest","@volontariapp/logger","@volontariapp/monitoring","@volontariapp/validation-nest"]
+    }
+    ,
+    {
+      "repo": "ms-social",
+      "responsibility": "Domaine ms-social",
+      "deps": ["@volontariapp/auth","@volontariapp/bridge-nest","@volontariapp/config","@volontariapp/contracts","@volontariapp/contracts-nest","@volontariapp/database","@volontariapp/domain-social","@volontariapp/errors","@volontariapp/errors-nest","@volontariapp/eslint-config","@volontariapp/health-check-nest","@volontariapp/logger","@volontariapp/monitoring","@volontariapp/validation-nest"]
+    }
+    ,
+    {
+      "repo": "ms-user",
+      "responsibility": "Domaine ms-user",
+      "deps": ["@volontariapp/auth","@volontariapp/bridge-nest","@volontariapp/config","@volontariapp/contracts","@volontariapp/contracts-nest","@volontariapp/database","@volontariapp/domain-user","@volontariapp/errors","@volontariapp/errors-nest","@volontariapp/eslint-config","@volontariapp/health-check-nest","@volontariapp/logger","@volontariapp/messaging","@volontariapp/monitoring","@volontariapp/outbox","@volontariapp/shared","@volontariapp/validation-nest"]
+    }
+    ,
+    {
+      "repo": "ci-tools",
+      "responsibility": "CI/CD central du projet",
+      "deps": [""]
+    }
+    ,
+    {
+      "repo": "proto-registry",
+      "responsibility": "Structure de proto/volontariapp/",
+      "deps": [""]
+    }
+    ,
+    {
+      "repo": "npm-packages",
+      "responsibility": "Volontariapp npm-packages monorepo",
+      "deps": ["@volontariapp/npm-packages","@volontariapp/shared"]
+    }
+    ,
+    {
+      "repo": "outbox-runners",
+      "responsibility": "Outbox runners processus dmons \"Lean Mode\"",
+      "deps": [""]
+    }
+    ,
+    {
+      "repo": "workers-runners",
+      "responsibility": "Workers Runners",
+      "deps": [""]
+    }
+    ,
+    {
+      "repo": "post-processors-runner",
+      "responsibility": "Post-Processors Runners",
+      "deps": [""]
+    }
+    ,
+    {
+      "repo": "ws-service",
+      "responsibility": "WebSocket Service (ws-service)",
+      "deps": ["@volontariapp/auth","@volontariapp/bridge-nest","@volontariapp/config","@volontariapp/contracts","@volontariapp/contracts-nest","@volontariapp/database","@volontariapp/domain-event","@volontariapp/errors","@volontariapp/errors-nest","@volontariapp/eslint-config","@volontariapp/health-check","@volontariapp/health-check-nest","@volontariapp/logger","@volontariapp/messaging","@volontariapp/monitoring","@volontariapp/post-processors","@volontariapp/shared","@volontariapp/testing","@volontariapp/validation-nest"]
+    }
+    ,
+    {
+      "repo": "changelog-checker",
+      "responsibility": "Outil CLI Go validation de CHANGELOG.md",
+      "deps": [""]
+    }
+    ,
+    {
+      "repo": "nativapp",
+      "responsibility": "React Native Front-End Skills (MANDATORY)",
+      "deps": ["@volontariapp/config","@volontariapp/contracts","@volontariapp/errors","@volontariapp/logger","@volontariapp/messaging","@volontariapp/shared"]
+    }
+  ]
+}

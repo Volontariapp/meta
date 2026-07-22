@@ -54,3 +54,4 @@ lerna-debug.log*
 /workers-runners
 /post-processors-runner
 /ws-service
+graphify-out/
