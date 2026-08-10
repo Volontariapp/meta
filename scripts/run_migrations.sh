@@ -15,7 +15,7 @@ DIM='\033[2m'
 ENV="${1:-local}"
 
 # --- Services List ---
-SERVICES=("user" "social" "post" "event")
+SERVICES=("user" "social" "post" "event" "ws")
 
 # --- Selection System (Interactive) ---
 printf "\n  ${BOLD}${MAGENTA}Select Microservices to run migrations (${ENV}):${NC}\n"
@@ -32,7 +32,11 @@ while true; do
   for i in "${!SERVICES[@]}"; do
     if [ "$i" -eq "$cursor" ]; then prefix="${CYAN}▸${NC} "; else prefix="  "; fi
     if [ "${selected[$i]}" -eq 1 ]; then check="${GREEN}[x]${NC}"; else check="[ ]"; fi
-    printf "${prefix}${check} ms-${SERVICES[$i]}\033[K\n"
+    if [ "${SERVICES[$i]}" = "ws" ]; then
+      printf "${prefix}${check} ws-service\033[K\n"
+    else
+      printf "${prefix}${check} ms-${SERVICES[$i]}\033[K\n"
+    fi
   done
 
   IFS= read -rsn1 key
@@ -65,7 +69,11 @@ printf "\n"
 # --- Processing ---
 for i in "${!SERVICES[@]}"; do
   if [ "${selected[$i]}" -eq 1 ]; then
-    SERVICE_NAME="ms-${SERVICES[$i]}"
+    if [ "${SERVICES[$i]}" = "ws" ]; then
+      SERVICE_NAME="ws-service"
+    else
+      SERVICE_NAME="ms-${SERVICES[$i]}"
+    fi
     echo -e "${BOLD}${CYAN}━━━ Running Migrations: ${SERVICE_NAME} (${ENV}) ━━━${NC}"
     
     if [ -d "$SERVICE_NAME" ]; then
