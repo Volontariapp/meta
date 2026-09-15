@@ -1,3 +1,5 @@
+@.agents/AGENTS.md
+
 ## Approach
 - Read existing files before writing. Don't re-read unless changed.
 - Thorough in reasoning, concise in output.
