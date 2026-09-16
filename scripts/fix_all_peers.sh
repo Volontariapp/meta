@@ -4,7 +4,7 @@
 FIX_SCRIPT_PATH=$(realpath "$(dirname "$0")/fix_peer_deps.js")
 CLEAN_SCRIPT_PATH=$(realpath "$(dirname "$0")/clean_peers.js")
 
-WORKSPACES=("api-gateway" "ms-user" "ms-post" "ms-event" "ms-social" "nativapp")
+WORKSPACES=("api-gateway" "ms-user" "ms-post" "ms-event" "ms-social" "ms-storage" "nativapp")
 
 for ws in "${WORKSPACES[@]}"; do
   if [ -d "$ws" ]; then

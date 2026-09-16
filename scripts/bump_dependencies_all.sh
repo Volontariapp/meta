@@ -47,7 +47,7 @@ git checkout "${ORIGINAL_PKG_BRANCH}" --quiet
 git stash pop --quiet || true
 
 # 2. Iterate over repos to check and update
-REPOS=("api-gateway" "ms-user" "ms-post" "ms-event" "ms-social" "nativapp" "workers-runners" "post-processors-runner" "outbox-runners")
+REPOS=("api-gateway" "ms-user" "ms-post" "ms-event" "ms-social" "ms-storage" "nativapp" "workers-runners" "post-processors-runner" "outbox-runners")
 
 for repo in "${REPOS[@]}"; do
     target_dir="${ROOT_DIR}/${repo}"

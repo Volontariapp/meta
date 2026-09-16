@@ -18,6 +18,7 @@ REPOS=(
   "ms-event"
   "ms-post"
   "ms-social"
+  "ms-storage"
   "ms-user"
   "nativapp"
   "npm-packages"

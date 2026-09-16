@@ -18,7 +18,8 @@ SERVICES=(
   "ms-social"
   "ms-post"
   "ms-event"
-  
+  "ms-storage"
+
   # 2. Gateways & WebSockets
   "api-gateway"
   "ws-service"

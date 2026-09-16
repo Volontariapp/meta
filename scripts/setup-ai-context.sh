@@ -12,7 +12,7 @@ if ! command -v rg >/dev/null 2>&1; then
   exit 1
 fi
 
-REPOS="api-gateway ms-event ms-post ms-social ms-user ci-tools proto-registry npm-packages outbox-runners workers-runners post-processors-runner ws-service changelog-checker nativapp"
+REPOS="api-gateway ms-event ms-post ms-social ms-storage ms-user ci-tools proto-registry npm-packages outbox-runners workers-runners post-processors-runner ws-service changelog-checker nativapp"
 
 GRAPH_JSON="$ROOT/META_GRAPH.json"
 CONTEXT_MD="$ROOT/META_CONTEXT.md"
