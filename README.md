@@ -184,4 +184,3 @@ bash scripts/init_repos.sh
 ## License
 
 MIT— Proprietary software. All rights reserved.
-# ms-storage

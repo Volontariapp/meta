@@ -56,3 +56,4 @@ lerna-debug.log*
 /post-processors-runner
 /ws-service
 graphify-out/
+/ms-storage
