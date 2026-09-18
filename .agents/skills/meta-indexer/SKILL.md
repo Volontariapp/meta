@@ -16,13 +16,60 @@ Ces fichiers définissent les responsabilités de chaque repo et leurs interdép
 
 ## Utilisation de smart_search
 L'outil `smart_search` est un proxy intelligent qui optimise les requêtes (via Ripgrep, et plus tard Tree-Sitter) sur toute la codebase.
-- **Requête ciblée** : Privilégie l'utilisation de l'argument `directory` (ex: `ms-social` ou `npm-packages/packages/domain-social`) pour restreindre la recherche si tu sais dans quel domaine métier se trouve le code.
+
+> ⚠️ **RÈGLE ABSOLUE : Toujours passer le paramètre `scope`.**
+> Sans `scope` explicite, le MCP cible un index partiel et peut retourner "Aucun résultat" même si le symbole existe dans la codebase. Ce comportement a été confirmé en REX le 2026-09-18.
+
+### Paramètres obligatoires
+| Paramètre | Obligation      | Valeur recommandée                          |
+| -----------| -----------------| ---------------------------------------------|
+| `query`   | Obligatoire     | Le symbole ou pattern à chercher            |
+| `scope`   | **Obligatoire** | Chemin absolu vers le repo ou dossier cible |
+
+### Exemples corrects
+```
+// ✅ Avec scope absolu sur le workspace racine
+smart_search({ query: "UserResponse", scope: "/Users/victoragahi/Developer/meta" })
+
+// ✅ Avec scope ciblé sur un seul repo
+smart_search({ query: "UserAuthRequest", scope: "/Users/victoragahi/Developer/meta/submodules/api-gateway" })
+
+// ❌ Sans scope — NE PAS FAIRE, résultats imprévisibles
+smart_search({ query: "UserResponse" })
+```
+
+### Stratégie de scope recommandée
+1. **Tu connais le repo ciblé** → scope sur le repo précis (plus rapide, moins de bruit)
+2. **Tu cherches cross-repo** → scope sur `/Users/victoragahi/Developer/meta` (workspace racine)
+3. **Tu ne sais pas où ça se trouve** → commence par `find_dependents` si c'est un symbole importé, sinon scope racine
+
 - L'outil formate de lui-même les retours pour économiser des tokens, pas besoin de le wrapper dans RTK.
 
 ## Utilisation de find_dependents (Dependency Graph)
 L'outil `find_dependents` te permet d'explorer le graphe de dépendances gardé en mémoire vive par le MCP.
 - **Usage** : Si tu veux savoir quels microservices ou fichiers utilisent un contrat précis (ex: `UserAuthRequest`) ou un package NPM partagé (ex: `@volontariapp/domain-user`), utilise cet outil.
 - **Performance** : Cette requête s'exécute en O(1) car elle tape directement dans la RAM du pod. Privilégie cet outil plutôt qu'une recherche plein texte (`smart_search`) si ton objectif est uniquement de trouver les dépendances entrantes d'un symbole.
+
+## Utilisation de analyze_impact (Graphe des Flux Asynchrones CQRS / Outbox / Sagas)
+L'outil `analyze_impact` analyse les flux asynchrones (Events 1:N via Redis Streams & Post-Processors, Jobs 1:1 via BullMQ & Workers, Sagas & Scatter-Gather WebSocket) à partir du contrat de vérité `@volontariapp/messaging`.
+
+### Paramètres
+| Paramètre | Obligation | Description |
+|-----------|------------|-------------|
+| `target` | **Obligatoire** | Nom de l'Event (`UserCreatedEvent`), Job (`SendMailJob`), Post-Processor (`EventPostProcessor`), Worker ou Microservice |
+| `direction` | Optionnel | `"downstream"` (par défaut - impacts aval), `"upstream"` (causes amont), ou `"both"` (bidirectionnel) |
+
+### Exemples d'utilisation
+```json
+// Trouver tous les consommateurs, post-processors et cascades d'un événement
+analyze_impact({ "target": "EventUserCreated", "direction": "downstream" })
+
+// Trouver qui déclenche et émet un job ou consomme dans un worker
+analyze_impact({ "target": "EventPostProcessor", "direction": "upstream" })
+
+// Avoir la vue 360° causale d'un flow ou d'un microservice
+analyze_impact({ "target": "ms-user", "direction": "both" })
+```
 
 ## Exécution (Fallback)
 Si le serveur MCP n'est pas chargé nativement en tant qu'outil dans ta session, tu dois l'invoquer via le CLI :
