@@ -49,7 +49,7 @@ Ce fichier donne à l'IA la vision complète et globale de l'architecture du pro
 - **Transparence et Auditabilité :** Chaque action et chaque erreur DOIT être tracée à l'aide d'un logger dédié.
 
 ## 7. Recherche de Code & Navigation Cross-Repo (Optimisation de Contexte)
-- **SERVEUR MCP OBLIGATOIRE (`meta-indexer`) :** Interdiction d'utiliser `grep_search` ou des commandes bash `rg` pour la recherche de code ou l'analyse d'architecture. Tu DOIS obligatoirement utiliser les outils fournis par le serveur MCP `meta-indexer` (outils `smart_search` et `find_dependents`).
+- **SERVEUR MCP OBLIGATOIRE (`meta-indexer`) :** Interdiction d'utiliser `grep_search` ou des commandes bash `rg` pour la recherche de code ou l'analyse d'architecture. Tu DOIS obligatoirement utiliser les outils fournis par le serveur MCP `meta-indexer` (outils `smart_search` et `find_dependents`). **Exception (Fallback)** : Si et seulement si le serveur MCP est indisponible, crash, ou renvoie des erreurs d'exécution, tu es exceptionnellement autorisé à utiliser `grep_search` temporairement le temps que le MCP soit réparé afin de ne pas rester bloqué.
   - Utilise l'outil MCP `smart_search` pour chercher du texte ou des patterns dans le code. Privilégie une recherche ciblée sur un dossier spécifique.
   - Utilise l'outil MCP `find_dependents` (dependency graph) pour trouver quelles parties du code importent et dépendent d'un contrat ou d'un package partagé, c'est bien plus rapide qu'une recherche plein texte.
 - **Ne pas lire un fichier volumineux à l'aveugle :** toujours localiser la zone pertinente via `smart_search` d'abord.

@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "meta-indexer-local": {
-      "command": "cargo",
-      "args": ["run", "--release", "--manifest-path", "mcp-meta-indexer/Cargo.toml"],
+      "command": "./mcp-meta-indexer/target/release/mcp-meta-indexer",
+      "args": [],
       "env": {
         "MCP_TRANSPORT": "stdio"
       }
