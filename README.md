@@ -41,7 +41,7 @@ La documentation de référence est structurée selon le modèle **C4** pour une
 
 ## Intelligence Artificielle & Serveur MCP (`mcp-meta-indexer`)
 
-Pour permettre aux agents d'IA (Claude Code, Antigravity, Cursor) de naviguer et de raisonner sur les 17 dépôts sans saturer leur contexte en tokens, le projet intègre **[`mcp-meta-indexer`](mcp-meta-indexer/README.md)**, un serveur haute performance écrit en **Rust** implémentant le standard **Model Context Protocol (MCP)**.
+Pour permettre aux agents d'IA (Claude Code, Antigravity, Cursor) de naviguer et de raisonner sur tout les dépôts sans saturer leur contexte en tokens, le projet intègre **[`mcp-meta-indexer`](mcp-meta-indexer/README.md)**, un serveur haute performance écrit en **Rust** implémentant le standard **Model Context Protocol (MCP)**.
 
 ```mermaid
 flowchart LR
