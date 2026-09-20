@@ -1,6 +1,6 @@
 ---
 name: meta-indexer
-description: "Instructions sur l'utilisation du serveur MCP pour naviguer et chercher dans les 17 repositories de Volontariapp"
+description: "Instructions sur l'utilisation du serveur MCP pour naviguer et chercher dans les repositories de Volontariapp"
 ---
 
 # MCP Meta Indexer Skill
