@@ -13,9 +13,12 @@ Ce fichier donne à l'IA la vision complète et globale de l'architecture du pro
 ## 2. Infrastructure et Écosystème
 - **Approche Multi-Repo centralisée** : Le répertoire racine `meta` englobe tous les repositories du projet.
 - **CI/CD** : Chaque repo possède sa propre pipeline. 
-- **Code Partagé (NPM Packages)** : 
+- **Code Partagé (NPM Packages) & RÈGLE DU STOP IMMÉDIAT** : 
   - Situés dans `npm-packages`.
-  - Publiés de manière temporaire lors des Pull Requests (snapshots) et définitivement lors du merge sur `main`.
+  - **⚠️ RÈGLE DE BLOCAGE ABSOLU (STOP IMMÉDIAT)** : Dès que tu as fini de modifier quoi que ce soit dans `npm-packages` (ex: un contrat dans `messaging`, un enum dans `shared`, ou un modèle dans un package `domain-*`), **TU DOIS ABSOLUMENT T'ARRÊTER IMMÉDIATEMENT**.
+  - **INTERDICTION FORMELLE** de continuer à coder dans les autres microservices/repos consommateurs, de bricoler des types avec du casting `as unknown as Type` ou `any` pour contourner l'absence de publication, ou de tenter de compiler les consommateurs en avance.
+  - **ACTION OBLIGATOIRE** : Tu passes immédiatement la main au Lead Dev et tu **ATTENDS qu'il push sur une Pull Request** pour que la CI génère une version temporaire (snapshot) ou qu'il merge sur `main` pour la release définitive.
+  - Ce n'est qu'**APRÈS** la publication effective de la version par la CI et la mise à jour des dépendances que le travail dans les microservices consommateurs peut reprendre.
   - **IMPORTANT** : Chaque microservice (MS) possède un paquet NPM "domain" qui lui est propre et qui est partagé avec ses processus satellites (`outbox-runner`, `worker-runner`, `post-processors-runner`). Cela évite toute duplication de code logique.
 
 ## 3. Architecture Back-end (NestJS & Microservices)

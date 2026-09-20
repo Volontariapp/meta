@@ -58,3 +58,4 @@ lerna-debug.log*
 graphify-out/
 /ms-storage
 /mcp-meta-indexer
+/docs

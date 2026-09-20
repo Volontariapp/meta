@@ -17,24 +17,24 @@ Ce dépôt ("umbrella repository") centralise l'écosystème Volontariapp.
 Chaque microservice (API, Workers, Post-Processors), l'application mobile (`nativapp`), ainsi que les librairies partagées (`npm-packages`) sont des dépôts indépendants. Cette approche permet de conserver un versioning et une CI/CD découplés, tout en garantissant une expérience développeur unifiée en local grâce aux scripts d'orchestration.
 
 > **Architecture Détaillée (Modèle C4)** : 
-> Pour comprendre en profondeur la tuyauterie asynchrone (Outbox, Scatter-Gather), l'isolation des domaines et le déploiement GitOps, **[consultez la documentation complète de l'architecture ici](docs/README.md)**.
+> Toute la documentation technique, la modélisation C4 (System Context, Containers, Async Patterns, Infrastructure) et les guides d'architecture sont désormais hébergés dans le dépôt dédié **[Volontariapp/docs](https://github.com/Volontariapp/docs)** (ou accessible localement dans le répertoire [`./docs`](docs/README.md)).
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology | Rôle / Usage |
-|---|---|---|
-| **Runtime** | Node.js (24.14.0 LTS) | Moteur d'exécution asynchrone ultra-rapide. |
-| **Package Manager** | Yarn (4.12.0 Berry) | Gestion stricte des dépendances via Workspaces. |
-| **Backend API** | NestJS (11.x) | Framework modulaire pour les Microservices (gRPC). |
-| **Backend Workers** | NestJS Standalone | Consommateurs (Background Jobs) à très faible empreinte RAM. |
-| **Mobile** | React Native (Expo 54) | Application frontend unifiée (iOS / Android). |
-| **Real-Time** | Socket.io | Passerelle WebSockets avec Redis Adapter Pub/Sub. |
-| **Persistance** | PostgreSQL (TypeORM) | Bases de données isolées par domaine (ACID). |
-| **Event Broker** | Redis Streams | Bus d'événements persistant pour le backend asynchrone. |
-| **Job Queue** | Redis (BullMQ) | Gestion des files d'attente (Envoi emails, calculs lourds). |
-| **Déploiement** | K3s + ArgoCD | GitOps, Pod Security Admissions, Sealed Secrets. |
+| Layer               | Technology             | Rôle / Usage                                                 |
+| ---------------------| ------------------------| --------------------------------------------------------------|
+| **Runtime**         | Node.js (24.14.0 LTS)  | Moteur d'exécution asynchrone ultra-rapide.                  |
+| **Package Manager** | Yarn (4.12.0 Berry)    | Gestion stricte des dépendances via Workspaces.              |
+| **Backend API**     | NestJS (11.x)          | Framework modulaire pour les Microservices (gRPC).           |
+| **Backend Workers** | NestJS Standalone      | Consommateurs (Background Jobs) à très faible empreinte RAM. |
+| **Mobile**          | React Native (Expo 54) | Application frontend unifiée (iOS / Android).                |
+| **Real-Time**       | Socket.io              | Passerelle WebSockets avec Redis Adapter Pub/Sub.            |
+| **Persistance**     | PostgreSQL (TypeORM)   | Bases de données isolées par domaine (ACID).                 |
+| **Event Broker**    | Redis Streams          | Bus d'événements persistant pour le backend asynchrone.      |
+| **Job Queue**       | Redis (BullMQ)         | Gestion des files d'attente (Envoi emails, calculs lourds).  |
+| **Déploiement**     | K3s + ArgoCD           | GitOps, Pod Security Admissions, Sealed Secrets.             |
 
 ---
 

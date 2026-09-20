@@ -71,6 +71,42 @@ analyze_impact({ "target": "EventPostProcessor", "direction": "upstream" })
 analyze_impact({ "target": "ms-user", "direction": "both" })
 ```
 
+## Utilisation de analyze_grpc (Graphe Synchrone gRPC / Proto / Controllers)
+L'outil `analyze_grpc` cartographie la chaîne gRPC synchrone de bout en bout :
+- Définitions `.proto` dans `proto-registry/proto` (service, rpc, request, response)
+- Clients API Gateway / Microservices injectant `ClientGrpc`
+- Controllers Microservices implémentant `@GrpcMethod`
+
+### Paramètres
+| Paramètre | Obligation | Description |
+|-----------|------------|-------------|
+| `target` | **Obligatoire** | Nom du service (`UserService`), de la méthode RPC (`SignUp`, `GetUser`) ou du package |
+
+### Exemples d'utilisation
+```json
+// Trouver le contrat proto, le controller microservice et l'appelant Gateway pour un RPC
+analyze_grpc({ "target": "SignUp" })
+
+// Cartographier toutes les méthodes d'un service gRPC
+analyze_grpc({ "target": "UserService" })
+```
+
+## Utilisation de search_docs (Documentation C4 Architecture)
+L'outil `search_docs` interroge directement les sections conceptuelles de `meta/docs/` (`C1`, `C2`, `C3`, `C4`, `Monorepo-Structure.md`).
+- Évite de lire des fichiers entiers de 300 lignes.
+- Retourne uniquement le bloc pertinent (~200 tokens).
+
+### Paramètres
+| Paramètre | Obligation | Description |
+|-----------|------------|-------------|
+| `query` | **Obligatoire** | Concept architectural (`Scatter-Gather`, `Neo4j`, `Transactional Outbox`, `job_audit`, `ArgoCD`) |
+| `max_sections` | Optionnel | Nombre max de sections (défaut: 3) |
+
+### Exemple
+```json
+search_docs({ "query": "Scatter-Gather" })
+```
+
 ## Exécution (Fallback)
 Si le serveur MCP n'est pas chargé nativement en tant qu'outil dans ta session, tu dois l'invoquer via le CLI :
 1. Compile le serveur (une seule fois) pour éviter le surcoût de `cargo run` à chaque requête :

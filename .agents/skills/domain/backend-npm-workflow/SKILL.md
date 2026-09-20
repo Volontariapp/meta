@@ -7,11 +7,16 @@ description: Strict workflow for modifying npm-packages and proto-registry.
 
 ## `npm-packages`
 - The `npm-packages` repository always represents a definitive version.
-- **Modification Rule**: If you modify ANY package in `npm-packages`, you **MUST** push to git and **WAIT for the CI to pass**.
+- **🛑 RÈGLE CRITIQUE DE STOP IMMÉDIAT** : Dès que tu as fini de modifier un fichier dans `npm-packages` :
+  1. Tu vérifies que le package compile (`yarn build`).
+  2. Tu crées le changeset si nécessaire (`yarn changeset add message`).
+  3. **TU ARRÊTES IMMÉDIATEMENT TOUT CE QUE TU FAIS**.
+  4. Tu passes la main au Lead Dev pour qu'il push sur une PR.
+  5. **INTERDICTION FORMELLE** d'éditer ou de tenter de compiler les autres microservices avec des hacks/casts tant que la CI n'a pas publié la version (snapshot sur PR ou release sur `main`).
 - **Versioning**: 
-  - If CI passes on a PR -> you get a temporary version.
+  - If CI passes on a PR -> you get a temporary version (snapshot).
   - If CI passes on `main` -> you get a definitive version.
-- **Dependencies**: You CANNOT run `yarn up` in other repositories to apply changes until the CI has completely passed and generated the new version.
+- **Dependencies**: You CANNOT run `yarn up` or touch downstream repositories until the CI has completely passed and generated the new version.
 - **Changesets**: 
   - After modifications, you MUST run `yarn changeset add message`.
   - Then run `yarn changeset version` to bump all inherited/dependent packages.
