@@ -1,41 +1,74 @@
 ---
 name: Shared NPM Package Change
-description: Workflow for editing a shared package in npm-packages and propagating it to the microservice plus its satellite processes.
+description: Strict workflow for editing a shared package in npm-packages and propagating it to consumers.
 ---
 
-# Shared NPM Package Change
+# Shared NPM Package Change & Règle d'Or du Stop Immédiat
 
-`npm-packages/packages/` holds the shared code. Each domain has a dedicated `domain-<domain>` package (`domain-post`, `domain-user`, `domain-social`) shared between:
-- the `ms-<domain>` microservice
-- its `outbox-<domain>` runner (in `outbox-runners`)
-- its `worker-<domain>` runner (in `workers-runners`)
-- its post-processor (in `post-processors-runner`, via the `post-processors` package)
+Le répertoire `npm-packages/packages/` contient l'ensemble du code partagé entre microservices et leurs processus satellites :
+- **Packages de domaine (`domain-<domaine>`)** : partagés entre `ms-<domaine>`, `outbox-<domaine>`, `worker-<domaine>` et `post-processors-runner`.
+- **Packages transverses (`messaging`, `contracts`, `database`, `auth`, `logger`, `errors`, `monitoring`)** : consommés par l'ensemble des 17 dépôts.
 
-Cross-cutting packages (`auth`, `logger`, `errors`, `messaging`, `monitoring`, `contracts`, `database`) are consumed even more broadly — check usage before assuming a change is domain-local.
+---
 
-> 🛑 **RÈGLE CRITIQUE ET BLOQUANTE (STOP IMMÉDIAT) :**
-> Dès que tu as terminé une modification dans `npm-packages` (ex: ajout d'un enum dans `shared`, modification d'un contrat dans `messaging`, modèle dans `domain-*`) :
-> **TU DOIS ABSOLUMENT ARRÊTER TOUT CE QUE TU ES EN TRAIN DE FAIRE**.
-> - **Interdiction absolue** de continuer à coder dans les autres microservices (`ms-*`, `ws-service`, runners).
-> - **Interdiction absolue** de bricoler des casts types (`as unknown as Type`, `any`) pour contourner l'absence du package publié.
-> - **Action requise** : Tu rends immédiatement la main au Lead Dev et tu **ATTENDS qu'il pousse sur une PR** pour que la CI publie la version snapshot temporaire (ou release sur `main`).
-> - Ce n'est qu'**APRÈS** la génération de cette version par la CI que les dépendances des consommateurs pourront être mises à jour via `yarn up`.
+## 🛑 RÈGLE D'OR ABSOLUE : LE STOP IMMÉDIAT
 
-## Before editing a shared package
+> [!CAUTION]
+> **DÈS QUE TU AS TERMINÉ DE MODIFIER QUOI QUE CE SOIT DANS `npm-packages` :**
+> 1. Tu vérifies localement la compilation : `yarn build` (et `yarn test`).
+> 2. Tu crées le changeset nécessaire : `yarn changeset add`.
+> 3. **TU T'ARRÊTES IMMÉDIATEMENT**. Tu ne touches à AUCUN autre fichier ou repository.
+> 4. **INTERDICTION FORMELLE** d'aller modifier, tester ou compiler les microservices consommateurs (`ms-*`, `api-gateway`, runners) en avance.
+> 5. **INTERDICTION FORMELLE** de bricoler des types, d'utiliser du casting `as unknown as Type`, ou de poser du `any` pour faire semblant que le code compile sans le paquet publié.
+> 6. **ACTION EXIGÉE** : Tu passes la main au Lead Dev. Tu lui indiques que les modifications dans `npm-packages` sont prêtes et tu **ATTENDS qu'il pousse sur une PR**.
+> 7. La CI GitHub Actions s'exécute sur la PR et génère une version snapshot temporaire (ex: `@volontariapp/messaging@0.9.1-snapshot-pr-42`) ou définitive sur `main`.
+> 8. **Ce n'est qu'APRÈS la publication effective par la CI** que tu pourras mettre à jour les dépendances dans les microservices consommateurs (`yarn up @volontariapp/<pkg>@<version>`).
 
-1. Determine blast radius: is this a `domain-<domain>` package (scoped to one domain's MS + its 3 satellite runners) or a cross-cutting package (scoped to everything)?
-2. For cross-cutting packages, grep all `ms-*`, `outbox-runners`, `workers-runners`, `post-processors-runner`, `api-gateway` for the import before changing a public export or signature.
+---
 
-## Workflow de Modification & Publication
+## 1. Avant de modifier un package partagé (Impact Analysis)
 
-1. **Édition Locale** : Tu modifies le code dans `npm-packages/packages/<package>`.
-2. **Build & Test** : Tu vérifies que le package compile (`yarn build`) et que les tests passent (`yarn test`).
-3. **Changeset** : Tu prépares le changeset (`yarn changeset add` / `yarn changeset version`).
-4. **🛑 STOP & HANDOFF** : Tu t'arrêtes immédiatement. Tu indiques au Lead Dev que le package est prêt à être poussé sur une PR.
-5. **Attente du Snapshot** : Le Lead Dev push sur GitHub. La CI s'exécute et publie la version snapshot (ex: `@volontariapp/shared@0.9.1-snapshot-pr-42`).
-6. **Consommation** : Une fois la version snapshot disponible, tu reprends le travail dans les microservices consommateurs en mettant à jour la dépendance.
+Ne jamais modifier un package à l'aveugle :
+1. **Mesurer le rayon d'impact** : Utilise l'outil MCP `find_dependents` pour identifier en $O(1)$ tous les fichiers et services qui importent le package ou symbole modifié :
+   ```json
+   find_dependents({ "target": "@volontariapp/messaging" })
+   find_dependents({ "target": "UserAuthRequest" })
+   ```
+2. **Pour les flux asynchrones** : Si tu modifies un événement ou un job dans `messaging`, utilise l'outil MCP `analyze_impact` pour visualiser les producteurs, consommateurs et sagas impactés :
+   ```json
+   analyze_impact({ "target": "USER_CREATED" })
+   ```
 
-## Never do
+---
 
-- Never change a shared package's public API and merge it in the same PR as a consumer without first validating via the snapshot version.
-- Never assume a `domain-<domain>` package change is isolated — its outbox/worker/post-processor satellites read the same domain events and will break silently if a shape changes.
+## 2. Déroulement du Workflow Pas-à-Pas
+
+```mermaid
+flowchart TD
+    A["1. Édition du code dans npm-packages/"] --> B["2. Validation locale (yarn build & yarn test)"]
+    B --> C["3. Génération Changeset (yarn changeset add)"]
+    C --> D["🛑 4. STOP IMMÉDIAT (Passage de main au Lead Dev)"]
+    D --> E["5. Le Lead Dev push sur PR GitHub"]
+    E --> F["6. La CI publie la version Snapshot / Release"]
+    F --> G["7. Reprise : yarn up dans les microservices consommateurs"]
+```
+
+1. **Édition locale** : Modifications ciblées dans `npm-packages/packages/<package>`.
+2. **Build & Tests** : Vérifier que `yarn build` passe sans aucune erreur.
+3. **Changeset** :
+   - Exécuter `yarn changeset add` et sélectionner les packages modifiés.
+   - Ne JAMAIS bumper deux fois le même package sur la même branche (ex: pas de 3.1 -> 3.3).
+4. **🛑 STOP TOTAL** : Arrêt de toute exécution. Informer le Lead Dev que le package est prêt pour la PR.
+5. **Attente de publication** : Attendre le retour de la CI avec la version snapshot ou définitive.
+6. **Consommation** : Reprendre dans les microservices concernés via `yarn up @volontariapp/<package>@<version-snapshot>` et adapter le code consommateur.
+
+---
+
+## 3. Lien avec `proto-registry`
+
+- Si ta modification de contrat prend sa source dans des fichiers `.proto` (dans `proto-registry`), la chaîne est asynchrone :
+  1. Modification dans `proto-registry`.
+  2. Merge sur `main` dans `proto-registry`.
+  3. La CI de `proto-registry` ouvre/met à jour automatiquement une PR dans `npm-packages` pour régénérer `@volontariapp/contracts` et `@volontariapp/contracts-nest`.
+  4. Cette PR dans `npm-packages` doit être mergée et publiée par la CI.
+  5. **Tu ne dois JAMAIS tenter de toucher aux microservices avant que toute cette boucle ne soit terminée !**

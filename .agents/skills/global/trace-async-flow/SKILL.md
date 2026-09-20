@@ -1,31 +1,59 @@
 ---
 name: Trace Async Flow
-description: How to follow a request end-to-end across front, gateway, microservice, outbox, workers, and post-processors when debugging an asynchronous behavior.
+description: How to follow an asynchronous request end-to-end using analyze_impact and debug runtime bottlenecks.
 ---
 
-# Trace Async Flow
+# Trace Async Flow & Diagnostic Runtime
 
-No microservice pushes directly to Redis. Every async side-effect goes through the Transactional Outbox pattern, across up to 3 repos:
+Dans Volontariapp, aucun microservice n'écrit directement dans Redis pour une mutation. Chaque effet de bord asynchrone traverse le **Transactional Outbox Pattern**, réparti sur jusqu'à 3 processus distincts :
 
 ```
-MS (ms-<domain>)
-  → jobs_outbox table (status: Pending)
-  → outbox-<domain> runner (outbox-runners repo) polls with FOR UPDATE SKIP LOCKED, pushes to BullMQ queue
-  → worker-<domain> runner (workers-runners repo) consumes the job, writes job_audit (working/done/failed)
-  → job_audit SQL trigger writes event_outbox
-  → outbox-<domain> runner picks up event_outbox, pushes to a Redis Stream
-  → post-processor (post-processors-runner repo) consumes the stream
+ms-<domaine> 
+  → jobs_outbox (Postgres, status: Pending)
+  → outbox-<domaine> runner (Postgres FOR UPDATE SKIP LOCKED -> BullMQ Queue Redis)
+  → worker-<domaine> runner (Consomme BullMQ, écrit dans job_audit)
+  → SQL Trigger sur job_audit -> écrit dans event_outbox (status: pending)
+  → outbox-<domaine> runner (Pousse event_outbox dans Redis Stream)
+  → post-processor (post-processors-runner consomme le Stream, clôture la saga & déclenche WebSocket)
 ```
 
-## Debugging a stuck or missing async effect
+---
 
-1. Identify the domain (`post`/`user`/`social`/`event`) — each has its own `ms-<domain>`, `outbox-<domain>`, `worker-<domain>`, and post-processor.
-2. Check `jobs_outbox` in the MS's Postgres — if the row is stuck `Pending`, the `outbox-<domain>` runner (in `outbox-runners`) isn't polling/pushing.
-3. Check `job_audit` — if there's no row, the job never reached `workers-runners`; if it's `failed`, read the handler in `workers-runners/worker-<domain>/src/handlers/`.
-4. Check `event_outbox` — this only gets a row after `job_audit` reaches a terminal state (SQL trigger). No row here means the worker never audited completion.
-5. If `event_outbox` has a row but the post-processor never acted, the Redis Stream push (via `outbox-<domain>`) or the post-processor consumer (`post-processors-runner`) is the suspect.
+## 1. Étape 1 (Statique & Code) : Cartographie Instantanée via le Serveur MCP
 
-## Never do
+Ne cherche JAMAIS manuellement dans les dossiers `outbox-runners`, `workers-runners` et `post-processors-runner` avec du `grep`.
+Utilise en première intention l'outil MCP **`analyze_impact`** :
 
-- Never assume a microservice pushes to Redis directly — always trace through `jobs_outbox`/`event_outbox` first.
-- Never debug a `worker-<domain>` in isolation without checking whether `outbox-<domain>` actually delivered the job — most "worker bugs" are actually outbox delivery bugs.
+```json
+// Vue aval (downstream) : voir tous les consumers, handlers et cascades d'un événement
+analyze_impact({ "target": "USER_CREATED" })
+
+// Vue amont (upstream) : voir ce qui déclenche un handler ou post-processor précis
+analyze_impact({ "target": "UserCreatedPostProcessor" })
+```
+En $< 2\text{ms}$, l'outil te retourne le graphe causal exact : fichier émetteur, stream Redis, classe de post-processor, triade de saga (Commit / Rollback) et broadcast WebSocket.
+
+---
+
+## 2. Étape 2 (Dynamique & Runtime) : Diagnostiquer un Effet Bloqué en Base de Données
+
+Si un flux fonctionne en code mais ne produit pas d'effet en exécution réelle (ex: un utilisateur est créé mais le profil social n'apparaît pas dans Neo4j) :
+
+1. **Identifier le domaine** (`user`, `event`, `post`, `social`) — chaque domaine possède son microservice et ses daemons satellites dédiés.
+2. **Vérifier `jobs_outbox` dans la base PostgreSQL du microservice :**
+   - Si la ligne reste bloquée en statut `Pending`, le démon `outbox-<domaine>` ne scrute pas correctement ou n'arrive pas à contacter Redis.
+3. **Vérifier `job_audit` dans la même base :**
+   - S'il n'y a aucune ligne : le job n'est jamais arrivé au worker BullMQ.
+   - Si la ligne est en statut `failed` : inspecter les logs du handler dans `workers-runners/worker-<domaine>/src/workers/handlers/`.
+4. **Vérifier `event_outbox` dans la base :**
+   - Cette table ne reçoit une entrée qu'après le passage de `job_audit` en état terminal via le **Trigger SQL PostgreSQL**.
+   - Si aucune ligne n'apparaît, le trigger SQL ne s'est pas exécuté ou le worker n'a pas audité la complétion.
+5. **Vérifier les Redis Streams :**
+   - Si `event_outbox` est marqué comme traité mais que le post-processor n'a rien fait, le problème se situe au niveau de la connexion au Stream Redis ou du group de consommateurs dans `post-processors-runner`.
+
+---
+
+## 3. Règles d'Or
+
+- [ ] Ne jamais supposer qu'un microservice pousse directement dans Redis : toujours vérifier la table outbox en base de données.
+- [ ] Toujours utiliser `analyze_impact` pour comprendre la topologie causale avant de toucher au code d'un runner.

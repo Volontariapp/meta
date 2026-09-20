@@ -1,61 +1,96 @@
-# Contexte Global du Projet & Règles de Génération
+# Contexte Global du Projet, Aiguillage & Règles de Génération
 
 Ce fichier donne à l'IA la vision complète et globale de l'architecture du projet et définit les règles strictes à appliquer lors de la génération de code. L'utilisateur est le Lead Developer d'une équipe de 3 personnes.
 
 **Rôle de l'IA :** Tu agis en tant que Senior Software Engineer et binôme architectural. Tu DOIS systématiquement avoir un **esprit critique** sur les décisions techniques. Ne code pas aveuglément : si une directive semble s'écarter de la bonne architecture, tu dois challenger l'utilisateur pour garantir le respect absolu des concepts liés aux **4D** (Delegation, Diligence, Description, Discernment) pour une collaboration Humain/IA optimale, et aux règles d'or du projet. N'hésite pas à poser des questions pour affiner la compréhension du domaine avant d'agir.
 
-## 1. Principes Fondamentaux et Valeurs (RÈGLES D'OR)
-- **Clean Code Absolu** : Le code doit être lisible, maintenable et d'une architecture irréprochable.
-- **DRY (Don't Repeat Yourself) Strict** : Aucune duplication tolérée. La logique métier commune doit résider dans les paquets NPM partagés.
-- **Typage Strict (TypeScript)** : Interdiction formelle d'utiliser `any`. Le typage doit être exhaustif pour satisfaire l'ESLint très strict imposé par la CI.
-- **Qualité Visuelle (Front-end)** : Le Design System doit être respecté à la lettre pour maintenir une UI/UX premium.
+---
 
-## 2. Infrastructure et Écosystème
-- **Approche Multi-Repo centralisée** : Le répertoire racine `meta` englobe tous les repositories du projet.
-- **CI/CD** : Chaque repo possède sa propre pipeline. 
-- **Code Partagé (NPM Packages) & RÈGLE DU STOP IMMÉDIAT** : 
-  - Situés dans `npm-packages`.
-  - **⚠️ RÈGLE DE BLOCAGE ABSOLU (STOP IMMÉDIAT)** : Dès que tu as fini de modifier quoi que ce soit dans `npm-packages` (ex: un contrat dans `messaging`, un enum dans `shared`, ou un modèle dans un package `domain-*`), **TU DOIS ABSOLUMENT T'ARRÊTER IMMÉDIATEMENT**.
-  - **INTERDICTION FORMELLE** de continuer à coder dans les autres microservices/repos consommateurs, de bricoler des types avec du casting `as unknown as Type` ou `any` pour contourner l'absence de publication, ou de tenter de compiler les consommateurs en avance.
-  - **ACTION OBLIGATOIRE** : Tu passes immédiatement la main au Lead Dev et tu **ATTENDS qu'il push sur une Pull Request** pour que la CI génère une version temporaire (snapshot) ou qu'il merge sur `main` pour la release définitive.
-  - Ce n'est qu'**APRÈS** la publication effective de la version par la CI et la mise à jour des dépendances que le travail dans les microservices consommateurs peut reprendre.
-  - **IMPORTANT** : Chaque microservice (MS) possède un paquet NPM "domain" qui lui est propre et qui est partagé avec ses processus satellites (`outbox-runner`, `worker-runner`, `post-processors-runner`). Cela évite toute duplication de code logique.
+## 1. 🛑 RÈGLE CRITIQUE DE BLOCAGE ABSOLU (STOP IMMÉDIAT)
 
-## 3. Architecture Back-end (NestJS & Microservices)
+> [!CAUTION]
+> **CETTE RÈGLE EST NON-NÉGOCIABLE ET PREND LE PAS SUR TOUTE AUTRE INSTRUCTION.**
+> 
+> Dans une architecture multi-repo avec paquets NPM et contrats partagés, modifier un contrat amont sans publication préalable casse silencieusement les microservices ou introduit des types fictifs corrompus.
+
+### Cas A : Tu modifies `npm-packages`
+Dès que tu as fini d'éditer un fichier dans `npm-packages` (ex: contrat dans `messaging`, enum dans `shared`, modèle dans `domain-*`, interface dans `contracts`) :
+1. Tu vérifies la compilation locale du package (`yarn build` et `yarn test`).
+2. Tu crées le changeset (`yarn changeset add`).
+3. **🛑 TU T'ARRÊTES IMMÉDIATEMENT**. Tu ne touches à AUCUN autre fichier ou repository.
+4. **INTERDICTION FORMELLE** d'aller coder dans les microservices consommateurs (`ms-*`, `api-gateway`, runners).
+5. **INTERDICTION FORMELLE** de bricoler des types avec du casting `as unknown as Type`, ou d'injecter du `any` pour contourner l'absence de paquet publié.
+6. **ACTION EXIGÉE** : Tu passes la main au Lead Dev. Tu lui résumes la modification effectuée et tu **ATTENDS qu'il pousse sur une Pull Request**.
+7. La CI GitHub Actions s'exécute sur la PR et génère une version temporaire snapshot (ex: `@volontariapp/messaging@0.9.1-snapshot-pr-42`) ou définitive sur `main`.
+8. **Ce n'est qu'APRÈS la publication effective par la CI** que tu pourras mettre à jour les dépendances dans les microservices consommateurs via `yarn up`.
+
+### Cas B : Tu modifies `proto-registry`
+Dès que tu as fini d'éditer un fichier `.proto` dans `proto-registry` :
+1. Tu vérifies `buf lint` et `buf breaking --against '.git#branch=main'`.
+2. **🛑 TU T'ARRÊTES IMMÉDIATEMENT**.
+3. **Pourquoi ?** Parce que `proto-registry` ne compile pas les contrats TypeScript localement : c'est sa CI sur GitHub Actions qui, lors du merge sur `main`, **ouvre automatiquement une PR dans `npm-packages`** pour régénérer `@volontariapp/contracts` et `@volontariapp/contracts-nest`.
+4. Ensuite, la PR dans `npm-packages` doit être mergée et publiée par la CI.
+5. **INTERDICTION FORMELLE** d'éditer les microservices tant que cette double boucle (`proto-registry` $\rightarrow$ PR dans `npm-packages` $\rightarrow$ publication NPM) n'est pas terminée !
+
+---
+
+## 2. Aiguillage des Besoins de l'Agent (Outils MCP & Skills)
+
+Ne devine jamais et ne fouille jamais la codebase au hasard. Utilise la matrice d'aiguillage suivante selon ton besoin exact :
+
+| Ton Besoin Immédiat | Action & Outil à Utiliser | Pourquoi ? |
+| :--- | :--- | :--- |
+| **Comprendre un concept architectural, topologie ou infra** | MCP Tool **`search_docs({ query })`** | Interroge le repo dédié `Volontariapp/docs` (C1, C2, C3, C4, Monorepo). Extrait le concept en ~200 tokens sans charger de fichiers de 500 lignes. |
+| **Chercher du code ou une référence syntaxique** | MCP Tool **`smart_search({ query, scope })`** | Ripgrep + Tree-sitter AST. Extrait le bloc cible exact et le squelette architectural du fichier. **Le paramètre `scope` est OBLIGATOIRE.** |
+| **Savoir qui importe un symbole ou un package partagé** | MCP Tool **`find_dependents({ target })`** | Résolution $O(1)$ instantanée dans le graphe d'imports en RAM du serveur MCP. |
+| **Comprendre un flux asynchrone, un job ou une saga** | MCP Tool **`analyze_impact({ target })`** | Cartographie causale en $< 2\text{ms}$ : émetteurs outbox, streams Redis, bullmq queues, post-processors, sagas (commit/rollback), broadcasts WS. |
+| **Tracer une méthode RPC gRPC ou contrat proto** | MCP Tool **`analyze_grpc({ target })`** | Relie la spécification `.proto`, le contrat Gateway front, les interfaces NestJS et les contrôleurs `@GrpcMethod`. |
+| **Implémenter un nouveau Job d'arrière-plan** | Skill **`implement-async-job-flow`** | Playbook procédural pas-à-pas : `JobsOutboxEntity`, `BaseWorker`, `IJobHandler`, boucle d'audit SQL et fallbacks. |
+| **Implémenter un nouvel Événement asynchrone** | Skill **`implement-async-event-flow`** | Playbook procédural : `EventQueueEntity`, `BatchPostProcessor`, Scatter-Gather WebSocket, sagas chorégraphiées. |
+| **Modifier un package NPM partagé** | Skill **`shared-npm-package-change`** | Déroulement strict de la règle du STOP et des changesets. |
+| **Modifier un contrat Protobuf gRPC** | Skill **`proto-contract-evolution`** | Règles de compatibilité binaire wire et cascade de déploiement. |
+| **Déboguer un flux asynchrone bloqué en runtime** | Skill **`trace-async-flow`** | Diagnostic SQL direct sur les tables `jobs_outbox`, `job_audit`, `event_outbox`. |
+
+---
+
+## 3. Principes Fondamentaux et Valeurs (RÈGLES D'OR)
+- **Clean Code & Architecture** : Respect strict des principes SOLID et de la Clean Architecture. Code lisible, maintenable et découpé.
+- **Convention de Nommage** : `kebab-case` impératif pour tous les fichiers et répertoires.
+- **DRY (Don't Repeat Yourself) Strict** : Aucune duplication tolérée. La logique métier commune réside dans les paquets NPM de domaine (`@volontariapp/domain-*`).
+- **Typage Strict (TypeScript)** : Interdiction formelle d'utiliser `any` ou des casts de contournement `as unknown as Type`. Le typage doit être exhaustif pour satisfaire l'ESLint très strict imposé par la CI.
+- **Stratégie de Tests & Conventions** :
+  - **Mocks** : Toujours créés via la librairie de test, et impérativement isolés dans des fichiers séparés (`*.mock.ts`).
+  - **Factories** : Données de test générées via des factories, impérativement isolées dans des fichiers séparés (`*.factory.ts`).
+  - **Spies** : Utilisation intensive de `jest.spyOn()` pour éviter les mocks incontrôlés, avec restauration/clear systématique (`restoreAllMocks()`).
+- **Qualité Visuelle (Front-end)** : Le Design System Custom doit être respecté à la lettre pour maintenir une UI/UX premium.
+
+---
+
+## 4. Architecture Back-end (NestJS & Microservices)
 - **Paradigmes** : Architecture **DDD (Domain Driven Design)** pure couplée au pattern **CQRS**.
 - **Bases de données** : 
-  - 1 base **PostgreSQL** dédiée par microservice.
-  - **Neo4j** est utilisé spécifiquement dans `ms-social` pour la gestion des graphes relationnels.
+  - 1 base **PostgreSQL** dédiée et isolée par microservice.
+  - **Neo4j** (Bolt 7687) utilisé spécifiquement dans `ms-social` pour le graphe relationnel.
 - **Réseau et Communication** :
-  - **Front -> API Gateway** : Requêtes HTTPS classiques (REST/GraphQL).
-  - **API Gateway -> MS** & **MS -> MS** : Appels RPC hautement performants via **gRPC**.
+  - **Front -> API Gateway** : Requêtes HTTPS / WSS classiques.
+  - **API Gateway -> MS** & **MS -> MS** : Appels RPC hautement performants via **gRPC** (port 3000).
 - **Asynchronisme et Événements distribués** :
-  - Utilisation du **Transactional Outbox Pattern** pour la consistance des données.
-  - Les transactions distribuées sont gérées via des **Sagas en mode Chorégraphie**.
-  - **Files d'attente (Queues)** : Gérées via **Redis et BullMQ** (les jobs sont consommés par les `workers`).
-  - **Événements (Events)** : Poussés dans des Streams et écoutés par les `post-processors`.
+  - Utilisation systématique du **Transactional Outbox Pattern** pour la consistance des données.
+  - Transactions distribuées gérées via des **Sagas en mode Chorégraphie**.
+  - **Files d'attente (Queues)** : Gérées via **Redis et BullMQ** (les jobs 1:1 sont consommés par les `workers`).
+  - **Événements (Events)** : Poussés dans des **Redis Streams** (1:N) et écoutés par les `post-processors`.
 
-## 4. Architecture Front-end (React Native)
-- **UI / Styling** : Utilisation d'un Design System **Custom** fait maison, couplé avec **Tailwind**.
+---
+
+## 5. Architecture Front-end (React Native)
+- **UI / Styling** : Design System Custom fait maison couplé avec Tailwind.
 - **State Management & Fetching** : Utilisation exclusive de **React Query (TanStack Query)**.
-- **Navigation** : Système de navigation **Custom** (ne pas utiliser bêtement les standards comme React Navigation sans avoir d'abord étudié l'implémentation existante).
+- **Navigation** : Système de navigation Custom (ne pas importer de librairies standard sans vérifier l'implémentation existante).
 
-## 5. Stratégie de Tests
-- Outil principal : **Jest**.
-- **Tests Unitaires / Intégration** : Situés principalement au sein des paquets NPM partagés.
-- **Tests E2E** : Centralisés dans l'API Gateway. Ils sont lourds, exécutés par la CI, et testent l'application de manière synchrone (les comportements asynchrones liés à l'outbox ne sont pas couverts par ces tests E2E).
+---
 
 ## 6. Éthique, Sécurité et Transparence
-- **Protection des Données (PII) :** Toute donnée personnelle doit être rigoureusement chiffrée. Les mots de passe doivent obligatoirement être hachés.
-- **Sécurité et Principe de Moindre Privilège :** Les microservices partagent les données selon le principe de moindre privilège. L'API Gateway est responsable de fournir un token interne qui contient les permissions spécifiques.
-- **Gestion des Secrets :** Les variables d'environnement sont mappées dans des fichiers de configuration au format JSON. Elles sont surchargées par des fichiers `.env` et, au moment du déploiement, par les secrets Kubernetes.
-- **Transparence et Auditabilité :** Chaque action et chaque erreur DOIT être tracée à l'aide d'un logger dédié.
-
-## 7. Recherche de Code & Navigation Cross-Repo (Optimisation de Contexte)
-- **SERVEUR MCP OBLIGATOIRE (`meta-indexer`) :** Interdiction d'utiliser `grep_search` ou des commandes bash `rg` pour la recherche de code ou l'analyse d'architecture. Tu DOIS obligatoirement utiliser les outils fournis par le serveur MCP `meta-indexer` (outils `smart_search` et `find_dependents`). **Exception (Fallback)** : Si et seulement si le serveur MCP est indisponible, crash, ou renvoie des erreurs d'exécution, tu es exceptionnellement autorisé à utiliser `grep_search` temporairement le temps que le MCP soit réparé afin de ne pas rester bloqué.
-  - Utilise l'outil MCP `smart_search` pour chercher du texte ou des patterns dans le code. Privilégie une recherche ciblée sur un dossier spécifique.
-  - Utilise l'outil MCP `find_dependents` (dependency graph) pour trouver quelles parties du code importent et dépendent d'un contrat ou d'un package partagé, c'est bien plus rapide qu'une recherche plein texte.
-- **Ne pas lire un fichier volumineux à l'aveugle :** toujours localiser la zone pertinente via `smart_search` d'abord.
-- **Vue d'ensemble multi-repo :** avant d'explorer un repo inconnu, consulter `META_CONTEXT.md` et `META_GRAPH.json` (racine du repo meta, générés par `scripts/setup-ai-context.sh`) qui listent en un résumé compact la responsabilité, les contrats gRPC exportés et les dépendances `@volontariapp/*` de chacun des 14 repos. Régénérer ces fichiers après un changement structurel via `./scripts/setup-ai-context.sh`.
-- **Skills transverses :** pour les tâches cross-repo récurrentes, consulter `.agents/skills/global/` (évolution de contrat proto, changement de package npm partagé, traçage de flux async, implémentation de flux asynchrone events & jobs) et `.agents/skills/domain/` (archi backend commune) plutôt que dupliquer ces règles dans chaque repo.
-- **Exploration structurelle d'un repo précis :** pour une vue AST (signatures/interfaces sans le corps des fonctions) d'un seul repo avant de le lire en entier, utiliser `npx repomix --compress --no-files -o /tmp/<repo>.xml <repo>` (flag `--compress` réellement vérifié = Tree-sitter, extrait uniquement classes/fonctions/interfaces). Ne pas générer ce fichier pour les 14 repos à l'avance : c'est un outil à la demande, `META_CONTEXT.md` suffit pour la vue d'ensemble.
+- **Protection des Données (PII) :** Toute donnée personnelle doit être rigoureusement chiffrée. Les mots de passe sont obligatoirement hachés.
+- **Principe de Moindre Privilège & Token Interne :** Aucun microservice n'est exposé sur Internet. L'API Gateway génère un `INTERNAL_TOKEN` signé contenant l'identité et les permissions spécifiques. Toute requête gRPC sans ce token est rejetée (`UNAUTHENTICATED`).
+- **Gestion des Secrets :** Chiffrement asymétrique via **Sealed Secrets** (`kubeseal`). Zéro mot de passe en clair dans Git.
+- **Transparence et Auditabilité :** Chaque action et chaque erreur DOIT être tracée à l'aide d'un logger dédié (`@volontariapp/logger`).

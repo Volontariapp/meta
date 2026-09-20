@@ -1,22 +1,50 @@
 # AGENT.md — Technical Survival Guide
-> Volontariapp · NestJS Microservices Monorepo
+> Volontariapp · Distributed Microservices Ecosystem
+
+---
+
+## 🛑 RÈGLE CRITIQUE ET BLOQUANTE (STOP IMMÉDIAT)
+
+> [!CAUTION]
+> **1. Modification dans `npm-packages` :** Dès qu'un fichier est modifié dans `npm-packages/packages/`, tu lances `yarn build`, `yarn changeset add`, et **TU T'ARRÊTES IMMÉDIATEMENT**. Interdiction formelle de toucher ou de compiler les microservices consommateurs, ou de bricoler avec des casts `as unknown as Type` ou `any`. Tu passes la main au Lead Dev et tu **ATTENDS qu'il pousse sur une PR** pour que la CI publie la version snapshot.
+> 
+> **2. Modification dans `proto-registry` :** Dès qu'un fichier `.proto` est modifié, tu vérifies `buf lint` et **TU T'ARRÊTES IMMÉDIATEMENT**. La CI de `proto-registry` ouvre automatiquement une PR dans `npm-packages` pour régénérer `@volontariapp/contracts` et `@volontariapp/contracts-nest`. Tu ne touches à aucun microservice tant que toute cette chaîne n'a pas été mergée et publiée par la CI !
+
+---
+
+## Aiguillage & Navigation (Serveur MCP `mcp-meta-indexer`)
+
+- 📚 **Concepts d'architecture C4 & infra ?** $\rightarrow$ Utilise l'outil MCP `search_docs({ query })` (interroge le repo dédié `Volontariapp/docs`).
+- 🔍 **Recherche de code ou pattern ?** $\rightarrow$ Utilise l'outil MCP `smart_search({ query, scope })` (scope obligatoire).
+- 🕸️ **Dépendances d'un contrat ou package ?** $\rightarrow$ Utilise l'outil MCP `find_dependents({ target })` ($O(1)$ en RAM).
+- ⚡ **Flux asynchrone, job, outbox, saga ou WS ?** $\rightarrow$ Utilise l'outil MCP `analyze_impact({ target })`.
+- 🌐 **Flux gRPC, proto ou controllers ?** $\rightarrow$ Utilise l'outil MCP `analyze_grpc({ target })`.
 
 ---
 
 ## 1. Repository Map
 
 ```
-meta/                           ← root monorepo (Yarn 4 workspaces)
-├── api-gateway/                ← REST → gRPC edge layer (HTTP/REST, Swagger)
-├── ms-user/                    ← User microservice (gRPC, PostgreSQL + Neo4j)
-├── ms-post/                    ← Post microservice  (gRPC, PostgreSQL + Neo4j)
-├── ms-event/                   ← Event microservice (gRPC, PostgreSQL + Neo4j)
+meta/                           ← root umbrella monorepo
+├── docs/                       ← Documentation officielle d'architecture C4 (Volontariapp/docs)
+├── mcp-meta-indexer/           ← Serveur MCP Rust pour l'indexation IA et la navigation causale
+├── api-gateway/                ← Edge layer REST/WSS → gRPC (authentification & internal token)
+├── ms-user/                    ← User microservice (gRPC, PostgreSQL)
+├── ms-event/                   ← Event microservice (gRPC, PostgreSQL)
+├── ms-post/                    ← Post microservice (gRPC, PostgreSQL)
+├── ms-social/                  ← Social microservice (gRPC, PostgreSQL + Neo4j)
+├── ms-storage/                 ← Storage microservice (gRPC, S3/MinIO)
+├── ws-service/                 ← WebSocket real-time gateway (Scatter-Gather gatherer)
+├── outbox-runners/             ← Lean daemons PostgreSQL → Redis Streams & BullMQ
+├── workers-runners/            ← BullMQ job processing fleet (BaseWorker + IJobHandler)
+├── post-processors-runner/     ← Redis Streams consumers, saga rollbacks & cleanup
 ├── nativapp/                   ← React Native / Expo mobile app
-├── npm-packages/packages/      ← Internal @volontariapp/* libraries (source)
-├── proto-registry/             ← Protobuf definitions (source of truth for gRPC)
-├── ci-tools/                   ← Observability / Grafana / monitoring tooling
-├── changelog-checker/          ← Changelog validation CLI
-└── scripts/                    ← Shared shell utilities
+├── npm-packages/packages/      ← Monorepo des librairies partagées @volontariapp/*
+├── proto-registry/             ← Contrats Protobuf (Source Unique de Vérité gRPC)
+├── deploy/                     ← Source de vérité GitOps Kubernetes (K3s, ArgoCD)
+├── ci-tools/                   ← Workflows & actions GitHub Actions mutualisés
+├── changelog-checker/          ← Validateur de changelogs
+└── scripts/                    ← Scripts shell d'orchestration locale (root.sh)
 ```
 
 ---
@@ -344,20 +372,27 @@ yarn audit:fix
 
 ---
 
-## 13. Proto / gRPC Contract Flow
+## 13. Proto / gRPC Contract Flow & Cascade CI
 
 ```
-proto-registry/ (source of truth)
+proto-registry/ (.proto SSOT)
+       │ (1. Modification locale & buf lint)
+       ▼ (2. Merge sur main)
+GitHub Actions CI (proto-sync)
        │
-       ▼ (CI generates)
-@volontariapp/contracts        ← raw pb types
-@volontariapp/contracts-nest   ← NestJS service/method enums
+       ▼ (3. Ouvre automatiquement une Pull Request)
+npm-packages/packages/contracts & contracts-nest
+       │ (4. Revue & merge de la PR dans npm-packages)
+       ▼ (5. CI npm-packages publie sur GitHub Packages)
+@volontariapp/contracts@<version> & @volontariapp/contracts-nest@<version>
        │
-       ▼ (consumed via snapshot in each service)
+       ▼ (6. REPRISE : Consommé via yarn up dans chaque microservice)
 grpc-packages.ts               ← injection token (e.g. POST_PACKAGE)
 grpc-client.options.ts         ← proto file path + package name
 grpc-client.module.ts          ← ClientsModule.register(...)
 ```
+
+> **Règle absolue :** Ne JAMAIS modifier un microservice ou client gRPC tant que l'étape 5 (publication du package par la CI) n'est pas effective ! Localement, aucun fichier TypeScript n'est généré par `proto-registry`.
 
 ---
 

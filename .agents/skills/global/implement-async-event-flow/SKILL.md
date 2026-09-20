@@ -83,6 +83,15 @@ Tous les types d'événements et leurs structures de données **doivent** résid
    }
    ```
 
+> [!CAUTION]
+> ### 🛑 POINT DE BLOCAGE CRITIQUE : LE STOP IMMÉDIAT
+> **Tu viens de modifier `npm-packages` (`messaging`, `shared`) ? TU DOIS T'ARRÊTER.**
+> 1. Valide la compilation locale dans `npm-packages` : `yarn build && yarn test`.
+> 2. Génère le changeset : `yarn changeset add`.
+> 3. **STOP TOTAL :** Interdiction formelle de passer à l'Étape 2 (`domain-*` si hors npm-packages, ou `ms-*`), l'Étape 3 (`post-processors-runner`), ou l'Étape 4 (`ws-service`) immédiatement !
+> 4. Passe la main au Lead Dev pour qu'il pousse sur une PR et que la CI publie la version snapshot (ex: `@volontariapp/messaging@1.2.3-snapshot-pr-12.0`).
+> 5. **Ce n'est qu'après publication par la CI** que tu pourras lancer `yarn up @volontariapp/messaging @volontariapp/shared` dans les microservices et continuer les étapes ci-dessous.
+
 ---
 
 ## Étape 2 : Émettre l'Événement en BDD (`domain-<domaine>` ou `ms-<domaine>`)

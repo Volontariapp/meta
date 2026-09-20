@@ -75,6 +75,15 @@ Dans Volontariapp, un **Job** représente une opération asynchrone **1 : 1** (g
    }
    ```
 
+> [!CAUTION]
+> ### 🛑 POINT DE BLOCAGE CRITIQUE : LE STOP IMMÉDIAT
+> **Tu viens de modifier `npm-packages/packages/messaging` ? TU DOIS T'ARRÊTER.**
+> 1. Valide la compilation locale dans `npm-packages` : `yarn build && yarn test`.
+> 2. Génère le changeset : `yarn changeset add`.
+> 3. **STOP TOTAL :** Interdiction formelle de passer à l'Étape 2 (`ms-*`) ou l'Étape 3 (`workers-runners`) immédiatement !
+> 4. Passe la main au Lead Dev pour qu'il pousse sur une PR et que la CI publie la version snapshot (ex: `@volontariapp/messaging@1.2.3-snapshot-pr-12.0`).
+> 5. **Ce n'est qu'après publication par la CI** que tu pourras lancer `yarn up @volontariapp/messaging` dans les microservices et continuer les étapes ci-dessous.
+
 ---
 
 ## Étape 2 : Émettre le Job en Base (`ms-*` ou `domain-*`)
