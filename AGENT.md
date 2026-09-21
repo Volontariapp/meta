@@ -9,6 +9,8 @@
 > **1. Modification dans `npm-packages` :** Dès qu'un fichier est modifié dans `npm-packages/packages/`, tu lances `yarn build`, `yarn changeset add`, et **TU T'ARRÊTES IMMÉDIATEMENT**. Interdiction formelle de toucher ou de compiler les microservices consommateurs, ou de bricoler avec des casts `as unknown as Type` ou `any`. Tu passes la main au Lead Dev et tu **ATTENDS qu'il pousse sur une PR** pour que la CI publie la version snapshot.
 > 
 > **2. Modification dans `proto-registry` :** Dès qu'un fichier `.proto` est modifié, tu vérifies `buf lint` et **TU T'ARRÊTES IMMÉDIATEMENT**. La CI de `proto-registry` ouvre automatiquement une PR dans `npm-packages` pour régénérer `@volontariapp/contracts` et `@volontariapp/contracts-nest`. Tu ne touches à aucun microservice tant que toute cette chaîne n'a pas été mergée et publiée par la CI !
+> 
+> **3. Discipline `yarn install` & Sync :** Dès que tu mets à jour la version d'un paquet, que tu ajoutes une dépendance ou que tu effectues un `git pull` / `git checkout main`, **tu DOIS impérativement exécuter `yarn install`** pour synchroniser `yarn.lock` et `node_modules` avant de lancer la moindre compilation (`yarn build`) ou suite de tests.
 
 ---
 
