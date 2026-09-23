@@ -1,28 +1,9 @@
 {
   "mcpServers": {
-    "meta-indexer-local": {
-      "command": "./mcp-meta-indexer/target/release/mcp-meta-indexer",
-      "args": [],
-      "env": {
-        "MCP_TRANSPORT": "stdio"
-      }
-    },
-    "meta-indexer-cluster": {
-      "command": "kubectl",
-      "args": [
-        "exec",
-        "-i",
-        "deployment/mcp-meta-indexer",
-        "-n",
-        "prod",
-        "-c",
-        "mcp-meta-indexer",
-        "--",
-        "env",
-        "MCP_TRANSPORT=stdio",
-        "CODE_ROOT=/code/deploy.git/submodules",
-        "mcp-meta-indexer"
-      ]
+    "mesh-mcp": {
+      "command": "mesh-mcp",
+      "args": ["run"],
+      "env": {}
     }
   }
 }

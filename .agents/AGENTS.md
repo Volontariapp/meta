@@ -38,18 +38,23 @@ Dès que tu as fini d'éditer un fichier `.proto` dans `proto-registry` :
 
 Ne devine jamais et ne fouille jamais la codebase au hasard. Utilise la matrice d'aiguillage suivante selon ton besoin exact :
 
+> Tous les outils MCP ci-dessous sont servis par **`mesh-mcp`** (projet `causalmesh`,
+> config `.agents/mesh-mcp.toml`, schémas détaillés dans `.agents/skills/mesh-mcp/SKILL.md`).
+
 | Ton Besoin Immédiat | Action & Outil à Utiliser | Pourquoi ? |
 | :--- | :--- | :--- |
 | **Comprendre un concept architectural, topologie ou infra** | MCP Tool **`search_docs({ query })`** | Interroge le repo dédié `Volontariapp/docs` (C1, C2, C3, C4, Monorepo). Extrait le concept en ~200 tokens sans charger de fichiers de 500 lignes. |
-| **Chercher du code ou une référence syntaxique** | MCP Tool **`smart_search({ query, scope })`** | Ripgrep + Tree-sitter AST. Extrait le bloc cible exact et le squelette architectural du fichier. **Le paramètre `scope` est OBLIGATOIRE.** |
-| **Savoir qui importe un symbole ou un package partagé** | MCP Tool **`find_dependents({ target })`** | Résolution $O(1)$ instantanée dans le graphe d'imports en RAM du serveur MCP. |
-| **Comprendre un flux asynchrone, un job ou une saga** | MCP Tool **`analyze_impact({ target })`** | Cartographie causale en $< 2\text{ms}$ : émetteurs outbox, streams Redis, bullmq queues, post-processors, sagas (commit/rollback), broadcasts WS. |
-| **Tracer une méthode RPC gRPC ou contrat proto** | MCP Tool **`analyze_grpc({ target })`** | Relie la spécification `.proto`, le contrat Gateway front, les interfaces NestJS et les contrôleurs `@GrpcMethod`. |
+| **Chercher du code ou une référence syntaxique** | MCP Tool **`smart_search({ query, scope })`** | Ripgrep + Tree-sitter AST. Extrait le bloc cible exact et le squelette architectural du fichier. **Le paramètre `scope` est OBLIGATOIRE** (rejeté sinon, pas de valeur par défaut). |
+| **Savoir qui importe un symbole ou un package partagé** | MCP Tool **`find_dependents({ target })`** | Résolution $O(1)$ instantanée dans le graphe d'imports en RAM du serveur MCP. Un seul paramètre, pas de `scope`. |
+| **Comprendre un flux asynchrone, un job ou une saga** | MCP Tool **`analyze_impact({ target })`** | Cartographie causale en $< 2\text{ms}$ : émetteurs outbox, streams Redis, bullmq queues, post-processors, sagas (commit/rollback), broadcasts WS. Un seul paramètre, pas de `direction`. |
+| **Tracer une méthode RPC gRPC ou contrat proto** | MCP Tool **`analyze_grpc({ target })`** | Relie la spécification `.proto`, le contrat Gateway front, les interfaces NestJS et les contrôleurs `@GrpcMethod`. Un seul paramètre, pas de `service_name`/`method_name` séparés. |
+| **Visualiser toute la topologie du mesh** | MCP Tool **`visualize_mesh({ format })`** | Rend l'intégralité du graphe indexé en Mermaid ou HTML interactif. Pas pour une question ciblée sur un symbole — préfère `find_dependents`/`analyze_grpc`. |
 | **Implémenter un nouveau Job d'arrière-plan** | Skill **`implement-async-job-flow`** | Playbook procédural pas-à-pas : `JobsOutboxEntity`, `BaseWorker`, `IJobHandler`, boucle d'audit SQL et fallbacks. |
 | **Implémenter un nouvel Événement asynchrone** | Skill **`implement-async-event-flow`** | Playbook procédural : `EventQueueEntity`, `BatchPostProcessor`, Scatter-Gather WebSocket, sagas chorégraphiées. |
 | **Modifier un package NPM partagé** | Skill **`shared-npm-package-change`** | Déroulement strict de la règle du STOP et des changesets. |
 | **Modifier un contrat Protobuf gRPC** | Skill **`proto-contract-evolution`** | Règles de compatibilité binaire wire et cascade de déploiement. |
 | **Déboguer un flux asynchrone bloqué en runtime** | Skill **`trace-async-flow`** | Diagnostic SQL direct sur les tables `jobs_outbox`, `job_audit`, `event_outbox`. |
+| **Comprendre les schémas exacts des 6 outils mesh-mcp** | Skill **`mesh-mcp`** | Signatures vérifiées en source (pas dans `docs/mcp-tools.md`, qui est obsolète sur `analyze_grpc`/`analyze_impact`). |
 
 ---
 

@@ -12,13 +12,16 @@
 
 ---
 
-## Aiguillage & Navigation (Serveur MCP `mcp-meta-indexer`)
+## Aiguillage & Navigation (Serveur MCP `mesh-mcp`, projet `causalmesh`)
 
-- 📚 **Concepts d'architecture C4 & infra ?** $\rightarrow$ Utilise l'outil MCP `search_docs({ query })` (interroge le repo dédié `Volontariapp/docs`).
-- 🔍 **Recherche de code ou pattern ?** $\rightarrow$ Utilise l'outil MCP `smart_search({ query, scope })` (scope obligatoire).
-- 🕸️ **Dépendances d'un contrat ou package ?** $\rightarrow$ Utilise l'outil MCP `find_dependents({ target })` ($O(1)$ en RAM).
-- ⚡ **Flux asynchrone, job, outbox, saga ou WS ?** $\rightarrow$ Utilise l'outil MCP `analyze_impact({ target })`.
-- 🌐 **Flux gRPC, proto ou controllers ?** $\rightarrow$ Utilise l'outil MCP `analyze_grpc({ target })`.
+> Schémas complets dans `.agents/skills/mesh-mcp/SKILL.md`.
+
+- 📚 **Concepts d'architecture C4 & infra ?** $\rightarrow$ `search_docs({ query })` (interroge `meta/docs/`).
+- 🔍 **Recherche de code ou pattern ?** $\rightarrow$ `smart_search({ query, scope })` (`scope` **obligatoire**, rejeté sinon).
+- 🕸️ **Dépendances d'un contrat ou package ?** $\rightarrow$ `find_dependents({ target })` ($O(1)$ en RAM, pas de `scope`).
+- ⚡ **Flux asynchrone, job, outbox, saga ou WS ?** $\rightarrow$ `analyze_impact({ target })` (un seul paramètre, pas de `direction`).
+- 🌐 **Flux gRPC, proto ou controllers ?** $\rightarrow$ `analyze_grpc({ target })` (un seul paramètre, pas de `service_name`/`method_name` séparés).
+- 🗺️ **Vue d'ensemble de la topologie ?** $\rightarrow$ `visualize_mesh({ format })` (`"mermaid"` ou `"html"`, défaut `"mermaid"`).
 
 ---
 
@@ -27,7 +30,6 @@
 ```
 meta/                           ← root umbrella monorepo
 ├── docs/                       ← Documentation officielle d'architecture C4 (Volontariapp/docs)
-├── mcp-meta-indexer/           ← Serveur MCP Rust pour l'indexation IA et la navigation causale
 ├── api-gateway/                ← Edge layer REST/WSS → gRPC (authentification & internal token)
 ├── ms-user/                    ← User microservice (gRPC, PostgreSQL)
 ├── ms-event/                   ← Event microservice (gRPC, PostgreSQL)
