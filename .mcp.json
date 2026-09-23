@@ -1,9 +1,9 @@
 {
   "mcpServers": {
     "mesh-mcp": {
+      "args": [],
       "command": "mesh-mcp",
-      "args": ["run"],
-      "env": {}
+      "type": "stdio"
     }
   }
 }

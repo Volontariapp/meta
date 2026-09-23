@@ -16,7 +16,7 @@ Le méta-répertoire modulaire qui propulse la plateforme **Volontariapp** — c
 ## Architecture du Méta-Projet
 
 Ce dépôt ("umbrella repository") centralise l'écosystème distribué de Volontariapp. 
-Chaque microservice (API, Workers, Post-Processors), l'application mobile (`nativapp`), les librairies partagées (`npm-packages`), le registre Protobuf (`proto-registry`), l'indexeur IA (`mcp-meta-indexer`) et la documentation d'architecture (`docs`) sont des dépôts GitHub indépendants. 
+Chaque microservice (API, Workers, Post-Processors), l'application mobile (`nativapp`), les librairies partagées (`npm-packages`), le registre Protobuf (`proto-registry`) et la documentation d'architecture (`docs`) sont des dépôts GitHub indépendants. 
 
 Cette approche garantit un versioning et des pipelines CI/CD découplés, tout en offrant une expérience développeur unifiée en local grâce à nos scripts d'orchestration.
 
@@ -39,28 +39,30 @@ La documentation de référence est structurée selon le modèle **C4** pour une
 
 ---
 
-## Intelligence Artificielle & Serveur MCP (`mcp-meta-indexer`)
+## Intelligence Artificielle & Serveur MCP (`mesh-mcp`)
 
-Pour permettre aux agents d'IA (Claude Code, Antigravity, Cursor) de naviguer et de raisonner sur tout les dépôts sans saturer leur contexte en tokens, le projet intègre **[`mcp-meta-indexer`](mcp-meta-indexer/README.md)**, un serveur haute performance écrit en **Rust** implémentant le standard **Model Context Protocol (MCP)**.
+Pour permettre aux agents d'IA (Claude Code, Antigravity, Cursor) de naviguer et de raisonner sur tout les dépôts sans saturer leur contexte en tokens, le projet expose le standard **Model Context Protocol (MCP)** via **[`mesh-mcp`](https://github.com/VictorAgahi/causalmesh)** (projet `causalmesh`), un binaire local (`~/.local/bin/mesh-mcp`) configuré par `.agents/mesh-mcp.toml`. Ne parle jamais réseau, indexe uniquement les `roots` déclarés. Voir `.agents/skills/mesh-mcp/SKILL.md`.
 
 ```mermaid
 flowchart LR
-    Agent["Agent IA (Claude / Antigravity)"] <-->|"JSON-RPC 2.0 (Stdio / SSE)"| MCP["mcp-meta-indexer (Rust)"]
-    MCP <-->|"Index RAM (O(1)) + AST Tree-sitter"| Codebase[("Codebase Volontariapp (17 dépôts)")]
+    Agent["Agent IA (Claude / Antigravity)"] <-->|"JSON-RPC 2.0 (Stdio)"| MCP["mesh-mcp (Rust)"]
+    MCP <-->|"Index RAM (O(1)) + AST Tree-sitter"| Codebase[("Codebase Volontariapp")]
 ```
 
-### Les 5 Outils Exposés
+### Les 6 Outils Exposés
 
-1. 🔍 **`smart_search`** : Recherche plein texte Ripgrep combinée à un parser **Tree-sitter (AST)**. Extrait le bloc syntaxique exact et le squelette architectural du fichier (~90% d'économie de tokens), avec **fallback Fuzzy Matching** automatique en cas d'imprécision lexicale.
-2. 🕸️ **`find_dependents`** : Graphe des imports en mémoire vive. Résolution instantanée en $O(1)$ des consommateurs d'un symbole, contrat ou package partagé.
-3. ⚡ **`analyze_impact`** : Cartographie causale de l'architecture événementielle (CQRS, Transactional Outbox, Redis Streams, BullMQ, Post-processors, triades de sagas Commit/Rollback, et broadcasts WebSocket).
-4. 🌐 **`analyze_grpc`** : Cartographie synchrone de bout en bout des flux gRPC (spécifications `.proto` dans `proto-registry`, DTOs Gateway front, interfaces NestJS et contrôleurs `@GrpcMethod`).
-5. 📚 **`search_docs`** : Recherche ciblée et extraction de sections conceptuelles dans le repo `docs` (~200 tokens par concept extrait).
+1. 🔍 **`smart_search(query, scope, include_body?, fuzzy?)`** : Recherche de symboles déclarés (pas de texte libre) via **Tree-sitter (AST)**, décapité (~90% d'économie de tokens). `scope` est obligatoire. `fuzzy: true` fait un fallback full-text.
+2. 🕸️ **`find_dependents(target)`** : Graphe des imports en mémoire vive. Résolution instantanée en $O(1)$ des consommateurs d'un symbole, contrat ou package partagé.
+3. ⚡ **`analyze_impact(target)`** : Cartographie causale de l'architecture événementielle (Transactional Outbox, Redis Streams, BullMQ, Post-processors, sagas chorégraphiées, broadcasts WebSocket).
+4. 🌐 **`analyze_grpc(target)`** : Cartographie synchrone de bout en bout des flux gRPC (spécifications `.proto` dans `proto-registry`, DTOs Gateway front, interfaces NestJS et contrôleurs `@GrpcMethod`).
+5. 📚 **`search_docs(query, max_sections?)`** : Recherche ciblée et extraction de sections conceptuelles dans le repo `docs` (~200 tokens par concept extrait).
+6. 🗺️ **`visualize_mesh(format?)`** : Rend toute la topologie indexée en Mermaid ou HTML interactif.
+
+Les schémas exacts (vérifiés en source, pas dans une doc générée) sont dans `.agents/skills/mesh-mcp/SKILL.md`.
 
 ### Utilisation & Configuration
-- **En local (Stdio) :** Compilé via `cargo build --release` dans `mcp-meta-indexer/` et branché directement sur votre client MCP.
-- **Sur Kubernetes (SSE HTTP) :** Déployé sous forme de Pod sur le port 3000 avec le sidecar `git-sync` pour une synchronisation temps réel de la codebase.
-- **Documentation complète :** Consultez le [README mcp-meta-indexer](mcp-meta-indexer/README.md) et la documentation technique dans [mcp-meta-indexer/docs/](mcp-meta-indexer/docs/).
+- **En local (Stdio) :** `mesh-mcp run` — pointe sur `.agents/mesh-mcp.toml`.
+- **Documentation complète :** [SETUP.md de causalmesh](https://github.com/VictorAgahi/causalmesh/blob/main/SETUP.md).
 
 ---
 
@@ -69,7 +71,7 @@ flowchart LR
 | Layer | Technology | Rôle / Usage |
 |---|---|---|
 | **Runtime Backend** | Node.js (24.14.0 LTS) | Moteur d'exécution asynchrone TypeScript. |
-| **Indexation IA** | Rust (1.80+) | Serveur MCP haute performance (`mcp-meta-indexer`). |
+| **Indexation IA** | Rust (1.80+) | `mesh-mcp` (causalmesh), serveur MCP local. |
 | **Package Manager** | Yarn (4.12.0 Berry) | Gestion stricte des dépendances via Workspaces. |
 | **Backend API & MS** | NestJS (11.x) | Microservices modulaires communicant en gRPC. |
 | **Backend Satellites** | NestJS Standalone | Daemons `outbox-runners`, `workers-runners`, `post-processors-runner`. |
@@ -89,7 +91,6 @@ Tous les services sont hébergés dans l'organisation GitHub **[Volontariapp](ht
 
 ### Documentation & Outils IA
 - [**docs**](https://github.com/Volontariapp/docs) : Référentiel officiel de la documentation d'architecture C4, ADRs et guides techniques.
-- [**mcp-meta-indexer**](https://github.com/Volontariapp/mcp-meta-indexer) : Serveur MCP Rust pour l'indexation AST et l'analyse causale de la codebase.
 
 ### Points d'Entrée & Clients
 - [**nativapp**](https://github.com/Volontariapp/nativapp) : Application mobile React Native (Expo).
