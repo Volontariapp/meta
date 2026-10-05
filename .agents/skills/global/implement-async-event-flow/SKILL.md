@@ -78,9 +78,10 @@ Tous les types d'événements et leurs structures de données **doivent** résid
 
 5. **Déclarer le stream Redis** dans `npm-packages/packages/shared/src/enums/streams.enum.ts` :
    ```typescript
-   export enum Streams {
-     EVENT_CREATED = 'stream:event-created',
+   export enum EventStream {
+     EVENT_CREATED = 'event:created',
    }
+   // Chaque enum de domaine est fusionné dans l'objet `Streams` en bas du fichier.
    ```
 
 > [!CAUTION]
@@ -128,7 +129,7 @@ async createWithEvent(data: Partial<EventEntity>): Promise<EventEntity> {
       targetServices: [Streams.EVENT_CREATED],
     });
 
-    // 4. Écriture dans la table event_outbox
+    // 4. Écriture dans la table event_queue
     const eventQueueRepo = new EventQueueRepository<EventEventMessagingType.EVENT_CREATED>(
       queryRunner.manager.getRepository<EventQueueModel>(EventQueueModel),
     );
@@ -140,7 +141,7 @@ async createWithEvent(data: Partial<EventEntity>): Promise<EventEntity> {
 ```
 
 > [!NOTE]
-> **Le Runner Outbox est 100% transparent :** `outbox-runners/outbox-<domaine>` surveille la table `event_outbox` avec `SELECT ... FOR UPDATE SKIP LOCKED` et publie automatiquement dans le Redis Stream `Streams.EVENT_CREATED`. Aucun code n'est requis dans le runner !
+> **Le Runner Outbox est 100% transparent :** `outbox-runners/outbox-<domaine>` surveille la table `event_queue` avec `SELECT ... FOR UPDATE SKIP LOCKED` et publie automatiquement dans le Redis Stream `Streams.EVENT_CREATED`. Aucun code n'est requis dans le runner !
 
 ---
 

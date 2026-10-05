@@ -22,12 +22,12 @@ sequenceDiagram
 
     Repo->>PG: 1. BEGIN TRANSACTION
     Repo->>PG: 2. INSERT INTO events (...)
-    Repo->>PG: 3. INSERT INTO event_outbox (type, payload, targetServices)
+    Repo->>PG: 3. INSERT INTO event_queue (type, payload, target_services)
     Repo->>PG: 4. COMMIT TRANSACTION
     Note over PG, Runner: Données persistées avec certitude
     Runner->>PG: 5. SELECT FOR UPDATE SKIP LOCKED
-    Runner->>Redis: 6. XADD stream:event-created
-    Runner->>PG: 7. UPDATE event_outbox SET status = 'DONE'
+    Runner->>Redis: 6. XADD event:created
+    Runner->>PG: 7. UPDATE event_queue SET status = 'COMPLETED'
 ```
 
 ---
@@ -84,7 +84,7 @@ export class PostgresEventRepository extends BaseRepository<EventModel, EventEnt
         targetServices: [Streams.EVENT_PUBLISHED],
       });
 
-      // 4. Écriture dans event_outbox dans la transaction du queryRunner
+      // 4. Écriture dans event_queue dans la transaction du queryRunner
       const eventQueueRepo = new EventQueueRepository<EventEventMessagingType.EVENT_PUBLISHED>(
         queryRunner.manager.getRepository<EventQueueModel>(EventQueueModel),
       );
@@ -103,7 +103,7 @@ export class PostgresEventRepository extends BaseRepository<EventModel, EventEnt
 | Propriété | `EventQueueEntity` (Event) | `JobsOutboxEntity` (Job) |
 | :--- | :--- | :--- |
 | **Cardinalité** | **1 : N** (Diffusé à de multiples listeners) | **1 : 1** (Exécuté par un seul worker) |
-| **Table BDD** | `event_outbox` | `jobs_outbox` |
+| **Table BDD** | `event_queue` | `jobs_outbox` |
 | **Destination** | **Redis Streams** (`targetServices: [Streams.XYZ]`) | **BullMQ Queue** (`target: EventsQueue.EVENTS`) |
 | **Consommateur** | `post-processors-runner` / `ws-service` | `workers-runners` |
 | **Cas d'usage** | Événement métier, synchro multi-services | Tâche de fond lourde, envoi d'email, fallback |
@@ -132,7 +132,7 @@ await jobsRepo.create(job);
 ## 4. Fonctionnement du Démon `outbox-runners`
 
 Vous n'avez **aucun code à écrire** dans `outbox-runners`. Le processus tourne en boucle autonome :
-1. Polling via `SELECT * FROM event_outbox WHERE status = 'pending' FOR UPDATE SKIP LOCKED LIMIT 50`.
-2. Pousse le batch vers Redis Stream avec `XADD`.
-3. Passe le statut à `done` ou `failed` avec retry exponentiel.
+1. Polling des lignes `status = 'PENDING'` avec `FOR UPDATE SKIP LOCKED` et une limite égale au `batchSize` configuré (`OutboxConsumer`, `@volontariapp/database`).
+2. Pousse le batch vers les streams de `target_services` avec `XADD` (`EventQueuePusher`, `@volontariapp/outbox`).
+3. Passe le statut `PENDING` -> `PROCESSING` -> `COMPLETED` (ou `FAILED`), selon l'enum `OutboxStatus`.
 4. Aucun verrou bloquant entre plusieurs instances grâce à `SKIP LOCKED`.

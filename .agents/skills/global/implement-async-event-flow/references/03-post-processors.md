@@ -117,7 +117,7 @@ export class EventPublishedPostProcessor extends BatchPostProcessor<EventEventMe
   }
 
   private async emitCompensationEvent(payload: IEventPublishedPayload, error: unknown): Promise<void> {
-    // Émission dans event_outbox d'un événement *_FAILED
+    // Émission dans event_queue d'un événement *_FAILED
     // Les autres post-processors écouteront cet échec pour annuler leurs actions
   }
 }

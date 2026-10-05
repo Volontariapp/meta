@@ -53,7 +53,8 @@ Ne devine jamais et ne fouille jamais la codebase au hasard. Utilise la matrice 
 | **Implémenter un nouvel Événement asynchrone** | Skill **`implement-async-event-flow`** | Playbook procédural : `EventQueueEntity`, `BatchPostProcessor`, Scatter-Gather WebSocket, sagas chorégraphiées. |
 | **Modifier un package NPM partagé** | Skill **`shared-npm-package-change`** | Déroulement strict de la règle du STOP et des changesets. |
 | **Modifier un contrat Protobuf gRPC** | Skill **`proto-contract-evolution`** | Règles de compatibilité binaire wire et cascade de déploiement. |
-| **Déboguer un flux asynchrone bloqué en runtime** | Skill **`trace-async-flow`** | Diagnostic SQL direct sur les tables `jobs_outbox`, `job_audit`, `event_outbox`. |
+| **Travailler sur le stockage de fichiers (upload, scan, image d'un post / event / avatar)** | Skill **`file-storage-flow`** | Invariants (quarantaine, `file_id` jamais d'URL, `ConfirmFileAttachment`), recette pour rattacher une image à une entité, renvoi vers `docs/stockage-fichiers/`. |
+| **Déboguer un flux asynchrone bloqué en runtime** | Skill **`trace-async-flow`** | Diagnostic SQL direct sur les tables `jobs_outbox`, `job_audit`, `event_queue`. |
 | **Comprendre les schémas exacts des 6 outils mesh-mcp** | Skill **`mesh-mcp`** | Signatures vérifiées en source (pas dans `docs/mcp-tools.md`, qui est obsolète sur `analyze_grpc`/`analyze_impact`). |
 
 ---

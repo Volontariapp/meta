@@ -116,6 +116,6 @@ En étendant `BaseWorker`, vous bénéficiez de garanties industrielles :
 1. **Traçabilité du Worker Host** : Identifiant de machine (`workerId`) horodaté.
 2. **Détection d'Exécution Multiple** : Vérification dans `job_audit` pour éviter qu'un job acquitté ne soit ré-exécuté.
 3. **Transition Automatique d'État** :
-   - Début : Enregistrement `status = WORKING`.
-   - Succès : Enregistrement `status = DONE`.
+   - Début : Enregistrement `status = PROCESSING`.
+   - Succès : Enregistrement `status = COMPLETED`.
    - Échec : Enregistrement `status = FAILED` avec message d'erreur et stack trace.

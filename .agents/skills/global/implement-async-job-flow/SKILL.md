@@ -20,9 +20,9 @@ Dans Volontariapp, un **Job** représente une opération asynchrone **1 : 1** (g
          ↓
 [4. Worker Runner]     workers-runners/worker-* (BaseWorker + IJobHandler)
          ↓
-[5. Table job_audit]   Worker met à jour le statut (working -> done / failed)
+[5. Table job_audit]   Worker met à jour le statut (PROCESSING -> COMPLETED / FAILED)
          ↓
-[6. SQL Trigger DB]    Déclencheur auto sur job_audit -> insère dans event_outbox
+[6. SQL Trigger DB]    Déclencheur auto sur job_audit -> insère dans event_queue
          ↓
 [7. Post-Processor]    Nettoyage automatique (Hard Delete de jobs_outbox)
 ```
@@ -214,9 +214,9 @@ Dans le Worker principal du domaine (`workers-runners/worker-<domaine>/src/worke
 > 📖 *Détails complets :* [04-audit-loop-and-cleanup.md](file:///Users/victoragahi/Developer/meta/.agents/skills/global/implement-async-job-flow/references/04-audit-loop-and-cleanup.md)
 
 Vous n'avez **aucun code de nettoyage manuel à écrire** :
-1. `BaseWorker` passe le job en statut `WORKING` dans la table `job_audit` dès qu'il le prend en charge.
-2. Dès que le handler retourne son résultat, `BaseWorker` passe le statut à `DONE`.
-3. Un **Trigger SQL PostgreSQL** se déclenche automatiquement sur `job_audit` et insère un événement `JOB_OUTBOX_SUCCESS` dans la table `event_outbox`.
+1. `BaseWorker` passe le job en statut `PROCESSING` dans la table `job_audit` dès qu'il le prend en charge.
+2. Dès que le handler retourne son résultat, `BaseWorker` passe le statut à `COMPLETED` (ou `FAILED` en cas d'erreur).
+3. Le **Trigger SQL PostgreSQL** `job_audit_status_trigger` se déclenche automatiquement sur `job_audit` et insère un événement `<domaine>:job:outbox:success` (ou `:failure`) dans la table `event_queue`.
 4. L'outbox-runner pousse cet événement dans Redis Stream.
 5. Un post-processor central écoute ce stream et exécute le **Hard Delete** de la ligne d'origine dans `jobs_outbox`.
 

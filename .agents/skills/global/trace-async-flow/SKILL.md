@@ -9,11 +9,11 @@ Dans Volontariapp, aucun microservice n'écrit directement dans Redis pour une m
 
 ```
 ms-<domaine> 
-  → jobs_outbox (Postgres, status: Pending)
+  → jobs_outbox (Postgres, status: PENDING)
   → outbox-<domaine> runner (Postgres FOR UPDATE SKIP LOCKED -> BullMQ Queue Redis)
   → worker-<domaine> runner (Consomme BullMQ, écrit dans job_audit)
-  → SQL Trigger sur job_audit -> écrit dans event_outbox (status: pending)
-  → outbox-<domaine> runner (Pousse event_outbox dans Redis Stream)
+  → SQL Trigger sur job_audit -> écrit dans event_queue (status: pending)
+  → outbox-<domaine> runner (Pousse event_queue dans Redis Stream)
   → post-processor (post-processors-runner consomme le Stream, clôture la saga & déclenche WebSocket)
 ```
 
@@ -41,15 +41,15 @@ Si un flux fonctionne en code mais ne produit pas d'effet en exécution réelle 
 
 1. **Identifier le domaine** (`user`, `event`, `post`, `social`) — chaque domaine possède son microservice et ses daemons satellites dédiés.
 2. **Vérifier `jobs_outbox` dans la base PostgreSQL du microservice :**
-   - Si la ligne reste bloquée en statut `Pending`, le démon `outbox-<domaine>` ne scrute pas correctement ou n'arrive pas à contacter Redis.
+   - Si la ligne reste bloquée en statut `PENDING`, le démon `outbox-<domaine>` ne scrute pas correctement ou n'arrive pas à contacter Redis.
 3. **Vérifier `job_audit` dans la même base :**
    - S'il n'y a aucune ligne : le job n'est jamais arrivé au worker BullMQ.
    - Si la ligne est en statut `failed` : inspecter les logs du handler dans `workers-runners/worker-<domaine>/src/workers/handlers/`.
-4. **Vérifier `event_outbox` dans la base :**
+4. **Vérifier `event_queue` dans la base :**
    - Cette table ne reçoit une entrée qu'après le passage de `job_audit` en état terminal via le **Trigger SQL PostgreSQL**.
    - Si aucune ligne n'apparaît, le trigger SQL ne s'est pas exécuté ou le worker n'a pas audité la complétion.
 5. **Vérifier les Redis Streams :**
-   - Si `event_outbox` est marqué comme traité mais que le post-processor n'a rien fait, le problème se situe au niveau de la connexion au Stream Redis ou du group de consommateurs dans `post-processors-runner`.
+   - Si `event_queue` est marqué comme traité mais que le post-processor n'a rien fait, le problème se situe au niveau de la connexion au Stream Redis ou du group de consommateurs dans `post-processors-runner`.
 
 ---
 

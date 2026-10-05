@@ -89,5 +89,5 @@ Chaque ligne de `jobs_outbox` contient :
 - `emitter` : Nom du microservice émetteur (`ms-user`, `ms-event`).
 - `emitterId` : ID de l'utilisateur ou entité à l'origine de l'action.
 - `target` : Nom de la queue Redis BullMQ (`events-queue`).
-- `status` : `pending` -> `processing` -> `done` -> supprimé par post-processor.
+- `status` (enum `OutboxStatus`) : `PENDING` -> `PROCESSING` -> `COMPLETED`, puis ligne supprimée par le post-processor commun une fois le job audité `COMPLETED`.
 - `payload` : JSONB contenant les arguments nécessaires au worker.

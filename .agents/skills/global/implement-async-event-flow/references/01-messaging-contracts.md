@@ -91,11 +91,17 @@ Les noms de streams Redis sont centralisés dans [`npm-packages/packages/shared/
 Vérifier si le stream existe déjà ou l'ajouter :
 
 ```typescript
-export enum Streams {
+export enum EventStream {
   // ...
-  EVENT_PUBLISHED = 'stream:event-published',
-  WS_FEEDBACK = 'stream:ws-feedback',
+  EVENT_PUBLISHED = 'event:published',
 }
+
+export enum WebsocketStream {
+  // ...
+  WS_EVENT_PUBLISHED_FEEDBACK = 'ws:event-published-feedback',
+}
+
+// Les enums de domaine sont fusionnés dans l'objet `Streams` en bas du fichier.
 ```
 
 ---
