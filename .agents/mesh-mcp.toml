@@ -367,6 +367,10 @@ read_governance_mode = "allow_all"
 "networkpolic" = "skills/volontariapp-deploy-gitops/SKILL.md"
 "kustomiz" = "skills/volontariapp-deploy-gitops/SKILL.md"
 "initcontainer" = "skills/volontariapp-deploy-gitops/SKILL.md"
+# volontariapp-docx-reports
+"docx" = "skills/volontariapp-docx-reports/SKILL.md"
+"coaching-report" = "skills/volontariapp-docx-reports/SKILL.md"
+"word" = "skills/volontariapp-docx-reports/SKILL.md"
 # volontariapp-file-storage-flow
 "storage" = "skills/volontariapp-file-storage-flow/SKILL.md"
 "file_id" = "skills/volontariapp-file-storage-flow/SKILL.md"

@@ -2,6 +2,7 @@
 
 ## 2026-10-06
 
+- **Nouvelle skill** - [volontariapp-docx-reports](/volontariapp-docx-reports/SKILL.md) - Modification et relecture de documents Word DOCX (claude-code/agent)
 - **Nouvelle skill** - [volontariapp-ci-tools](/volontariapp-ci-tools/SKILL.md) - CI partagée et infra locale (ci-tools) (claude-code/claude-opus-5-5)
 - **Nouvelle skill** - [volontariapp-deploy-gitops](/volontariapp-deploy-gitops/SKILL.md) - Déploiement GitOps (deploy) (claude-code/claude-opus-5-5)
 - **Nouvelle skill** - [volontariapp-grpc-microservice](/volontariapp-grpc-microservice/SKILL.md) - Anatomie d'un microservice gRPC (claude-code/claude-opus-5-5)

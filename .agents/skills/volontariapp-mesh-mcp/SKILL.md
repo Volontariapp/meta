@@ -23,9 +23,6 @@ sources:
     title: Schémas des outils (source Rust)
 verified:
   - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T08:27:39Z"
-    digest: ec9631050fc36b89
-  - by: claude-code/claude-opus-5-5
     at: "2026-10-06T08:29:06Z"
     digest: 719ba8cd148cd42c
   - by: claude-code/claude-opus-5-5
@@ -37,6 +34,9 @@ verified:
   - by: claude-code/claude-opus-5-5
     at: "2026-10-06T09:14:51Z"
     digest: d5053c498a61540a
+  - by: claude-code/agent
+    at: "2026-10-06T11:21:34Z"
+    digest: 438df1dddb5acc40
 ---
 
 # MeshMCP Skill

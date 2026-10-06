@@ -11,5 +11,6 @@ Guide pas-à-pas pour concevoir et implémenter un flux asynchrone complet (mess
 - [Deep-Dive : Étape 4 - Scatter-Gather & Passerelle WebSocket (`ws-service`)](/volontariapp-implement-async-event-flow/references/04-scatter-gather-ws.md) - Étape détaillée de volontariapp-implement-async-event-flow.
 - [Deep-Dive : Étape 5 - Réception Client dans `nativapp`](/volontariapp-implement-async-event-flow/references/05-nativapp-handling.md) - Étape détaillée de volontariapp-implement-async-event-flow.
 - [Deep-Dive : Le Pattern Saga en Chorégraphie (Compensations & Rollback)](/volontariapp-implement-async-event-flow/references/06-saga-pattern-choreography.md) - Étape détaillée de volontariapp-implement-async-event-flow.
+- [Leçons apprises](/volontariapp-implement-async-event-flow/references/lessons.md) - Règles et pièges découverts en travaillant sur volontariapp-implement-async-event-flow, du plus récent au plus ancien.
 
 Historique : [log.md](/volontariapp-implement-async-event-flow/log.md)
