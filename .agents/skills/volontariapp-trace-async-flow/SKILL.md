@@ -49,6 +49,9 @@ verified:
   - by: claude-code/claude-opus-5-5
     at: "2026-10-06T09:00:39Z"
     digest: cda174fef99dcaa1
+  - by: claude-code/claude-opus-5-5
+    at: "2026-10-06T09:14:39Z"
+    digest: cda174fef99dcaa1
 ---
 
 # Trace Async Flow & Diagnostic Runtime
@@ -129,6 +132,7 @@ redis-cli XRANGE <stream>-dlq - + COUNT 20  # messages abandonnés après maxRet
 
 - [ ] Ne jamais supposer qu'un service pousse directement dans Redis : partir de la table outbox de sa base.
 - [ ] Toujours `analyze_impact` avant d'ouvrir un runner, puis SQL, puis Redis, dans cet ordre.
+- [ ] Les runners `outbox-*` (Node pur, sans NestJS) n'ont pas de logique propre : tout est dans `@volontariapp/outbox` et `@volontariapp/database`. Une modification du polling doit garder `FOR UPDATE SKIP LOCKED` : livraison au moins une fois, sans double publication quand le runner est répliqué.
 - [ ] Un diagnostic qui révèle un nouveau piège devient une leçon : `evolve.py learn --skill volontariapp-trace-async-flow --kind pitfall`.
 
 [^migrations]: Migrations communes (jobs_outbox, job_audit, event_queue, triggers)

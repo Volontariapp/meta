@@ -63,6 +63,7 @@ Ne devine jamais et ne fouille jamais la codebase au hasard. Utilise la matrice 
 | **Ajouter ou modifier une route REST, une règle d'auth ou un appel gRPC côté gateway** | Skill **`volontariapp-api-gateway`** | `@GatewayController`, token interne en métadonnée, clients gRPC, `FALLBACK_ACTIVATED` (206), proxy WebSocket, risques connus de la gateway. |
 | **Implémenter ou modifier un RPC dans un `ms-*`** | Skill **`volontariapp-grpc-microservice`** | Contrôleurs command/query, DTO du contrat, `GrpcValidationPipe`, `GrpcInternalGuard`, `withFallback`, migrations, faits par service. |
 | **Modifier l'infra Kubernetes (manifests, secrets, réseau, bases)** | Skill **`volontariapp-deploy-gitops`** | Repo `deploy` (ArgoCD), images épinglées par sha, PSA Restricted, SealedSecrets, NetworkPolicies. |
+| **Modifier la CI partagée ou l'infra locale docker-compose** | Skill **`volontariapp-ci-tools`** | Workflows réutilisables appelés par tous les repos, impact multi-repo, services du docker-compose local. |
 | **Déboguer un flux asynchrone bloqué en runtime** | Skill **`volontariapp-trace-async-flow`** | Diagnostic SQL direct sur les tables `jobs_outbox`, `job_audit`, `event_queue`. |
 | **Comprendre les schémas exacts des 6 outils mesh-mcp** | Skill **`volontariapp-mesh-mcp`** | Signatures vérifiées en source (pas dans `docs/mcp-tools.md`, qui est obsolète sur `analyze_grpc`/`analyze_impact`). |
 
@@ -94,6 +95,10 @@ Avant chaque étape, ouvrir le `SKILL.md` de la skill de l'étape (plugin matt-p
 
 `setup-pre-commit` est hors sujet (Husky est déjà en place). `setup-matt-pocock-skills` se lance une fois avant d'utiliser `to-tickets` ou `triage` avec un tracker. Le guide technique détaillé (carte des repos, structure d'un module, DTO, contrôleurs, tests) reste dans `AGENT.md`.
 
+## 2 quater. `meta`, source de vérité unique
+
+Seuls `meta` et `nativapp` portent des fichiers d'agent : ouvrir les sessions depuis `meta`. Chaque sous-repo a un hook pre-commit qui, quand le repo est cloné dans `meta`, lance `evolve.py check-staged` et bloque tant que les skills décrivant les fichiers commités n'ont pas été revérifiées (`SKILL_CHECK_MODE=warn` pour avertir seulement, `SKIP_SKILL_CHECK=1` pour contourner). Après un clone : `./scripts/install-skill-hooks.sh`.
+
 ## 2 ter. Boucle d'apprentissage
 
 Les skills `volontariapp-*` sont des bundles OKF v0.2 tenus à jour par `volontariapp-skill-evolution`, qui suit tous les repos clonés sous `meta`. Avant de terminer une tâche qui a modifié du code :
@@ -113,6 +118,7 @@ Le plan liste exactement quelles skills relire, à cause de quels fichiers (et d
 | Skill | Quand l'utiliser |
 | :--- | :--- |
 | [`volontariapp-api-gateway`](.agents/skills/volontariapp-api-gateway/SKILL.md) | Ajouter ou modifier une route REST de api-gateway (point d'entrée HTTP unique) : contrôleur command/query, guards, token interne propagé en métadonnée gRPC, client gRPC… |
+| [`volontariapp-ci-tools`](.agents/skills/volontariapp-ci-tools/SKILL.md) | Modifier la CI partagée (workflows réutilisables GitHub Actions appelés par tous les repos) ou l'infrastructure locale docker-compose de ci-tools (bases, Redis, MinIO, D… |
 | [`volontariapp-deploy-gitops`](.agents/skills/volontariapp-deploy-gitops/SKILL.md) | Modifier l'infrastructure Kubernetes de Volontariapp dans le repo deploy (GitOps ArgoCD) : manifests d'un service et de ses runners, overlay prod, secrets scellés, netwo… |
 | [`volontariapp-file-storage-flow`](.agents/skills/volontariapp-file-storage-flow/SKILL.md) | Playbook pour tout travail sur le stockage de fichiers (upload, scan, réservation, rattachement, nettoyage) - ms-storage, worker-storage, post-processor-storage, et ratt… |
 | [`volontariapp-grpc-microservice`](.agents/skills/volontariapp-grpc-microservice/SKILL.md) | Implémenter ou modifier un RPC dans un microservice gRPC (ms-user, ms-event, ms-post, ms-social) : contrôleur @GrpcMethod command/query, DTO implémentant le contrat, log… |

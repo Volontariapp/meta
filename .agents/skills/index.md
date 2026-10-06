@@ -7,6 +7,7 @@ Le cycle de vie des skills est géré par [volontariapp-skill-evolution](/volont
 | Skill | Domaine | Dernière vérification |
 | :--- | :--- | :--- |
 | [volontariapp-api-gateway](/volontariapp-api-gateway/SKILL.md) | API Gateway (REST vers gRPC) | 2026-10-06 |
+| [volontariapp-ci-tools](/volontariapp-ci-tools/SKILL.md) | CI partagée et infra locale (ci-tools) | 2026-10-06 |
 | [volontariapp-deploy-gitops](/volontariapp-deploy-gitops/SKILL.md) | Déploiement GitOps (deploy) | 2026-10-06 |
 | [volontariapp-file-storage-flow](/volontariapp-file-storage-flow/SKILL.md) | File Storage Flow | 2026-10-06 |
 | [volontariapp-grpc-microservice](/volontariapp-grpc-microservice/SKILL.md) | Anatomie d'un microservice gRPC | 2026-10-06 |

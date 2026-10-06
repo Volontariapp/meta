@@ -53,3 +53,7 @@ Les autres agents n'ont pas ces garde-fous : ils lancent `evolve.py plan` eux-m�
 [^agents-md]: AGENTS.md (source unique)
 [^settings]: Hooks Claude Code
 [^evolve]: evolve.py (index des skills dans AGENTS.md)
+
+# Source de vérité unique
+
+Depuis le 2026-10-06, seuls `meta` et `nativapp` gardent des fichiers d'agent. Les `CLAUDE.md`, `AGENT.md`, `.agents/`, `.claude/` (hooks graphify) et `graphify-out/` des autres repos ont été supprimés ; leur contenu vérifié vit dans les skills `volontariapp-*` (fiches par service de `volontariapp-grpc-microservice`, carte des routes de `volontariapp-api-gateway`, `volontariapp-ci-tools`). Une session d'agent s'ouvre donc depuis `meta`, pas depuis un sous-repo. Les `.ai-knowledge.md` des repos sont conservés mais génériques : les skills font foi.

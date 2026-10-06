@@ -6,5 +6,6 @@ Ajouter ou modifier une route REST de api-gateway (point d'entrée HTTP unique) 
 
 - [SKILL.md](/volontariapp-api-gateway/SKILL.md) - point d'entrée de la skill
 - [Leçons apprises](/volontariapp-api-gateway/references/lessons.md) - Règles et pièges découverts en travaillant sur volontariapp-api-gateway, du plus récent au plus ancien.
+- [Carte des routes REST](/volontariapp-api-gateway/references/routes.md) - Routes REST de api-gateway et microservice cible de chacune (reprise du CLAUDE.md du repo, supprimé au profit de meta).
 
 Historique : [log.md](/volontariapp-api-gateway/log.md)

@@ -9,17 +9,17 @@ generated:
   at: "2026-10-06T09:55:00Z"
 sources:
   - id: user
-    resource: ms-user/CLAUDE.md
-    title: ms-user/CLAUDE.md
+    resource: ms-user/src/modules/user/controllers
+    title: "ms-user (fiche détaillée : ms-user.md)"
   - id: event
-    resource: ms-event/CLAUDE.md
-    title: ms-event/CLAUDE.md
+    resource: ms-event/src/modules/event/controllers
+    title: "ms-event (fiche détaillée : ms-event.md)"
   - id: post
-    resource: ms-post/CLAUDE.md
-    title: ms-post/CLAUDE.md
+    resource: ms-post/src/modules/post/controllers
+    title: "ms-post (fiche détaillée : ms-post.md)"
   - id: social
-    resource: ms-social/CLAUDE.md
-    title: ms-social/CLAUDE.md
+    resource: ms-social/src/modules
+    title: "ms-social (fiche détaillée : ms-social.md)"
   - id: storage
     resource: docs/stockage-fichiers/01-etat-des-lieux.md
     title: État des lieux du stockage
@@ -35,6 +35,8 @@ sources:
 | `ms-social`[^social] | Noeuds miroirs `SocialUser`, `SocialPost`, `SocialEvent` dans Neo4j (`domain-social`) | Services par agrégat (user-node, relationship, publication, interaction, participation, event-post-link), chacun avec variantes `Admin*` | **N'émet rien** : tables outbox présentes pour les migrations seulement | aucune |
 | `ms-storage`[^storage] | Aucun modèle (`domain-storage` sans repository) | **Aucun handler** ; démarre en HTTP seul (`listen(3006)`) | aucun | aucune |
 
+Fiches détaillées : [ms-user](/volontariapp-grpc-microservice/references/ms-user.md), [ms-event](/volontariapp-grpc-microservice/references/ms-event.md), [ms-post](/volontariapp-grpc-microservice/references/ms-post.md), [ms-social](/volontariapp-grpc-microservice/references/ms-social.md).
+
 # Invariants notables
 
 - `ms-user` : `rna` doit matcher `^W[0-9]{9}$` (sinon `INVALID_RNA`) et fait passer le rôle à `ORGANIZATION` ; mot de passe via `@volontariapp/crypto`, jamais loggé ; e-mail loggé en hash tronqué ; changement de mot de passe exige `previousPassword`.
@@ -43,8 +45,8 @@ sources:
 - `ms-social` : toute création vérifie l'inexistence (`*_ALREADY_EXISTS`), toute suppression l'existence (`*_NOT_FOUND`) ; « amis » = follow réciproque ; aucune règle anti self-follow.
 - Sagas : `saga_status` (PENDING, DONE, CANCEL) sur `events`, `posts`, `comments`. Seul `post-processor-event` le fait passer à CANCEL ; un post en échec reste PENDING.
 
-[^user]: ms-user/CLAUDE.md
-[^event]: ms-event/CLAUDE.md
-[^post]: ms-post/CLAUDE.md
-[^social]: ms-social/CLAUDE.md
+[^user]: ms-user (fiche détaillée : ms-user.md)
+[^event]: ms-event (fiche détaillée : ms-event.md)
+[^post]: ms-post (fiche détaillée : ms-post.md)
+[^social]: ms-social (fiche détaillée : ms-social.md)
 [^storage]: État des lieux du stockage

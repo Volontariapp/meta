@@ -425,7 +425,8 @@ def compute_status() -> tuple[list[SkillStatus], list[str]]:
         statuses.append(SkillStatus(skill, sorted(changes.values(), key=lambda c: c.file), validate_skill(skill, files)))
     uncovered = sorted(
         f for f in worktree
-        if f.startswith(WATCHED_ROOTS) and not f.startswith(".agents/") and not any(s.covers(f) for s in skills)
+        if f.startswith(WATCHED_ROOTS) and not f.startswith(".agents/") and (REPO / f).exists()
+        and not any(s.covers(f) for s in skills)
     )
     return statuses, uncovered
 
@@ -982,12 +983,19 @@ def cmd_check_staged(args: argparse.Namespace) -> int:
                 stale.setdefault(skill.name, []).append(f)
     if not stale:
         return 0
-    print("Skills à vérifier avant ce commit (le code qu'elles décrivent a changé) :")
+    here = Path.cwd()
+    evolve = os.path.relpath(REPO.resolve() / SELF, here)
+    repo_label = prefix.rstrip("/") or REPO.name
+    print(f"Skills de meta à vérifier avant ce commit dans {repo_label} (le code qu'elles décrivent a changé) :")
     for name, files in stale.items():
-        print(f"  - {name} : {', '.join(files[:MAX_FILES_SHOWN])}")
-    print(f"\nRelire la skill, la mettre à jour si besoin, puis : python3 {SELF} sync <skill> --by human:<vous>")
-    print("Contournement volontaire : SKIP_SKILL_CHECK=1 git commit ...")
-    return 1
+        skill_md = os.path.relpath(SKILLS_DIR.resolve() / name / "SKILL.md", here)
+        print(f"  - {name} ({skill_md}) : {', '.join(f[len(prefix):] for f in files[:MAX_FILES_SHOWN])}")
+    print("\nRelire la skill, la corriger si une règle, un chemin ou une commande change, puis enregistrer la vérification :")
+    print(f"  python3 {evolve} sync <skill> --by human:<vous> --message \"<ce qui a changé>\"")
+    if prefix:
+        print("La skill vit dans meta : commiter aussi meta (source de vérité des skills).")
+    print("Contournement volontaire : SKIP_SKILL_CHECK=1 git commit ...  Avertir sans bloquer : SKILL_CHECK_MODE=warn")
+    return 0 if getattr(args, "warn", False) else 1
 
 
 def cmd_hook(args: argparse.Namespace) -> int:
@@ -1023,7 +1031,9 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("plan").set_defaults(func=cmd_plan)
     sub.add_parser("validate").set_defaults(func=cmd_validate)
     sub.add_parser("index").set_defaults(func=cmd_index)
-    sub.add_parser("check-staged").set_defaults(func=cmd_check_staged)
+    p = sub.add_parser("check-staged")
+    p.add_argument("--warn", action="store_true", help="affiche les skills à vérifier sans bloquer le commit")
+    p.set_defaults(func=cmd_check_staged)
     sub.add_parser("hook").set_defaults(func=cmd_hook)
 
     p = sub.add_parser("sync")

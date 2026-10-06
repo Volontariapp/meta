@@ -5,6 +5,7 @@ Run: python3 -m unittest discover -s .agents/skills/volontariapp-skill-evolution
 
 from __future__ import annotations
 
+import argparse
 import io
 import json
 import os
@@ -292,6 +293,24 @@ class MultiRepoTests(RepoTestCase):
         change = self.svc_status().changes[0]
         self.assertEqual(change.file, "svc/src/other.ts")
         self.assertIn("svc@", change.how)
+
+    def test_check_staged_from_nested_repo_blocks_or_warns(self):
+        time.sleep(1.1)
+        (self.svc / "src" / "main.ts").write_text("export const a = 4;\n")
+        self.git_svc("add", "-A")
+        previous = Path.cwd()
+        os.chdir(self.svc)
+        try:
+            out = io.StringIO()
+            with redirect_stdout(out):
+                self.assertEqual(evolve.cmd_check_staged(argparse.Namespace(warn=False)), 1)
+            self.assertIn("../.agents/skills/volontariapp-svc/SKILL.md", out.getvalue())
+            self.assertIn("src/main.ts", out.getvalue())
+            self.assertIn("commiter aussi meta", out.getvalue())
+            with redirect_stdout(io.StringIO()):
+                self.assertEqual(evolve.cmd_check_staged(argparse.Namespace(warn=True)), 0)
+        finally:
+            os.chdir(previous)
 
     def test_sync_clears_nested_change(self):
         time.sleep(1.1)

@@ -25,10 +25,13 @@ verified:
   - by: claude-code/claude-opus-5-5
     at: "2026-10-06T09:00:38Z"
     digest: 49499925efc5f8c6
+  - by: claude-code/claude-opus-5-5
+    at: "2026-10-06T09:14:39Z"
+    digest: 49499925efc5f8c6
 sources:
   - id: gw-claude
-    resource: api-gateway/CLAUDE.md
-    title: "api-gateway/CLAUDE.md (routes, auth, clients)"
+    resource: api-gateway/src/modules
+    title: "Modules de api-gateway (carte : references/routes.md)"
   - id: decorator
     resource: api-gateway/src/common/decorators/gateway-controller.decorator.ts
     title: GatewayController
@@ -62,6 +65,8 @@ Seul composant exposé sur Internet (préfixe global `api/v1`). Aucune logique m
 ## Quand l'utiliser
 
 Nouvelle route, nouveau champ exposé au front, changement d'auth ou de rôle, appel d'un nouveau RPC. Si le RPC n'existe pas encore : `volontariapp-proto-contract-evolution` d'abord (règle du STOP).
+
+Carte complète des routes : [Carte des routes REST](/volontariapp-api-gateway/references/routes.md).
 
 ## Anatomie d'une route
 
@@ -101,7 +106,7 @@ Nouvelle route, nouveau champ exposé au front, changement d'auth ou de rôle, a
 - [ ] Aucun id d'utilisateur lu dans le payload quand `@CurrentUser()` le donne.
 - [ ] Réponses d'erreur Swagger (`@Api*Response`, `@CustomApiError`) alignées sur les erreurs réellement renvoyées.
 
-[^gw-claude]: api-gateway/CLAUDE.md (routes, auth, clients)
+[^gw-claude]: Modules de api-gateway (carte : references/routes.md)
 [^decorator]: GatewayController
 [^app-module]: AppModule (GrpcInternalInterceptor, HelperModule)
 [^grpc-module]: GrpcClientModule

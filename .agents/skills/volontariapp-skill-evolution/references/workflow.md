@@ -23,6 +23,9 @@ sources:
   - id: claude-hooks
     resource: "https://docs.claude.com/en/docs/claude-code/hooks"
     title: Claude Code hooks reference
+  - id: installer
+    resource: scripts/install-skill-hooks.sh
+    title: install-skill-hooks.sh
 ---
 
 # Trigger
@@ -34,8 +37,9 @@ Trois points d'entrée, du plus fréquent au plus tardif :
 | Après chaque `Write`/`Edit` d'un fichier | Hook `PostToolUse`[^post-edit] | Ajoute au contexte la liste des skills qui couvrent ce fichier (`evolve.py owners`). |
 | Fin de chaque boucle de l'agent | Hook `Stop`[^stop-hook] | Lance `evolve.py hook` : s'il y a un plan, bloque l'arrêt une fois avec ce plan. |
 | `git commit` dans `meta` | Hook pre-commit[^pre-commit] | `evolve.py validate` si des fichiers de `.agents/skills/` sont commités. |
+| `git commit` dans un sous-repo | Bloc ajouté à `.husky/pre-commit`, ou `.githooks/pre-commit` pour les repos sans Husky[^installer] | Si `../.agents/skills/.../evolve.py` existe (repo cloné dans `meta`) : `evolve.py check-staged` bloque tant qu'une skill qui décrit un fichier commité n'a pas été revérifiée (`sync`). Repo cloné seul (CI) : aucun effet. `SKILL_CHECK_MODE=warn` avertit sans bloquer, `SKIP_SKILL_CHECK=1` contourne. |
 
-Les commits des sous-repos (`ms-*`, `npm-packages`...) ne passent pas par le pre-commit de `meta` : c'est le hook `Stop` qui détecte leurs changements. `evolve.py check-staged` fonctionne aussi depuis un sous-repo si une équipe veut l'y installer.
+Les commits des sous-repos passent par leur propre hook, qui appelle le `evolve.py` de `meta`. `scripts/install-skill-hooks.sh` (lancé par `init_repos.sh`) active `core.hooksPath .githooks` dans les repos sans Husky : config locale, à relancer sur chaque poste. Une vérification faite depuis un sous-repo modifie la skill dans `meta` : commiter aussi `meta`.
 
 # Steps
 
@@ -61,3 +65,4 @@ Les commits des sous-repos (`ms-*`, `npm-packages`...) ne passent pas par le pre
 [^pre-commit]: Hook git pre-commit de meta
 [^claude-hooks]: Claude Code hooks reference
 [^evolve]: evolve.py
+[^installer]: install-skill-hooks.sh

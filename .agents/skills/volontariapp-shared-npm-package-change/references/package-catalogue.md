@@ -1,7 +1,7 @@
 ---
 type: Reference
 title: Catalogue des packages @volontariapp
-description: Rôle, version, API réellement exportée de chaque package de npm-packages, et écarts connus entre README et code.
+description: "Rôle, version, API réellement exportée de chaque package de npm-packages, et écarts connus entre README et code."
 tags: [npm-packages, catalogue, doc-drift]
 status: stable
 generated:
@@ -12,8 +12,8 @@ sources:
     resource: npm-packages/packages
     title: Sources des packages (src/index.ts de chacun)
   - id: npm-claude
-    resource: npm-packages/CLAUDE.md
-    title: npm-packages/CLAUDE.md
+    resource: npm-packages/package.json
+    title: "npm-packages/package.json (workspaces, scripts)"
   - id: consumers
     resource: .agents/skills/volontariapp-shared-npm-package-change/scripts/consumers.py
     title: consumers.py
@@ -53,7 +53,7 @@ Versions relevées le 2026-10-06 dans `packages/*/package.json`[^packages]. Pour
 
 # Écarts README / code
 
-Les README de packages sont en partie génériques. Le code et `npm-packages/CLAUDE.md`[^npm-claude] font foi.
+Les README de packages sont en partie génériques. Le code et ce catalogue font foi[^npm-claude].
 
 | README | Affirme | Réalité |
 | :--- | :--- | :--- |
@@ -66,5 +66,5 @@ Les README de packages sont en partie génériques. Le code et `npm-packages/CLA
 | Fichiers `ARCHITECTURE.md` des `ms-*` | RabbitMQ, Kafka, table `outbox_events` | Redis Streams et BullMQ, table `event_queue` |
 
 [^packages]: Sources des packages (src/index.ts de chacun)
-[^npm-claude]: npm-packages/CLAUDE.md
+[^npm-claude]: npm-packages/package.json (workspaces, scripts)
 [^consumers]: consumers.py

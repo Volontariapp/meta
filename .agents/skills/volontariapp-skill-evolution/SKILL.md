@@ -14,6 +14,10 @@ paths:
   - GEMINI.md
   - ".cursor/rules/**"
   - .agents/mesh-mcp.toml
+  - "*/.githooks/pre-commit"
+  - "*/.husky/pre-commit"
+  - scripts/install-skill-hooks.sh
+  - scripts/init_repos.sh
 mesh_keys:
   - skill-evolution
   - evolve.py
@@ -39,14 +43,20 @@ sources:
     title: check_symbols.py
 verified:
   - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T08:27:39Z"
-    digest: 36589db00f22cebb
-  - by: claude-code/claude-opus-5-5
     at: "2026-10-06T08:38:31Z"
     digest: 5f0cc4357fd4264c
   - by: claude-code/claude-opus-5-5
     at: "2026-10-06T09:00:40Z"
     digest: 386034a5f769022d
+  - by: claude-code/claude-opus-5-5
+    at: "2026-10-06T09:14:40Z"
+    digest: 3eed3a9681c1364b
+  - by: claude-code/claude-opus-5-5
+    at: "2026-10-06T09:14:52Z"
+    digest: d8400d9a0015c223
+  - by: claude-code/claude-opus-5-5
+    at: "2026-10-06T09:16:34Z"
+    digest: f97102aa559082e5
 ---
 
 # Évolution des skills (auto-apprentissage)

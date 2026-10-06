@@ -354,6 +354,11 @@ read_governance_mode = "allow_all"
 "internalmetadata" = "skills/volontariapp-api-gateway/SKILL.md"
 "iscurrentuseroradminguard" = "skills/volontariapp-api-gateway/SKILL.md"
 "ws-proxy" = "skills/volontariapp-api-gateway/SKILL.md"
+# volontariapp-ci-tools
+"ci-tools" = "skills/volontariapp-ci-tools/SKILL.md"
+"docker-compose" = "skills/volontariapp-ci-tools/SKILL.md"
+"e2e-orchestrator" = "skills/volontariapp-ci-tools/SKILL.md"
+"service-ci.yml" = "skills/volontariapp-ci-tools/SKILL.md"
 # volontariapp-deploy-gitops
 "deploy/" = "skills/volontariapp-deploy-gitops/SKILL.md"
 "argocd" = "skills/volontariapp-deploy-gitops/SKILL.md"

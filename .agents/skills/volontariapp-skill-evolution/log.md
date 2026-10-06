@@ -2,6 +2,9 @@
 
 ## 2026-10-06
 
+- **Vérification** - plan : fichiers supprimés ignorés dans les non-couverts ; init_repos.sh couvert (claude-code/claude-opus-5-5)
+- **Vérification** - paths : hooks pre-commit des sous-repos et install-skill-hooks.sh (claude-code/claude-opus-5-5)
+- **Vérification** - check-staged multi-repo (--warn, chemins relatifs), hooks des sous-repos, install-skill-hooks.sh (claude-code/claude-opus-5-5)
 - **Vérification** - mesh_keys et synchronisation de mesh-mcp.toml, check_symbols.py, YAML strict (claude-code/claude-opus-5-5)
 - **Leçon** - Les tests doivent isoler chaque chemin module (pitfall) (claude-code/claude-opus-5-5)
 - **Leçon** - Frontmatter YAML invalide avec @ (pitfall) (claude-code/claude-opus-5-5)

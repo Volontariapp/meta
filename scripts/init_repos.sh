@@ -71,4 +71,7 @@ for dir in "${ROOT_DIR}"/*/; do
   fi
 done
 
+echo -e "  🪝 Activating meta skill hooks..."
+"${ROOT_DIR}/scripts/install-skill-hooks.sh" || true
+
 echo -e "${GREEN}--- Repositories ready ---${NC}"

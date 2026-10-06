@@ -30,6 +30,12 @@ verified:
   - by: claude-code/claude-opus-5-5
     at: "2026-10-06T09:00:38Z"
     digest: 9c3cccf2a29ec765
+  - by: claude-code/claude-opus-5-5
+    at: "2026-10-06T09:14:39Z"
+    digest: 9c3cccf2a29ec765
+  - by: claude-code/claude-opus-5-5
+    at: "2026-10-06T09:16:33Z"
+    digest: 9c3cccf2a29ec765
 sources:
   - id: agent-md
     resource: AGENT.md
