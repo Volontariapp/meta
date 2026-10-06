@@ -1,1 +1,9 @@
 npx lint-staged --allow-empty
+
+# Skills (.agents/skills, bundle OKF) : conformité et index à jour. Contournement : SKIP_SKILL_CHECK=1 git commit ...
+if [ -z "$SKIP_SKILL_CHECK" ] && git diff --cached --name-only | grep -q -e '^\.agents/skills/' -e '^AGENTS\.md$'; then
+  PYTHONDONTWRITEBYTECODE=1 python3 .agents/skills/volontariapp-skill-evolution/scripts/evolve.py validate || {
+    echo "Skills non conformes OKF : corriger (evolve.py index / sync) puis relancer le commit."
+    exit 1
+  }
+fi

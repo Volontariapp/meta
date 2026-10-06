@@ -1,0 +1,150 @@
+---
+type: Playbook
+title: "Deep-Dive : Étape 2 - Transactional Outbox & Émission BDD"
+description: Étape détaillée de volontariapp-implement-async-event-flow.
+tags: [async, outbox]
+status: stable
+generated:
+  by: claude-code/claude-opus-5-5
+  at: "2026-10-06T08:22:12Z"
+---
+
+# Deep-Dive : Étape 2 - Transactional Outbox & Émission BDD
+
+Ce document détaille l'implémentation de l'émission transactionnelle dans PostgreSQL depuis les packages `domain-*` (`npm-packages/packages`) et les microservices `ms-*`.
+
+---
+
+## 1. Pourquoi le Transactional Outbox ?
+
+Dans une architecture distribuée, **écrire dans PostgreSQL puis appeler Redis directement est un anti-pattern** majeur (problème du "Dual Write") :
+- Si Redis plante ou subit un timeout réseau après le commit SQL, le message est perdu à jamais.
+- Si le commit SQL échoue après l'envoi Redis, des consommateurs traitent un événement inexistant en base.
+
+**La solution Volontariapp :**
+Le message est écrit **dans la même transaction ACID PostgreSQL** que les données métiers. L'écriture en base de l'entité métier et de l'événement Outbox réussissent ensemble ou échouent ensemble.
+
+```mermaid
+sequenceDiagram
+    participant Repo as Domain Repository
+    participant PG as PostgreSQL (Transaction ACID)
+    participant Runner as outbox-<domaine> (Daemon)
+    participant Redis as Redis Stream
+
+    Repo->>PG: 1. BEGIN TRANSACTION
+    Repo->>PG: 2. INSERT INTO events (...)
+    Repo->>PG: 3. INSERT INTO event_queue (type, payload, target_services)
+    Repo->>PG: 4. COMMIT TRANSACTION
+    Note over PG, Runner: Données persistées avec certitude
+    Runner->>PG: 5. SELECT FOR UPDATE SKIP LOCKED
+    Runner->>Redis: 6. XADD event:created
+    Runner->>PG: 7. UPDATE event_queue SET status = 'COMPLETED'
+```
+
+---
+
+## 2. Implémentation dans un Repository de Domaine
+
+Emplacement standard : `npm-packages/packages/domain-<domaine>/src/repositories/postgres-<entite>.repository.ts`.
+
+```typescript
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import type { Repository } from '@volontariapp/database';
+import { BaseRepository, EventQueueEntity, EventQueueModel } from '@volontariapp/database';
+import { EventQueueRepository } from '@volontariapp/outbox';
+import { Streams } from '@volontariapp/shared';
+import { EventEventMessagingType, IEventPublishedPayload } from '@volontariapp/messaging';
+import { NotFoundError } from '@volontariapp/errors';
+import { EventModel } from '../models/event.model.js';
+import { EventEntity } from '../entities/event.entity.js';
+
+@Injectable()
+export class PostgresEventRepository extends BaseRepository<EventModel, EventEntity> {
+  constructor(
+    @InjectRepository(EventModel)
+    repository: Repository<EventModel>,
+  ) {
+    super(repository, EventEntity, EventModel);
+  }
+
+  async publishEvent(eventId: string, organizerId: string): Promise<EventEntity> {
+    return this.executeInTransaction(async (queryRunner) => {
+      // 1. Mise à jour de l'état métier
+      const model = await queryRunner.manager.findOne(this.modelClass, { where: { id: eventId } });
+      if (!model) {
+        throw new NotFoundError(`Event ${eventId} introuvable`, 'EVENT_NOT_FOUND', { eventId });
+      }
+      model.status = 'PUBLISHED';
+      const savedModel = await queryRunner.manager.save(this.modelClass, model);
+      const entity = this.toEntity(savedModel);
+
+      // 2. Préparation du payload typé
+      const payload: IEventPublishedPayload = {
+        eventId: entity.id,
+        organizerId,
+        publishedAt: new Date().toISOString(),
+        tags: entity.tags ?? [],
+      };
+
+      // 3. Instanciation de l'événement Outbox
+      const eventQueueEntity = EventQueueEntity.createEvent<EventEventMessagingType.EVENT_PUBLISHED>({
+        type: EventEventMessagingType.EVENT_PUBLISHED,
+        emitter: 'ms-event',
+        emitterId: organizerId,
+        payload,
+        targetServices: [Streams.EVENT_PUBLISHED],
+      });
+
+      // 4. Écriture dans event_queue dans la transaction du queryRunner
+      const eventQueueRepo = new EventQueueRepository<EventEventMessagingType.EVENT_PUBLISHED>(
+        queryRunner.manager.getRepository<EventQueueModel>(EventQueueModel),
+      );
+      await eventQueueRepo.create(eventQueueEntity);
+
+      return entity;
+    });
+  }
+}
+```
+
+---
+
+## 3. Distinction Cruciale : `EventQueueEntity` (Event) vs `JobsOutboxEntity` (Job)
+
+| Propriété | `EventQueueEntity` (Event) | `JobsOutboxEntity` (Job) |
+| :--- | :--- | :--- |
+| **Cardinalité** | **1 : N** (Diffusé à de multiples listeners) | **1 : 1** (Exécuté par un seul worker) |
+| **Table BDD** | `event_queue` | `jobs_outbox` |
+| **Destination** | **Redis Streams** (`targetServices: [Streams.XYZ]`) | **BullMQ Queue** (`target: EventsQueue.EVENTS`) |
+| **Consommateur** | `post-processors-runner` / `ws-service` | `workers-runners` |
+| **Cas d'usage** | Événement métier, synchro multi-services | Tâche de fond lourde, envoi d'email, fallback |
+
+### Exemple pour un Job Outbox (Fallback ou Tâche) :
+```typescript
+import { JobsOutboxEntity, JobsOutboxModel } from '@volontariapp/database';
+import { JobsOutboxRepository } from '@volontariapp/outbox';
+import { EventsQueue, JobMessagingType } from '@volontariapp/messaging';
+
+const job = JobsOutboxEntity.createJob<typeof JobMessagingType.PUBLISH_EVENT>({
+  type: JobMessagingType.PUBLISH_EVENT,
+  emitter: 'ms-event',
+  emitterId: userId,
+  scheduledAt: new Date(),
+  target: EventsQueue.EVENTS,
+  payload: { eventId, creatorId: userId },
+});
+
+const jobsRepo = new JobsOutboxRepository(queryRunner.manager.getRepository(JobsOutboxModel));
+await jobsRepo.create(job);
+```
+
+---
+
+## 4. Fonctionnement du Démon `outbox-runners`
+
+Vous n'avez **aucun code à écrire** dans `outbox-runners`. Le processus tourne en boucle autonome :
+1. Polling des lignes `status = 'PENDING'` avec `FOR UPDATE SKIP LOCKED` et une limite égale au `batchSize` configuré (`OutboxConsumer`, `@volontariapp/database`).
+2. Pousse le batch vers les streams de `target_services` avec `XADD` (`EventQueuePusher`, `@volontariapp/outbox`).
+3. Passe le statut `PENDING` -> `PROCESSING` -> `COMPLETED` (ou `FAILED`), selon l'enum `OutboxStatus`.
+4. Aucun verrou bloquant entre plusieurs instances grâce à `SKIP LOCKED`.

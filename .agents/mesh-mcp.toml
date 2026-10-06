@@ -1,69 +1,45 @@
-# mesh-mcp.toml — Volontariapp meta workspace
-# Hand-tuned from `mesh-mcp init --auto` output + verified against real repo structure
-# (rg checks for BaseWorker / IJobHandler / BatchPostProcessor / createEvent / @GrpcMethod).
+# mesh-mcp.toml: Volontariapp meta workspace
+# Hand-tuned from `mesh-mcp init --auto` output, every key checked against causalmesh's own source
+# (crates/mesh-core/src/config.rs is `deny_unknown_fields`: an invented key fails at startup).
 #
-# Re-audited 2026-09-23 against causalmesh @ 75b1748 (mesh-mcp 2.9.1, rebuilt from source —
-# the previously installed ~/.local/bin binary was a stale 2.9.0 prebuilt and silently gave
-# different behavior than this file's own source tree, see notes below):
-#   - `${workspace_root}` templating: the old binary genuinely didn't substitute it (empirically
-#     reproduced: 0/1 roots resolved). Fixed upstream in causalmesh commit 07daff9 ("fix: correct
-#     root resolution..."), which landed BEFORE this file was first written but AFTER the binary
-#     on this machine was built. Rebuilding (`cargo build --workspace --release`) and reinstalling
-#     fixed it — re-verified empirically (1/1, then 2/2 roots resolved with `${WORKSPACE_ROOT:-...}`
-#     unset and set). Now safe to use, so this file does.
-#   - SETUP.md's config reference table (in this same causalmesh checkout) claims
-#     `[engines.contracts.grpc]`, `.openapi`, `[engines.docs] enabled/paths`, and
-#     `[engines.policy] enabled` are "accepted but not read by anything". That is stale docs, not
-#     current behavior: crates/mesh-server/src/indexer.rs `extract_config()` / `engine_toggles()`
-#     and crates/mesh-core/src/state.rs's own tests show these are wired. Verified by grepping the
-#     source directly rather than trusting SETUP.md. Configured below accordingly.
+# Audit history (details in git log of this file and in ~/Developer/causalmesh/rex-volontariapp-7.0.6.md):
+#   - 2026-09-23, 2.9.1 / 3e626ee: `${workspace_root}` templating, docs.paths and proto_dirs
+#     substitution fixed upstream (07daff9, 08578a8, 3.0.0); gRPC handler linking for
+#     `@GrpcMethod(SERVICE_CONST, EnumType.X)` fixed (3e626ee).
+#   - 2026-09-28, 7.0.6 / 737fedd: `ci-tools` submodule (14 copies, ~17% of the index) excluded.
+#   - 2026-10-06, 7.0.19 / bcf220b: this revision. Six causal patterns added (jobs, sagas, SQL
+#     trigger producers, WebSocket push, mobile client listeners), policy skills remapped so the
+#     most specific playbook wins, docs aliases fixed (one of them was destroying matches),
+#     `.agents/` indexed so search_docs also finds the team's skills.
 #
-# Re-audited again 2026-09-23 against causalmesh @ 3e626ee (mesh-mcp 2.9.1, rebuilt from source):
-#   - Upstream fixed the gRPC handler-linking bug this session had previously reported (a
-#     `@GrpcMethod(SERVICE_CONST, EnumType.SIGN_UP)` decorator using identifiers instead of string
-#     literals produced a garbled node name that never matched the proto's bare RPC name, so
-#     `analyze_grpc`'s "Server Handlers" was empty for every single gRPC handler in this codebase
-#     — 100% of them use this decorator shape). Fix commit 3e626ee, independently verified via
-#     `cargo test --workspace` (200/200) and `cargo clippy` (clean) before rebuilding/reinstalling.
-#     Re-tested on this exact config: `analyze_grpc("SignUp")` now returns 1 server handler
-#     (previously 0). No config change was needed for this one — it was a parser bug, not a
-#     config bug; the fix landed purely in causalmesh's own source.
-#   - The `proto_dirs`/`spec_files` `${workspace_root}` bug documented below is a SEPARATE,
-#     still-unfixed issue (different function, `allows_proto_path()`/`spec_file_matches()`) —
-#     the workaround (plain substrings, no `${workspace_root}` prefix) below is still required.
-#     (Superseded: fixed in 3.0.0, see [engines.contracts.grpc] below.)
+# Fixed upstream since the 7.0.6 report (no workaround needed any more):
+#   7.0.7 analyze_grpc no longer traces RPCs that merely contain the target, and resolves calls
+#         made through `commandService`/`queryService` inherited from base-grpc.controller.ts;
+#   7.0.8 wire-format check compares enum values; 7.0.9 secret masking of `const password = '...'`;
+#   7.0.10 analyze_impact `depth >= 2` follows re-emissions (rows marked heuristic);
+#   7.0.12 find_dependents counts barrels and describe-only specs.
 #
-# Re-audited 2026-09-28 against mesh-mcp 7.0.6 (tag v7.0.6 = causalmesh 737fedd, on origin/main;
-# installed ~/.local/bin binary, `mesh-mcp doctor` reports "v7.0.6, commit: 737fedd", daemon
-# version matches). Full report: ~/Developer/causalmesh/rex-volontariapp-7.0.6.md.
-#   - doctor: 0 errors, 0 warnings; before this revision 3810 files scanned, 3771 indexed,
-#     0 not indexed. 663 of those files were the `ci-tools` git submodule, duplicated in 14 roots
-#     (7 different HEADs) and not detected by doctor's root-overlap check. Now excluded below;
-#     after this revision doctor reports 3161 scanned, 3122 indexed, 0 not indexed.
-#   - `gather-stream-consumer` pattern verified: `analyze_impact("EVENT_CREATED")` lists the
-#     ws-service and post-processor options files as consumers of the same topic as the
-#     `domain-event` producer.
-#   - Known 7.0.6 limits on THIS codebase (treat these answers as leads, confirm with rg):
-#       * analyze_grpc lists handlers/clients of RPCs whose name merely CONTAINS the target
-#         (CreateEvent -> CreateEventNode, UpdateUser -> AdminUpdateUser);
-#       * analyze_grpc misses api-gateway calls made through `commandService`/`queryService`
-#         fields inherited from base-grpc.controller.ts (75 call sites, 22 files);
-#       * the analyze_grpc wire-format check does not compare enum values;
-#       * analyze_impact `depth >= 2` does not follow pattern-engine producers, and does not
-#         flag producers it cannot see (user.created is emitted by a SQL trigger);
-#       * smart_search redaction masks enum members and JSON env-var mappings but not
-#         `const password = '...'`;
-#       * find_dependents skips files without a declaration (describe-only specs, barrels).
+# Still-known limits on THIS codebase (treat as leads, confirm with a targeted rg in one repo):
+#   * events emitted through a lookup table are invisible: EVENT_CREATION_FAILED is pushed by
+#     ws-service's gather via npm-packages/packages/messaging/src/websockets/events/mapping.ts;
+#   * the job-audit SQL trigger builds its stream name at runtime
+#     (`stream_prefix || ':job:outbox:success'`), so JOB_OUTBOX_* producers are not resolved;
+#   * a named import from an external npm package can be linked to a homonymous workspace symbol
+#     (`import { Index } from 'typeorm'`), visible in visualize_mesh only.
+#
+# 7.0.19 `mesh-mcp init --write-ide-config` writes a routing block into CLAUDE.md/AGENTS.md that
+# points to `.agents/skills/mesh-mcp/SKILL.md`. The skill is `.agents/skills/volontariapp-mesh-mcp/`
+# here: do not run that command, AGENTS.md section 2 already carries the routing table.
 
 [workspace]
 name = "volontariapp-meta"
 version = "1.0.0"
 
-# Verified working (see note above). Lets the same file run unmodified from a different checkout
-# path or in CI via `WORKSPACE_ROOT=/path/to/meta mesh-mcp run`; defaults to ".." because this
-# file lives one level below the repo root, in .agents/.
+# Lets the same file run unmodified from another checkout or in CI via
+# `WORKSPACE_ROOT=/path/to/meta mesh-mcp run`; ".." because this file lives in .agents/.
 workspace_root = "${WORKSPACE_ROOT:-..}"
 
+# `roots` is also the security jail: anything outside is refused.
 roots = [
   "${workspace_root}/proto-registry",
   "${workspace_root}/npm-packages",
@@ -79,7 +55,10 @@ roots = [
   "${workspace_root}/workers-runners",
   "${workspace_root}/nativapp",
   "${workspace_root}/deploy",
-  "${workspace_root}/docs"
+  "${workspace_root}/docs",
+  # The team's OKF skills and this file: search_docs("outbox") then also returns the playbooks
+  # (volontariapp-implement-async-*), not only the C1-C4 docs. Plugin skills are excluded below.
+  "${workspace_root}/.agents"
 ]
 
 exclude_patterns = [
@@ -91,17 +70,17 @@ exclude_patterns = [
   "**/coverage/**",
   "**/graphify-out/**",
   "**/npm-packages/tools/changelog-checker-*",
-  # Root-name-prefixed exclude patterns (a pattern containing the crawl root's own directory
-  # name as a literal segment, e.g. "deploy" here when "deploy" is itself a root) used to be
-  # silently dead: crawl_scope() is called once per root and strips that root's prefix before
-  # matching, so "**/deploy/submodules/**" never matched anything from inside the deploy root
-  # itself. Fixed upstream in causalmesh commit 08578a8 (ExcludeMatcher::is_excluded_with_root,
-  # which also checks root_name.join(rel)) — re-verified empirically after rebuilding: this
-  # canonical form now correctly dedupes deploy/submodules/* from every other root's real copy.
+  # Root-name-prefixed patterns work since causalmesh 08578a8 (ExcludeMatcher::is_excluded_with_root).
   "**/deploy/submodules/**",  # mirrored copies of the same repos, nested inside the deploy root
-  # Shared CI tooling, a git submodule checked out in 14 roots: 14 near-identical copies
-  # (~17% of the index, 2026-09-28) that duplicate every smart_search hit on workflows/compose.
+  # Shared CI tooling, a git submodule checked out in 14 roots (`doctor` warns on it since 7.0.13).
   "**/ci-tools/**",
+  # Third-party matt-pocock skills (generic workflow advice, not Volontariapp knowledge) and the
+  # generated OKF index/log files, which only repeat the SKILL.md titles.
+  "**/.agents/plugins/**",
+  "**/.agents/skills/index.md",
+  "**/.agents/skills/*/index.md",
+  "**/.agents/skills/*/log.md",
+  "**/.agents/skills/log.md",
   "**/*.log",
   "**/.env*",
   "**/secrets/**",
@@ -114,168 +93,328 @@ exclude_patterns = [
 ]
 
 # ==============================================================================
-# Engine 1: Documentation Engine (C1-C4 architecture docs)
-# `enabled` and `paths` are wired (indexer.rs engine_toggles()/doc_path_allowed()). `paths` used
-# to only match relative-to-root globs (a literal "${workspace_root}/docs" placeholder never
-# matched anything — confirmed empirically: search_docs("outbox") returned 0/23 real hits).
-# Fixed upstream in causalmesh commit 08578a8: ExcludeMatcher::compile() now strips a
-# "${workspace_root}/" or "${WORKSPACE_ROOT}/" prefix from any `paths`/`exclude_patterns` entry
-# before compiling the glob, so the canonical documented form below now genuinely narrows
-# indexing to docs/ (re-verified after rebuilding mesh-mcp: 10/10 relevant sections, 0 noise).
-# Kept "*.md" alongside it deliberately — it additionally surfaces per-service CLAUDE.md/README.md
-# files (e.g. ms-post/CLAUDE.md's exact event payloads), which search_docs found genuinely useful
-# in practice and which "${workspace_root}/docs/**" alone would exclude.
+# Engine 1: Documentation (search_docs). crates/mesh-core/src/docs.rs normalize_query():
+# the query is split on whitespace, `stop_words` are dropped, then each remaining word is
+# REPLACED by its alias. An alias therefore loses every match of the original word: it must
+# point to a term the docs actually use, or to a stem shared by both spellings.
+# Counts below: occurrences in docs/ on 2026-10-06 (rg -i -c).
+# ==============================================================================
 [engines.docs]
 enabled = true
+# "*.md" keeps per-service CLAUDE.md/README.md (exact event payloads in ms-post/CLAUDE.md) and the
+# .agents skills, on top of the C1-C4 architecture docs.
 paths = ["${workspace_root}/docs/**", "*.md"]
-aliases = { "ws" = "websocket", "k8s" = "kubernetes", "dlq" = "dead-letter-queue", "grpc" = "grpc" }
+# Filler words that otherwise add +5 per section and drown the real keyword (French and English,
+# agents ask in both). Domain words such as "job", "event", "flux" are kept on purpose.
+stop_words = [
+  "le", "la", "les", "un", "une", "des", "du", "de", "d'un", "d'une", "et", "ou", "est", "sont",
+  "comment", "quoi", "quel", "quelle", "quels", "quelles", "pour", "dans", "sur", "avec", "par",
+  "qui", "que", "ce", "cette", "ces", "on", "faire",
+  "the", "a", "an", "of", "to", "in", "is", "are", "how", "what", "which", "does", "do", "and",
+  "or", "for", "with", "by", "from", "it", "this", "that"
+]
 exact_phrase_boost = 60
 fuzzy_fallback = true
 sanitize_prompt_injections = true
 
+# Aliases: see the REPLACED-word warning above.
+[engines.docs.aliases]
+# stems shared by the French and English spellings
+"idempotence" = "idempot"
+"idempotency" = "idempot"
+"idempotent" = "idempot"
+# shorthand -> spelling used in the docs
+"k8s" = "kubernetes"  # kubernetes 11, k8s 0
+"ws" = "websocket"  # websocket 12
+"pg" = "postgres"
+"postgresql" = "postgres"  # postgres 109 (also matches "postgresql")
+"pp" = "post-processor"
+"postprocessor" = "post-processor"
+"postprocessors" = "post-processor"
+"gw" = "gateway"  # "api gateway" 14 + "api-gateway" 43, both contain "gateway"
+"bull" = "bullmq"
+"mq" = "bullmq"
+"neo" = "neo4j"
+"rn" = "nativapp"
+"mobile" = "nativapp"  # nativapp 17, mobile 4
+"internal-token" = "internal_token"
+"internaltoken" = "internal_token"
+"security" = "sécurité"  # sécurité 9, security 2
+"scatter" = "scatter-gather"
+# "dlq" is deliberately NOT aliased: the docs write "dlq" (5) and never "dead-letter-queue" (0);
+# the previous `"dlq" = "dead-letter-queue"` turned every DLQ question into 0 results.
+
 # ==============================================================================
-# Engine 2: Formal Schema Engine (Protobuf / OpenAPI)
-# `[engines.contracts.grpc]`/`.openapi` fields below are wired (ExtractConfig::from_contracts
-# in mesh-parsers/src/languages/mod.rs), despite SETUP.md's stale claim that they're inert.
+# Engine 2: Formal contracts (Protobuf). Every key below is read
+# (ExtractConfig::from_contracts, crates/mesh-parsers/src/languages/mod.rs).
 # ==============================================================================
 [engines.contracts]
 enabled = true
 
 [engines.contracts.grpc]
-# `${workspace_root}` in proto_dirs used to be a literal substring that never matched any real
-# absolute path (allows_proto_path() wasn't run through the same substitution as roots/
-# exclude_patterns/docs.paths), silently disabling all proto extraction. Fixed upstream in
-# causalmesh 3.0.0 (strip_workspace_root_prefix() now shared by ExcludeMatcher::compile(),
-# allows_proto_path(), and spec_file_matches()) — re-verified empirically on this exact config
-# after rebuilding: analyze_grpc("SignUp") finds the proto definition again with the canonical
-# templated form below.
 proto_dirs = ["${workspace_root}/proto-registry/proto"]
-# Only @GrpcMethod is actually used across ms-event/ms-post/ms-social/ms-user (verified via rg,
-# 2026-09-23). @GrpcService does not appear anywhere in the codebase today; add it back if a
-# service-level decorator is introduced.
+# Only @GrpcMethod is used (no @GrpcService, @GrpcStreamMethod, @MessagePattern or @EventPattern in
+# ms-*/api-gateway, rg 2026-10-06). Add a decorator here the day one appears.
 controller_annotations = ["@GrpcMethod"]
 canonical_fqcn_projection = true
 
-# [engines.contracts.openapi] is disabled — genuinely dead, not a causalmesh config bug this
-# time. `api-gateway/swagger-static/*.json` is generated at build time by @nestjs/swagger and
-# gitignored (api-gateway/.gitignore:63, `swagger-static/*`) — verified via
-# `git check-ignore -v`. mesh-mcp's crawler always respects .gitignore with no override, so
-# these files are never scanned regardless of how `spec_files` is written (confirmed via
-# `mesh-mcp doctor`, which now detects and warns on exactly this since 3.0.0). To re-enable:
-# either commit the generated specs (defeats the point of gitignoring build output), or run
-# `yarn generate:openapi` (or equivalent) and un-ignore the output before indexing — neither is
-# done today, so leave this section commented out rather than carrying dead config.
+# [engines.contracts.openapi] stays off: api-gateway/swagger-static/*.json is generated at build
+# time and gitignored (api-gateway/.gitignore:63), and the crawler always respects .gitignore.
+# Re-enable only if the generated specs get committed.
 # [engines.contracts.openapi]
 # enabled = true
-# spec_files = [
-#   "api-gateway/swagger-static/openapi-global.json",
-#   "api-gateway/swagger-static/openapi-user.json",
-#   "api-gateway/swagger-static/openapi-post.json",
-#   "api-gateway/swagger-static/openapi-social.json",
-#   "api-gateway/swagger-static/openapi-event.json"
-# ]
+# spec_files = ["api-gateway/swagger-static/openapi-*.json"]
 
 # ==============================================================================
-# Declarative Custom Pattern Engine — matched against real source (verified via rg):
-#   workers-runners/**  -> `export class XWorker extends BaseWorker<T>`
-#   post-processors-runner/** -> `export class XPostProcessor extends BatchPostProcessor<T>`
-#   npm-packages/packages/database/src/outbox -> `EventQueueEntity.createEvent<T>(...)`
+# Declarative causal patterns (crates/mesh-parsers/src/languages/mod.rs extract_custom_patterns):
+#   topic_producer -> node `produce:<target>`, linked to every consumer of the same topic
+#   topic_consumer -> node `<consumer_group>` (or `consume:<target>`), linked likewise
+#   saga           -> node named `<target>`, listed under "related sagas" by analyze_impact when
+#                     its name contains the queried topic
+#   rpc            -> node `rpc:<target>`, recorded as a gRPC call
+# Topic keys go through normalize_topic_key() (mesh-core/src/contracts.rs): a member reference
+# such as `UserJobType.FALLBACK_X`, `JobMessagingType.FALLBACK_X` or `Streams.X` is reduced to its
+# lowercase member (`fallback_x`), so different enums naming the same member share one topic.
+# `file_pattern` is matched as a SUFFIX OR SUBSTRING of the path after its leading `*` and `.`
+# are stripped (CompiledPattern::matches_path): "*.ts" becomes the bare needle "ts", which also
+# matches `.agents/...`, any `events/` or `tests/` folder and their Markdown. Every pattern below
+# uses "/src/" instead (all TypeScript sources live under a src/ directory; docs, skills and this
+# file never do), or a file-name suffix such as "options.ts". Regexes are Rust `regex` syntax (no
+# look-around), single-quoted so backslashes stay single. An invalid regex is logged on stderr
+# and skipped: check with `mesh-mcp graph --format mermaid 2>&1 | grep -i pattern`.
 # ==============================================================================
+
+# ---- Domain events (Transactional Outbox -> Redis Streams -> post-processors) -----------------
+
+# Producer side, business type: `EventQueueEntity.createEvent<T>(...)`
+# (npm-packages/packages/database/src/outbox, called from the domain-* repositories).
 [[engines.contracts.patterns]]
 name = "outbox-event-producer"
 kind = "topic_producer"
-file_pattern = "*.ts"
+file_pattern = "/src/"
 regex = 'createEvent<([A-Za-z0-9_.]+)>'
 target_group = 1
 
+# Producer side, physical stream: `targetServices: [Streams.EVENT_CREATED]`
+# (domain-event/.../postgres-event.repository.ts). Same normalized key as the business type.
+[[engines.contracts.patterns]]
+name = "outbox-target-stream"
+kind = "topic_producer"
+file_pattern = "/src/"
+regex = 'targetServices:\s*\[\s*(\w+\.\w+)'
+target_group = 1
+
+# Producer side, SQL: a Postgres trigger that writes into event_queue. Convention
+# `create_<topic>_event_queue_record()` (npm-packages/packages/domain-user/src/database/triggers):
+# the captured `user_created` is exactly the key of `UserEventMessagingType.USER_CREATED`, which
+# had "No producer resolved" before this pattern (it also hits the twin users.trigger.sql). Anchored on CREATE so the
+# `EXECUTE FUNCTION create_..._event_queue_record()` line of the same file is not a second hit.
+[[engines.contracts.patterns]]
+name = "sql-trigger-event-producer"
+kind = "topic_producer"
+file_pattern = "/src/"
+regex = 'CREATE\s+OR\s+REPLACE\s+FUNCTION\s+create_(\w+)_event_queue_record\(\)'
+target_group = 1
+
+# Consumer side: `class XPostProcessor extends BatchPostProcessor<T>` (post-processors-runner/**,
+# ws-service/src/post-processors/**).
 [[engines.contracts.patterns]]
 name = "batch-post-processor"
 kind = "topic_consumer"
-file_pattern = "*.ts"
+file_pattern = "/src/"
 regex = 'class\s+(\w+)\s+extends\s+BatchPostProcessor<([^>]+)>'
 target_group = 2
 consumer_group = 1
 
-[[engines.contracts.patterns]]
-name = "bullmq-job-worker"
-kind = "topic_consumer"
-file_pattern = "*.ts"
-regex = 'class\s+(\w+)\s+extends\s+BaseWorker<([^>]+)>'
-target_group = 2
-consumer_group = 1
-
-# The two patterns above key nodes by the *business event type* (e.g.
-# `EventEventMessagingType.EVENT_CREATED`), never by the actual physical
-# channel it travels over. These two surface that channel identity as its
-# own node — the real Redis Stream key (outbox producer side, verified in
-# npm-packages/packages/domain-event/.../postgres-event.repository.ts:69,
-# `targetServices: [Streams.EVENT_CREATED]`) and the real BullMQ queue name
-# (worker consumer side, verified in workers-runners/*/src/workers/*.worker.ts,
-# `@Processor(EventsQueue.EVENTS)`). They deliberately do NOT try to merge
-# with the event-type nodes above — the pattern engine has no reliable way
-# to prove a given event type always rides a specific stream/queue, so a
-# separate, honestly-unconnected node is safer than a fabricated link.
-[[engines.contracts.patterns]]
-name = "outbox-target-stream"
-kind = "topic_producer"
-file_pattern = "*.ts"
-regex = 'targetServices:\s*\[\s*(\w+\.\w+)'
-target_group = 1
-
-[[engines.contracts.patterns]]
-name = "bullmq-processor-queue"
-kind = "topic_consumer"
-file_pattern = "*.ts"
-# @Processor(...) decorates the class from above it, e.g.:
-#   @Injectable()
-#   @Processor(EventsQueue.EVENTS)
-#   export class EventWorker extends BaseWorker<JobMessagingType> {
-regex = '@Processor\((\w+\.\w+)\)[\s\S]{0,120}?class\s+(\w+)\s+extends\s+BaseWorker'
-target_group = 1
-consumer_group = 2
-
+# Consumer side, gather: the stream lives in a sibling options file
+# (`streamName: getEventStreamName(Streams.EVENT_CREATED)`, ws-service/src/post-processors/*/options/).
+# Linking works when enum member names match; `SocialEventMessagingType.EVENT_SOCIAL_CREATED`
+# riding `Streams.WS_EVENT_CREATED_FEEDBACK` stays a separate topic.
 [[engines.contracts.patterns]]
 name = "gather-stream-consumer"
 kind = "topic_consumer"
 file_pattern = "options.ts"
-# Gather/batch post-processors declare their stream in a sibling options file, e.g.
-#   ws-service/src/post-processors/events/options/ws-event-created.options.ts:
-#     streamName: getEventStreamName(Streams.EVENT_CREATED),
-# (the class itself only `extends BaseGatherPostProcessor`). Needs mesh-mcp >= 7.0.5,
-# which keys `Streams.EVENT_CREATED` and `EventMessagingType.EVENT_CREATED` on the same topic.
-# `file_pattern` is a filename suffix match: it also catches `event-created-options.ts`
-# (verified on 7.0.6). Linking only works when enum member names match: a type such as
-# `SocialEventMessagingType.EVENT_SOCIAL_CREATED` riding `Streams.WS_EVENT_CREATED_FEEDBACK`
-# stays a separate, consumer-less topic.
 regex = 'streamName:\s*get\w*StreamName\((\w+\.\w+)\)'
 target_group = 1
 
+# Saga compensation: a post-processor that moves an aggregate's `saga_status`
+# (post-processor-event/.../event-creation-failed.post-processor.ts sets SagaStatus.CANCEL,
+# event-creation-successfull sets DONE). Node named after the event it reacts to, so
+# analyze_impact("EVENT_CREATION_FAILED") lists it under related sagas. The class header and the
+# `saga_status:` assignment are ~1.8 KB apart in today's files: 4000 leaves room to grow.
+[[engines.contracts.patterns]]
+name = "saga-status-transition"
+kind = "saga"
+file_pattern = ".post-processor.ts"
+regex = 'extends\s+BatchPostProcessor<([^>]+)>[\s\S]{0,4000}?saga_status:\s*SagaStatus\.\w+'
+target_group = 1
+
+# ---- Jobs (Transactional Outbox -> BullMQ -> workers) ----------------------------------------
+
+# Producer side: a command controller turns a failed synchronous command into a background job,
+# `this.withFallback(UserJobType.FALLBACK_UPDATE_USER, user.id, data, ...)`
+# (ms-*/src/modules/*/controllers/command*/). Before this pattern no job had a producer.
+[[engines.contracts.patterns]]
+name = "fallback-job-producer"
+kind = "topic_producer"
+file_pattern = "/src/"
+regex = 'withFallback\(\s*(\w+\.\w+)'
+target_group = 1
+
+# Consumer side, per job type: one handler class per job,
+# `export class FallbackCreateEventHandler implements IJobHandler<...> { ... public readonly
+# jobType = JobMessagingType.FALLBACK_CREATE_EVENT;` (workers-runners/*/src/workers/handlers/**).
+# Links to the producer above through the shared member (`fallback_create_event`).
+[[engines.contracts.patterns]]
+name = "job-handler-consumer"
+kind = "topic_consumer"
+file_pattern = "/src/"
+regex = 'class\s+(\w+)\s+implements\s+IJobHandler<[\s\S]{0,600}?jobType\s*=\s*(\w+\.\w+)'
+target_group = 2
+consumer_group = 1
+
+# Consumer side, per worker: `class EventWorker extends BaseWorker<JobMessagingType>` keys on the
+# whole enum (no member), so it surfaces the worker class, not a job link.
+[[engines.contracts.patterns]]
+name = "bullmq-job-worker"
+kind = "topic_consumer"
+file_pattern = "/src/"
+regex = 'class\s+(\w+)\s+extends\s+BaseWorker<([^>]+)>'
+target_group = 2
+consumer_group = 1
+
+# Consumer side, physical queue: `@Processor(EventsQueue.EVENTS)` above the worker class.
+[[engines.contracts.patterns]]
+name = "bullmq-processor-queue"
+kind = "topic_consumer"
+file_pattern = "/src/"
+regex = '@Processor\((\w+\.\w+)\)[\s\S]{0,120}?class\s+(\w+)\s+extends\s+BaseWorker'
+target_group = 1
+consumer_group = 2
+
+# ---- Real-time push (ws-service -> Socket.IO -> nativapp) ------------------------------------
+# Both sides name `WebsocketMessagingType.X`. Its normalized key is the member (`post_liked`),
+# the same as the domain event's: analyze_impact("POST_LIKED") therefore runs end to end, from
+# the outbox producer to the nativapp handler that updates the UI. That merge is intended; the
+# rows still say which file is a Socket.IO push and which a Redis consumer.
+
+# Producer side: NotificationService calls in ws-service post-processors
+# (`notifyUser(id, WebsocketMessagingType.POST_LIKED, ...)`, `broadcastExcept(...)`, `broadcast(...)`).
+[[engines.contracts.patterns]]
+name = "websocket-push-producer"
+kind = "topic_producer"
+file_pattern = "/src/"
+regex = '(?:notifyUser|broadcastExcept|broadcast)\([^;]{0,160}?(\w*WebsocketMessagingType\.\w+)'
+target_group = 1
+
+# Consumer side: the mobile client's listeners,
+# `socket.on(WebsocketMessagingType.POST_CREATED, handlePostCreated)`
+# (nativapp/src/hooks/useNotificationHandlers.ts, 23 listeners on 2026-10-06).
+[[engines.contracts.patterns]]
+name = "nativapp-socket-listener"
+kind = "topic_consumer"
+file_pattern = "/src/"
+regex = 'socket\.on\(\s*(\w*WebsocketMessagingType\.\w+)\s*,\s*(\w+)'
+target_group = 1
+consumer_group = 2
+
 # ==============================================================================
-# Engine 3: Policy Steering & Active Governance — mirrors .agents/AGENTS.md §1
-# (Cas A: npm-packages, Cas B: proto-registry — both require STOP + human handoff)
-# `enabled` is wired (mesh-core/src/state.rs tests: `enabled = false` disables both
-# stop_rules and skills), despite SETUP.md listing it as inert — keep this true.
+# Engine 3: Policy (governance.rs). Mirrors AGENTS.md section 1 (STOP rule).
 # ==============================================================================
 [engines.policy]
 enabled = true
 enforce_git_hooks = true
 cryptographic_audit_trail = true
+# allow_all on purpose. `enforce_refusal` would refuse every READ of npm-packages/proto-registry,
+# which an agent needs precisely to apply the STOP workflow; `audit_warn` only writes a stderr
+# trace no agent sees. Writes are guarded by the Claude Code hook .claude/hooks/stop-rule-guard.sh.
+read_governance_mode = "allow_all"
 
+# Matched as whole path segments (evaluate_guard). Used by RSAH refusals when read_governance_mode
+# is not allow_all, and shown in `mesh-mcp doctor`.
 [engines.policy.stop_rules]
-"proto-registry" = "🛑 STOP: proto-registry ne compile pas les contrats TS localement. Sa CI ouvre une PR dans npm-packages pour régénérer @volontariapp/contracts — attendre la publication avant de toucher aux microservices."
-"npm-packages" = "🛑 STOP: après build/test/changeset, passer la main au Lead Dev pour la PR. Ne jamais bricoler un `as unknown as Type` ou du `any` en attendant la publication NPM."
+"proto-registry" = "STOP: proto-registry ne compile pas les contrats TS localement. Sa CI ouvre une PR dans npm-packages pour régénérer @volontariapp/contracts : attendre la publication avant de toucher aux microservices."
+"npm-packages" = "STOP: après build, test et changeset, passer la main au Lead Dev pour la PR. Ne jamais contourner l'attente de publication avec un `as unknown as Type` ou du `any`."
 
-# Keys are matched exactly against the MCP tool name first (governance.rs recommend_skill()),
-# then case-insensitively as a substring of the query's scope/target, longest match wins.
-# "engines.contracts.grpc" (the old key here) is neither a real tool name nor a string that can
-# ever appear in a query's scope/target, so it could never fire — dead config. Fixed below to the
-# real tool name. Also filled in the three playbooks from AGENTS.md's skill matrix that weren't
-# wired to anything yet (all five files verified present under .agents/skills/global/).
+# recommend_skill(): a key equal to the TOOL NAME wins over everything (no subject match is even
+# tried), otherwise the LONGEST key contained (case-insensitive) in the call's scope/target/query
+# wins. The previous `"analyze_impact"` tool key therefore sent every async question, jobs and
+# WebSocket included, to trace-async-flow: replaced by subject keys. Paths are relative to this
+# file's directory (resolve_skill_paths), so they resolve whatever the server's cwd is.
+# The table itself is GENERATED by `evolve.py index` from the `mesh_keys` of each SKILL.md
+# (volontariapp-skill-evolution): edit the skill's frontmatter, never the lines below.
 [engines.policy.skills]
-"analyze_grpc" = ".agents/skills/global/proto-contract-evolution/SKILL.md"
-"proto-registry" = ".agents/skills/global/proto-contract-evolution/SKILL.md"
-"npm-packages" = ".agents/skills/global/shared-npm-package-change/SKILL.md"
-"analyze_impact" = ".agents/skills/global/trace-async-flow/SKILL.md"
-"workers-runners" = ".agents/skills/global/implement-async-job-flow/SKILL.md"
-"outbox-runners" = ".agents/skills/global/implement-async-job-flow/SKILL.md"
-"post-processors-runner" = ".agents/skills/global/implement-async-event-flow/SKILL.md"
+# >>> skills-mesh:start (généré par evolve.py index depuis les `mesh_keys` des skills, ne pas éditer)
+# volontariapp-api-gateway
+"api-gateway" = "skills/volontariapp-api-gateway/SKILL.md"
+"gatewaycontroller" = "skills/volontariapp-api-gateway/SKILL.md"
+"accesstokenguard" = "skills/volontariapp-api-gateway/SKILL.md"
+"rolesguard" = "skills/volontariapp-api-gateway/SKILL.md"
+"grpcinternalinterceptor" = "skills/volontariapp-api-gateway/SKILL.md"
+"internalmetadata" = "skills/volontariapp-api-gateway/SKILL.md"
+"iscurrentuseroradminguard" = "skills/volontariapp-api-gateway/SKILL.md"
+"ws-proxy" = "skills/volontariapp-api-gateway/SKILL.md"
+# volontariapp-deploy-gitops
+"deploy/" = "skills/volontariapp-deploy-gitops/SKILL.md"
+"argocd" = "skills/volontariapp-deploy-gitops/SKILL.md"
+"sealedsecret" = "skills/volontariapp-deploy-gitops/SKILL.md"
+"kubeseal" = "skills/volontariapp-deploy-gitops/SKILL.md"
+"networkpolic" = "skills/volontariapp-deploy-gitops/SKILL.md"
+"kustomiz" = "skills/volontariapp-deploy-gitops/SKILL.md"
+"initcontainer" = "skills/volontariapp-deploy-gitops/SKILL.md"
+# volontariapp-file-storage-flow
+"storage" = "skills/volontariapp-file-storage-flow/SKILL.md"
+"file_id" = "skills/volontariapp-file-storage-flow/SKILL.md"
+"upload" = "skills/volontariapp-file-storage-flow/SKILL.md"
+"confirmfileattachment" = "skills/volontariapp-file-storage-flow/SKILL.md"
+"quarantine" = "skills/volontariapp-file-storage-flow/SKILL.md"
+# volontariapp-grpc-microservice
+"ms-user" = "skills/volontariapp-grpc-microservice/SKILL.md"
+"ms-event" = "skills/volontariapp-grpc-microservice/SKILL.md"
+"ms-post" = "skills/volontariapp-grpc-microservice/SKILL.md"
+"ms-social" = "skills/volontariapp-grpc-microservice/SKILL.md"
+"basecommandcontroller" = "skills/volontariapp-grpc-microservice/SKILL.md"
+"grpcvalidationpipe" = "skills/volontariapp-grpc-microservice/SKILL.md"
+"grpcinternalguard" = "skills/volontariapp-grpc-microservice/SKILL.md"
+"sync-migrations" = "skills/volontariapp-grpc-microservice/SKILL.md"
+"transformer" = "skills/volontariapp-grpc-microservice/SKILL.md"
+# volontariapp-implement-async-event-flow
+"post-processors-runner" = "skills/volontariapp-implement-async-event-flow/SKILL.md"
+"messaging" = "skills/volontariapp-implement-async-event-flow/SKILL.md"
+"post-processor" = "skills/volontariapp-implement-async-event-flow/SKILL.md"
+"postprocessor" = "skills/volontariapp-implement-async-event-flow/SKILL.md"
+"streams." = "skills/volontariapp-implement-async-event-flow/SKILL.md"
+"saga" = "skills/volontariapp-implement-async-event-flow/SKILL.md"
+"_failed" = "skills/volontariapp-implement-async-event-flow/SKILL.md"
+"gather" = "skills/volontariapp-implement-async-event-flow/SKILL.md"
+"ws-service" = "skills/volontariapp-implement-async-event-flow/SKILL.md"
+"websocket" = "skills/volontariapp-implement-async-event-flow/SKILL.md"
+# volontariapp-implement-async-job-flow
+"workers-runners" = "skills/volontariapp-implement-async-job-flow/SKILL.md"
+"outbox-runners" = "skills/volontariapp-implement-async-job-flow/SKILL.md"
+"messaging/src/jobs" = "skills/volontariapp-implement-async-job-flow/SKILL.md"
+"fallback_" = "skills/volontariapp-implement-async-job-flow/SKILL.md"
+"jobtype" = "skills/volontariapp-implement-async-job-flow/SKILL.md"
+"jobmessagingtype" = "skills/volontariapp-implement-async-job-flow/SKILL.md"
+"ijobhandler" = "skills/volontariapp-implement-async-job-flow/SKILL.md"
+"baseworker" = "skills/volontariapp-implement-async-job-flow/SKILL.md"
+# volontariapp-mesh-mcp
+"causalmesh" = "skills/volontariapp-mesh-mcp/SKILL.md"
+"mesh-mcp" = "skills/volontariapp-mesh-mcp/SKILL.md"
+# volontariapp-proto-contract-evolution
+"analyze_grpc" = "skills/volontariapp-proto-contract-evolution/SKILL.md"
+"proto-registry" = "skills/volontariapp-proto-contract-evolution/SKILL.md"
+".proto" = "skills/volontariapp-proto-contract-evolution/SKILL.md"
+"contracts" = "skills/volontariapp-proto-contract-evolution/SKILL.md"
+# volontariapp-shared-npm-package-change
+"npm-packages" = "skills/volontariapp-shared-npm-package-change/SKILL.md"
+"@volontariapp/" = "skills/volontariapp-shared-npm-package-change/SKILL.md"
+# volontariapp-skill-evolution
+"skill-evolution" = "skills/volontariapp-skill-evolution/SKILL.md"
+"evolve.py" = "skills/volontariapp-skill-evolution/SKILL.md"
+"okf" = "skills/volontariapp-skill-evolution/SKILL.md"
+# volontariapp-trace-async-flow
+"jobs_outbox" = "skills/volontariapp-trace-async-flow/SKILL.md"
+"job_audit" = "skills/volontariapp-trace-async-flow/SKILL.md"
+"event_queue" = "skills/volontariapp-trace-async-flow/SKILL.md"
+# <<< skills-mesh:end
