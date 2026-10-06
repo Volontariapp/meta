@@ -2,6 +2,11 @@
 
 ## 2026-10-06
 
+- **Vérification** - ajout de la regle changeset version / GITHUB_TOKEN (claude-code/claude-sonnet-5-5)
+- **Leçon** - yarn changeset version exige GITHUB_TOKEN et le changeset deja pousse (rule) (claude-code/agent)
+- **Vérification** - nettoyage de lessons.md apres ajout de la regle de merge (claude-code/claude-sonnet-5-5)
+- **Vérification** - ajout de la regle de merge (revue obligatoire, --auto) (claude-code/claude-sonnet-5-5)
+- **Leçon** - Merge d'une PR de npm-packages : revue obligatoire, utiliser --auto (rule) (claude-code/agent)
 - **Vérification** - retrait de la lecon sur le bump des dependances internes (demande annulee par l'utilisateur) (claude-code/claude-sonnet-5-5)
 - **Vérification** - regle ajoutee : bump patch des dependances internes workspace:* d'un package modifie (claude-code/claude-sonnet-5-5)
 - **Leçon** - Bump patch des dependances internes workspace:* d'un package modifie (rule) (claude-code/agent)

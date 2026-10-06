@@ -20,9 +20,18 @@ sources:
   - id: src-38f74cdc
     resource: docs/.env
     title: docs/.env
+  - id: src-a706e158
+    resource: npm-packages/.husky/pre-commit
+    title: npm-packages/.husky/pre-commit
 ---
 
 # Leçons
+
+## 2026-10-06 - Dans un worktree hors de meta, le controle de skills du hook husky est sans effet
+
+- **Type :** rule
+- **Leçon :** Le hook pre-commit des sous-depots ne lance evolve.py check-staged que si ../.agents/skills/volontariapp-skill-evolution/scripts/evolve.py existe a cote du depot (clone dans meta). Un git worktree cree hors de meta (par ex. dans le scratchpad) n'a pas ce chemin : le controle est silencieusement ignore. Les agents qui y travaillent doivent relire et mettre a jour a la main les skills de meta concernees puis lancer evolve.py sync, et l'orchestrateur le verifie. Le verrou STOP de .claude/hooks ne s'applique pas non plus aux fichiers hors du depot meta.[^src-a706e158]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-06 - Backlog Notion Volontariapp : API REST avec NOTION_TOKEN
 
@@ -52,3 +61,4 @@ sources:
 [^src-5352af57]: .agents/skills/volontariapp-skill-evolution/scripts/okf.py
 [^src-17b81fa2]: .agents/skills/volontariapp-skill-evolution/tests/test_evolve.py
 [^src-38f74cdc]: docs/.env
+[^src-a706e158]: npm-packages/.husky/pre-commit

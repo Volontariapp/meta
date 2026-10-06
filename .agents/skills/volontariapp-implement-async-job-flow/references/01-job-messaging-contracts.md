@@ -31,6 +31,9 @@ npm-packages/packages/messaging/src/jobs/
 ├── post/
 │   ├── payloads.ts       # Enums et interfaces pour Post
 │   └── queue.ts          # PostQueue
+├── storage/
+│   ├── payloads.ts       # Enums et interfaces pour Storage (storage.scan_file, storage.cleanup_files)
+│   └── queue.ts          # StorageQueue ('storage-queue')
 ├── envelope.ts           # JobEnvelope wrapper générique
 └── index.ts              # JobMessagingType et JobRegistry
 ```

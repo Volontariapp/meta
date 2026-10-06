@@ -26,8 +26,6 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T08:54:04Z"
-  - by: claude-code/claude-opus-5-5
     at: "2026-10-06T09:00:38Z"
     digest: 9c3cccf2a29ec765
   - by: claude-code/claude-opus-5-5
@@ -35,6 +33,12 @@ verified:
     digest: 9c3cccf2a29ec765
   - by: claude-code/claude-opus-5-5
     at: "2026-10-06T09:16:33Z"
+    digest: 9c3cccf2a29ec765
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T22:34:27Z"
+    digest: 9c3cccf2a29ec765
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T22:38:52Z"
     digest: 9c3cccf2a29ec765
 sources:
   - id: agent-md

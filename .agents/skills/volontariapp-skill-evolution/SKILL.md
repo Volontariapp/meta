@@ -43,9 +43,6 @@ sources:
     title: check_symbols.py
 verified:
   - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T09:14:40Z"
-    digest: 3eed3a9681c1364b
-  - by: claude-code/claude-opus-5-5
     at: "2026-10-06T09:14:52Z"
     digest: d8400d9a0015c223
   - by: claude-code/claude-opus-5-5
@@ -56,6 +53,9 @@ verified:
     digest: 2bf4599de2a3e325
   - by: claude-code/agent
     at: "2026-10-06T14:36:21Z"
+    digest: 2bf4599de2a3e325
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T22:51:25Z"
     digest: 2bf4599de2a3e325
 ---
 

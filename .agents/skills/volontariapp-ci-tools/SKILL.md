@@ -23,6 +23,9 @@ verified:
   - by: claude-code/claude-opus-5-5
     at: "2026-10-06T09:14:39Z"
     digest: 4ea45a7ba03d5217
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T22:51:25Z"
+    digest: 4ea45a7ba03d5217
 sources:
   - id: workflows
     resource: ci-tools/.github/workflows

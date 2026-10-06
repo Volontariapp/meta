@@ -26,21 +26,21 @@ sources:
     resource: npm-packages/packages/domain-storage/src
     title: "@volontariapp/domain-storage"
 verified:
-  - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T08:27:39Z"
-    digest: 4e4eff9dc3f64673
-  - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T09:00:40Z"
-    digest: 4e4eff9dc3f64673
   - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-06T15:11:02Z"
-    digest: 5ca8b1818aca14b5
+    at: "2026-10-06T22:24:49Z"
+    digest: c153279141b23f16
   - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-06T15:11:51Z"
-    digest: d4d4bec11e4e7252
+    at: "2026-10-06T22:27:14Z"
+    digest: 823ef71100fce341
   - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-06T15:34:36Z"
-    digest: 959328280c1c081b
+    at: "2026-10-06T22:31:08Z"
+    digest: 823ef71100fce341
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T22:51:24Z"
+    digest: 823ef71100fce341
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T22:53:46Z"
+    digest: 823ef71100fce341
 ---
 
 # Playbook : Stockage de Fichiers
@@ -48,7 +48,7 @@ verified:
 La référence d'architecture est `docs/stockage-fichiers/` (repo `Volontariapp/docs`). Ce playbook en est le résumé opérationnel. **Lis le document du flux concerné avant de coder.**
 
 > [!IMPORTANT]
-> **Statut au 2026-10-06 : architecture cible (RFC), presque rien n'est implémenté.** `ms-storage` démarre en HTTP seul, sans aucun handler gRPC ; `domain-storage` (tickets 1.6 et 1.7, version 0.5.0 sur la branche `feat/domain-storage-object-key-helpers`) a les enums `ScanStatus` / `ValidationMode` / `RejectionReason`, `FileStatus.RESERVED`, `VALIDATION_POLICY_BY_ENTITY` et `resolveValidationMode` (SVG retiré) et les helpers purs `buildQuarantineObjectKey` / `buildPublicObjectKey` / `buildPublicFileUrl` (`src/helpers/`), mais ni modèle ni repository ; aucune base `ms-storage` dans `deploy`. Les symboles `FileModel`, `PostgresFileRepository`, `attachFromConfirmationEvent`, `useUploadFile` **n'existent pas encore** : ce sont les noms à créer. Toujours partir de `01-etat-des-lieux.md` et de `10-plan-implementation.md` (vagues, chacune terminée par la règle du STOP).
+> **Statut au 2026-10-06 : architecture cible (RFC), presque rien n'est implémenté.** `ms-storage` démarre en hybride (gRPC sur `microServices.msStorageUrl`, `0.0.0.0:5006`, plus HTTP `/health` sur 3006, `GrpcInternalGuard` global) mais n'a encore aucun handler gRPC ; sa migration de production `ms-storage/src/migrations/domain/1791300000000-CreateFilesAndReleasedEntities.ts` crée `files` (7 index dont 5 partiels) et `released_entities` ; son test (`yarn test:migration`, opt-in via `MS_STORAGE_MIGRATION_TEST_DB_HOST`, base locale jetable qu'il vide) compare le schéma à `FileModel` ; sa configuration porte `s3.privateBucket`, `s3.publicEndpoint` (signature uniquement), `s3.publicBaseUrl` et `scanner.host` / `scanner.port` / `scanner.timeoutMs` (validés, variables `S3_PRIVATE_BUCKET`, `S3_PUBLIC_ENDPOINT`, `S3_PUBLIC_BASE_URL`, `SCANNER_*`), `S3Module` est importé dans `AppModule` mais `S3Service` ne signe pas encore avec `publicEndpoint` ni ne gère la quarantaine ; `domain-storage` (tickets 1.6 à 1.10, mergés sur `main` : 0.7.0 publiée, 0.8.0 en cours de publication) a les enums `ScanStatus` / `ValidationMode` / `RejectionReason`, `FileStatus.RESERVED`, `VALIDATION_POLICY_BY_ENTITY` et `resolveValidationMode` (SVG retiré) et les helpers purs `buildQuarantineObjectKey` / `buildPublicObjectKey` / `buildPublicFileUrl` (`src/helpers/`) et les modèles TypeORM `FileModel` (table `files`) et `ReleasedEntityModel` (table `released_entities`, colonnes en snake_case explicites, `src/models/`, sous-chemin `./models`), et un `PostgresFileRepository` partiel (sous-chemin `./repositories`, jamais réexporté par la racine, `src/repositories/`), refactoré en 0.9.0 sur le pattern de `domain-user` : `FileEntity` (classe pure `src/entities/`, exportée par la racine ; `FileEntity.create` porte les invariants : MIME autorisé, mode SYNC/ASYNC depuis la taille déclarée, clé de quarantaine, `uploadExpiresAt` = création + `presignedUrlTtlSeconds` + 5 min) et `ReleasedEntityEntity`, `registerStorageMappings()` (`src/models/mapper.ts`, appelé à l'import de `./models`, enregistre aussi les paires outbox), `IFileRepository` (renvoie des entités), `PostgresFileRepository extends BaseRepository<FileModel, FileEntity>` (`@Injectable`, constructeur `@InjectRepository(FileModel) Repository<FileModel>`, plus de `DataSource`), outbox écrite via `JobsOutboxRepository` / `EventQueueRepository` de `@volontariapp/outbox` sur `manager.getRepository(...)` de la transaction ; `typeorm` est résolu en deux copies (Yarn instancie un peer par jeu de peers) : le `tsconfig.json` de domain-storage mappe `typeorm` vers la copie hissée pour que `Repository` / `EntityManager` restent assignables à ceux de `database` / `outbox` (sans ça TS2345 "Property 'findOptions' is protected") ; le TS2589 invoqué avant n'a pas pu être reproduit. Méthodes : `createPending`, `confirmUpload`, `switchToAsync`, `resetToAwaitingUpload`, `completeScan`, `rejectScan`. Chaque transition est un `UPDATE ... RETURNING` conditionnel en READ COMMITTED, renvoie `null` / `false` si aucune ligne ne correspond, et écrit `jobs_outbox` (`storage.scan_file`) ou `event_queue` (`storage.file_scanned` / `storage.file_rejected`, seulement si la ligne est `ATTACHED`) dans la même transaction. Les tests d'intégration (`yarn test:integration`, base `postgres-storage` sur `localhost:5437`, qui fait un `dropDatabase()` : refusé hors hôte local) chargent la migration de test `src/test/migrations/domain/` puis les migrations communes copiées de domain-post (`src/test/migrations/common/`). **Limite connue** : `@volontariapp/shared` n'a pas encore d'enum `StorageStream`, donc les événements storage sont écrits avec `targetServices` vide (`FILE_SCAN_RESULT_TARGET_SERVICES`, `src/repositories/file-outbox.builders.ts`) : le pusher les ignore tant que la constante n'est pas renseignée. ATTENTION : avec `targetServices` vide, le pusher d'outbox saute la ligne sans erreur et le consommateur la marque `COMPLETED` : l'événement est perdu en silence et le média du post reste `PENDING`, donc ne pas brancher `completeScan` / `rejectScan` dans `ms-storage` ou `worker-storage` avant que `StorageStream` existe. `reserve` (ticket 1.10, domain-storage 0.8.0) existe : `reserve({ fileIds, entityType, entityId, ownerId })` dedoublonne, refuse au-dela de `maxPerEntity` (`TooManyFilesException`, ids distincts de l'appel, pas le cumul en base : un avatar remplace peut coexister avec l'ancien `ATTACHED`), verrouille en `SELECT ... FOR UPDATE ORDER BY id`, classe chaque fichier avec la regle pure `classifyFileForAttachment` (`src/policies/attachment-validation.rule.ts`, a reutiliser telle quelle dans `attachFromConfirmationEvent` : verdicts `RESERVE` / `ALREADY_HELD` / `NOT_FOUND` / `REFUSED` + `AttachmentRefusalReason`), puis un seul `UPDATE ... WHERE status = 'PENDING'` pour tout reserver ; tout ou rien, `FileNotFoundException` (404, prioritaire) ou `FileAttachmentRefusedException` (422, `code` `FILE_ATTACHMENT_REFUSED`, `details.reason` ; son `grpcCode` est FAILED_PRECONDITION : elle étend `BaseApiError` directement, car `UnprocessableEntityError` fixe INVALID_ARGUMENT et le filtre global renvoie `grpcCode` tel quel, il n'existe aucun mapping par `code`) ; aucun evenement ecrit. Pas encore de `attachFromConfirmationEvent`, `releaseForEntity`, `releaseFile`, `releaseForOwner` (ticket 1.11) ; aucune base `ms-storage` dans `deploy`. Les symboles `attachFromConfirmationEvent`, `useUploadFile` **n'existent pas encore** : ce sont les noms à créer. Toujours partir de `01-etat-des-lieux.md` et de `10-plan-implementation.md` (vagues, chacune terminée par la règle du STOP).
 
 | Besoin | Document |
 | :--- | :--- |
@@ -82,7 +82,7 @@ La référence d'architecture est `docs/stockage-fichiers/` (repo `Volontariapp/
 12. **Un post-processor métier qui ne trouve plus l'entité acquitte avec un log `warn`** : la règle d'émission garantit qu'elle existait, elle a donc été supprimée depuis.
 13. **`FileStatus` et `ScanStatus` sont deux axes distincts. `media_status` / `cover_status` sont distincts de `saga_status`.**
 14. **`ws-service` n'est jamais un maillon métier.**
-15. **Persistance `files` dans `domain-storage`** (`FileModel`, `PostgresFileRepository`), partagée par `ms-storage`, `worker-storage` et `post-processor-storage`. Le pipeline S3 / clamd / ré-encodage vit dans le package d'infrastructure storage.
+15. **Persistance `files` dans `domain-storage`** (`FileModel`, `PostgresFileRepository`, `./repositories`), partagée par `ms-storage`, `worker-storage` et `post-processor-storage`. Le pipeline S3 / clamd / ré-encodage vit dans le package d'infrastructure storage.
 16. **La table d'événements s'appelle `event_queue`**, pas `event_outbox`.
 
 ---

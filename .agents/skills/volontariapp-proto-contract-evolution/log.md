@@ -2,6 +2,7 @@
 
 ## 2026-10-06
 
+- **Vérification** - post protos: commentaires de documentation uniquement, regles inchangees (claude-code/claude-sonnet-5-5)
 - **Vérification** - event.proto: ajout additif Event.cover_file_id=16 et cover_status=17 (oubli du ticket 2.6), regles inchangees (claude-code/claude-sonnet-5-5)
 - **Vérification** - ajout du piege proto-sync HEAD~1 (un seul commit regenere par push) et du secours proto-reset (claude-code/claude-sonnet-5-5)
 - **Leçon** - proto-sync ne regenere que le dernier commit d'un push (rule) (claude-code/agent)

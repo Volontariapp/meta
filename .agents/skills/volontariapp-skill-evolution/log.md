@@ -2,6 +2,8 @@
 
 ## 2026-10-06
 
+- **Vérification** - passe d'evolution apres les merges du Sprint 8 (statut du repository, CI des services, worktrees) (claude-code/claude-sonnet-5-5)
+- **Leçon** - Dans un worktree hors de meta, le controle de skills du hook husky est sans effet (rule) (claude-code/agent)
 - **Vérification** - skill relue et alignée sur le code (claude-code/agent)
 - **Leçon** - Backlog Notion Volontariapp : API REST avec NOTION_TOKEN (rule) (claude-code/agent)
 - **Vérification** - Intégration de la skill volontariapp-docx-reports et hooks (claude-code/agent)

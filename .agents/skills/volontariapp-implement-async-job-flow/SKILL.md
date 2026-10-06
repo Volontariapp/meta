@@ -56,6 +56,9 @@ verified:
   - by: claude-code/claude-opus-5-5
     at: "2026-10-06T09:00:38Z"
     digest: 20a2c5ba4fcf1ea2
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T16:07:49Z"
+    digest: 345152032d485017
 ---
 
 # Guide : Implémenter un Job Asynchrone End-to-End
