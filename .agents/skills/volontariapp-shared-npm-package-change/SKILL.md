@@ -41,6 +41,12 @@ verified:
   - by: claude-code/claude-opus-5-5
     at: "2026-10-06T09:14:39Z"
     digest: f8d4767ea11f974c
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T15:19:37Z"
+    digest: f8d4767ea11f974c
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T15:25:42Z"
+    digest: f8d4767ea11f974c
 ---
 
 # Shared NPM Package Change & Règle d'Or du Stop Immédiat

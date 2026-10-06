@@ -17,9 +17,18 @@ sources:
   - id: src-17b81fa2
     resource: .agents/skills/volontariapp-skill-evolution/tests/test_evolve.py
     title: .agents/skills/volontariapp-skill-evolution/tests/test_evolve.py
+  - id: src-38f74cdc
+    resource: docs/.env
+    title: docs/.env
 ---
 
 # Leçons
+
+## 2026-10-06 - Backlog Notion Volontariapp : API REST avec NOTION_TOKEN
+
+- **Type :** rule
+- **Leçon :** Le connecteur Notion MCP pointe vers un autre workspace (projet Arkhorys, base Sprint Backlogs). Pour les backlogs Volontariapp, utiliser l'API REST Notion avec NOTION_TOKEN lu dans docs/.env (source sans l'afficher). Base Backlogs id 2fd37561-a847-80a1-8c79-cebcaa8100b7, filtre select Sprint = 'Sprint N - Victor A Assign' (champs: Nom, État, Priority, Charge, Weekly, EPIC, Bloqué par).[^src-38f74cdc]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-06 - Les tests doivent isoler chaque chemin module
 
@@ -42,3 +51,4 @@ sources:
 [^src-e76e88b2]: .agents/skills/volontariapp-skill-evolution/scripts/evolve.py
 [^src-5352af57]: .agents/skills/volontariapp-skill-evolution/scripts/okf.py
 [^src-17b81fa2]: .agents/skills/volontariapp-skill-evolution/tests/test_evolve.py
+[^src-38f74cdc]: docs/.env

@@ -35,12 +35,21 @@ sources:
     resource: docs/stockage-fichiers/08-contrats-et-evolutions.md
     title: "Contrats et évolutions (numérotation, trou du champ 5)"
 verified:
-  - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T08:27:39Z"
-    digest: 238e23c33482852b
-  - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T09:00:39Z"
-    digest: 41f409c4f0300da6
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T15:00:01Z"
+    digest: d70b224dffd86cbe
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T15:02:04Z"
+    digest: 61b6a8d10a0104d0
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T15:05:28Z"
+    digest: f305ac39a0987635
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T15:21:22Z"
+    digest: f305ac39a0987635
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T15:34:14Z"
+    digest: fdc49f89e9cb9d16
 ---
 
 # Proto Contract Evolution & Cycle de Propagation gRPC

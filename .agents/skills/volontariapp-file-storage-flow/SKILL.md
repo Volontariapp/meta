@@ -32,6 +32,15 @@ verified:
   - by: claude-code/claude-opus-5-5
     at: "2026-10-06T09:00:40Z"
     digest: 4e4eff9dc3f64673
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T15:11:02Z"
+    digest: 5ca8b1818aca14b5
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T15:11:51Z"
+    digest: d4d4bec11e4e7252
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T15:34:36Z"
+    digest: 959328280c1c081b
 ---
 
 # Playbook : Stockage de Fichiers
@@ -39,7 +48,7 @@ verified:
 La référence d'architecture est `docs/stockage-fichiers/` (repo `Volontariapp/docs`). Ce playbook en est le résumé opérationnel. **Lis le document du flux concerné avant de coder.**
 
 > [!IMPORTANT]
-> **Statut au 2026-10-06 : architecture cible (RFC), presque rien n'est implémenté.** `ms-storage` démarre en HTTP seul, sans aucun handler gRPC ; `domain-storage@0.3.0` n'a ni modèle ni repository ; aucune base `ms-storage` dans `deploy`. Les symboles `FileModel`, `PostgresFileRepository`, `ScanStatus`, `resolveValidationMode`, `buildPublicFileUrl`, `attachFromConfirmationEvent`, `useUploadFile` **n'existent pas encore** : ce sont les noms à créer. Toujours partir de `01-etat-des-lieux.md` et de `10-plan-implementation.md` (vagues, chacune terminée par la règle du STOP).
+> **Statut au 2026-10-06 : architecture cible (RFC), presque rien n'est implémenté.** `ms-storage` démarre en HTTP seul, sans aucun handler gRPC ; `domain-storage` (tickets 1.6 et 1.7, version 0.5.0 sur la branche `feat/domain-storage-object-key-helpers`) a les enums `ScanStatus` / `ValidationMode` / `RejectionReason`, `FileStatus.RESERVED`, `VALIDATION_POLICY_BY_ENTITY` et `resolveValidationMode` (SVG retiré) et les helpers purs `buildQuarantineObjectKey` / `buildPublicObjectKey` / `buildPublicFileUrl` (`src/helpers/`), mais ni modèle ni repository ; aucune base `ms-storage` dans `deploy`. Les symboles `FileModel`, `PostgresFileRepository`, `attachFromConfirmationEvent`, `useUploadFile` **n'existent pas encore** : ce sont les noms à créer. Toujours partir de `01-etat-des-lieux.md` et de `10-plan-implementation.md` (vagues, chacune terminée par la règle du STOP).
 
 | Besoin | Document |
 | :--- | :--- |

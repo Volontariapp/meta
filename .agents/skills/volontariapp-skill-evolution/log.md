@@ -2,6 +2,8 @@
 
 ## 2026-10-06
 
+- **Vérification** - skill relue et alignée sur le code (claude-code/agent)
+- **Leçon** - Backlog Notion Volontariapp : API REST avec NOTION_TOKEN (rule) (claude-code/agent)
 - **Vérification** - Intégration de la skill volontariapp-docx-reports et hooks (claude-code/agent)
 - **Vérification** - plan : fichiers supprimés ignorés dans les non-couverts ; init_repos.sh couvert (claude-code/claude-opus-5-5)
 - **Vérification** - paths : hooks pre-commit des sous-repos et install-skill-hooks.sh (claude-code/claude-opus-5-5)
