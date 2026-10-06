@@ -60,3 +60,5 @@ graphify-out/
 /mcp-meta-indexer
 /docs
 /causalmesh
+
+__pycache__/

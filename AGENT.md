@@ -14,7 +14,7 @@
 
 ## Aiguillage & Navigation (Serveur MCP `mesh-mcp`, projet `causalmesh`)
 
-> Schémas complets dans `.agents/skills/mesh-mcp/SKILL.md`.
+> Schémas complets dans `.agents/skills/volontariapp-mesh-mcp/SKILL.md`.
 
 - 📚 **Concepts d'architecture C4 & infra ?** $\rightarrow$ `search_docs({ query })` (interroge `meta/docs/`).
 - 🔍 **Recherche de code ou pattern ?** $\rightarrow$ `smart_search({ query, scope })` (`scope` **obligatoire**, rejeté sinon).

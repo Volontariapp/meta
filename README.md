@@ -41,7 +41,7 @@ La documentation de référence est structurée selon le modèle **C4** pour une
 
 ## Intelligence Artificielle & Serveur MCP (`mesh-mcp`)
 
-Pour permettre aux agents d'IA (Claude Code, Antigravity, Cursor) de naviguer et de raisonner sur tout les dépôts sans saturer leur contexte en tokens, le projet expose le standard **Model Context Protocol (MCP)** via **[`mesh-mcp`](https://github.com/VictorAgahi/causalmesh)** (projet `causalmesh`), un binaire local (`~/.local/bin/mesh-mcp`) configuré par `.agents/mesh-mcp.toml`. Ne parle jamais réseau, indexe uniquement les `roots` déclarés. Voir `.agents/skills/mesh-mcp/SKILL.md`.
+Pour permettre aux agents d'IA (Claude Code, Antigravity, Cursor) de naviguer et de raisonner sur tout les dépôts sans saturer leur contexte en tokens, le projet expose le standard **Model Context Protocol (MCP)** via **[`mesh-mcp`](https://github.com/VictorAgahi/causalmesh)** (projet `causalmesh`), un binaire local (`~/.local/bin/mesh-mcp`) configuré par `.agents/mesh-mcp.toml`. Ne parle jamais réseau, indexe uniquement les `roots` déclarés. Voir `.agents/skills/volontariapp-mesh-mcp/SKILL.md`.
 
 ```mermaid
 flowchart LR
@@ -58,7 +58,7 @@ flowchart LR
 5. 📚 **`search_docs(query, max_sections?)`** : Recherche ciblée et extraction de sections conceptuelles dans le repo `docs` (~200 tokens par concept extrait).
 6. 🗺️ **`visualize_mesh(format?)`** : Rend toute la topologie indexée en Mermaid ou HTML interactif.
 
-Les schémas exacts (vérifiés en source, pas dans une doc générée) sont dans `.agents/skills/mesh-mcp/SKILL.md`.
+Les schémas exacts (vérifiés en source, pas dans une doc générée) sont dans `.agents/skills/volontariapp-mesh-mcp/SKILL.md`.
 
 ### Utilisation & Configuration
 - **En local (Stdio) :** `mesh-mcp run` — pointe sur `.agents/mesh-mcp.toml`.
