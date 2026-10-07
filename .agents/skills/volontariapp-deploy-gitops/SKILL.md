@@ -20,14 +20,21 @@ generated:
   by: claude-code/claude-opus-5-5
   at: "2026-10-06T08:54:04Z"
 verified:
-  - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T08:54:04Z"
-  - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T09:00:38Z"
-    digest: 6f5f592a222e5679
   - by: claude-code/agent
-    at: "2026-10-07T09:54:22Z"
-    digest: c163976c699c4595
+    at: "2026-10-07T14:12:26Z"
+    digest: 6119b9dd4cb0cf9e
+  - by: claude-code/agent
+    at: "2026-10-07T18:08:36Z"
+    digest: 8e56366ddf6181dd
+  - by: claude-code/agent
+    at: "2026-10-07T18:23:25Z"
+    digest: 2fa13ce517c1f662
+  - by: "human:victoragahi"
+    at: "2026-10-07T18:30:37Z"
+    digest: 57097d4605d7f4d1
+  - by: claude-code/agent
+    at: "2026-10-07T18:32:09Z"
+    digest: 63f58acd042a28d8
 sources:
   - id: c4
     resource: docs/C4-Deployment-And-Infrastructure.md
@@ -71,6 +78,7 @@ sources:
 - **Réseau Default-Deny** : un nouveau flux (service vers base, service vers service, sortie Internet) exige une NetworkPolicy explicite par label `app`. Sans elle, la connexion est bloquée même dans le namespace.
 - **Ressources** : requests/limits obligatoires (gateway 50m/64Mi à 200m/128Mi, microservice 100m/128Mi à 500m/256Mi, runners comme la gateway)[^readme].
 - **Ports** : gRPC des microservices et HTTP de la gateway sur 3000 ; Postgres 5432 ; Neo4j 7687 ; Redis 6379.
+- **Redis des Outboxes (`REDIS_HOST`)** : Tous les `deployment-outbox.yaml` (y compris pour `ws-service`) DOIVENT pointer sur `redis-master` (broker global du mesh). Ne jamais configurer un Redis local de service (ex: `ws-service-redis`), sinon les événements dépilés par l'outbox sont publiés dans un trou noir et n'atteignent jamais les post-processors.
 
 ## Points d'attention relevés
 

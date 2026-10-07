@@ -2,6 +2,14 @@
 
 ## 2026-10-07
 
+- **Vérification** - Fix typage et linting des tests unitaires et tsconfig pour pp-user (claude-code/agent)
+- **Vérification** - Ajout du post-processor PostLikedBadgePostProcessor et SocialInteractionClient gRPC pour le badge SOCIAL_LIKE_COUNT_10 (claude-code/agent)
+- **Vérification** - Ajout du post-processor post-creation-successfull et evaluation du badge COMMUNITY_POST_COUNT_1 dans post-processor-user (claude-code/agent)
+- **Vérification** - Add learnings about outbox redis-master host, getEventStreamName prefix, and gather completion streams (claude-code/agent)
+- **Leçon** - Complétion de saga gather : stream de sortie versus trigger initial (pitfall) (claude-code/agent)
+- **Leçon** - Nommage de stream des post-processors : toujours getEventStreamName (pitfall) (claude-code/agent)
+- **Vérification** - Added UserBadgeAwardedPostProcessor to ws-service (process:antigravity)
+- **Vérification** - Added user.badge_awarded contracts and stream (agent:antigravity)
 - **Vérification** - Relu : specs d'integration de ws-service alignees sur IPostCreatedPayload (userId, fileIds) et IEventCreatedPayload (userId), aucune regle modifiee (claude-code/agent)
 - **Vérification** - Relu : ws-service bump @volontariapp/* (logger 0.3.0) et reformatage Prettier des imports des post-processors, aucune regle modifiee (claude-code/agent)
 - **Vérification** - Relu : bump @volontariapp/* (logger 0.3.0) dans post-processors-runner et outbox-runners, aucune regle modifiee (claude-code/agent)

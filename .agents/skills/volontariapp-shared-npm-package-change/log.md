@@ -2,6 +2,8 @@
 
 ## 2026-10-07
 
+- **Vérification** - Patch messaging gather completion streams and bump packages (claude-code/agent)
+- **Vérification** - Added user.badge_awarded contracts and version bump (agent:antigravity)
 - **Leçon** - yarn build (nest build) ne compile pas les specs : verifier avec tsc (rule) (claude-code/agent)
 - **Leçon** - Bump consommateurs : pre-push, watchman, ordre des commits (rule) (claude-code/agent)
 - **Leçon** - Le verrou STOP survit a la publication dans la meme session (rule) (claude-code/agent)

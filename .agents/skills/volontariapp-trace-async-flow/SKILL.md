@@ -52,6 +52,9 @@ verified:
   - by: claude-code/claude-opus-5-5
     at: "2026-10-06T09:14:39Z"
     digest: cda174fef99dcaa1
+  - by: claude-code/agent
+    at: "2026-10-07T14:12:26Z"
+    digest: cda174fef99dcaa1
 ---
 
 # Trace Async Flow & Diagnostic Runtime

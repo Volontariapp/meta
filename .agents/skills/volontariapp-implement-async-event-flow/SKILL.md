@@ -13,6 +13,7 @@ paths:
   - npm-packages/packages/shared/src/enums/streams.enum.ts
   - "ws-service/src/post-processors/**"
   - ws-service/src/core/services/gather-state.service.ts
+  - "post-processors-runner/**"
 mesh_keys:
   - post-processors-runner
   - messaging
@@ -50,21 +51,21 @@ sources:
     resource: npm-packages/packages/messaging/src/sagas/gather-registry.ts
     title: SAGA_GATHER_COMPLETION_MAPPING
 verified:
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-06T16:17:46Z"
-    digest: ba7804bbe7e048dd
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-06T20:55:37Z"
-    digest: ba7804bbe7e048dd
+  - by: "process:antigravity"
+    at: "2026-10-07T12:16:39Z"
+    digest: 76ce491f4f8f443d
   - by: claude-code/agent
-    at: "2026-10-07T10:23:57Z"
-    digest: c0800f1c730ed9a9
+    at: "2026-10-07T14:12:26Z"
+    digest: 76ce491f4f8f443d
   - by: claude-code/agent
-    at: "2026-10-07T10:25:46Z"
-    digest: c0800f1c730ed9a9
+    at: "2026-10-07T15:34:39Z"
+    digest: 0a1aa0225327a47d
   - by: claude-code/agent
-    at: "2026-10-07T10:34:41Z"
-    digest: c0800f1c730ed9a9
+    at: "2026-10-07T18:08:35Z"
+    digest: 4b83ebabda2cff9c
+  - by: claude-code/agent
+    at: "2026-10-07T18:23:29Z"
+    digest: 7983826efcf29d08
 ---
 
 # Guide : Implémenter un Flux Asynchrone End-to-End
@@ -298,6 +299,8 @@ Lorsque plusieurs post-processors travaillent en parallèle (ex : `post-processo
 - [ ] **Jamais d'appel Redis direct depuis un MS :** Toujours passer par `EventQueueEntity` ou `JobsOutboxEntity`.
 - [ ] **Transaction ACID obligatoire :** L'écriture métier et l'insertion outbox doivent partager le même `queryRunner`.
 - [ ] **Gestion des Sagas :** Si un post-processor échoue dans un scatter-gather, émettre l'événement `*_FAILED` pour que les autres processeurs effectuent leur rollback logique.
+- [ ] **Toujours `getEventStreamName` dans les options de post-processor :** L'outbox pusher préfixe systématiquement les flux par `stream:`. Le provider d'options d'un post-processor DOIT obligatoirement faire `streamName: getEventStreamName(Streams.MON_STREAM)`.
+- [ ] **Stream de complétion de gather :** Dans `SAGA_GATHER_COMPLETION_MAPPING` (`gather-registry.ts`), le champ `stream` DOIT être le stream de complétion (ex: `Streams.EVENT_SUCCESSFULLY_CREATED`), et JAMAIS le stream déclencheur (ex: `event:created`).
 
 [^streams]: Enum Streams
 [^gather]: BaseGatherPostProcessor

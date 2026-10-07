@@ -8,7 +8,7 @@ status: stable
 paths:
   - "npm-packages/packages/messaging/src/jobs/**"
   - "npm-packages/packages/workers/src/**"
-  - "workers-runners/*/src/workers/**"
+  - "workers-runners/*/src/**"
 mesh_keys:
   - workers-runners
   - outbox-runners
@@ -51,9 +51,6 @@ sources:
     title: job_catalogue.py
 verified:
   - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T08:27:39Z"
-    digest: 20a2c5ba4fcf1ea2
-  - by: claude-code/claude-opus-5-5
     at: "2026-10-06T09:00:38Z"
     digest: 20a2c5ba4fcf1ea2
   - by: claude-code/claude-sonnet-5-5
@@ -65,6 +62,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-07T10:22:48Z"
     digest: ecd7f271c01ebcc3
+  - by: claude-code/agent
+    at: "2026-10-07T15:04:15Z"
+    digest: 3e1ad8843770396a
 ---
 
 # Guide : Implémenter un Job Asynchrone End-to-End
