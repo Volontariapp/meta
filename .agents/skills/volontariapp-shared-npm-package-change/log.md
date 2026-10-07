@@ -2,6 +2,7 @@
 
 ## 2026-10-07
 
+- **Vérification** - Bump versions et changelogs suite aux events event_social.wished/unwished (claude-code/agent)
 - **Vérification** - Patch messaging gather completion streams and bump packages (claude-code/agent)
 - **Vérification** - Added user.badge_awarded contracts and version bump (agent:antigravity)
 - **Leçon** - yarn build (nest build) ne compile pas les specs : verifier avec tsc (rule) (claude-code/agent)

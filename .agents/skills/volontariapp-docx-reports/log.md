@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-07
+
+- **Vérification** - Sanitization XML et insertion propre images coaching 8 (human:victoragahi)
+
 ## 2026-10-06
 
 - **Vérification** - Unification du template unique sous Rapport de suivi coaching template.docx (claude-code/agent)

@@ -2,6 +2,7 @@
 
 ## 2026-10-07
 
+- **Vérification** - Vérification des bumps de tags d'images ms-social et post-processor-user suite aux releases (claude-code/agent)
 - **Vérification** - Commit et push du déploiement 9a5faf9 avec variables et volumes gRPC (claude-code/agent)
 - **Vérification** - Image tag 9a5faf9, volume certs et env vars gRPC pour post-processor-user (human:victoragahi)
 - **Vérification** - Ajout des variables d'environnement gRPC et montage du secret auth-certs pour pp-user (claude-code/agent)

@@ -51,12 +51,6 @@ sources:
     resource: npm-packages/packages/messaging/src/sagas/gather-registry.ts
     title: SAGA_GATHER_COMPLETION_MAPPING
 verified:
-  - by: "process:antigravity"
-    at: "2026-10-07T12:16:39Z"
-    digest: 76ce491f4f8f443d
-  - by: claude-code/agent
-    at: "2026-10-07T14:12:26Z"
-    digest: 76ce491f4f8f443d
   - by: claude-code/agent
     at: "2026-10-07T15:34:39Z"
     digest: 0a1aa0225327a47d
@@ -66,6 +60,12 @@ verified:
   - by: claude-code/agent
     at: "2026-10-07T18:23:29Z"
     digest: 7983826efcf29d08
+  - by: claude-code/agent
+    at: "2026-10-07T21:44:43Z"
+    digest: b37754ea53cfdef2
+  - by: claude-code/agent
+    at: "2026-10-07T22:06:55Z"
+    digest: e05655a665da1ef5
 ---
 
 # Guide : Implémenter un Flux Asynchrone End-to-End

@@ -2,6 +2,8 @@
 
 ## 2026-10-07
 
+- **Vérification** - Ajout post-processor event_social.wished pour badge EVENT_WISHLIST_COUNT_10 (claude-code/agent)
+- **Vérification** - Ajout des evenements et streams event_social.wished et event_social.unwished (claude-code/agent)
 - **Vérification** - Fix typage et linting des tests unitaires et tsconfig pour pp-user (claude-code/agent)
 - **Vérification** - Ajout du post-processor PostLikedBadgePostProcessor et SocialInteractionClient gRPC pour le badge SOCIAL_LIKE_COUNT_10 (claude-code/agent)
 - **Vérification** - Ajout du post-processor post-creation-successfull et evaluation du badge COMMUNITY_POST_COUNT_1 dans post-processor-user (claude-code/agent)
