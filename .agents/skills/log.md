@@ -1,5 +1,9 @@
 # Historique des skills
 
+## 2026-10-07
+
+- **Nouvelle skill** - [volontariapp-logger](/volontariapp-logger/SKILL.md) - Logger partagé : masquage et corrélation de traces (claude-code/agent)
+
 ## 2026-10-06
 
 - **Nouvelle skill** - [volontariapp-docx-reports](/volontariapp-docx-reports/SKILL.md) - Modification et relecture de documents Word DOCX (claude-code/agent)

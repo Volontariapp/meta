@@ -1,5 +1,14 @@
 # Historique
 
+## 2026-10-07
+
+- **Leçon** - yarn build (nest build) ne compile pas les specs : verifier avec tsc (rule) (claude-code/agent)
+- **Leçon** - Bump consommateurs : pre-push, watchman, ordre des commits (rule) (claude-code/agent)
+- **Leçon** - Le verrou STOP survit a la publication dans la meme session (rule) (claude-code/agent)
+- **Leçon** - Bump logger : contracts* tire les protos en cours (rule) (claude-code/agent)
+- **Leçon** - Bump changeset en cascade et lint hors workspace (rule) (claude-code/agent)
+- **Vérification** - paths elargis aux package.json, CHANGELOG.md et yarn.lock des packages (bumps changesets en cascade sur les dependants internes) (claude-code/agent)
+
 ## 2026-10-06
 
 - **Vérification** - ajout de la regle sur le CHANGELOG des versions publiees (claude-code/claude-sonnet-5-5)

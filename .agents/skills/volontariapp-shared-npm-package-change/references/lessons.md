@@ -21,6 +21,36 @@ sources:
 
 # Leçons
 
+## 2026-10-07 - yarn build (nest build) ne compile pas les specs : verifier avec tsc
+
+- **Type :** rule
+- **Leçon :** nest build utilise tsconfig.build.json qui exclut les specs, mais le build Docker les a fait echouer (ws-service : userId et fileIds manquants dans les payloads de test, IEventCreatedPayload et IPostCreatedPayload). Apres un bump, valider chaque consommateur avec npx tsc --noEmit -p tsconfig.json en plus de yarn build : cela a aussi revele scripts/seed/events.seeder.ts dans api-gateway.
+- **Consigné par :** claude-code/agent
+
+## 2026-10-07 - Bump consommateurs : pre-push, watchman, ordre des commits
+
+- **Type :** rule
+- **Leçon :** Apres un bump, les repos ms-* executent yarn lint au pre-push (lint --fix reformate et retire des gardes devenues inutiles avec les types plus stricts : fileIds, missingFileIds, $metadata?) : commiter ces corrections avant de pousser. Jest echoue avec watchman casse (glog absent) : ajouter --watchman=false. Le hook pre-commit de chaque repo exige un evolve.py sync de la skill concernee avant git commit. Ordre qui a fonctionne : yarn up, yarn build, corriger les DTO et factories, yarn lint, jest, sync, commit, push. Ne pas utiliser de script Python pour editer un consommateur : le classifieur de permissions le traite comme un contournement du verrou.
+- **Consigné par :** claude-code/agent
+
+## 2026-10-07 - Le verrou STOP survit a la publication dans la meme session
+
+- **Type :** rule
+- **Leçon :** Si la meme session modifie npm-packages puis bumpe les consommateurs, le hook stop-rule-guard refuse toute edition (Edit/Write) dans ms-*, api-gateway, runners meme apres publication CI. yarn up par Bash passe, mais corriger le code consommateur exige que le Lead Dev lance ! .claude/hooks/stop-rule-guard.sh release. Prevenir le Lead Dev des la fin du STOP, ou ouvrir une session neuve pour la phase consommateurs.
+- **Consigné par :** claude-code/agent
+
+## 2026-10-07 - Bump logger : contracts* tire les protos en cours
+
+- **Type :** rule
+- **Leçon :** yarn up '@volontariapp/*' dans un consommateur bumpe aussi contracts et contracts-nest, qui dependent du logger et embarquent les protos de la feature stockage (idempotencyKey, coverStatus, fileIds) : ms-event, ms-post, ms-user, api-gateway et worker-event ne compilent plus. Tester d'abord (yarn up puis yarn build, puis git checkout package.json yarn.lock) avant de commiter. Les yarn install de test modifient .yarn/install-state.gz (suivi par git dans les runners) : le restaurer avec git checkout.
+- **Consigné par :** claude-code/agent
+
+## 2026-10-07 - Bump changeset en cascade et lint hors workspace
+
+- **Type :** rule
+- **Leçon :** yarn changeset version bumpe aussi en patch tous les dependants internes (ex: logger minor => auth, monitoring... en patch), c'est attendu. yarn lint de workspace echoue (eslint absent hors eslint-config) : lancer node ../../node_modules/eslint/bin/eslint.js src/ depuis le package. cd est casse par un hook z du shell : utiliser builtin cd.
+- **Consigné par :** claude-code/agent
+
 ## 2026-10-06 - Ne jamais reecrire l'entree CHANGELOG d'une version deja publiee
 
 - **Type :** rule

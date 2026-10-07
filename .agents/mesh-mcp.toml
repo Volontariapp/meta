@@ -407,6 +407,9 @@ read_governance_mode = "allow_all"
 "jobmessagingtype" = "skills/volontariapp-implement-async-job-flow/SKILL.md"
 "ijobhandler" = "skills/volontariapp-implement-async-job-flow/SKILL.md"
 "baseworker" = "skills/volontariapp-implement-async-job-flow/SKILL.md"
+# volontariapp-logger
+"@volontariapp/logger" = "skills/volontariapp-logger/SKILL.md"
+"Masker" = "skills/volontariapp-logger/SKILL.md"
 # volontariapp-mesh-mcp
 "causalmesh" = "skills/volontariapp-mesh-mcp/SKILL.md"
 "mesh-mcp" = "skills/volontariapp-mesh-mcp/SKILL.md"

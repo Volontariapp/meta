@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-07
+
+- **Vérification** - Relu : workers-runners bump @volontariapp/* (logger 0.3.0) et factories de test worker-event alignees (idempotencyKey, eventId, coverStatus), aucune regle modifiee (claude-code/agent)
+- **Vérification** - Relu contre messaging/jobs : arborescence storage (SCAN_FILE, CLEANUP_FILES, StorageQueue) toujours exacte, aucun changement necessaire (claude-code/agent)
+
 ## 2026-10-06
 
 - **Vérification** - Relu apres ajout du domaine storage dans messaging (jobs et events), procedure inchangee; arborescence des jobs completee (claude-code/claude-sonnet-5-5)

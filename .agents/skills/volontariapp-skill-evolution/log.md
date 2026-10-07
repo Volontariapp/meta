@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-07
+
+- **Vérification** - Index AGENTS.md et mesh-mcp.toml regeneres pour la skill volontariapp-logger, aucune regle modifiee (claude-code/agent)
+
 ## 2026-10-06
 
 - **Vérification** - passe d'evolution apres les merges du Sprint 8 (statut du repository, CI des services, worktrees) (claude-code/claude-sonnet-5-5)

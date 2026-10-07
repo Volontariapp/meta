@@ -25,6 +25,9 @@ verified:
   - by: claude-code/claude-opus-5-5
     at: "2026-10-06T09:00:38Z"
     digest: 6f5f592a222e5679
+  - by: claude-code/agent
+    at: "2026-10-07T09:54:22Z"
+    digest: c163976c699c4595
 sources:
   - id: c4
     resource: docs/C4-Deployment-And-Infrastructure.md

@@ -2,6 +2,7 @@
 
 ## 2026-10-07
 
+- **Vérification** - Relu : ms-storage bump @volontariapp/* (logger 0.3.0) et retrait d'un optional chaining devenu inutile dans s3-error.utils.ts, aucune regle modifiee (claude-code/agent)
 - **Vérification** - ajout de la procedure de test manuel local de ms-storage (claude-code/claude-sonnet-5-5)
 - **Leçon** - Test manuel local de ms-storage : ce qui est testable et ce qui ne l'est pas (rule) (claude-code/agent)
 

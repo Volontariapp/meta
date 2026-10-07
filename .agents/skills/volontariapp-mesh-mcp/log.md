@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-07
+
+- **Vérification** - mesh-mcp.toml: index regenere pour la nouvelle skill volontariapp-logger (cles @volontariapp/logger, Masker), aucun changement de regle (claude-code/agent)
+
 ## 2026-10-06
 
 - **Vérification** - Mise à jour mesh-mcp.toml avec la nouvelle skill docx (claude-code/agent)

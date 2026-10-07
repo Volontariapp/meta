@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-10-07
+
+- **Vérification** - Relu : specs d'integration de ws-service alignees sur IPostCreatedPayload (userId, fileIds) et IEventCreatedPayload (userId), aucune regle modifiee (claude-code/agent)
+- **Vérification** - Relu : ws-service bump @volontariapp/* (logger 0.3.0) et reformatage Prettier des imports des post-processors, aucune regle modifiee (claude-code/agent)
+- **Vérification** - Relu : bump @volontariapp/* (logger 0.3.0) dans post-processors-runner et outbox-runners, aucune regle modifiee (claude-code/agent)
+
 ## 2026-10-06
 
 - **Vérification** - ajout de la regle sur les types de payload partages (unions de litteraux) (claude-code/claude-sonnet-5-5)

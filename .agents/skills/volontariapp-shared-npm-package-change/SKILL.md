@@ -7,6 +7,9 @@ tags: [npm-packages, changesets, stop-rule]
 status: stable
 paths:
   - npm-packages/package.json
+  - "npm-packages/packages/*/package.json"
+  - "npm-packages/packages/*/CHANGELOG.md"
+  - npm-packages/yarn.lock
   - npm-packages/.changeset/config.json
   - "npm-packages/.github/workflows/**"
 mesh_keys:
@@ -33,9 +36,6 @@ sources:
     title: Pipeline réutilisable npm-packages (ci-tools)
 verified:
   - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-06T16:24:10Z"
-    digest: f8d4767ea11f974c
-  - by: claude-code/claude-sonnet-5-5
     at: "2026-10-06T16:24:19Z"
     digest: f8d4767ea11f974c
   - by: claude-code/claude-sonnet-5-5
@@ -47,6 +47,9 @@ verified:
   - by: claude-code/claude-sonnet-5-5
     at: "2026-10-06T23:36:16Z"
     digest: f8d4767ea11f974c
+  - by: claude-code/agent
+    at: "2026-10-07T09:33:28Z"
+    digest: 2cbb37b9c22f3abd
 ---
 
 # Shared NPM Package Change & Règle d'Or du Stop Immédiat
