@@ -2,6 +2,11 @@
 
 ## 2026-10-06
 
+- **Vérification** - ajout de la regle sur le CHANGELOG des versions publiees (claude-code/claude-sonnet-5-5)
+- **Leçon** - Ne jamais reecrire l'entree CHANGELOG d'une version deja publiee (rule) (claude-code/agent)
+- **Vérification** - ajout des lecons : typeorm duplique par peers, branches empilees (claude-code/claude-sonnet-5-5)
+- **Leçon** - Avant de pousser une branche empilee, verifier l'etat de la PR de base (rule) (claude-code/agent)
+- **Leçon** - typeorm est duplique par jeu de peers : types incompatibles entre un domaine et database/outbox (rule) (claude-code/agent)
 - **Vérification** - ajout de la regle changeset version / GITHUB_TOKEN (claude-code/claude-sonnet-5-5)
 - **Leçon** - yarn changeset version exige GITHUB_TOKEN et le changeset deja pousse (rule) (claude-code/agent)
 - **Vérification** - nettoyage de lessons.md apres ajout de la regle de merge (claude-code/claude-sonnet-5-5)

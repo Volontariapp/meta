@@ -2,6 +2,7 @@
 
 ## 2026-10-06
 
+- **Vérification** - Ticket 1.11 : attachFromConfirmationEvent, releaseForEntity, releaseFile, releaseForOwner existent (domain-storage 0.10.0) ; mapper enregistre a l'import de ./models contrairement a domain-post ; now retire de createPending, TTL borne a 7 jours (claude-code/claude-sonnet-5-5)
 - **Vérification** - PostgresFileRepository refactore: FileEntity, mapper, IFileRepository, BaseRepository, outbox via @volontariapp/outbox (claude-code/claude-sonnet-5-5)
 - **Vérification** - passe d'evolution apres les merges du Sprint 8 (statut du repository, CI des services, worktrees) (claude-code/claude-sonnet-5-5)
 - **Vérification** - FileAttachmentRefusedException: grpcCode FAILED_PRECONDITION (extends BaseApiError), pas de mapping par code (claude-code/claude-sonnet-5-5)

@@ -14,9 +14,30 @@ sources:
   - id: src-9f856e83
     resource: npm-packages/.changeset/config.json
     title: npm-packages/.changeset/config.json
+  - id: src-b40f1e79
+    resource: npm-packages/yarn.lock
+    title: npm-packages/yarn.lock
 ---
 
 # Leçons
+
+## 2026-10-06 - Ne jamais reecrire l'entree CHANGELOG d'une version deja publiee
+
+- **Type :** rule
+- **Leçon :** Une correction de texte du CHANGELOG n'est permise que sur une version non publiee (verifier avec npm view @volontariapp/<pkg>@<version> version --prefer-online : absent signifie non publiee). Pour une version deja publiee, ne pas modifier son entree : decrire le changement (retrait d'un champ d'API, correction) dans l'entree de la NOUVELLE version, en le signalant comme cassant si c'est le cas. Sinon un consommateur lit 'version X sans le champ' alors que la X publiee l'accepte.[^src-9f856e83]
+- **Consigné par :** claude-code/agent
+
+## 2026-10-06 - Avant de pousser une branche empilee, verifier l'etat de la PR de base
+
+- **Type :** rule
+- **Leçon :** Une branche creee sur la branche d'une PR ouverte doit etre re-verifiee juste avant le push (gh pr view <n> --json state) : si la PR de base a ete mergee entre-temps, la branche d'origine disparait, le rebase sur origin/main reecrit les SHA et un push d'une branche deja publiee est rejete en non fast-forward. Dans ce cas ne pas deplacer ni forcer la branche (les deplacements de refs et le force push sont refuses par le classifieur de permissions) : publier la lignee rebasee sous un nouveau nom de branche et ouvrir la PR depuis celui-ci, puis laisser le Lead Dev supprimer l'ancienne branche distante.[^src-9f856e83]
+- **Consigné par :** claude-code/agent
+
+## 2026-10-06 - typeorm est duplique par jeu de peers : types incompatibles entre un domaine et database/outbox
+
+- **Type :** rule
+- **Leçon :** Yarn berry cree une instance physique de typeorm par jeu de peerDependencies : la copie hissee (node_modules/typeorm, utilisee par @volontariapp/database et outbox) et des copies sous packages/<domain>/node_modules/typeorm, toutes en 0.3.28 avec une seule entree dans yarn.lock. Passer un EntityManager ou un Repository d'un package domain-* a EventQueueRepository / JobsOutboxRepository echoue alors en TS2345 (Property 'findOptions' is protected but type 'SelectQueryBuilder<Entity>' is not a class derived from 'SelectQueryBuilder<Entity>'). domain-post le contourne avec as unknown as dans ses tests, ce qu'AGENTS.md interdit. Piste examinee en revue (PR #217) : paths dans le tsconfig du package qui mappe typeorm vers ../../node_modules/typeorm/index.d.ts (types seulement ; en NodeNext il faut pointer index.d.ts, pas le dossier), avec pour limite la dependance a la disposition hissee. Le TS2589 (profondeur de types) invoque a tort pour justifier des inserts bruts n'est pas reproductible avec EventQueueRepository.create.[^src-b40f1e79]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-06 - yarn changeset version exige GITHUB_TOKEN et le changeset deja pousse
 
@@ -32,3 +53,4 @@ sources:
 
 [^src-10d1da5b]: npm-packages
 [^src-9f856e83]: npm-packages/.changeset/config.json
+[^src-b40f1e79]: npm-packages/yarn.lock

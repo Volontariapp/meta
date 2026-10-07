@@ -33,12 +33,6 @@ sources:
     title: Pipeline réutilisable npm-packages (ci-tools)
 verified:
   - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-06T15:19:37Z"
-    digest: f8d4767ea11f974c
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-06T15:25:42Z"
-    digest: f8d4767ea11f974c
-  - by: claude-code/claude-sonnet-5-5
     at: "2026-10-06T16:24:10Z"
     digest: f8d4767ea11f974c
   - by: claude-code/claude-sonnet-5-5
@@ -46,6 +40,12 @@ verified:
     digest: f8d4767ea11f974c
   - by: claude-code/claude-sonnet-5-5
     at: "2026-10-06T22:28:01Z"
+    digest: f8d4767ea11f974c
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T22:56:43Z"
+    digest: f8d4767ea11f974c
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-06T23:36:16Z"
     digest: f8d4767ea11f974c
 ---
 
