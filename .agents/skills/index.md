@@ -10,7 +10,7 @@ Le cycle de vie des skills est géré par [volontariapp-skill-evolution](/volont
 | [volontariapp-ci-tools](/volontariapp-ci-tools/SKILL.md) | CI partagée et infra locale (ci-tools) | 2026-10-06 |
 | [volontariapp-deploy-gitops](/volontariapp-deploy-gitops/SKILL.md) | Déploiement GitOps (deploy) | 2026-10-06 |
 | [volontariapp-docx-reports](/volontariapp-docx-reports/SKILL.md) | Modification et relecture de documents Word DOCX | 2026-10-06 |
-| [volontariapp-file-storage-flow](/volontariapp-file-storage-flow/SKILL.md) | File Storage Flow | 2026-10-06 |
+| [volontariapp-file-storage-flow](/volontariapp-file-storage-flow/SKILL.md) | File Storage Flow | 2026-10-07 |
 | [volontariapp-grpc-microservice](/volontariapp-grpc-microservice/SKILL.md) | Anatomie d'un microservice gRPC | 2026-10-06 |
 | [volontariapp-implement-async-event-flow](/volontariapp-implement-async-event-flow/SKILL.md) | Implement Async Event Flow | 2026-10-06 |
 | [volontariapp-implement-async-job-flow](/volontariapp-implement-async-job-flow/SKILL.md) | Implement Async Job Flow | 2026-10-06 |

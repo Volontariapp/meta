@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-07
+
+- **Vérification** - ajout de la procedure de test manuel local de ms-storage (claude-code/claude-sonnet-5-5)
+- **Leçon** - Test manuel local de ms-storage : ce qui est testable et ce qui ne l'est pas (rule) (claude-code/agent)
+
 ## 2026-10-06
 
 - **Vérification** - Ticket 1.11 : attachFromConfirmationEvent, releaseForEntity, releaseFile, releaseForOwner existent (domain-storage 0.10.0) ; mapper enregistre a l'import de ./models contrairement a domain-post ; now retire de createPending, TTL borne a 7 jours (claude-code/claude-sonnet-5-5)

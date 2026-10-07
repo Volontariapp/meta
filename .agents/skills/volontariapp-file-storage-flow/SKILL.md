@@ -27,9 +27,6 @@ sources:
     title: "@volontariapp/domain-storage"
 verified:
   - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-06T22:27:14Z"
-    digest: 823ef71100fce341
-  - by: claude-code/claude-sonnet-5-5
     at: "2026-10-06T22:31:08Z"
     digest: 823ef71100fce341
   - by: claude-code/claude-sonnet-5-5
@@ -40,6 +37,9 @@ verified:
     digest: 823ef71100fce341
   - by: claude-code/claude-sonnet-5-5
     at: "2026-10-06T23:30:15Z"
+    digest: 823ef71100fce341
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-07T08:42:02Z"
     digest: 823ef71100fce341
 ---
 
