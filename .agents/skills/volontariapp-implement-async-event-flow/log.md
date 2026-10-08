@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-11
+
+- **Leçon** - Payloads POST_LIKED et COMMENT_CREATED: authorId est l'acteur, pas l'auteur du post (pitfall) (claude-code/agent)
+
 ## 2026-10-08
 
 - **Vérification** - Implémentation du flux event.finished et des 9 badges de participation dans post-processor-user (claude-code/agent)

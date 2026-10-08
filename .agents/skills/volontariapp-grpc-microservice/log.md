@@ -1,7 +1,13 @@
 # Historique
 
+## 2026-10-11
+
+- **Leçon** - ms-post: ListPosts sans tri ni plafond, mediaStatus jamais renseigne (pitfall) (claude-code/agent)
+- **Leçon** - Les RPC Admin* n'ont aucun controle de role (pitfall) (claude-code/agent)
+
 ## 2026-10-08
 
+- **Vérification** - Typage UserRoles.VOLUNTEER dans le test de changeEventState de ms-event (human:agent)
 - **Vérification** - Add badge_progress and badge_progress_events tables (claude-code/agent)
 - **Vérification** - Ajout des tables badge_progress et badge_progress_events dans ms-user et vérification du rôle dans changeEventState de ms-event (claude-code/agent)
 

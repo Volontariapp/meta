@@ -24,6 +24,12 @@ sources:
 
 # Leçons
 
+## 2026-10-11 - Payloads POST_LIKED et COMMENT_CREATED: authorId est l'acteur, pas l'auteur du post
+
+- **Type :** pitfall
+- **Leçon :** Dans interaction.service.ts (domain-social) le payload de POST_LIKED/POST_UNLIKED est { postId, authorId: userId.value } : authorId est l'utilisateur qui like, userId n'est jamais renseigne et l'auteur du post est absent. Dans postgres-comment.repository.ts (domain-post) COMMENT_CREATED porte authorId = auteur du commentaire, sans l'auteur du post. COMMENT_DELETED n'a pas d'acteur dans le payload. L'acteur et la date se lisent dans l'enveloppe du message (emitterId, createdAt). Ne pas deduire le sens d'un champ de son nom: lire le producteur. Verifie en session le 2026-10-11.[^src-2d73ed86]
+- **Consigné par :** claude-code/agent
+
 ## 2026-10-07 - Complétion de saga gather : stream de sortie versus trigger initial
 
 - **Type :** pitfall

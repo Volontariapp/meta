@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-11
+
+- **Leçon** - Notification WebSocket de fin de job: mapping messaging obligatoire (pitfall) (claude-code/agent)
+- **Leçon** - Outbox: un push BullMQ en echec laisse le job FAILED, jamais repousse (pitfall) (claude-code/agent)
+
 ## 2026-10-07
 
 - **Vérification** - Add EventQueueModel provider and entity registration in worker-social for domain services (claude-code/agent)

@@ -9,6 +9,7 @@ Guide pas-à-pas pour concevoir, émettre et consommer un Job d'arrière-plan (B
 - [Deep-Dive : Étape 2 - Émission de Jobs & Fallbacks](/volontariapp-implement-async-job-flow/references/02-emitting-jobs-and-fallbacks.md) - Étape détaillée de volontariapp-implement-async-job-flow.
 - [Deep-Dive : Étape 3 - Workers & Handlers dans `workers-runners`](/volontariapp-implement-async-job-flow/references/03-worker-and-handlers.md) - Étape détaillée de volontariapp-implement-async-job-flow.
 - [Deep-Dive : Étape 4 - La Boucle d'Audit et le SQL Trigger](/volontariapp-implement-async-job-flow/references/04-audit-loop-and-cleanup.md) - Étape détaillée de volontariapp-implement-async-job-flow.
+- [Leçons apprises](/volontariapp-implement-async-job-flow/references/lessons.md) - Règles et pièges découverts en travaillant sur volontariapp-implement-async-job-flow, du plus récent au plus ancien.
 
 ## Scripts
 
