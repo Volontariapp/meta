@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-08
+
+- **Vérification** - Bump versions for event.finished contracts and models (claude-code/agent)
+
 ## 2026-10-07
 
 - **Vérification** - Bump versions et changelogs suite aux events event_social.wished/unwished (claude-code/agent)

@@ -12,12 +12,12 @@ Le cycle de vie des skills est géré par [volontariapp-skill-evolution](/volont
 | [volontariapp-docx-reports](/volontariapp-docx-reports/SKILL.md) | Modification et relecture de documents Word DOCX | 2026-10-07 |
 | [volontariapp-file-storage-flow](/volontariapp-file-storage-flow/SKILL.md) | File Storage Flow | 2026-10-07 |
 | [volontariapp-grpc-microservice](/volontariapp-grpc-microservice/SKILL.md) | Anatomie d'un microservice gRPC | 2026-10-07 |
-| [volontariapp-implement-async-event-flow](/volontariapp-implement-async-event-flow/SKILL.md) | Implement Async Event Flow | 2026-10-07 |
+| [volontariapp-implement-async-event-flow](/volontariapp-implement-async-event-flow/SKILL.md) | Implement Async Event Flow | 2026-10-08 |
 | [volontariapp-implement-async-job-flow](/volontariapp-implement-async-job-flow/SKILL.md) | Implement Async Job Flow | 2026-10-07 |
 | [volontariapp-logger](/volontariapp-logger/SKILL.md) | Logger partagé : masquage et corrélation de traces | 2026-10-07 |
 | [volontariapp-mesh-mcp](/volontariapp-mesh-mcp/SKILL.md) | mesh-mcp | 2026-10-07 |
 | [volontariapp-proto-contract-evolution](/volontariapp-proto-contract-evolution/SKILL.md) | Proto Contract Evolution | 2026-10-06 |
-| [volontariapp-shared-npm-package-change](/volontariapp-shared-npm-package-change/SKILL.md) | Shared NPM Package Change | 2026-10-07 |
+| [volontariapp-shared-npm-package-change](/volontariapp-shared-npm-package-change/SKILL.md) | Shared NPM Package Change | 2026-10-08 |
 | [volontariapp-skill-evolution](/volontariapp-skill-evolution/SKILL.md) | Évolution des skills (auto-apprentissage) | 2026-10-07 |
 | [volontariapp-trace-async-flow](/volontariapp-trace-async-flow/SKILL.md) | Trace Async Flow | 2026-10-07 |
 

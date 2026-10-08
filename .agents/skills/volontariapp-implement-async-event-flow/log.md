@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-08
+
+- **Vérification** - Add event.finished event and streams contracts (claude-code/agent)
+
 ## 2026-10-07
 
 - **Vérification** - Ajout post-processor event_social.wished pour badge EVENT_WISHLIST_COUNT_10 (claude-code/agent)
