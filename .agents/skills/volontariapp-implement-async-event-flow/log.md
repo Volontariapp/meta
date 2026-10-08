@@ -2,6 +2,7 @@
 
 ## 2026-10-08
 
+- **Vérification** - Implémentation du flux event.finished et des 9 badges de participation dans post-processor-user (claude-code/agent)
 - **Vérification** - Add event.finished event and streams contracts (claude-code/agent)
 
 ## 2026-10-07

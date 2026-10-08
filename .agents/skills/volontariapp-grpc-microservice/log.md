@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-08
+
+- **Vérification** - Add badge_progress and badge_progress_events tables (claude-code/agent)
+- **Vérification** - Ajout des tables badge_progress et badge_progress_events dans ms-user et vérification du rôle dans changeEventState de ms-event (claude-code/agent)
+
 ## 2026-10-07
 
 - **Vérification** - Relu : ms-post ajoute media/mediaStatus a PostDTO (PostMediaDTO), fileIds obligatoire et idempotencyKey a CreatePostCommandDTO, gardes inutiles retirees, aucune regle modifiee (claude-code/agent)
