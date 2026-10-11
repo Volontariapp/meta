@@ -26,9 +26,6 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-07T10:13:37Z"
-    digest: 933dd2a676c02b92
-  - by: claude-code/agent
     at: "2026-10-07T10:16:42Z"
     digest: 97ef31bd6e114295
   - by: claude-code/agent
@@ -40,6 +37,9 @@ verified:
   - by: "human:agent"
     at: "2026-10-08T12:51:29Z"
     digest: 01c5e53a4531e766
+  - by: "human:victor"
+    at: "2026-10-11T17:58:26Z"
+    digest: 0054dad3294bf700
 sources:
   - id: agent-md
     resource: AGENT.md

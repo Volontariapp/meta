@@ -21,6 +21,12 @@ sources:
 
 # Leçons
 
+## 2026-10-11 - Dépendance workspace ajoutée et bumps induits
+
+- **Type :** pitfall
+- **Leçon :** Ajouter une dépendance workspace (ex: @volontariapp/outbox dans domain-user) exige yarn install avant le build. yarn changeset version bumpe aussi en patch les dépendants (auth, database, outbox, workers...). Dans ce shell, cd est aliasé sur z: utiliser builtin cd. L'erreur ESLint de messaging/src/helpers/jobs-events-mapping.ts (no-unnecessary-condition) existe déjà sur main.[^src-9f856e83]
+- **Consigné par :** claude-code/agent
+
 ## 2026-10-07 - yarn build (nest build) ne compile pas les specs : verifier avec tsc
 
 - **Type :** rule

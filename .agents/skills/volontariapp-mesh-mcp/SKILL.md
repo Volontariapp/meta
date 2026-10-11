@@ -22,21 +22,21 @@ sources:
     resource: causalmesh/crates/mesh-server/src/tools
     title: Schémas des outils (source Rust)
 verified:
-  - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T08:38:22Z"
-    digest: 1511f6b2c11bcc5f
-  - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T09:00:40Z"
-    digest: 9494e60674197e8d
-  - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T09:14:51Z"
-    digest: d5053c498a61540a
   - by: claude-code/agent
     at: "2026-10-06T11:21:34Z"
     digest: 438df1dddb5acc40
   - by: claude-code/agent
     at: "2026-10-07T09:33:57Z"
     digest: 7dc014c21b572025
+  - by: claude-code/agent
+    at: "2026-10-11T17:05:14Z"
+    digest: a2575e84205fe231
+  - by: claude-code/agent
+    at: "2026-10-11T17:05:23Z"
+    digest: 2d7a9a6be3cb0862
+  - by: claude-code/agent
+    at: "2026-10-11T17:05:29Z"
+    digest: b10fd2bf53fbb348
 ---
 
 # MeshMCP Skill

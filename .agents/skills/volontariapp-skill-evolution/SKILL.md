@@ -42,21 +42,21 @@ sources:
     resource: .agents/skills/volontariapp-skill-evolution/scripts/check_symbols.py
     title: check_symbols.py
 verified:
-  - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T09:16:34Z"
-    digest: f97102aa559082e5
-  - by: claude-code/agent
-    at: "2026-10-06T11:21:34Z"
-    digest: 2bf4599de2a3e325
-  - by: claude-code/agent
-    at: "2026-10-06T14:36:21Z"
-    digest: 2bf4599de2a3e325
   - by: claude-code/claude-sonnet-5-5
     at: "2026-10-06T22:51:25Z"
     digest: 2bf4599de2a3e325
   - by: claude-code/agent
     at: "2026-10-07T09:34:05Z"
     digest: 55bf7677a54d8f4b
+  - by: claude-code/agent
+    at: "2026-10-11T17:05:14Z"
+    digest: 9f9549bda472d941
+  - by: claude-code/agent
+    at: "2026-10-11T17:05:23Z"
+    digest: f1509b0007dffdb4
+  - by: claude-code/agent
+    at: "2026-10-11T17:05:29Z"
+    digest: ea96412728594d5a
 ---
 
 # Évolution des skills (auto-apprentissage)

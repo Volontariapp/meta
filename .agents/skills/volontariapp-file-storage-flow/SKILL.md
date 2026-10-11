@@ -27,12 +27,6 @@ sources:
     title: "@volontariapp/domain-storage"
 verified:
   - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-06T22:51:24Z"
-    digest: 823ef71100fce341
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-06T22:53:46Z"
-    digest: 823ef71100fce341
-  - by: claude-code/claude-sonnet-5-5
     at: "2026-10-06T23:30:15Z"
     digest: 823ef71100fce341
   - by: claude-code/claude-sonnet-5-5
@@ -41,6 +35,12 @@ verified:
   - by: claude-code/agent
     at: "2026-10-07T10:24:59Z"
     digest: a0f487e0826967fe
+  - by: claude-code/agent
+    at: "2026-10-11T17:37:19Z"
+    digest: feb13dcc8d655294
+  - by: claude-code/agent
+    at: "2026-10-11T17:38:04Z"
+    digest: b74e969765134a0e
 ---
 
 # Playbook : Stockage de Fichiers

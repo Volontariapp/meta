@@ -131,6 +131,7 @@ Le plan liste exactement quelles skills relire, à cause de quels fichiers (et d
 | [`volontariapp-shared-npm-package-change`](.agents/skills/volontariapp-shared-npm-package-change/SKILL.md) | Modifier un package partagé de npm-packages (messaging, shared, database, domain-*, auth...) et propager la nouvelle version aux consommateurs : rayon d'impact, build, c… |
 | [`volontariapp-skill-evolution`](.agents/skills/volontariapp-skill-evolution/SKILL.md) | Boucle d'auto-apprentissage des skills Volontariapp : savoir quelles skills sont désynchronisées du code (tous repos confondus), les mettre à jour, consigner une leçon a… |
 | [`volontariapp-trace-async-flow`](.agents/skills/volontariapp-trace-async-flow/SKILL.md) | Diagnostiquer un flux asynchrone qui ne produit pas son effet (job, événement, saga, notification WebSocket) : cartographie avec analyze_impact puis requêtes SQL sur job… |
+| [`volontariapp-user-account-deletion`](.agents/skills/volontariapp-user-account-deletion/SKILL.md) | Suppression de compte en deux temps (PENDING_DELETION): requestDeletionWithUserDeleted, finalizeDeletion, fan-out de user.deleted vers les domaines et gather ws. |
 
 ### Skills du plugin matt-pocock
 

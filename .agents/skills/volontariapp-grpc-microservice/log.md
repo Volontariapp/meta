@@ -2,6 +2,7 @@
 
 ## 2026-10-11
 
+- **Vérification** - wire requestDeletion and add user status migration (human:victor)
 - **Leçon** - ms-post: ListPosts sans tri ni plafond, mediaStatus jamais renseigne (pitfall) (claude-code/agent)
 - **Leçon** - Les RPC Admin* n'ont aucun controle de role (pitfall) (claude-code/agent)
 

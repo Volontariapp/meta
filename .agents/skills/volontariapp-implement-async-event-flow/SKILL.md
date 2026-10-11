@@ -11,6 +11,7 @@ paths:
   - "npm-packages/packages/outbox/src/**"
   - "npm-packages/packages/post-processors/src/**"
   - npm-packages/packages/shared/src/enums/streams.enum.ts
+  - "npm-packages/packages/domain-user/src/repositories/**"
   - "ws-service/src/post-processors/**"
   - ws-service/src/core/services/gather-state.service.ts
   - "post-processors-runner/**"
@@ -52,20 +53,20 @@ sources:
     title: SAGA_GATHER_COMPLETION_MAPPING
 verified:
   - by: claude-code/agent
-    at: "2026-10-07T18:23:29Z"
-    digest: 7983826efcf29d08
+    at: "2026-10-11T16:59:25Z"
+    digest: ad8b5d5278ab1cc8
   - by: claude-code/agent
-    at: "2026-10-07T21:44:43Z"
-    digest: b37754ea53cfdef2
+    at: "2026-10-11T17:00:10Z"
+    digest: 1a67458533bd2339
   - by: claude-code/agent
-    at: "2026-10-07T22:06:55Z"
-    digest: e05655a665da1ef5
+    at: "2026-10-11T17:37:19Z"
+    digest: 8db882952d693c69
   - by: claude-code/agent
-    at: "2026-10-08T11:58:01Z"
-    digest: 54fa806ec4b1b301
+    at: "2026-10-11T18:39:46Z"
+    digest: 6759ea3438fade37
   - by: claude-code/agent
-    at: "2026-10-08T12:41:26Z"
-    digest: 9000517012c7c7e9
+    at: "2026-10-11T18:59:58Z"
+    digest: 17784ba614496bc1
 ---
 
 # Guide : Implémenter un Flux Asynchrone End-to-End
@@ -300,6 +301,8 @@ Lorsque plusieurs post-processors travaillent en parallèle (ex : `post-processo
 - [ ] **Transaction ACID obligatoire :** L'écriture métier et l'insertion outbox doivent partager le même `queryRunner`.
 - [ ] **Gestion des Sagas :** Si un post-processor échoue dans un scatter-gather, émettre l'événement `*_FAILED` pour que les autres processeurs effectuent leur rollback logique.
 - [ ] **Toujours `getEventStreamName` dans les options de post-processor :** L'outbox pusher préfixe systématiquement les flux par `stream:`. Le provider d'options d'un post-processor DOIT obligatoirement faire `streamName: getEventStreamName(Streams.MON_STREAM)`.
+- [ ] **Fan-out vers plusieurs domaines :** `event-queue.pusher.ts` fait un `XADD` par stream de `targetServices`. Un événement lu par plusieurs services (ex: `user.deleted`) exige donc UN stream par consommateur (`Streams.USER_DELETED_POST`, `USER_DELETED_EVENT`, `USER_DELETED_STORAGE`, `SOCIAL_USER`, plus `USER_DELETED` pour `ws-service`). Les événements de complétion partagent le stream de feedback WS (`WS_USER_DELETED_FEEDBACK`), avec un consumer group distinct par classe de processor côté `ws-service`.
+- [ ] **Ne pas avaler les erreurs d'un post-processor de purge :** un `catch` qui logue sans relancer acquitte le message, donc ni retry (`RetryHelper`, 5 tentatives) ni DLQ, et le gather reste `PENDING` sans timeout. Relancer, et émettre `*_DELETION_FAILED` quand les retries sont épuisés. Les purges doivent être idempotentes ("déjà supprimé" = succès).
 - [ ] **Stream de complétion de gather :** Dans `SAGA_GATHER_COMPLETION_MAPPING` (`gather-registry.ts`), le champ `stream` DOIT être le stream de complétion (ex: `Streams.EVENT_SUCCESSFULLY_CREATED`), et JAMAIS le stream déclencheur (ex: `event:created`).
 
 [^streams]: Enum Streams

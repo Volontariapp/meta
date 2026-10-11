@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-11
+
+- **Vérification** - Fix require-await in test (claude-code/agent)
+- **Vérification** - Ajout de markFilesForDeletionByOwner dans IFileRepository et PostgresFileRepository (claude-code/agent)
+
 ## 2026-10-07
 
 - **Vérification** - Relu : ms-storage bump @volontariapp/* (logger 0.3.0) et retrait d'un optional chaining devenu inutile dans s3-error.utils.ts, aucune regle modifiee (claude-code/agent)

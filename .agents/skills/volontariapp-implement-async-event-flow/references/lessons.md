@@ -20,9 +20,27 @@ sources:
   - id: src-57587df4
     resource: npm-packages/packages/messaging/src/sagas/gather-registry.ts
     title: npm-packages/packages/messaging/src/sagas/gather-registry.ts
+  - id: src-cd3f14ee
+    resource: npm-packages/packages/domain-user/src/repositories/postgres-user.repository.ts
+    title: npm-packages/packages/domain-user/src/repositories/postgres-user.repository.ts
+  - id: src-92a40169
+    resource: post-processors-runner/post-processor-social/src/post-processors/users/user-deleted.post-processor.ts
+    title: post-processors-runner/post-processor-social/src/post-processors/users/user-deleted.post-processor.ts
 ---
 
 # Leçons
+
+## 2026-10-11 - post-processor-social avale les erreurs de USER_DELETED
+
+- **Type :** pitfall
+- **Leçon :** UserDeletedPostProcessor (post-processor-social) capture les erreurs sans les relancer: le message est acquitté, USER_SOCIAL_DELETED n'est jamais émis et le gather user.deleted reste PENDING. Aucun reaper de gather_state trouvé. SocialUserService.deleteUser lève SOCIAL_USER_NOT_FOUND si le noeud n'existe pas, donc un retry après succès partiel échoue.[^src-92a40169]
+- **Consigné par :** claude-code/agent
+
+## 2026-10-11 - Suppression de compte en deux temps
+
+- **Type :** decision
+- **Leçon :** Le user passe en PENDING_DELETION et user.deleted est écrit dans l'outbox dans la même transaction (requestDeletionWithUserDeleted). La ligne users n'est supprimée (finalizeDeletion) qu'après le succès du gather ws, pour pouvoir rejouer en cas d'échec d'un pp. Décisions produit : events du user supprimés même avec participants, likes supprimés (DETACH DELETE), commentaires conservés avec authorId sentinelle et contenu remplacé.[^src-cd3f14ee]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-11 - Payloads POST_LIKED et COMMENT_CREATED: authorId est l'acteur, pas l'auteur du post
 
@@ -58,3 +76,5 @@ sources:
 [^src-be2f6941]: npm-packages/packages/messaging/src/events/storage/payloads.ts
 [^src-6dd92801]: post-processors-runner/post-processor-user/src/post-processors/options/event-creation-successfull-badge-options.ts
 [^src-57587df4]: npm-packages/packages/messaging/src/sagas/gather-registry.ts
+[^src-cd3f14ee]: npm-packages/packages/domain-user/src/repositories/postgres-user.repository.ts
+[^src-92a40169]: post-processors-runner/post-processor-social/src/post-processors/users/user-deleted.post-processor.ts

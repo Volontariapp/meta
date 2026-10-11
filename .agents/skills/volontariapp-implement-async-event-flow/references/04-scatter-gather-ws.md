@@ -65,7 +65,8 @@ sequenceDiagram
 Deux classes de base dans `ws-service/src/post-processors/`[^base] :
 
 - `BaseGatherPostProcessor` : `isCreator = true` pour celui qui écoute le déclencheur (initialise l'état), `false` pour ceux qui écoutent un retour (mettent à jour l'état).
-- `BaseWebSocketGatherPostProcessor` : retour non créateur qui, à la complétion, choisit `successEvent` ou `failureEvent`, le traduit en événement WebSocket (`getWsEventForEvent`), puis `notifyUser(emitterId, ...)` et, en cas de succès, `broadcastExcept(emitterId, ...)`.
+- `BaseWebSocketGatherPostProcessor` : retour non créateur qui, à la complétion, choisit `successEvent` ou `failureEvent`, le traduit en événement WebSocket (`getWsEventForEvent`), puis `notifyUser(emitterId, ...)`. Si `isEmitterOnly` est actif (ex: `SagaGatherType.USER_DELETION`), la notification inclut `{ ...payload, isEmitter: true }` et aucun `broadcast` ni `broadcastExcept` n'est émis. Sinon, en cas de succès, `broadcastExcept(emitterId, ...)` est appelé.
+- `GatherReaperService` : tâche périodique nettoyant les clés en attente ayant dépassé le timeout (`maxAge`), marquant les clés expirées en `FAILED` et déclenchant la complétion en échec si toutes les clés sont résolues.
 
 Exemple réel, le retour « géocodage réussi » de la création d'événement[^geocoded] :
 

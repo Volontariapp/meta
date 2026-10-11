@@ -1,5 +1,12 @@
 # Historique
 
+## 2026-10-11
+
+- **Vérification** - Bumps de versions pour la purge des domaines dans le chantier de suppression de compte (claude-code/agent)
+- **Vérification** - Resync apres lint-staged, phase 1 suppression de compte (claude-code/agent)
+- **Vérification** - Phase 1 suppression de compte: bumps shared/messaging/domain-user, dependance workspace outbox, bumps induits (claude-code/agent)
+- **Leçon** - Dépendance workspace ajoutée et bumps induits (pitfall) (claude-code/agent)
+
 ## 2026-10-08
 
 - **Vérification** - Bump versions for event.finished contracts and models (claude-code/agent)

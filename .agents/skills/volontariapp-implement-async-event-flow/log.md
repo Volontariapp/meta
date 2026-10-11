@@ -2,6 +2,13 @@
 
 ## 2026-10-11
 
+- **Vérification** - Support isEmitterOnly et GatherReaperService dans ws-service (claude-code/agent)
+- **Vérification** - Implement user account deletion processors across post-processors-runner (claude-code/agent)
+- **Vérification** - Ajout de USER_DELETION_SUCCESS dans UserStream (claude-code/agent)
+- **Vérification** - Resync apres lint-staged, phase 1 suppression de compte (claude-code/agent)
+- **Vérification** - Fan-out multi-domaine de user.deleted: nouveaux streams, evenements user_*_deleted, regles pp de purge; domain-user repositories ajoute aux paths (claude-code/agent)
+- **Leçon** - post-processor-social avale les erreurs de USER_DELETED (pitfall) (claude-code/agent)
+- **Leçon** - Suppression de compte en deux temps (decision) (claude-code/agent)
 - **Leçon** - Payloads POST_LIKED et COMMENT_CREATED: authorId est l'acteur, pas l'auteur du post (pitfall) (claude-code/agent)
 
 ## 2026-10-08

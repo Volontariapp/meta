@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-11
+
+- **Vérification** - map deleteMe to ActionSuccessResponseDTO (human:victor)
+
 ## 2026-10-07
 
 - **Leçon** - Les DTO de mise a jour heritent des champs de creation (rule) (claude-code/agent)

@@ -1,5 +1,9 @@
 # Historique des skills
 
+## 2026-10-11
+
+- **Nouvelle skill** - [volontariapp-user-account-deletion](/volontariapp-user-account-deletion/SKILL.md) - User Account Deletion (claude-code/agent)
+
 ## 2026-10-07
 
 - **Nouvelle skill** - [volontariapp-logger](/volontariapp-logger/SKILL.md) - Logger partagé : masquage et corrélation de traces (claude-code/agent)

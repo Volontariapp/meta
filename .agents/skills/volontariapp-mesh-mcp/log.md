@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-10-11
+
+- **Vérification** - mesh-mcp.toml stable apres regeneration (claude-code/agent)
+- **Vérification** - mesh_keys sans doublon de casse (claude-code/agent)
+- **Vérification** - Enregistrement automatique de la skill volontariapp-user-account-deletion (index AGENTS.md, mesh-mcp.toml), mesh_keys declares (claude-code/agent)
+
 ## 2026-10-07
 
 - **Vérification** - mesh-mcp.toml: index regenere pour la nouvelle skill volontariapp-logger (cles @volontariapp/logger, Masker), aucun changement de regle (claude-code/agent)

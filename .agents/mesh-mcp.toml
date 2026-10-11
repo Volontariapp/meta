@@ -429,4 +429,9 @@ read_governance_mode = "allow_all"
 "jobs_outbox" = "skills/volontariapp-trace-async-flow/SKILL.md"
 "job_audit" = "skills/volontariapp-trace-async-flow/SKILL.md"
 "event_queue" = "skills/volontariapp-trace-async-flow/SKILL.md"
+# volontariapp-user-account-deletion
+"PENDING_DELETION" = "skills/volontariapp-user-account-deletion/SKILL.md"
+"requestDeletionWithUserDeleted" = "skills/volontariapp-user-account-deletion/SKILL.md"
+"finalizeDeletion" = "skills/volontariapp-user-account-deletion/SKILL.md"
+"USER_DELETED" = "skills/volontariapp-user-account-deletion/SKILL.md"
 # <<< skills-mesh:end
