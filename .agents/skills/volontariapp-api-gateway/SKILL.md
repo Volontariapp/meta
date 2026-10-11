@@ -20,9 +20,6 @@ generated:
   by: claude-code/claude-opus-5-5
   at: "2026-10-06T08:54:04Z"
 verified:
-  - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T09:14:39Z"
-    digest: 49499925efc5f8c6
   - by: claude-code/agent
     at: "2026-10-07T10:20:01Z"
     digest: e0c6dbf5523c8acb
@@ -35,6 +32,9 @@ verified:
   - by: "human:victor"
     at: "2026-10-11T18:01:52Z"
     digest: b3f9eb3d74a99322
+  - by: claude-code/agent
+    at: "2026-10-11T20:48:30Z"
+    digest: fc2b234309989b93
 sources:
   - id: gw-claude
     resource: api-gateway/src/modules

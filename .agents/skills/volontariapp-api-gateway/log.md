@@ -2,6 +2,7 @@
 
 ## 2026-10-11
 
+- **Vérification** - use createMock in unit test (claude-code/agent)
 - **Vérification** - map deleteMe to ActionSuccessResponseDTO (human:victor)
 
 ## 2026-10-07

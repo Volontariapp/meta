@@ -2,6 +2,8 @@
 
 ## 2026-10-11
 
+- **Vérification** - filter PENDING_DELETION in user queries (claude-code/agent)
+- **Vérification** - filter PENDING_DELETION in user queries (claude-code/agent)
 - **Vérification** - wire requestDeletion and add user status migration (human:victor)
 - **Leçon** - ms-post: ListPosts sans tri ni plafond, mediaStatus jamais renseigne (pitfall) (claude-code/agent)
 - **Leçon** - Les RPC Admin* n'ont aucun controle de role (pitfall) (claude-code/agent)

@@ -2,6 +2,9 @@
 
 ## 2026-10-11
 
+- **Vérification** - update lockfiles (claude-code/agent)
+- **Vérification** - bump dependencies to stable versions (claude-code/agent)
+- **Vérification** - Fix mockEventRepository in event-creation specs (claude-code/agent)
 - **Vérification** - Support isEmitterOnly et GatherReaperService dans ws-service (claude-code/agent)
 - **Vérification** - Implement user account deletion processors across post-processors-runner (claude-code/agent)
 - **Vérification** - Ajout de USER_DELETION_SUCCESS dans UserStream (claude-code/agent)
