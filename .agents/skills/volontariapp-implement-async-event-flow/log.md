@@ -2,6 +2,8 @@
 
 ## 2026-10-11
 
+- **Vérification** - Piege forFeature/autoLoadEntities: UserBadgeModel ajoute dans DomainUserModule de post-processor-user (claude-code/agent)
+- **Leçon** - TypeORM forFeature et relations par chaine (rule) (claude-code/agent)
 - **Vérification** - update lockfiles (claude-code/agent)
 - **Vérification** - bump dependencies to stable versions (claude-code/agent)
 - **Vérification** - Fix mockEventRepository in event-creation specs (claude-code/agent)
