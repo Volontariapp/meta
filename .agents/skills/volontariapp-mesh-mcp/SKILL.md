@@ -1,7 +1,7 @@
 ---
 name: volontariapp-mesh-mcp
 description: "Instructions sur l'utilisation du serveur MCP local mesh-mcp (causalmesh) pour naviguer et chercher dans les repositories de Volontariapp"
-type: Agent Skill
+type: Tool Reference
 title: mesh-mcp
 tags: [mcp, causalmesh, search]
 status: stable
@@ -23,20 +23,20 @@ sources:
     title: Schémas des outils (source Rust)
 verified:
   - by: claude-code/agent
-    at: "2026-10-07T09:33:57Z"
-    digest: 7dc014c21b572025
+    at: "2026-10-12T08:49:16Z"
+    digest: 47c14f02b485e528
   - by: claude-code/agent
-    at: "2026-10-11T17:05:14Z"
-    digest: a2575e84205fe231
+    at: "2026-10-12T11:52:51Z"
+    digest: 47c14f02b485e528
   - by: claude-code/agent
-    at: "2026-10-11T17:05:23Z"
-    digest: 2d7a9a6be3cb0862
+    at: "2026-10-12T12:03:26Z"
+    digest: 3553ec91204b4b88
   - by: claude-code/agent
-    at: "2026-10-11T17:05:29Z"
-    digest: b10fd2bf53fbb348
+    at: "2026-10-12T12:20:24Z"
+    digest: 983911582f1041a5
   - by: claude-code/agent
-    at: "2026-10-12T08:06:17Z"
-    digest: 052c25e5b80c8eda
+    at: "2026-10-13T08:06:07Z"
+    digest: 81e1d56172d4534c
 ---
 
 # MeshMCP Skill
@@ -131,6 +131,8 @@ Un nom de membre suffit comme `target` : `UserJobType.FALLBACK_X`, `JobMessaging
 | Job | `withFallback(JobType.X, ...)` dans un command controller | handler `implements IJobHandler<...>` avec `jobType = JobType.X`, worker `extends BaseWorker`, `@Processor(Queue.X)` |
 | Saga | post-processor qui écrit `saga_status: SagaStatus.*`, listé en « related sagas » | |
 | Push temps réel | `notifyUser` / `broadcast` / `broadcastExcept(WebsocketMessagingType.X)` dans `ws-service` | `socket.on(WebsocketMessagingType.X, handler)` dans `nativapp` |
+
+Depuis mesh-mcp 7.1.8, le défaut d'un motif `topic_*` est `heuristic` ; chaque motif porte `confidence` explicite (`.agents/mesh-mcp.toml`)[^mesh-config]. `exact` : nom littéral lié par le code (`createEvent<X.Y>`, `targetServices: [Streams.X]`, `streamName: get*StreamName(Streams.X)`, `withFallback(JobType.X)`, `jobType = JobType.X`, `@Processor(Queue.X)`, `socket.on(WebsocketMessagingType.X, ...)`). `heuristic` : nom déduit (nom de fonction du trigger SQL, argument de type de `BatchPostProcessor`, enum entier de `BaseWorker`, table `mapping.ts`, appels `notifyUser`/`broadcast` génériques). Après une modification de la config, le démon la recharge à la requête suivante (143 à 304 ms) ; la première requête répond encore avec l'ancien état.
 
 Les push WebSocket portent le même nom de membre que l'événement de domaine : `analyze_impact("POST_LIKED")` va donc de l'outbox jusqu'au handler `nativapp`, de bout en bout.
 

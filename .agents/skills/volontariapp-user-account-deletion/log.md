@@ -1,5 +1,16 @@
 # Historique
 
+## 2026-10-13
+
+- **Vérification** - Propagation migration commune 1792000000000 (claude-code/agent)
+- **Vérification** - Relu apres ajout de la migration commune AddTraceparent et de la colonne traceparent sur OutboxModel: aucune regle ni commande de la skill ne change (claude-code/agent)
+- **Vérification** - SKILL.md relue: regles toujours exactes, source de la lecon corrigee (claude-code/agent)
+- **Leçon** - finalizeDeletion est appele depuis post-processors-runner, pas ms-user/ws-service (pitfall) (claude-code/agent)
+
+## 2026-10-12
+
+- **Vérification** - Retypage OKF: type Domain Reference (claude-code/agent)
+
 ## 2026-10-11
 
 - **Vérification** - mesh_keys sans doublon de casse (claude-code/agent)

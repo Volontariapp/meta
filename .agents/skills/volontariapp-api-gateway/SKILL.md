@@ -1,9 +1,9 @@
 ---
 name: volontariapp-api-gateway
-description: "Ajouter ou modifier une route REST de api-gateway (point d'entrée HTTP unique) : contrôleur command/query, guards, token interne propagé en métadonnée gRPC, client gRPC du microservice, mapping d'erreurs et FALLBACK_ACTIVATED (206), proxy WebSocket. À utiliser pour tout travail dans api-gateway/."
-type: Agent Skill
-title: API Gateway (REST vers gRPC)
-tags: [api-gateway, auth, grpc]
+description: "Playbook opérationnel pas-à-pas pour exposer ou modifier une route REST Edge sur api-gateway : DTO Swagger, contrôleur REST, guards, token interne propagé en métadonnée gRPC, support HTTP 206 et tests."
+type: Playbook
+title: Exposer ou Modifier une Route REST Edge
+tags: [api-gateway, auth, grpc, rest, swagger, playbook]
 status: stable
 paths:
   - "api-gateway/src/**"
@@ -21,12 +21,6 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-07T10:20:01Z"
-    digest: e0c6dbf5523c8acb
-  - by: claude-code/agent
-    at: "2026-10-07T10:36:06Z"
-    digest: e0c6dbf5523c8acb
-  - by: claude-code/agent
     at: "2026-10-07T10:39:35Z"
     digest: 7d4f376e24a7d269
   - by: "human:victor"
@@ -34,6 +28,12 @@ verified:
     digest: b3f9eb3d74a99322
   - by: claude-code/agent
     at: "2026-10-11T20:48:30Z"
+    digest: fc2b234309989b93
+  - by: claude-code/agent
+    at: "2026-10-12T11:52:53Z"
+    digest: fc2b234309989b93
+  - by: claude-code/agent
+    at: "2026-10-12T11:54:00Z"
     digest: fc2b234309989b93
 sources:
   - id: gw-claude
@@ -65,60 +65,177 @@ sources:
     title: WsProxyMiddleware
 ---
 
-# API Gateway (REST vers gRPC)
+# Playbook : Exposer ou Modifier une Route REST Edge (API Gateway)
 
-Seul composant exposé sur Internet (préfixe global `api/v1`). Aucune logique métier : authentifier, valider le DTO, appeler le bon microservice en gRPC avec le token interne, traduire la réponse et les erreurs[^gw-claude].
+Dans l'écosystème Volontariapp, `api-gateway` est l'unique point d'entrée HTTP exposé publiquement (préfixe global `/api/v1`)[^gw-claude]. 
 
-## Quand l'utiliser
+L'API Gateway **ne contient aucune logique métier** : son rôle exclusif consiste à authentifier l'utilisateur, valider le payload REST, relayer la requête au microservice cible via gRPC en y injectant un token interne signé (`x-internal-token`), et traduire la réponse ou les erreurs en HTTP.
 
-Nouvelle route, nouveau champ exposé au front, changement d'auth ou de rôle, appel d'un nouveau RPC. Si le RPC n'existe pas encore : `volontariapp-proto-contract-evolution` d'abord (règle du STOP).
+La référence des modules, de la topologie réseau et des risques de sécurité est consignée dans [Sécurité & Risques API Gateway](/volontariapp-api-gateway/references/security-and-risks.md).
 
-Carte complète des routes : [Carte des routes REST](/volontariapp-api-gateway/references/routes.md).
+---
 
-## Anatomie d'une route
+## Trigger
 
-| Élément | Où | Règle |
-| :--- | :--- | :--- |
-| Module | `src/modules/<domaine>/` (`user`, `post`, `event`, `social`, `system`, `helper`, `health`, `ws-proxy`) | Contrôleurs séparés `controllers/commands/` (écriture) et `controllers/queries/` (lecture), variantes `*-admin.*-controller.ts` |
-| Contrôleur | `@GatewayController(tag, options)`[^decorator] | Pose `AccessTokenGuard` ; `{ admin: true }` ajoute `RolesGuard`. Sans `admin: true`, un `@Roles(...)` posé seul n'est **pas** appliqué |
-| Route publique | `@Public()` | Réservé à login, refresh et helpers de dev |
-| Utilisateur courant | `@CurrentUser()` | Routes « me » (`/users/me`, `/social/feed/me`) : jamais d'id utilisateur pris dans l'URL ou le body |
-| Propriétaire ou admin | `IsCurrentUserOrAdminGuard` | Routes scopées `:userId` |
-| Validation | `ValidationPipe({ transform: true })` global, DTO `class-validator` | Le DTO de requête est la seule entrée acceptée |
-| Appel gRPC | `Base*GrpcController` fait `client.getService<XServiceClient>(X_SERVICE_NAME)` dans `onModuleInit` | Les contrôleurs concrets héritent de la base et passent `req['internalMetadata']` en second argument de chaque appel |
+Ce playbook doit être exécuté dès qu'une tâche nécessite :
+- L'ajout d'une nouvelle route REST publique ou authentifiée (GET, POST, PUT, PATCH, DELETE).
+- L'exposition d'un nouveau paramètre de requête ou champ de réponse vers l'application mobile `nativapp`.
+- L'ajustement des règles d'authentification ou des permissions de rôle sur un endpoint existant.
 
-## Token interne et clients
+---
 
-- `GrpcInternalInterceptor` (`@volontariapp/auth`), enregistré en `APP_INTERCEPTOR`[^app-module], signe l'`INTERNAL_TOKEN` et pose `req['internalMetadata']` (`grpc.Metadata`). Un appel gRPC sans cette métadonnée est rejeté `UNAUTHENTICATED` par le `GrpcInternalGuard` du microservice.
-- `GrpcClientModule`[^grpc-module] enregistre 4 clients : `UserPackage`, `PostPackage`, `EventPackage`, `SocialPackage`, options `getGrpcOptions(GRPC_MICROSERVICES.X, url)`. Pas encore de client `ms-storage` : à ajouter avec le flux de stockage.
-- Le WebSocket n'est pas du gRPC : `WsProxyMiddleware`[^ws-proxy] vérifie le JWT, signe un token interne et relaie la connexion vers `msWsUrl` avec l'en-tête `x-internal-token`.
+## Étape 1 : Spécification du DTO Swagger & Validation
 
-## Erreurs et asynchronisme
+Emplacement : `src/modules/<domaine>/dto/request/<nom>.request.dto.ts`.
 
-- Les erreurs `BaseApiError` des microservices portent `statusCode` et `grpcCode` ; la gateway les rend avec le même code HTTP.
-- **HTTP 206 = `FALLBACK_ACTIVATED`**[^errors-nest] : le microservice a échoué sur une erreur non client et a écrit un job de fallback ; le client attend le résultat par WebSocket. Une opération asynchrone normale (événement de domaine) répond 200/201, pas 206. Documenter la réponse avec `@CustomApiError(() => FALLBACK_ACTIVATED(...))` sur les routes concernées.
+Chaque DTO de requête doit :
+1. Documenter les champs pour OpenAPI/Swagger avec `@ApiProperty()` ou `@ApiPropertyOptional()`.
+2. Appliquer des décorateurs `class-validator` stricts.
+3. Implémenter la méthode adaptatrice `toCommand(): CommandType` ou `toQuery(): QueryType` pour convertir le format REST en contrat gRPC.
 
-## Risques connus (à traiter, ne pas reproduire)
+```typescript
+import { ApiProperty } from '@nestjs/swagger';
+import { IsString, IsNotEmpty, IsUUID, IsOptional } from 'class-validator';
+import type { CreatePostCommand } from '@volontariapp/contracts-nest';
 
-| Risque | Détail |
-| :--- | :--- |
-| **Jetons arbitraires en production** | `HelperModule` est monté dès que `nodeEnv !== TEST`[^app-module], or le déploiement fixe `NODE_ENV=production`[^deploy-gw]. `TokenHelperController` est `@Public()`[^helper] : `GET /api/v1/helpers/tokens/admin-token` renvoie un access token ADMIN à n'importe qui. La condition attendue est probablement `nodeEnv === DEVELOPMENT` ou `LOCAL`. |
-| `@Roles` sans `RolesGuard` | `SystemSeedController` porte `@Roles(UserRoles.ADMIN)` mais `@GatewayController('System')` sans `admin: true`[^seed] : tout utilisateur authentifié peut lancer le seed. |
-| Pas de rate limiting | Aucun throttler dans la gateway (prérequis du stockage de fichiers). |
+export class CreatePostRequestDTO {
+  @ApiProperty({ description: 'Titre de la publication', example: 'Mission Maraude Paris' })
+  @IsString()
+  @IsNotEmpty()
+  title!: string;
 
-## Checklist
+  @ApiProperty({ description: 'Contenu textuel', example: 'Besoin de 5 bénévoles ce samedi' })
+  @IsString()
+  @IsNotEmpty()
+  content!: string;
 
-- [ ] `@GatewayController(tag, { admin: true })` pour toute route d'administration, jamais `@Roles` seul.
-- [ ] `req['internalMetadata']` passé à chaque appel gRPC.
-- [ ] Aucun id d'utilisateur lu dans le payload quand `@CurrentUser()` le donne.
-- [ ] Réponses d'erreur Swagger (`@Api*Response`, `@CustomApiError`) alignées sur les erreurs réellement renvoyées.
+  @ApiPropertyOptional({ description: 'Identifiant du fichier image déjà confirmé' })
+  @IsUUID()
+  @IsOptional()
+  coverFileId?: string;
+
+  toCommand(): CreatePostCommand {
+    return {
+      title: this.title,
+      content: this.content,
+      coverFileId: this.coverFileId,
+    };
+  }
+}
+```
+
+---
+
+## Étape 2 : Contrôleur REST NestJS & Règles de Sécurité
+
+Emplacement : `src/modules/<domaine>/controllers/commands/` (écriture) ou `queries/` (lecture).
+
+```typescript
+import { Controller, Post, Body, Req, HttpCode, HttpStatus } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { Request } from 'express';
+import { firstValueFrom } from 'rxjs';
+import { GatewayController } from '../../../../common/decorators/gateway-controller.decorator.js';
+import { CurrentUser, type AuthUser } from '@volontariapp/auth';
+import { BasePostGrpcController } from '../base-post-grpc.controller.js';
+import { CreatePostRequestDTO } from '../../dto/request/create-post.request.dto.js';
+import { PostResponseDTO } from '../../dto/response/post.response.dto.js';
+
+@GatewayController('Posts')
+export class PostCommandController extends BasePostGrpcController {
+
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: 'Créer une nouvelle publication' })
+  @ApiResponse({ status: 201, type: PostResponseDTO })
+  async createPost(
+    @Body() dto: CreatePostRequestDTO,
+    @CurrentUser() user: AuthUser,
+    @Req() req: Request,
+  ): Promise<PostResponseDTO> {
+    const command = dto.toCommand();
+    
+    // Appel gRPC avec injection obligatoire de req['internalMetadata']
+    const result = await firstValueFrom(
+      this.postCommandService.createPost(command, req['internalMetadata']),
+    );
+
+    return PostResponseDTO.fromGrpc(result);
+  }
+}
+```
+
+### Règles de Sécurité Inviolables :
+- **Administration** : Pour toute route d'administration, utiliser impérativement `@GatewayController('Tag', { admin: true })`[^decorator]. Sans `{ admin: true }`, le garde `RolesGuard` n'est **pas monté**, rendant `@Roles(UserRoles.ADMIN)` totalement inopérant[^seed].
+- **Routes Publiques** : Ajouter `@Public()` uniquement pour les endpoints ouverts sans authentification (`/login`, `/refresh`)[^helper].
+- **Identité du demandeur** : Pour les routes de profil ou d'action personnelle (`/me`), extraire l'utilisateur exclusivement via `@CurrentUser()`[^app-module]. Ne **jamais** accepter de `userId` dans le body ou les paramètres d'URL pour le demandeur connecté.
+- **Ressources scopées par utilisateur** : Utiliser `IsCurrentUserOrAdminGuard` pour les routes ciblant `:userId`.
+
+---
+
+## Étape 3 : Câblage du Client gRPC
+
+1. Le contrôleur hérite du contrôleur de base du domaine (`Base<Domaine>GrpcController`)[^grpc-module].
+2. Lors de `onModuleInit`, le contrôleur résout le client typé gRPC via `client.getService<XServiceClient>(X_SERVICE_NAME)`.
+3. Si un nouveau package de microservice doit être raccordé (ex. `ms-storage`), l'enregistrer dans `GrpcClientModule` via `getGrpcOptions(GRPC_MICROSERVICES.X, url)`.
+
+---
+
+## Étape 4 : Propagation Obligatoire du Token Interne
+
+Tout microservice en aval exige un `x-internal-token` signé pour autoriser la requête. 
+
+- L'intercepteur global `GrpcInternalInterceptor` génère et attache automatiquement un objet `grpc.Metadata` sur la requête Express : `req['internalMetadata']`[^app-module].
+- **Règle absolue :** Vous devez obligatoirement passer `req['internalMetadata']` comme **second argument** de chaque appel gRPC :
+  ```typescript
+  await firstValueFrom(this.service.someRpc(command, req['internalMetadata']));
+  ```
+- Omettre cet argument provoque un rejet immédiat du microservice avec le statut `UNAUTHENTICATED`.
+
+---
+
+## Étape 5 : Mapping des Réponses et Gestion du HTTP 206
+
+1. **Mapping d'Erreurs :** Les erreurs `BaseApiError` renvoyées par les microservices portent `statusCode` et `grpcCode`. L'API Gateway les retranscrit avec le statut HTTP d'origine.
+2. **Support HTTP 206 `FALLBACK_ACTIVATED` :**
+   - Lorsqu'un microservice subit une défaillance de dépendance non bloquante, il déclenche un job de fallback et retourne `FALLBACK_ACTIVATED`[^errors-nest].
+   - L'API Gateway doit renvoyer ce résultat avec le code HTTP **206 (Partial Content)** :
+   ```typescript
+   @ApiResponse({ status: 206, description: 'Traitement asynchrone différé (fallback activé)' })
+   ```
+   - Le client mobile `nativapp` sait qu'il doit écouter la notification de finalisation via WebSocket.
+
+---
+
+## Étape 6 : Tests & Validation de l'Endpoint
+
+1. **Tests unitaires de Contrôleur :**
+   - Mocker le client gRPC (ex: `MockUserClientGrpc`).
+   - Mocker l'objet `Request` avec `req['internalMetadata'] = new Metadata()`.
+   - Vérifier que le DTO appelle bien `toCommand()` et que le retour est conforme.
+2. **Validation Swagger :**
+   - Démarrer l'API Gateway ou inspecter la spec générée : vérifier que le tag, les statuts 200/201/206/400/401/403 et les schémas DTO sont intégralement documentés.
+
+---
+
+## Checklist d'Assurance Qualité & Critères d'Arrêt
+
+Avant de déclarer la tâche terminée :
+- [ ] Le DTO de requête implémente les décorateurs Swagger et `class-validator`.
+- [ ] Le DTO possède sa méthode adaptatrice `toCommand()` ou `toQuery()`.
+- [ ] `@GatewayController(tag, { admin: true })` est posé sur toute route d'administration.
+- [ ] `req['internalMetadata']` est passé en second argument de **chaque** appel gRPC.
+- [ ] Aucun `userId` n'est extrait du payload sur les routes « me ».
+- [ ] Les réponses asynchrones avec fallback documentent le statut HTTP 206 (`FALLBACK_ACTIVATED`).
+- [ ] `yarn test` passe avec succès sur `api-gateway`.
+- [ ] `yarn tsc` et `yarn lint` ne produisent aucune erreur.
 
 [^gw-claude]: Modules de api-gateway (carte : references/routes.md)
 [^decorator]: GatewayController
 [^app-module]: AppModule (GrpcInternalInterceptor, HelperModule)
 [^grpc-module]: GrpcClientModule
-[^ws-proxy]: WsProxyMiddleware
-[^errors-nest]: FALLBACK_ACTIVATED (PartialContentError 206)
-[^deploy-gw]: Déploiement api-gateway (NODE_ENV)
 [^helper]: TokenHelperController
 [^seed]: SystemSeedController
+[^deploy-gw]: Déploiement api-gateway (NODE_ENV)
+[^errors-nest]: FALLBACK_ACTIVATED (PartialContentError 206)
+[^ws-proxy]: WsProxyMiddleware

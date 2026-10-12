@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-13
+
+- **Vérification** - Trigger job_audit résilient aux job_id non-UUID (claude-code/agent)
+- **Vérification** - Relu apres ajout de la migration commune AddTraceparent et de la colonne traceparent sur OutboxModel: aucune regle ni commande de la skill ne change (claude-code/agent)
+
 ## 2026-10-07
 
 - **Vérification** - Add learnings about outbox redis-master host, getEventStreamName prefix, and gather completion streams (claude-code/agent)

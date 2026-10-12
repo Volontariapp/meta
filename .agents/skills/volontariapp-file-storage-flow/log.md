@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-13
+
+- **Vérification** - Migration commune 1792000000000 répliquée dans ms-storage et domain-storage (claude-code/agent)
+- **Vérification** - Relu apres ajout de la migration commune AddTraceparent et de la colonne traceparent sur OutboxModel: aucune regle ni commande de la skill ne change (claude-code/agent)
+
 ## 2026-10-11
 
 - **Vérification** - Fix require-await in test (claude-code/agent)

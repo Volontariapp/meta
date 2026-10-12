@@ -1,5 +1,18 @@
 # Historique
 
+## 2026-10-13
+
+- **Vérification** - Migration commune 1792000000000 répliquée dans ms-* (claude-code/agent)
+- **Vérification** - Relu apres ajout de la migration commune AddTraceparent et de la colonne traceparent sur OutboxModel: aucune regle ni commande de la skill ne change (claude-code/agent)
+- **Vérification** - withFallback ms-event: 403 hors fallback, extraPayload; deleteEvent passe l'acteur au service (claude-code/agent)
+- **Leçon** - withFallback ms-event: 403 sans job, extraPayload pour les droits au replay (rule) (claude-code/agent)
+- **Leçon** - Le controle de propriete vit dans le service de domaine, acteur obligatoire (rule) (claude-code/agent)
+
+## 2026-10-12
+
+- **Vérification** - Alignement mesh_keys (claude-code/agent)
+- **Vérification** - Refactoring en vrai playbook opérationnel séquentiel (claude-code/agent)
+
 ## 2026-10-11
 
 - **Vérification** - filter PENDING_DELETION in user queries (claude-code/agent)

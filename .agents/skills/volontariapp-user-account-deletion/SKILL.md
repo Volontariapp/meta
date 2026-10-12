@@ -1,10 +1,10 @@
 ---
 name: volontariapp-user-account-deletion
 description: "Suppression de compte en deux temps (PENDING_DELETION): requestDeletionWithUserDeleted, finalizeDeletion, fan-out de user.deleted vers les domaines et gather ws. A utiliser pour tout changement de domain-user touchant la suppression, le statut ou le cycle de vie d'un user."
-type: Agent Skill
+type: Domain Reference
 title: User Account Deletion
 tags: [user-account-deletion]
-status: draft
+status: stable
 paths:
   - "npm-packages/packages/domain-user/src/**"
 mesh_keys:
@@ -17,20 +17,20 @@ generated:
   at: "2026-10-11T16:59:33Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-11T16:59:40Z"
-    digest: 41f44d3551166416
-  - by: claude-code/agent
-    at: "2026-10-11T17:00:10Z"
-    digest: 9c79e5ebabc8a103
-  - by: claude-code/agent
-    at: "2026-10-11T17:04:48Z"
-    digest: 6a3eba2fe5a5d382
-  - by: claude-code/agent
-    at: "2026-10-11T17:05:14Z"
-    digest: 6a3eba2fe5a5d382
-  - by: claude-code/agent
     at: "2026-10-11T17:05:23Z"
     digest: 6a3eba2fe5a5d382
+  - by: claude-code/agent
+    at: "2026-10-12T11:52:52Z"
+    digest: 2b6792d3efa8b352
+  - by: claude-code/agent
+    at: "2026-10-13T09:11:14Z"
+    digest: 2b6792d3efa8b352
+  - by: claude-code/agent
+    at: "2026-10-13T11:38:33Z"
+    digest: f83c020a514803cb
+  - by: claude-code/agent
+    at: "2026-10-13T16:25:37Z"
+    digest: 1355deb6d953b9c8
 sources: []
 ---
 
@@ -38,7 +38,10 @@ sources: []
 
 ## Quand utiliser cette skill
 
-Suppression de compte en deux temps (PENDING_DELETION): requestDeletionWithUserDeleted, finalizeDeletion, fan-out de user.deleted vers les domaines et gather ws. A utiliser pour tout changement de domain-user touchant la suppression, le statut ou le cycle de vie d'un user.
+Ce document spécifie les **invariants de domaine et règles d'architecture** pour la suppression de compte utilisateur en deux temps (`PENDING_DELETION`). 
+
+> [!NOTE]
+> Cette fiche est une référence d'invariants de domaine (`Domain Reference`). Pour exécuter, implémenter ou modifier le pipeline technique asynchrone de bout en bout (émission outbox, stream fan-out, gather WebSocket et compensation), utilise le playbook opérationnel déterministe [`volontariapp-implement-async-event-flow`](/volontariapp-implement-async-event-flow/SKILL.md).
 
 ## Règles
 

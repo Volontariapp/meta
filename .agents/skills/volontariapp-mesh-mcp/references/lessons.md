@@ -15,6 +15,18 @@ sources:
 
 # Leçons
 
+## 2026-10-12 - Les routes HTTP ne sont pas interrogeables par chemin
+
+- **Type :** pitfall
+- **Leçon :** mesh-mcp 7.1.3 indexe les routes NestJS en noeuds HttpEndpoint (signature 'PATCH /events/:id/state', sans le prefixe api/v1 de setGlobalPrefix dans api-gateway/src/main.ts) mais smart_search et analyze_impact ne les trouvent pas par chemin : chercher par nom de handler (smart_search scope api-gateway). mesh-mcp graph --format json permet de les lister.[^src-ee621be8]
+- **Consigné par :** claude-code/agent
+
+## 2026-10-12 - meshd ne recharge pas mesh-mcp.toml a chaud
+
+- **Type :** pitfall
+- **Leçon :** Apres edition du toml, /mcp ne reconnecte que le proxy mesh-mcp run : le demon meshd (enfant du proxy) garde l'ancienne config (teste le 2026-10-12 : aucune prise en compte apres 68 s). Redemarrer meshd (pkill meshd) puis refaire un appel ; pour valider sans toucher au demon, utiliser mesh-mcp run --standalone -c .agents/mesh-mcp.toml.[^src-ee621be8]
+- **Consigné par :** claude-code/agent
+
 ## 2026-10-06 - Une clé skill égale à un nom d'outil masque les autres
 
 - **Type :** pitfall

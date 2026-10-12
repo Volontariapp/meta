@@ -67,7 +67,7 @@ async scheduleExport(queryRunner: QueryRunner, organizerId: string, options: Exp
 Dans les microservices (`ms-*/src/modules/*/controllers/commands/`), les contrôleurs étendent `BaseCommandController`.
 
 La méthode `withFallback` encapsule l'opération :
-- Si l'erreur est une erreur client (`400`, `404`, `409`), aucune tâche de fallback n'est créée et l'erreur est renvoyée au client.
+- Si l'erreur est une erreur client (`400`, `404`, `409`, et `403` dans `ms-event` ; les autres `ms-*` ne court-circuitent pas encore le `403`), aucune tâche de fallback n'est créée et l'erreur est renvoyée au client.
 - Si l'erreur est un crash inattendu (`500`, timeout), elle intercepte l'erreur, persiste un job dans `jobs_outbox` ciblant `EventsQueue.FALLBACK_EVENTS`, et lève `FALLBACK_ACTIVATED`.
 
 ```typescript

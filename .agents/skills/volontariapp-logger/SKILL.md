@@ -1,7 +1,7 @@
 ---
 name: volontariapp-logger
 description: "Modifier ou utiliser @volontariapp/logger : masquage des données personnelles (clés, motifs, configuration), champs trace_id / dd.trace_id / dd.span_id injectés depuis le span OpenTelemetry actif, pièges de compatibilité (React Native, ordre des champs JSON)."
-type: Agent Skill
+type: Standard
 title: "Logger partagé : masquage et corrélation de traces"
 tags: [logger]
 status: stable
@@ -21,6 +21,9 @@ verified:
     digest: 86278baab7297a03
   - by: claude-code/agent
     at: "2026-10-07T09:33:57Z"
+    digest: 86278baab7297a03
+  - by: claude-code/agent
+    at: "2026-10-12T11:52:50Z"
     digest: 86278baab7297a03
 sources:
   - id: masking

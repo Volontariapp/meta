@@ -30,6 +30,12 @@ sources:
 
 # Leçons
 
+## 2026-10-12 - Service de domaine avec EventQueueModel: forFeature dans le module qui le declare
+
+- **Type :** rule
+- **Leçon :** Un service de domain-social (ParticipationService, InteractionService) injecte @InjectRepository(EventQueueModel). Le module Nest qui le declare en provider doit lui-meme importer TypeOrmModule.forFeature([EventQueueModel]); l'import dans un module voisin (PostProcessorsModule) ne suffit pas. Sinon: Nest can't resolve dependencies ... EventQueueModelRepository au demarrage (post-processor-social, corrige dans DomainSocialModule). Un worker sans TypeOrmModule fournit getRepositoryToken(EventQueueModel) dans AppModule, et son image deployee doit contenir ce provider (deploy/ pointe un sha d'image).
+- **Consigné par :** claude-code/agent
+
 ## 2026-10-11 - TypeORM forFeature et relations par chaine
 
 - **Type :** rule

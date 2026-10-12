@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-12
+
+- **Vérification** - Utilisation du mock MockUserClientGrpc (claude-code/agent)
+- **Vérification** - Refactoring en vrai playbook opérationnel séquentiel (claude-code/agent)
+
 ## 2026-10-11
 
 - **Vérification** - use createMock in unit test (claude-code/agent)

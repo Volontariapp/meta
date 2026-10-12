@@ -1,5 +1,13 @@
 # Historique des skills
 
+## 2026-10-12
+
+- **Nouvelle skill** - [volontariapp-scaffold-microservice](/volontariapp-scaffold-microservice/SKILL.md) - Scaffolding d'un Nouveau Microservice gRPC et de ses Runners (claude-code/agent)
+- **Nouvelle skill** - [volontariapp-sealed-secrets](/volontariapp-sealed-secrets/SKILL.md) - Gestion des Secrets Scellés GitOps (kubeseal) (claude-code/agent)
+- **Nouvelle skill** - [volontariapp-async-remediation](/volontariapp-async-remediation/SKILL.md) - Remédiation et Dépilement des Files Asynchrones (DLQ & Streams) (claude-code/agent)
+- **Nouvelle skill** - [volontariapp-db-migration](/volontariapp-db-migration/SKILL.md) - Migrations PostgreSQL et Synchronisation Multi-Services (claude-code/agent)
+- **Nouvelle skill** - [volontariapp-mesh-mcp-verification](/volontariapp-mesh-mcp-verification/SKILL.md) - Verification des anomalies mesh-mcp (claude-code/agent)
+
 ## 2026-10-11
 
 - **Nouvelle skill** - [volontariapp-user-account-deletion](/volontariapp-user-account-deletion/SKILL.md) - User Account Deletion (claude-code/agent)

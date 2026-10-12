@@ -53,9 +53,6 @@ sources:
     title: SAGA_GATHER_COMPLETION_MAPPING
 verified:
   - by: claude-code/agent
-    at: "2026-10-11T18:59:58Z"
-    digest: 17784ba614496bc1
-  - by: claude-code/agent
     at: "2026-10-11T19:31:34Z"
     digest: 06b2d5f50f532499
   - by: claude-code/agent
@@ -67,6 +64,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-11T21:18:49Z"
     digest: afe3f1b7a3905072
+  - by: claude-code/agent
+    at: "2026-10-12T09:30:36Z"
+    digest: 9f96fec39dfbc3d7
 ---
 
 # Guide : Implémenter un Flux Asynchrone End-to-End

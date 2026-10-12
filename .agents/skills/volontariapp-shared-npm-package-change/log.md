@@ -1,5 +1,15 @@
 # Historique
 
+## 2026-10-13
+
+- **Vérification** - Changeset sans TTY (ecrire le .md), verifier le bump vs origin/main avant version, propagation patch aux dependants, check-changelogs muet tant que non commite (claude-code/agent)
+- **Vérification** - lecons: precision que l'exemple ms-event n'est verifie qu'en local (claude-code/agent)
+- **Vérification** - worker-event: resolution retiree, alignement par versions (domain-event 3.10.1); lecons corrigees (pas de resolutions) (claude-code/agent)
+- **Vérification** - Etape yarn up: controle des copies multiples de @volontariapp/database (regression e2e ms-event), regle consignee (claude-code/agent)
+- **Leçon** - Apres yarn up dans un consommateur, verifier qu'il n'y a qu'une copie de @volontariapp/database (rule) (claude-code/agent)
+- **Vérification** - Relu apres bump de versions (messaging 2.24.0 et dependants) par changeset : skill inchangee (claude-code/agent)
+- **Vérification** - Relu apres bump domain-event 3.10.0 par changeset : workflow STOP inchange, aucun changement (claude-code/agent)
+
 ## 2026-10-11
 
 - **Vérification** - Bumps de versions pour la purge des domaines dans le chantier de suppression de compte (claude-code/agent)

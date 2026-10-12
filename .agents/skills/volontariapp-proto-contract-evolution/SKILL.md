@@ -1,7 +1,7 @@
 ---
 name: volontariapp-proto-contract-evolution
 description: "Modifier un contrat Protobuf de proto-registry (champ, message, enum, RPC) sans casser la compatibilité wire, puis suivre la cascade proto-registry, PR automatique dans npm-packages, publication, consommateurs. À utiliser avant toute édition d'un .proto."
-type: Agent Skill
+type: Playbook
 title: Proto Contract Evolution
 tags: [grpc, protobuf, buf, stop-rule]
 status: stable
@@ -36,9 +36,6 @@ sources:
     title: "Contrats et évolutions (numérotation, trou du champ 5)"
 verified:
   - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-06T15:02:04Z"
-    digest: 61b6a8d10a0104d0
-  - by: claude-code/claude-sonnet-5-5
     at: "2026-10-06T15:05:28Z"
     digest: f305ac39a0987635
   - by: claude-code/claude-sonnet-5-5
@@ -49,6 +46,9 @@ verified:
     digest: fdc49f89e9cb9d16
   - by: claude-code/claude-sonnet-5-5
     at: "2026-10-06T15:41:59Z"
+    digest: 603980fa2fea4e5d
+  - by: claude-code/agent
+    at: "2026-10-12T12:03:25Z"
     digest: 603980fa2fea4e5d
 ---
 
@@ -107,6 +107,7 @@ flowchart TD
   - Changement de numéro de tag d'un champ.
   - Changement de type d'un champ (ex: `int32` -> `string`).
   - **Ordre de déploiement obligatoire :** Les consommateurs (API Gateway, MS) doivent d'abord cesser de lire/écrire le champ avant que celui-ci ne soit définitivement retiré de `proto-registry`.
+  - Pour toute suppression ou renommage, suivre impérativement le [Playbook de Dépréciation Protobuf](/volontariapp-proto-contract-evolution/references/deprecation-playbook.md) (procédure séquentielle en 3 phases : `[deprecated = true]`, extinction des consommateurs, puis `reserved <tag>; reserved "<nom>";`).
 
 ---
 

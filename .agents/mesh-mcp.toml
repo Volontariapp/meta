@@ -204,6 +204,7 @@ canonical_fqcn_projection = true
 [[engines.contracts.patterns]]
 name = "outbox-event-producer"
 kind = "topic_producer"
+confidence = "exact"
 file_pattern = "/src/"
 regex = 'createEvent<([A-Za-z0-9_.]+)>'
 target_group = 1
@@ -213,6 +214,7 @@ target_group = 1
 [[engines.contracts.patterns]]
 name = "outbox-target-stream"
 kind = "topic_producer"
+confidence = "exact"
 file_pattern = "/src/"
 regex = 'targetServices:\s*\[\s*(\w+\.\w+)'
 target_group = 1
@@ -225,6 +227,7 @@ target_group = 1
 [[engines.contracts.patterns]]
 name = "sql-trigger-event-producer"
 kind = "topic_producer"
+confidence = "heuristic"
 file_pattern = "/src/"
 regex = 'CREATE\s+OR\s+REPLACE\s+FUNCTION\s+create_(\w+)_event_queue_record\(\)'
 target_group = 1
@@ -234,6 +237,7 @@ target_group = 1
 [[engines.contracts.patterns]]
 name = "batch-post-processor"
 kind = "topic_consumer"
+confidence = "heuristic"
 file_pattern = "/src/"
 regex = 'class\s+(\w+)\s+extends\s+BatchPostProcessor<([^>]+)>'
 target_group = 2
@@ -246,6 +250,7 @@ consumer_group = 1
 [[engines.contracts.patterns]]
 name = "gather-stream-consumer"
 kind = "topic_consumer"
+confidence = "exact"
 file_pattern = "options.ts"
 regex = 'streamName:\s*get\w*StreamName\((\w+\.\w+)\)'
 target_group = 1
@@ -272,6 +277,7 @@ target_group = 1
 [[engines.contracts.patterns]]
 name = "ws-event-mapping-producer"
 kind = "topic_producer"
+confidence = "heuristic"
 file_pattern = "websockets/events/mapping.ts"
 regex = '\]:\s*(\w*WebsocketMessagingType\.\w+)'
 target_group = 1
@@ -284,6 +290,7 @@ target_group = 1
 [[engines.contracts.patterns]]
 name = "fallback-job-producer"
 kind = "topic_producer"
+confidence = "exact"
 file_pattern = "/src/"
 regex = 'withFallback\(\s*(\w+\.\w+)'
 target_group = 1
@@ -295,6 +302,7 @@ target_group = 1
 [[engines.contracts.patterns]]
 name = "job-handler-consumer"
 kind = "topic_consumer"
+confidence = "exact"
 file_pattern = "/src/"
 regex = 'class\s+(\w+)\s+implements\s+IJobHandler<[\s\S]{0,600}?jobType\s*=\s*(\w+\.\w+)'
 target_group = 2
@@ -305,6 +313,7 @@ consumer_group = 1
 [[engines.contracts.patterns]]
 name = "bullmq-job-worker"
 kind = "topic_consumer"
+confidence = "heuristic"
 file_pattern = "/src/"
 regex = 'class\s+(\w+)\s+extends\s+BaseWorker<([^>]+)>'
 target_group = 2
@@ -314,6 +323,7 @@ consumer_group = 1
 [[engines.contracts.patterns]]
 name = "bullmq-processor-queue"
 kind = "topic_consumer"
+confidence = "exact"
 file_pattern = "/src/"
 regex = '@Processor\((\w+\.\w+)\)[\s\S]{0,120}?class\s+(\w+)\s+extends\s+BaseWorker'
 target_group = 1
@@ -330,6 +340,7 @@ consumer_group = 2
 [[engines.contracts.patterns]]
 name = "websocket-push-producer"
 kind = "topic_producer"
+confidence = "heuristic"
 file_pattern = "/src/"
 regex = '(?:notifyUser|broadcastExcept|broadcast)\([^;]{0,160}?(\w*WebsocketMessagingType\.\w+)'
 target_group = 1
@@ -340,6 +351,7 @@ target_group = 1
 [[engines.contracts.patterns]]
 name = "nativapp-socket-listener"
 kind = "topic_consumer"
+confidence = "exact"
 file_pattern = "/src/"
 regex = 'socket\.on\(\s*(\w*WebsocketMessagingType\.\w+)\s*,\s*(\w+)'
 target_group = 1
@@ -381,16 +393,22 @@ read_governance_mode = "allow_all"
 "internalmetadata" = "skills/volontariapp-api-gateway/SKILL.md"
 "iscurrentuseroradminguard" = "skills/volontariapp-api-gateway/SKILL.md"
 "ws-proxy" = "skills/volontariapp-api-gateway/SKILL.md"
+# volontariapp-async-remediation
+"dlq-remediation" = "skills/volontariapp-async-remediation/SKILL.md"
+"xclaim-recovery" = "skills/volontariapp-async-remediation/SKILL.md"
+"stream-remediation" = "skills/volontariapp-async-remediation/SKILL.md"
 # volontariapp-ci-tools
 "ci-tools" = "skills/volontariapp-ci-tools/SKILL.md"
 "docker-compose" = "skills/volontariapp-ci-tools/SKILL.md"
 "e2e-orchestrator" = "skills/volontariapp-ci-tools/SKILL.md"
 "service-ci.yml" = "skills/volontariapp-ci-tools/SKILL.md"
+# volontariapp-db-migration
+"migrations" = "skills/volontariapp-db-migration/SKILL.md"
+"sync-migrations" = "skills/volontariapp-db-migration/SKILL.md"
+"typeorm" = "skills/volontariapp-db-migration/SKILL.md"
 # volontariapp-deploy-gitops
 "deploy/" = "skills/volontariapp-deploy-gitops/SKILL.md"
 "argocd" = "skills/volontariapp-deploy-gitops/SKILL.md"
-"sealedsecret" = "skills/volontariapp-deploy-gitops/SKILL.md"
-"kubeseal" = "skills/volontariapp-deploy-gitops/SKILL.md"
 "networkpolic" = "skills/volontariapp-deploy-gitops/SKILL.md"
 "kustomiz" = "skills/volontariapp-deploy-gitops/SKILL.md"
 "initcontainer" = "skills/volontariapp-deploy-gitops/SKILL.md"
@@ -412,7 +430,6 @@ read_governance_mode = "allow_all"
 "basecommandcontroller" = "skills/volontariapp-grpc-microservice/SKILL.md"
 "grpcvalidationpipe" = "skills/volontariapp-grpc-microservice/SKILL.md"
 "grpcinternalguard" = "skills/volontariapp-grpc-microservice/SKILL.md"
-"sync-migrations" = "skills/volontariapp-grpc-microservice/SKILL.md"
 "transformer" = "skills/volontariapp-grpc-microservice/SKILL.md"
 # volontariapp-implement-async-event-flow
 "post-processors-runner" = "skills/volontariapp-implement-async-event-flow/SKILL.md"
@@ -440,11 +457,20 @@ read_governance_mode = "allow_all"
 # volontariapp-mesh-mcp
 "causalmesh" = "skills/volontariapp-mesh-mcp/SKILL.md"
 "mesh-mcp" = "skills/volontariapp-mesh-mcp/SKILL.md"
+# volontariapp-mesh-mcp-verification
+"rex" = "skills/volontariapp-mesh-mcp-verification/SKILL.md"
 # volontariapp-proto-contract-evolution
 "analyze_grpc" = "skills/volontariapp-proto-contract-evolution/SKILL.md"
 "proto-registry" = "skills/volontariapp-proto-contract-evolution/SKILL.md"
 ".proto" = "skills/volontariapp-proto-contract-evolution/SKILL.md"
 "contracts" = "skills/volontariapp-proto-contract-evolution/SKILL.md"
+# volontariapp-scaffold-microservice
+"scaffold-microservice" = "skills/volontariapp-scaffold-microservice/SKILL.md"
+"new-microservice" = "skills/volontariapp-scaffold-microservice/SKILL.md"
+"create-service" = "skills/volontariapp-scaffold-microservice/SKILL.md"
+# volontariapp-sealed-secrets
+"sealedsecret" = "skills/volontariapp-sealed-secrets/SKILL.md"
+"kubeseal" = "skills/volontariapp-sealed-secrets/SKILL.md"
 # volontariapp-shared-npm-package-change
 "npm-packages" = "skills/volontariapp-shared-npm-package-change/SKILL.md"
 "@volontariapp/" = "skills/volontariapp-shared-npm-package-change/SKILL.md"

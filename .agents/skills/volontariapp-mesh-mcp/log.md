@@ -1,7 +1,19 @@
 # Historique
 
+## 2026-10-13
+
+- **Vérification** - confidence explicite sur les 12 motifs topic (7 exact, 5 heuristic), rechargement du démon à la requête (claude-code/agent)
+
 ## 2026-10-12
 
+- **Vérification** - Mise à jour mesh_keys avec scaffold-microservice (claude-code/agent)
+- **Vérification** - Mise à jour suite à l'ajout des playbooks du Lot 2 (claude-code/agent)
+- **Vérification** - Retypage OKF: type Tool Reference (claude-code/agent)
+- **Vérification** - toml: ajout de la cle mesh rex generee pour la skill de verification (claude-code/agent)
+- **Vérification** - relue apres questions QA causalmesh, aucune regle nouvelle (claude-code/agent)
+- **Vérification** - lecons: pas de rechargement a chaud du demon, routes HTTP non interrogeables par chemin (claude-code/agent)
+- **Leçon** - Les routes HTTP ne sont pas interrogeables par chemin (pitfall) (claude-code/agent)
+- **Leçon** - meshd ne recharge pas mesh-mcp.toml a chaud (pitfall) (claude-code/agent)
 - **Vérification** - mesh-mcp.toml: audit 7.1.3, exclusion docx, pattern ws-event-mapping-producer; skill relue, inchangee (claude-code/agent)
 
 ## 2026-10-11

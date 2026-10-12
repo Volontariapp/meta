@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-12
+
+- **Vérification** - Retypage OKF: type Standard (claude-code/agent)
+
 ## 2026-10-07
 
 - **Vérification** - mesh_keys declares (claude-code/agent)

@@ -26,12 +26,6 @@ sources:
     resource: npm-packages/packages/domain-storage/src
     title: "@volontariapp/domain-storage"
 verified:
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-06T23:30:15Z"
-    digest: 823ef71100fce341
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-07T08:42:02Z"
-    digest: 823ef71100fce341
   - by: claude-code/agent
     at: "2026-10-07T10:24:59Z"
     digest: a0f487e0826967fe
@@ -41,6 +35,12 @@ verified:
   - by: claude-code/agent
     at: "2026-10-11T17:38:04Z"
     digest: b74e969765134a0e
+  - by: claude-code/agent
+    at: "2026-10-13T11:38:32Z"
+    digest: 1b3adb8d3be9f003
+  - by: claude-code/agent
+    at: "2026-10-13T16:28:46Z"
+    digest: dd0e5400bb57c6d4
 ---
 
 # Playbook : Stockage de Fichiers

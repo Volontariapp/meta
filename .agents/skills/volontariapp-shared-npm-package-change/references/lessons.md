@@ -17,9 +17,18 @@ sources:
   - id: src-b40f1e79
     resource: npm-packages/yarn.lock
     title: npm-packages/yarn.lock
+  - id: src-a7f33c12
+    resource: ms-event/package.json
+    title: ms-event/package.json
 ---
 
 # Leçons
+
+## 2026-10-13 - Apres yarn up dans un consommateur, verifier qu'il n'y a qu'une copie de @volontariapp/database
+
+- **Type :** rule
+- **Leçon :** Les paquets @volontariapp/domain-*, outbox et workers epinglent database en version exacte, souvent differente de celle du consommateur. Un yarn up peut donc installer plusieurs copies (ms-event apres domain-event 3.10.0: 3.4.29 a la racine, 3.4.31 sous domain-event). Les tests unitaires et le build passent, mais les e2e CI cassent: EntityMetadataNotFoundError 'No metadata for EventQueueModel' et 'No mapping registered from JobsOutboxEntity to JobsOutboxModel' (4 suites e2e event, 46 tests). Avant de pousser: find node_modules -path '*@volontariapp/database/package.json' -not -path '*/dist/*' doit n'afficher qu'une ligne; sinon aligner les versions. Correctif prefere par l'equipe: PAS de resolutions (trop fragile a maintenir). Aligner les versions: database en dependance directe a la version epinglee par domain-event/workers/outbox (npm view @volontariapp/<paquet>@<version> dependencies.@volontariapp/database), et monter domain-event, workers et outbox sur des versions qui epinglent la meme database. Exemples verifies en local (CI e2e ms-event a revalider): ms-event = domain-event 3.10.0 + database 3.4.31 + outbox 0.9.68; worker-event = domain-event 3.10.1 + workers 1.3.37 (database 3.4.32, messaging 2.24.0, outbox 0.9.69).[^src-a7f33c12]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-11 - Dépendance workspace ajoutée et bumps induits
 
@@ -90,3 +99,4 @@ sources:
 [^src-10d1da5b]: npm-packages
 [^src-9f856e83]: npm-packages/.changeset/config.json
 [^src-b40f1e79]: npm-packages/yarn.lock
+[^src-a7f33c12]: ms-event/package.json

@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-12
+
+- **Vérification** - Ajout du playbook de dépréciation Protobuf et tombstoning (claude-code/agent)
+
 ## 2026-10-06
 
 - **Vérification** - post protos: commentaires de documentation uniquement, regles inchangees (claude-code/claude-sonnet-5-5)

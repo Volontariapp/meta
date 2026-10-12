@@ -43,20 +43,20 @@ sources:
     title: check_symbols.py
 verified:
   - by: claude-code/agent
-    at: "2026-10-07T09:34:05Z"
-    digest: 55bf7677a54d8f4b
+    at: "2026-10-12T12:20:13Z"
+    digest: 35652b6933ca3547
   - by: claude-code/agent
-    at: "2026-10-11T17:05:14Z"
-    digest: 9f9549bda472d941
+    at: "2026-10-13T08:06:08Z"
+    digest: 37bcfa1a0182058c
   - by: claude-code/agent
-    at: "2026-10-11T17:05:23Z"
-    digest: f1509b0007dffdb4
+    at: "2026-10-13T08:17:57Z"
+    digest: bad4e16f3e66064b
   - by: claude-code/agent
-    at: "2026-10-11T17:05:29Z"
-    digest: ea96412728594d5a
+    at: "2026-10-13T08:20:14Z"
+    digest: bad4e16f3e66064b
   - by: claude-code/agent
-    at: "2026-10-12T08:06:17Z"
-    digest: feb096330f9106b0
+    at: "2026-10-13T09:15:57Z"
+    digest: 0164ca15f8d1b2d6
 ---
 
 # Évolution des skills (auto-apprentissage)
@@ -99,6 +99,7 @@ python3 $E learn --skill volontariapp-shared-npm-package-change --kind pitfall \
   --title "Snapshot non publié" \
   --insight "Un yarn up vers une version snapshot échoue tant que la CI de la PR npm-packages n'a pas fini." \
   --source npm-packages/.github/workflows
+#   --source : fichier existant (chemin relatif à meta) ou URL, jamais du texte libre ; `learn` refuse sinon
 python3 $E new volontariapp-saga-rollback --title "Rollback de saga" --description "..." \
   --paths "post-processors-runner/*/src/post-processors/*-failed.post-processor.ts" --mesh-keys rollback creation_failed
 python3 $E owners ms-user/src/main.ts

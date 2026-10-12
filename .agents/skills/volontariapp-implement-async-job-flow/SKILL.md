@@ -50,21 +50,21 @@ sources:
     resource: .agents/skills/volontariapp-implement-async-job-flow/scripts/job_catalogue.py
     title: job_catalogue.py
 verified:
-  - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T09:00:38Z"
-    digest: 20a2c5ba4fcf1ea2
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-06T16:07:49Z"
-    digest: 345152032d485017
   - by: claude-code/agent
-    at: "2026-10-07T09:33:28Z"
-    digest: ecd7f271c01ebcc3
+    at: "2026-10-13T13:50:20Z"
+    digest: 8ed46432d3892d9a
   - by: claude-code/agent
-    at: "2026-10-07T10:22:48Z"
-    digest: ecd7f271c01ebcc3
+    at: "2026-10-13T13:52:50Z"
+    digest: eeb597ad6ac1ace4
   - by: claude-code/agent
-    at: "2026-10-07T15:04:15Z"
-    digest: 3e1ad8843770396a
+    at: "2026-10-13T16:03:31Z"
+    digest: 7470348f214c34c1
+  - by: claude-code/agent
+    at: "2026-10-13T16:03:46Z"
+    digest: 15c1a9cecb2b3890
+  - by: claude-code/agent
+    at: "2026-10-13T16:25:35Z"
+    digest: 49a6b75a4480410a
 ---
 
 # Guide : Implémenter un Job Asynchrone End-to-End
@@ -291,7 +291,7 @@ Vous n'avez **aucun code de nettoyage manuel à écrire** :
 | Sujet | Réalité | Conséquence |
 | :--- | :--- | :--- |
 | `IJobHandler` | Interface **locale à chaque worker**, pas exportée par `@volontariapp/workers` : `worker-user/src/handlers/interfaces/`, `worker-post` et `worker-social/src/workers/job-handler.interface.ts` | Importer celle du worker concerné. Un handler vit sous `src/handlers/` dans `worker-user`, sous `src/workers/handlers/` ailleurs. |
-| `withFallback` | Dupliqué dans chaque `ms-*` (`BaseCommandController`), aucun job sur une erreur 400/404/409, sinon job `FALLBACK_*` vers la queue `FALLBACK_*` puis `FALLBACK_ACTIVATED`[^base-cmd] | Les queries n'ont pas de fallback. Le payload est `{ userId, payload }`, posé avec un `@ts-expect-error` existant : dette à ne pas recopier. |
+| `withFallback` | Dupliqué dans chaque `ms-*` (`BaseCommandController`), aucun job sur une erreur 400/404/409, sinon job `FALLBACK_*` vers la queue `FALLBACK_*` puis `FALLBACK_ACTIVATED`[^base-cmd] | Les queries n'ont pas de fallback. Le payload est `{ userId, payload }`, posé avec un `@ts-expect-error` existant : dette à ne pas recopier. Piège : un `ForbiddenError` (403) crée un job puis renvoie 206 dans tout `ms-*` dont `withFallback` ne l'exclut pas (corrigé dans `ms-event`, vérifié par test ; non vérifié dans les autres `ms-*`). Un job rejoué doit re-vérifier les droits : `ms-event` passe `extraPayload` à `withFallback` (ex. `userRole` dans `IFallbackDeleteEventJobPayload`). |
 | Statut de `jobs_outbox` | `PROCESSING` au pull, `COMPLETED` dès le push BullMQ[^dispatcher] | La ligne reste en base jusqu'au `DELETE` de `JobOutboxSuccessPostProcessor`[^pp-success]. `COMPLETED` ne veut pas dire « exécuté ». |
 | Échec d'un job | Le trigger émet `<domaine>:job:outbox:failure`, `JobOutboxFailedPostProcessor` n'accepte que `:job:outbox:failed`, et son `UPDATE ... WHERE status = PENDING` ne toucherait pas une ligne déjà `COMPLETED`[^pp-failed] | **Bug P4** : aucun feedback d'échec de job sur la plateforme. Ne pas s'appuyer sur ce chemin. |
 | Idempotence | `BaseWorker` saute un job déjà `COMPLETED` dans `job_audit`[^base-worker] | Un rejeu BullMQ d'un job terminé est sans effet ; un job interrompu en `PROCESSING` est rejoué. |

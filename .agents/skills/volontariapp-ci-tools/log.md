@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-12
+
+- **Vérification** - Retypage OKF: type Catalogue (claude-code/agent)
+
 ## 2026-10-06
 
 - **Vérification** - passe d'evolution apres les merges du Sprint 8 (statut du repository, CI des services, worktrees) (claude-code/claude-sonnet-5-5)

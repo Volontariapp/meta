@@ -1,7 +1,7 @@
 ---
 name: volontariapp-ci-tools
 description: "Modifier la CI partagée (workflows réutilisables GitHub Actions appelés par tous les repos) ou l'infrastructure locale docker-compose de ci-tools (bases, Redis, MinIO, Datadog). À utiliser avant de toucher ci-tools : tout changement a un impact multi-repo immédiat."
-type: Agent Skill
+type: Catalogue
 title: CI partagée et infra locale (ci-tools)
 tags: [ci, github-actions, docker-compose]
 status: stable
@@ -26,6 +26,9 @@ verified:
   - by: claude-code/claude-sonnet-5-5
     at: "2026-10-06T22:51:25Z"
     digest: 4ea45a7ba03d5217
+  - by: claude-code/agent
+    at: "2026-10-12T11:52:51Z"
+    digest: d23b5b9bbc66d392
 sources:
   - id: workflows
     resource: ci-tools/.github/workflows

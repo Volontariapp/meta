@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-10-12
+
+- **Vérification** - Nettoyage typographique ArgoCD (claude-code/agent)
+- **Vérification** - Refactoring en playbook opérationnel et extraction cluster-specifications (claude-code/agent)
+- **Vérification** - Workers: conteneur principal passe a 96Mi request / 192Mi limit (usage mesure ~91Mi, 96 % de l'ancien limit) (claude-code/agent)
+
 ## 2026-10-07
 
 - **Vérification** - Vérification des bumps de tags d'images ms-social et post-processor-user suite aux releases (claude-code/agent)

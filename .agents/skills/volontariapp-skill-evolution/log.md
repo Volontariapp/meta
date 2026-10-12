@@ -1,7 +1,23 @@
 # Historique
 
+## 2026-10-13
+
+- **Vérification** - hook absence: couverture par ligne; learn valide --source; AGENTS.md R8 (claude-code/agent)
+- **Leçon** - Le hook d'absence verifie la couverture ligne par ligne, et learn valide --source (rule) (claude-code/agent)
+- **Vérification** - Lecon: chemin de evolve.py selon le projet (Hermes vs meta) (claude-code/agent)
+- **Leçon** - Chemin de evolve.py selon le projet (rule) (claude-code/agent)
+- **Vérification** - Ajout du hook Stop absence-claims-guard.py, rappel condense des regles de raisonnement dans mesh-first-reminder.sh, section 2 quinquies d'AGENTS.md (claude-code/agent)
+- **Leçon** - Questions d'architecture: absence et couverture (rule) (claude-code/agent)
+- **Vérification** - relu : mesh-mcp.toml ne change que les motifs contracts, la table [engines.policy.skills] est inchangée (claude-code/agent)
+
 ## 2026-10-12
 
+- **Vérification** - Ajout de volontariapp-scaffold-microservice dans AGENTS.md (claude-code/agent)
+- **Vérification** - Mise à jour des tables d'aiguillage dans AGENTS.md (claude-code/agent)
+- **Vérification** - Mise à jour suite à l'ajout des playbooks du Lot 2 (claude-code/agent)
+- **Vérification** - Mise à jour index AGENTS.md (claude-code/agent)
+- **Vérification** - Hook mesh-first-reminder (SessionStart, UserPromptSubmit) documente; search-via-mesh.sh corrige en .py (claude-code/agent)
+- **Vérification** - toml: cle generee rex, aucune regle modifiee (claude-code/agent)
 - **Vérification** - mesh-mcp.toml audit 7.1.3, aucune regle de la skill modifiee (claude-code/agent)
 
 ## 2026-10-11

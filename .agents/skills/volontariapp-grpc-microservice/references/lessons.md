@@ -17,9 +17,27 @@ sources:
   - id: src-855ad96a
     resource: ms-post/src/modules/post/transformers/post.transformer.ts
     title: ms-post/src/modules/post/transformers/post.transformer.ts
+  - id: src-c5886b21
+    resource: npm-packages/packages/domain-event/src/services/event.service.ts
+    title: npm-packages/packages/domain-event/src/services/event.service.ts
+  - id: src-8fc3ad1d
+    resource: ms-event/src/modules/event/controllers/commands/base.command.controller.ts
+    title: ms-event/src/modules/event/controllers/commands/base.command.controller.ts
 ---
 
 # Leçons
+
+## 2026-10-13 - withFallback ms-event: 403 sans job, extraPayload pour les droits au replay
+
+- **Type :** rule
+- **Leçon :** Dans ms-event, withFallback court-circuite aussi 403 (test: un ForbiddenError ne cree plus de job) et accepte extraPayload type Omit<JobRegistry[K], userId|payload> pour stocker des champs en plus de userId (userRole pour FALLBACK_DELETE_EVENT). Le controleur ramene un role inconnu a VOLUNTEER, jamais a undefined, pour garder le controle de propriete.[^src-8fc3ad1d]
+- **Consigné par :** claude-code/agent
+
+## 2026-10-13 - Le controle de propriete vit dans le service de domaine, acteur obligatoire
+
+- **Type :** rule
+- **Leçon :** Toute commande de suppression ou de modification exposee par un RPC doit verifier organisateur/auteur ou ADMIN dans le service domain-* (PostService.delete, EventService.delete), avec actorId et actorRole obligatoires et non optionnels : un parametre optionnel saute silencieusement le controle. Le contrôleur gRPC passe user.id et user.role. Les handlers fallback des workers appellent le meme service et doivent donc recevoir l'acteur dans le payload du job.[^src-c5886b21]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-11 - ms-post: ListPosts sans tri ni plafond, mediaStatus jamais renseigne
 
@@ -48,3 +66,5 @@ sources:
 [^src-8d7f15d6]: npm-packages/packages/errors/src/exceptions/unprocessable-entity.error.ts
 [^src-7efaf3d0]: ms-social/src/modules/participation/controllers/participation.query.controller.ts
 [^src-855ad96a]: ms-post/src/modules/post/transformers/post.transformer.ts
+[^src-c5886b21]: npm-packages/packages/domain-event/src/services/event.service.ts
+[^src-8fc3ad1d]: ms-event/src/modules/event/controllers/commands/base.command.controller.ts

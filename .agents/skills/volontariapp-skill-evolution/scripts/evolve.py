@@ -742,6 +742,10 @@ def learn(skill_name: str, title: str, insight: str, kind: str, source: str | No
     if skill_name not in skills:
         raise SystemExit(f"Skill inconnue : {skill_name} (créer d'abord avec `new`)")
     skill = skills[skill_name]
+    if source and "://" not in source and not (REPO / source.split("#")[0]).exists():
+        raise SystemExit(
+            f"--source doit être un fichier existant du repo (chemin relatif à meta) ou une URL : {source}"
+        )
     target = skill.path / "references" / "lessons.md"
     target.parent.mkdir(exist_ok=True)
     stamp = okf.now_utc()
@@ -1048,7 +1052,7 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--title", required=True)
     p.add_argument("--insight", required=True)
     p.add_argument("--kind", default="rule", choices=["rule", "pitfall", "command", "decision"])
-    p.add_argument("--source")
+    p.add_argument("--source", help="fichier existant du repo (chemin relatif à meta) ou URL, jamais du texte libre")
     p.add_argument("--by", default=DEFAULT_ACTOR)
     p.set_defaults(func=cmd_learn)
 

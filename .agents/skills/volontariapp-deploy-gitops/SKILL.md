@@ -1,9 +1,9 @@
 ---
 name: volontariapp-deploy-gitops
-description: "Modifier l'infrastructure Kubernetes de Volontariapp dans le repo deploy (GitOps ArgoCD) : manifests d'un service et de ses runners, overlay prod, secrets scellés, network policies, bases de données, sécurité des pods. À utiliser pour tout changement d'infra ; jamais de kubectl apply manuel en production."
-type: Agent Skill
-title: Déploiement GitOps (deploy)
-tags: [deploy, kubernetes, argocd, security]
+description: "Playbook opérationnel pas-à-pas pour faire évoluer l'infrastructure Kubernetes dans le repo deploy (ArgoCD) : création de manifests durcis PSA Restricted, NetworkPolicies default-deny et validation kustomize."
+type: Playbook
+title: "Déploiement GitOps (Cluster K3s & ArgoCD)"
+tags: [deploy, kubernetes, argocd, security, gitops, playbook]
 status: stable
 paths:
   - "deploy/apps/**"
@@ -11,8 +11,6 @@ paths:
 mesh_keys:
   - deploy/
   - argocd
-  - sealedsecret
-  - kubeseal
   - networkpolic
   - kustomiz
   - initcontainer
@@ -21,20 +19,20 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-07T18:08:36Z"
-    digest: 8e56366ddf6181dd
-  - by: claude-code/agent
-    at: "2026-10-07T18:23:25Z"
-    digest: 2fa13ce517c1f662
-  - by: "human:victoragahi"
-    at: "2026-10-07T18:30:37Z"
-    digest: 57097d4605d7f4d1
-  - by: claude-code/agent
     at: "2026-10-07T18:32:09Z"
     digest: 63f58acd042a28d8
   - by: claude-code/agent
     at: "2026-10-07T22:10:32Z"
     digest: d341743f2ba7a6c4
+  - by: claude-code/agent
+    at: "2026-10-12T09:58:03Z"
+    digest: a4bfb8e622c69f12
+  - by: claude-code/agent
+    at: "2026-10-12T12:03:24Z"
+    digest: a4bfb8e622c69f12
+  - by: claude-code/agent
+    at: "2026-10-12T12:04:10Z"
+    digest: a4bfb8e622c69f12
 sources:
   - id: c4
     resource: docs/C4-Deployment-And-Infrastructure.md
@@ -53,41 +51,176 @@ sources:
     title: Bases de données par service
 ---
 
-# Déploiement GitOps (`deploy`)
+# Playbook : Déploiement GitOps (Cluster K3s & ArgoCD)
 
-`deploy` est la source de vérité du cluster K3s : ArgoCD (app-of-apps) synchronise ce que contient `main`. Toute modification passe par une PR sur ce repo ; jamais de `kubectl apply` manuel en production[^c4].
+Le dépôt `deploy` est l'unique source de vérité de l'infrastructure du cluster K3s : ArgoCD (pattern app-of-apps) synchronise automatiquement ce que contient la branche `main`[^c4]. 
 
-## Structure réelle
+> [!CAUTION]
+> **RÈGLE CRITIQUE : ZÉRO `kubectl apply` MANUEL EN PRODUCTION.**
+> Toute modification d'infrastructure, de dimensionnement, de secret ou de réseau passe impérativement par une Pull Request sur le dépôt `deploy`.
 
-| Dossier | Contenu |
-| :--- | :--- |
-| `apps/base/<service>/` | `deployment.yaml` (le service), `deployment-outbox.yaml`, `deployment-worker.yaml`, `deployment-post-processor.yaml`, `service.yaml`, `kustomization.yaml`. Services : `api-gateway`, `ms-user`, `ms-event`, `ms-post`, `ms-social`, `ms-storage`, `ws-service`, `mcp-meta-indexer` |
-| `apps/overlays/prod/` | Seul overlay existant (le README parle d'un overlay `dev` qui n'existe pas) ; secrets scellés partagés dans `shared-infra/` |
-| `infrastructure/argocd/` | `bootstrap/`, `apps/`, `projects/`, `ingress.yaml` |
-| `infrastructure/databases/` | Un dossier par base (`ms-user`, `ms-event`, `ms-post`, `ms-social`, `ws-service`, `neo4j`, `redis`) ; **pas de base `ms-storage`**[^dbs] |
-| `infrastructure/security/` | `cert-manager`, `network-policies`, `sealed-secrets`, `resource-quotas`, `traefik` |
-| `infrastructure/monitoring/` | Agent Datadog |
-| `submodules/` | Code source des services, en lecture seule : mis à jour par la CI de chaque repo |
+La documentation détaillée de la structure du cluster, des bases de données et des ressources est disponible dans [Spécifications Cluster](/volontariapp-deploy-gitops/references/cluster-specifications.md).
 
-## Règles
+---
 
-- **Images épinglées par sha** (`ghcr.io/volontariapp/<service>:sha-<court>`)[^base-user] : la CI de chaque service met à jour sous-module et image par un commit `chore(deploy): update <service> submodule and deployment images`. Ne pas éditer ces lignes à la main sauf rollback volontaire.
-- **Pods durcis (PSA Restricted)** : `runAsNonRoot`, système de fichiers racine en lecture seule (`/tmp` en `emptyDir`), pas d'escalade, `seccompProfile: RuntimeDefault`, `capabilities.drop: ["ALL"]`. Tout nouveau conteneur, initContainer compris, reprend ce bloc. Seul `mcp-meta-indexer/deployment.yaml` n'a pas `readOnlyRootFilesystem: true`.
-- **Attente des dépendances** : chaque déploiement a un initContainer `busybox:1.28` qui boucle sur `nc -zv <service>-db-postgresql 5432` (ou Neo4j 7687) avant de démarrer[^base-user].
-- **Secrets** : uniquement des `SealedSecret` chiffrés avec `kubeseal` et la clé publique du cluster ; jamais de `Secret` en clair ni de valeur sensible dans un `ConfigMap`.
-- **Réseau Default-Deny** : un nouveau flux (service vers base, service vers service, sortie Internet) exige une NetworkPolicy explicite par label `app`. Sans elle, la connexion est bloquée même dans le namespace.
-- **Ressources** : requests/limits obligatoires (gateway 50m/64Mi à 200m/128Mi, microservice 100m/128Mi à 500m/256Mi, runners comme la gateway)[^readme].
-- **Ports** : gRPC des microservices et HTTP de la gateway sur 3000 ; Postgres 5432 ; Neo4j 7687 ; Redis 6379.
-- **Redis des Outboxes (`REDIS_HOST`)** : Tous les `deployment-outbox.yaml` (y compris pour `ws-service`) DOIVENT pointer sur `redis-master` (broker global du mesh). Ne jamais configurer un Redis local de service (ex: `ws-service-redis`), sinon les événements dépilés par l'outbox sont publiés dans un trou noir et n'atteignent jamais les post-processors.
+## Trigger
 
-## Points d'attention relevés
+Ce playbook doit être exécuté dès qu'une tâche nécessite :
+- Le déploiement d'un nouveau microservice, runner outbox, worker BullMQ ou post-processor.
+- L'ajustement des variables d'environnement, requests/limits ou sondes de liveness/readiness.
+- L'ouverture d'un nouveau flux réseau inter-services ou vers une base de données.
+- La mise à jour d'un manifest dans `deploy/apps/base/` ou de l'overlay de production `deploy/apps/overlays/prod/`.
 
-- `api-gateway` est déployée avec `NODE_ENV=production`[^gw], ce qui monte le module de génération de tokens (voir `volontariapp-api-gateway`, risques connus).
-- `mcp-meta-indexer` est toujours déployé alors que le dépôt a été remplacé par `causalmesh` dans `meta`.
-- Une base `ms-storage` sera à ajouter avec le flux de stockage (Postgres dédié, NetworkPolicy, SealedSecret).
+---
+
+## Procédure A : Création ou Mise à Jour d'un Manifest (`deployment.yaml`)
+
+Emplacement : `deploy/apps/base/<service>/`.
+
+Chaque conteneur déployé doit se conformer strictement au profil **PSA Restricted** (Pod Security Standards) et intégrer l'attente active de ses dépendances :
+
+### 1. Template de Durcissement PSA Restricted (Obligatoire) :
+```yaml
+spec:
+  template:
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: service
+          image: ghcr.io/volontariapp/<service>:sha-<court> # Épinglé par commit sha
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+      volumes:
+        - name: tmp
+          emptyDir: {}
+```
+
+### 2. InitContainer d'Attente de Dépendance (Base de Données / Redis) :
+Pour éviter les crash-loops au démarrage du pod, injecter l'initContainer standard bouclant sur la disponibilité réseau de la base[^base-user] :
+```yaml
+      initContainers:
+        - name: wait-for-db
+          image: busybox:1.28
+          command:
+            - sh
+            - -c
+            - "until nc -zv <service>-db-postgresql 5432; do echo waiting for db; sleep 2; done"
+          resources:
+            requests:
+              cpu: 32m
+              memory: 64Mi
+            limits:
+              cpu: 32m
+              memory: 64Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+```
+
+### 3. Règles d'Attribution des Ressources & Réseau :
+- **Requests / Limits**[^readme] :
+  - Microservices `ms-*` : Requests 100m / 128Mi, Limits 500m / 256Mi.
+  - Runners outbox / post-processors : Requests 50m / 64Mi, Limits 200m / 128Mi.
+  - Workers Node.js : Request 96Mi, Limit 192Mi (ne jamais fixer 96Mi de limit : risque d'OOMKill avéré).
+- **Broker d'Outbox (`REDIS_HOST`)** :
+  - Tout `deployment-outbox.yaml` doit pointer vers `redis-master` (broker global du mesh). Ne jamais brancher une outbox sur un Redis local isolé.
+
+---
+
+## Procédure B : Définition des NetworkPolicies (Réseau Default-Deny)
+
+Le cluster applique une politique de **Default-Deny** : tout trafic ingress/egress non explicitement déclaré est bloqué par défaut, même au sein du même namespace Kubernetes.
+
+Pour ouvrir un flux réseau vers un microservice ou une base :
+
+1. Créer ou éditer la `NetworkPolicy` sous `deploy/infrastructure/security/network-policies/<service>-netpol.yaml` :
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: <service>-network-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: <service>
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Autoriser les appels gRPC entrants depuis l'API Gateway ou un autre service autorisé
+    - from:
+        - podSelector:
+            matchLabels:
+              app: api-gateway
+      ports:
+        - protocol: TCP
+          port: 3000
+  egress:
+    # Autoriser la connexion vers sa base PostgreSQL dédiée
+    - to:
+        - podSelector:
+            matchLabels:
+              app: <service>-db-postgresql
+      ports:
+        - protocol: TCP
+          port: 5432
+    # Autoriser la résolution DNS du cluster
+    - to:
+        - namespaceSelector: {}
+          podSelector:
+            matchLabels:
+              k8s-app: kube-dns
+      ports:
+        - protocol: UDP
+          port: 53
+```
+
+---
+
+## Procédure C : Validation Kustomize & Synchronisation ArgoCD
+
+1. **Déclarer les manifests dans `kustomization.yaml` :**
+   - Base locale : vérifier `deploy/apps/base/<service>/kustomization.yaml`.
+   - Overlay de production : déclarer le nouveau service ou le secret scellé dans `deploy/apps/overlays/prod/kustomization.yaml`.
+
+2. **Validation Dry-Run locale :**
+   Exécuter Kustomize localement pour valider la syntaxe et l'interpolation :
+   ```bash
+   kubectl kustomize deploy/apps/overlays/prod/ > /dev/null
+   ```
+
+3. **Livraison GitOps :**
+   - Commiter sur une branche de feature du dépôt `deploy`.
+   - Ouvrir la Pull Request. Dès le merge sur `main`, ArgoCD synchronise l'état en moins de 3 minutes.
+   - Contrôler le déploiement sur la console ArgoCD : statut Synced et santé Healthy.
+
+---
+
+## Checklist d'Assurance Qualité & Critères d'Arrêt
+
+Avant de valider une modification d'infrastructure :
+- [ ] Aucun `Secret` en clair ni mot de passe dans les manifests Git (utiliser exclusivement `SealedSecret`).
+- [ ] Profil PSA Restricted intégralement respecté (`readOnlyRootFilesystem: true`, `/tmp` en `emptyDir`).
+- [ ] InitContainer `busybox:1.28` configuré pour attendre la disponibilité du port DB.
+- [ ] Requests et limits définies pour chaque conteneur.
+- [ ] NetworkPolicy déclarée pour tout nouveau flux réseau.
+- [ ] `deployment-outbox.yaml` configuré avec `REDIS_HOST: redis-master`.
+- [ ] `kubectl kustomize` compile sans aucune erreur de syntaxe.
 
 [^c4]: C4 Deployment & Infrastructure
-[^base-user]: Manifest ms-user (initContainer, securityContext, image sha)
-[^dbs]: Bases de données par service
 [^readme]: deploy/README.md
+[^base-user]: Manifest ms-user (initContainer, securityContext, image sha)
 [^gw]: Manifest api-gateway (NODE_ENV)
+[^dbs]: Bases de données par service

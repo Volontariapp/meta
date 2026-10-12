@@ -38,9 +38,11 @@ Copilot n'est pas branché : `meta/.github` est le repo de profil de l'organisat
 | Événement | Script | Rôle |
 | :--- | :--- | :--- |
 | `PreToolUse` `Write\|Edit\|MultiEdit\|NotebookEdit` | `.claude/hooks/stop-rule-guard.sh` | Règle du STOP : refuse l'édition d'un consommateur de `@volontariapp/*` après une édition de `npm-packages/` ou `proto-registry/` dans la même session. |
-| `PreToolUse` `Grep\|Bash` | `.claude/hooks/search-via-mesh.sh` | Recherche transverse (racine de `meta`) : redirige vers les outils `mesh-mcp`. Une recherche ciblée sur un sous-repo passe, comme un `grep`/`rg` qui filtre un pipe (`... \| rg X`, il lit stdin). |
+| `SessionStart`, `UserPromptSubmit` | `.claude/hooks/mesh-first-reminder.sh <événement>` | Injecte en `additionalContext` le rappel « mesh-mcp d'abord » : commande `ToolSearch` pour charger les schémas, choix de l'outil, version condensée des règles de raisonnement d'`AGENTS.md` (section 2 quinquies : absence, producteur dynamique, FAIT/INFÉRENCE) et piège `cd` surchargé par `z` (utiliser des chemins absolus). |
+| `PreToolUse` `Grep\|Bash` | `.claude/hooks/search-via-mesh.py` | Recherche transverse (racine de `meta`) : redirige vers les outils `mesh-mcp`. Une recherche ciblée sur un sous-repo passe, comme un `grep`/`rg` qui filtre un pipe (`... \| rg X`, il lit stdin). |
 | `PostToolUse` `Write\|Edit\|MultiEdit` | `.claude/hooks/post-edit.sh` | Pose le marqueur amont du STOP, lance ESLint sur le seul fichier modifié dans son repo, liste les skills qui le décrivent. |
 | `Stop` | `.claude/hooks/stop-skill-evolution.sh` | `evolve.py hook` : plan de mise à jour des skills. |
+| `Stop` | `.claude/hooks/absence-claims-guard.py` | Relecture des affirmations d'absence : bloque une fois si la réponse du tour dit « nulle part », « jamais appelé » ou « aucun producteur » sans citer, sur la même ligne, un outil mesh-mcp ou « non trouvé dans <périmètre> » (détection par regex ligne par ligne, `stop_hook_active` et erreur de lecture laissent terminer). |
 
 Les autres agents n'ont pas ces garde-fous : ils lancent `evolve.py plan` eux-mêmes et appliquent la règle du STOP et le routage `mesh-mcp` à la lecture d'`AGENTS.md`.
 

@@ -36,20 +36,20 @@ sources:
     title: Pipeline réutilisable npm-packages (ci-tools)
 verified:
   - by: claude-code/agent
-    at: "2026-10-07T21:44:43Z"
-    digest: 88fcf68f717c12a7
+    at: "2026-10-13T09:38:11Z"
+    digest: d88c9b4195d75313
   - by: claude-code/agent
-    at: "2026-10-08T11:58:00Z"
-    digest: ce03e7691c352569
+    at: "2026-10-13T10:13:32Z"
+    digest: d88c9b4195d75313
   - by: claude-code/agent
-    at: "2026-10-11T16:59:26Z"
-    digest: cbcd9d462d4bef3a
+    at: "2026-10-13T10:24:57Z"
+    digest: d88c9b4195d75313
   - by: claude-code/agent
-    at: "2026-10-11T17:00:10Z"
-    digest: cbcd9d462d4bef3a
+    at: "2026-10-13T10:25:06Z"
+    digest: d88c9b4195d75313
   - by: claude-code/agent
-    at: "2026-10-11T17:37:19Z"
-    digest: 30a208328a38b060
+    at: "2026-10-13T12:01:03Z"
+    digest: 4d2d29ed7ae0de16
 ---
 
 # Shared NPM Package Change & Règle d'Or du Stop Immédiat
@@ -106,7 +106,9 @@ flowchart TD
 2. **Build & Tests** : Vérifier que `yarn build` passe sans aucune erreur.
 3. **Changeset** :
    - Exécuter `yarn changeset add` et sélectionner les packages modifiés, puis `yarn changeset version` pour écrire la version et le `CHANGELOG.md` que la CI vérifie.
-   - Ne JAMAIS bumper deux fois le même package sur la même branche (ex: pas de 3.1 -> 3.3).
+   - Ne JAMAIS bumper deux fois le même package sur la même branche (ex: pas de 3.1 -> 3.3). Avant `version`, comparer `package.json` à `origin/main` : s'il est déjà différent, le bump a eu lieu.
+   - `yarn changeset add` est interactif. Sans TTY, écrire `.changeset/<nom>.md` (en-tête `'@volontariapp/<pkg>': minor|patch`, puis une phrase), puis `yarn changeset version`.
+   - `version` propage un bump patch aux dépendants internes (`updateInternalDependencies: patch`) : relire le diff des `package.json` et `CHANGELOG.md` générés (ex. un changement dans `database` touche `domain-*`, `outbox`, `workers`, `post-processors`). `yarn check-changelogs` compare à `origin/main` sur des commits : il répond « No packages were modified » tant que rien n'est commité.
 4. **🛑 STOP TOTAL** : Arrêt de toute exécution. Informer le Lead Dev que le package est prêt pour la PR.
 5. **Attente de publication** : Attendre le retour de la CI avec la version snapshot ou définitive.
 6. **Consommation** : Reprendre dans les microservices concernés via `yarn up @volontariapp/<package>@<version-snapshot>` et adapter le code consommateur.

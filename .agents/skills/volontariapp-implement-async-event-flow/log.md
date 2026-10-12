@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-12
+
+- **Vérification** - DomainSocialModule post-processor-social: forFeature EventQueueModel (claude-code/agent)
+- **Leçon** - Service de domaine avec EventQueueModel: forFeature dans le module qui le declare (rule) (claude-code/agent)
+
 ## 2026-10-11
 
 - **Vérification** - Piege forFeature/autoLoadEntities: UserBadgeModel ajoute dans DomainUserModule de post-processor-user (claude-code/agent)
