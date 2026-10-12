@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-12
+
+- **Vérification** - mesh-mcp.toml: audit 7.1.3, exclusion docx, pattern ws-event-mapping-producer; skill relue, inchangee (claude-code/agent)
+
 ## 2026-10-11
 
 - **Vérification** - mesh-mcp.toml stable apres regeneration (claude-code/agent)

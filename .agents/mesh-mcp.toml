@@ -11,6 +11,15 @@
 #     trigger producers, WebSocket push, mobile client listeners), policy skills remapped so the
 #     most specific playbook wins, docs aliases fixed (one of them was destroying matches),
 #     `.agents/` indexed so search_docs also finds the team's skills.
+#   - 2026-10-12, 7.1.3 / e867b44: benchmark on this workspace (3565 files, ~8070 contract nodes,
+#     graph rebuilt in 0.5 s, analyze_impact p50 under 1 ms). `*.docx` and `modify_docx.py` excluded
+#     (`doctor` is now warning-free); pattern `ws-event-mapping-producer` added for the
+#     EVENT_CREATION_FAILED lookup-table limit. The 7.1.x changelog (JS/TS multi-framework parser,
+#     tsconfig path aliases, broker rules for Kafka/Redis/NATS/BullMQ/SQS, wildcard subjects,
+#     NestJS/Express route nodes) needs no key here: it is automatic and `deny_unknown_fields`
+#     leaves nothing to enable. The six custom patterns below were kept: they cover Volontariapp
+#     shapes (enum members, SQL triggers, `withFallback`) that the generic rules do not read.
+#     A restart of the MCP server (meshd) is needed after editing this file.
 #
 # Fixed upstream since the 7.0.6 report (no workaround needed any more):
 #   7.0.7 analyze_grpc no longer traces RPCs that merely contain the target, and resolves calls
@@ -82,6 +91,10 @@ exclude_patterns = [
   "**/.agents/skills/*/log.md",
   "**/.agents/skills/log.md",
   "**/*.log",
+  # Word reports and their OpenXML helper scripts (docs/coaching, volontariapp-docx-reports): not
+  # searchable, and the only files `doctor` reports as not indexed (3 oversized .docx, 2 scripts).
+  "**/*.docx",
+  "**/modify_docx.py",
   "**/.env*",
   "**/secrets/**",
   "**/*.pem",
@@ -247,6 +260,20 @@ name = "saga-status-transition"
 kind = "saga"
 file_pattern = ".post-processor.ts"
 regex = 'extends\s+BatchPostProcessor<([^>]+)>[\s\S]{0,4000}?saga_status:\s*SagaStatus\.\w+'
+target_group = 1
+
+# Producer side, lookup table: ws-service's gather does not name the websocket event it emits, it
+# reads `EVENT_EVENT_TO_WS_EVENT_MAPPING[type]` (npm-packages/packages/messaging/src/websockets/
+# events/mapping.ts), so `[EventEventMessagingType.EVENT_CREATION_FAILED]:
+# EventWebsocketMessagingType.EVENT_CREATION_FAILED` is the only static trace of the emission.
+# The value is normalized to its member, which is the domain event's key: analyze_impact
+# ("EVENT_CREATION_FAILED") no longer reports "No producer resolved". Matches only `]: X.Y` value
+# positions, so the JOB_TO_EVENT_MAPPING table (event-type values) is not read as a producer.
+[[engines.contracts.patterns]]
+name = "ws-event-mapping-producer"
+kind = "topic_producer"
+file_pattern = "websockets/events/mapping.ts"
+regex = '\]:\s*(\w*WebsocketMessagingType\.\w+)'
 target_group = 1
 
 # ---- Jobs (Transactional Outbox -> BullMQ -> workers) ----------------------------------------
