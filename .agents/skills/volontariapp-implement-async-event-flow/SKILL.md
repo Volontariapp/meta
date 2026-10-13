@@ -53,9 +53,6 @@ sources:
     title: SAGA_GATHER_COMPLETION_MAPPING
 verified:
   - by: claude-code/agent
-    at: "2026-10-11T20:40:21Z"
-    digest: f1638891bfb2f7d2
-  - by: claude-code/agent
     at: "2026-10-11T21:18:49Z"
     digest: afe3f1b7a3905072
   - by: claude-code/agent
@@ -67,6 +64,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-13T16:51:22Z"
     digest: 3f1f7732fcb45767
+  - by: claude-code/agent
+    at: "2026-10-13T17:06:53Z"
+    digest: bf56f24424d48983
 ---
 
 # Guide : Implémenter un Flux Asynchrone End-to-End
@@ -296,7 +296,9 @@ Lorsque plusieurs post-processors travaillent en parallèle (ex : `post-processo
 
 ## Contexte de trace des événements
 
-`EventQueueEntity.createEvent` capture le contexte OpenTelemetry actif dans `traceparent` (`captureTraceparent()` de `@volontariapp/database`) ; `EventQueuePusher` l'écrit dans le champ `traceparent` du stream (vide si absent) et dans le JSON `event` (`RedisEventMessage.traceparent?`). Un consommateur de stream ne doit pas supposer le champ présent. Détails et NULL attendus : skill `volontariapp-trace-async-flow`.
+`EventQueueEntity.createEvent` capture le contexte OpenTelemetry actif dans `traceparent` (`captureTraceparent()` de `@volontariapp/database`) ; `EventQueuePusher` l'écrit dans le champ `traceparent` du stream (vide si absent) et dans le JSON `event` (`RedisEventMessage.traceparent?`). `RedisEventMessage.traceparent` est un `string` requis (`''` = aucun contexte), mais les messages déjà dans un stream avant l'ajout du champ ne l'ont pas à l'exécution (le parsing est un `JSON.parse(...) as StreamEvent`).
+
+**Événement déclenché par un autre (post-processor, étape de saga)** : utiliser `EventQueueEntity.createFollowUp(event, { type, emitter, emitterId, payload, targetServices })`, qui recopie `traceId`, `traceparent` et `correlationId` de l'événement consommé et tolère `''` et l'absence. Ne pas appeler `createEvent` en recopiant ces champs à la main, ni écrire une ligne `event_queue` en objet simple : le compilateur n'impose rien sur un `repo.save({...})` (TypeORM le type en `DeepPartial`). `createEvent` reste pour le premier événement d'une chaîne, où le contexte vient du span actif. Détails et NULL attendus : skill `volontariapp-trace-async-flow`.
 
 ## Règles d'Or & Checklist Anti-Bugs
 

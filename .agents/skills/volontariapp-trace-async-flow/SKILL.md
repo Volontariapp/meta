@@ -43,9 +43,6 @@ sources:
     resource: docs/stockage-fichiers/11-scenarios-de-panne.md
     title: "Scénarios de panne, problèmes P2 et P4"
 verified:
-  - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T09:14:39Z"
-    digest: cda174fef99dcaa1
   - by: claude-code/agent
     at: "2026-10-07T14:12:26Z"
     digest: cda174fef99dcaa1
@@ -58,6 +55,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-13T16:50:09Z"
     digest: 977a0e3fee62649d
+  - by: claude-code/agent
+    at: "2026-10-13T17:06:54Z"
+    digest: 88f6f033dc983e58
 ---
 
 # Trace Async Flow & Diagnostic Runtime
@@ -139,6 +139,7 @@ redis-cli XRANGE <stream>-dlq - + COUNT 20  # messages abandonnés après maxRet
 - `jobs_outbox.traceparent` et `event_queue.traceparent` (`varchar(55)` NULL, migration commune `1791900000000-AddTraceparentToJobsOutboxAndEventQueue`) contiennent le contexte W3C (`00-<trace-id>-<span-id>-<flags>`) capturé par `captureTraceparent()` (`@volontariapp/database`) dans `EventQueueEntity.createEvent` et `JobsOutboxEntity.createJob`. `traceId` (uuid) est l'ancien champ, conservé.
 - NULL est normal : ligne écrite par un trigger SQL (dont `notify_job_audit_status_change`), tâche planifiée, ou tracing désactivé. Ne pas y voir un bug d'émission.
 - Transport : champ `traceparent` du stream Redis (chaîne vide si absent) et dans le JSON `event` ; champ `traceparent` de `JobEnvelope` dans les données du job BullMQ. Les consommateurs doivent traiter `''` et l'absence (messages antérieurs) comme « pas de contexte ».
+- Un événement déclenché par un autre hérite du `traceparent` de la source via `EventQueueEntity.createFollowUp` (comme `traceId` et `correlationId`) ; `correlationId` sert au Scatter-Gather de `ws-service`, `traceparent` à la trace Datadog, les deux n'ont pas le même rôle.
 - Restauration du contexte côté workers et post-processors : tâche 2.11, pas encore faite au 2026-10-13.
 
 ## 5. Règles

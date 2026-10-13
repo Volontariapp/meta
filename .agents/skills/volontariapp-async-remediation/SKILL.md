@@ -18,9 +18,6 @@ generated:
   at: "2026-10-12T11:58:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T10:01:14Z"
-    digest: b0afc62ab333d137
-  - by: claude-code/agent
     at: "2026-10-13T10:07:21Z"
     digest: 2e89d1eb07ff641e
   - by: claude-code/agent
@@ -32,6 +29,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-13T16:50:12Z"
     digest: 03a912a13b2083c1
+  - by: claude-code/agent
+    at: "2026-10-13T17:06:55Z"
+    digest: aee8017f0ffe0cf2
 sources:
   - id: retry
     kind: local_file

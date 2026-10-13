@@ -2,6 +2,7 @@
 
 ## 2026-10-13
 
+- **Vérification** - createFollowUp pour les evenements declenches, traceparent requis sur RedisEventMessage (legacy sans champ), DeepPartial de save n'impose rien (claude-code/agent)
 - **Vérification** - Ajout du contexte de trace des lignes outbox: traceparent capture, transporte (stream, JobEnvelope), NULL attendu, restauration en 2.11 (claude-code/agent)
 - **Vérification** - Trigger job_audit résilient aux job_id non-UUID (claude-code/agent)
 - **Vérification** - Relu apres ajout de la migration commune AddTraceparent et de la colonne traceparent sur OutboxModel: aucune regle ni commande de la skill ne change (claude-code/agent)

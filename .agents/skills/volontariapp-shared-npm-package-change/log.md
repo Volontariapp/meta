@@ -2,6 +2,7 @@
 
 ## 2026-10-13
 
+- **Vérification** - Relu apres traceparent requis sur RedisEventMessage et createFollowUp: aucune regle de la skill ne change (claude-code/agent)
 - **Vérification** - Pieges locaux: dist perime (erreurs ESLint error typed), null vs undefined des colonnes nullable, base de tests d'integration (claude-code/agent)
 - **Vérification** - Changeset sans TTY (ecrire le .md), verifier le bump vs origin/main avant version, propagation patch aux dependants, check-changelogs muet tant que non commite (claude-code/agent)
 - **Vérification** - lecons: precision que l'exemple ms-event n'est verifie qu'en local (claude-code/agent)

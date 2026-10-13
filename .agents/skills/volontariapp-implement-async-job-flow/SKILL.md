@@ -51,9 +51,6 @@ sources:
     title: job_catalogue.py
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T13:52:50Z"
-    digest: eeb597ad6ac1ace4
-  - by: claude-code/agent
     at: "2026-10-13T16:03:31Z"
     digest: 7470348f214c34c1
   - by: claude-code/agent
@@ -64,6 +61,9 @@ verified:
     digest: 49a6b75a4480410a
   - by: claude-code/agent
     at: "2026-10-13T16:50:11Z"
+    digest: 173d177dde7c1e82
+  - by: claude-code/agent
+    at: "2026-10-13T17:06:56Z"
     digest: 173d177dde7c1e82
 ---
 
