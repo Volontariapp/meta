@@ -2,6 +2,8 @@
 
 ## 2026-10-13
 
+- **Vérification** - Relu apres reformatage Prettier de jobs-outbox.pusher.ts (import sur plusieurs lignes): contenu de la skill inchange (claude-code/agent)
+- **Vérification** - Relu apres capture du traceparent et migration job_audit trigger (ms-user 6c360de): aucune regle de la skill ne change (claude-code/agent)
 - **Vérification** - Migration commune 1792000000000 répliquée (claude-code/agent)
 - **Vérification** - BaseWorker fallback emitter (claude-code/agent)
 - **Vérification** - Fallback pour emitter dans recordAuditStart et correction des tests pour contrainte NOT NULL sur job_audit.emitter (claude-code/agent)

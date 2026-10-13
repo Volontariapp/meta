@@ -2,6 +2,7 @@
 
 ## 2026-10-13
 
+- **Vérification** - Section contexte de trace des jobs (JobEnvelope.traceparent) (claude-code/agent)
 - **Vérification** - Validation trigger notify_job_audit_status_change avec emitterId safe (claude-code/agent)
 - **Vérification** - BaseWorker fallback emitter (claude-code/agent)
 - **Vérification** - Fallback pour emitter dans recordAuditStart et correction des tests pour contrainte NOT NULL sur job_audit.emitter (claude-code/agent)

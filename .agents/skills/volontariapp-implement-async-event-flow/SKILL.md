@@ -53,12 +53,6 @@ sources:
     title: SAGA_GATHER_COMPLETION_MAPPING
 verified:
   - by: claude-code/agent
-    at: "2026-10-11T19:31:34Z"
-    digest: 06b2d5f50f532499
-  - by: claude-code/agent
-    at: "2026-10-11T20:34:26Z"
-    digest: 38edf4339f1683f4
-  - by: claude-code/agent
     at: "2026-10-11T20:40:21Z"
     digest: f1638891bfb2f7d2
   - by: claude-code/agent
@@ -67,6 +61,12 @@ verified:
   - by: claude-code/agent
     at: "2026-10-12T09:30:36Z"
     digest: 9f96fec39dfbc3d7
+  - by: claude-code/agent
+    at: "2026-10-13T16:50:10Z"
+    digest: 6c88242d67be3402
+  - by: claude-code/agent
+    at: "2026-10-13T16:51:22Z"
+    digest: 3f1f7732fcb45767
 ---
 
 # Guide : Implémenter un Flux Asynchrone End-to-End
@@ -293,6 +293,10 @@ Lorsque plusieurs post-processors travaillent en parallèle (ex : `post-processo
 3. Le handler invalide les clés React Query concernées ; ne jamais mettre à jour l'état serveur hors React Query.
 
 ---
+
+## Contexte de trace des événements
+
+`EventQueueEntity.createEvent` capture le contexte OpenTelemetry actif dans `traceparent` (`captureTraceparent()` de `@volontariapp/database`) ; `EventQueuePusher` l'écrit dans le champ `traceparent` du stream (vide si absent) et dans le JSON `event` (`RedisEventMessage.traceparent?`). Un consommateur de stream ne doit pas supposer le champ présent. Détails et NULL attendus : skill `volontariapp-trace-async-flow`.
 
 ## Règles d'Or & Checklist Anti-Bugs
 

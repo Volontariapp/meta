@@ -44,9 +44,6 @@ sources:
     title: "Scénarios de panne, problèmes P2 et P4"
 verified:
   - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T09:00:39Z"
-    digest: cda174fef99dcaa1
-  - by: claude-code/claude-opus-5-5
     at: "2026-10-06T09:14:39Z"
     digest: cda174fef99dcaa1
   - by: claude-code/agent
@@ -58,6 +55,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-13T16:25:37Z"
     digest: 5c35d5424ae48199
+  - by: claude-code/agent
+    at: "2026-10-13T16:50:09Z"
+    digest: 977a0e3fee62649d
 ---
 
 # Trace Async Flow & Diagnostic Runtime
@@ -133,6 +133,13 @@ redis-cli XRANGE <stream>-dlq - + COUNT 20  # messages abandonnés après maxRet
 - **DLQ** : après `maxRetries` tentatives, le message part dans `<stream>-dlq` et il est acquitté[^retry]. Aucun rejeu automatique : un événement en DLQ est perdu pour son consommateur (problème P2)[^panne].
 - **Bug P4** : le trigger émet `<d>:job:outbox:failure` mais `JobOutboxFailedPostProcessor` n'accepte que `:job:outbox:failed`[^pp-failed]. Aucun feedback d'échec de job n'existe aujourd'hui : un job `FAILED` reste silencieux côté client.
 - **Saga** : un échec de création d'événement passe `saga_status` à `CANCEL` (post-processor-event) ; un post en échec reste `PENDING`, aucun consommateur ne le compense.
+
+### Contexte de trace des lignes outbox (`traceparent`)
+
+- `jobs_outbox.traceparent` et `event_queue.traceparent` (`varchar(55)` NULL, migration commune `1791900000000-AddTraceparentToJobsOutboxAndEventQueue`) contiennent le contexte W3C (`00-<trace-id>-<span-id>-<flags>`) capturé par `captureTraceparent()` (`@volontariapp/database`) dans `EventQueueEntity.createEvent` et `JobsOutboxEntity.createJob`. `traceId` (uuid) est l'ancien champ, conservé.
+- NULL est normal : ligne écrite par un trigger SQL (dont `notify_job_audit_status_change`), tâche planifiée, ou tracing désactivé. Ne pas y voir un bug d'émission.
+- Transport : champ `traceparent` du stream Redis (chaîne vide si absent) et dans le JSON `event` ; champ `traceparent` de `JobEnvelope` dans les données du job BullMQ. Les consommateurs doivent traiter `''` et l'absence (messages antérieurs) comme « pas de contexte ».
+- Restauration du contexte côté workers et post-processors : tâche 2.11, pas encore faite au 2026-10-13.
 
 ## 5. Règles
 

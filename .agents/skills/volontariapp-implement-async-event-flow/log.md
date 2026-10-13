@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-13
+
+- **Vérification** - Relu apres reformatage Prettier de jobs-outbox.pusher.ts (import sur plusieurs lignes): contenu de la skill inchange (claude-code/agent)
+- **Vérification** - Section contexte de trace des evenements (champ traceparent du stream et du JSON) (claude-code/agent)
+
 ## 2026-10-12
 
 - **Vérification** - DomainSocialModule post-processor-social: forFeature EventQueueModel (claude-code/agent)

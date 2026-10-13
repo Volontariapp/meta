@@ -2,6 +2,7 @@
 
 ## 2026-10-13
 
+- **Vérification** - Pieges locaux: dist perime (erreurs ESLint error typed), null vs undefined des colonnes nullable, base de tests d'integration (claude-code/agent)
 - **Vérification** - Changeset sans TTY (ecrire le .md), verifier le bump vs origin/main avant version, propagation patch aux dependants, check-changelogs muet tant que non commite (claude-code/agent)
 - **Vérification** - lecons: precision que l'exemple ms-event n'est verifie qu'en local (claude-code/agent)
 - **Vérification** - worker-event: resolution retiree, alignement par versions (domain-event 3.10.1); lecons corrigees (pas de resolutions) (claude-code/agent)

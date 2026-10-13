@@ -51,9 +51,6 @@ sources:
     title: job_catalogue.py
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T13:50:20Z"
-    digest: 8ed46432d3892d9a
-  - by: claude-code/agent
     at: "2026-10-13T13:52:50Z"
     digest: eeb597ad6ac1ace4
   - by: claude-code/agent
@@ -65,6 +62,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-13T16:25:35Z"
     digest: 49a6b75a4480410a
+  - by: claude-code/agent
+    at: "2026-10-13T16:50:11Z"
+    digest: 173d177dde7c1e82
 ---
 
 # Guide : Implémenter un Job Asynchrone End-to-End
@@ -304,6 +304,10 @@ Catalogue à jour, calculé depuis le code[^catalogue] :
 python3 .agents/skills/volontariapp-implement-async-job-flow/scripts/job_catalogue.py            # tous les jobs
 python3 .agents/skills/volontariapp-implement-async-job-flow/scripts/job_catalogue.py --orphans  # sans producteur ou sans handler
 ```
+
+## Contexte de trace des jobs
+
+`JobsOutboxEntity.createJob` capture le contexte OpenTelemetry actif dans `traceparent` ; `JobsOutboxPusher` le place dans l'enveloppe BullMQ (`JobEnvelope.traceparent?`, absent sans span actif), en push unitaire et en bulk. Les handlers lisent `JobEnvelope`, pas la ligne outbox. Détails : skill `volontariapp-trace-async-flow`.
 
 ## Règles d'Or & Checklist Anti-Bugs
 
