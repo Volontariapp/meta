@@ -2,6 +2,7 @@
 
 ## 2026-10-13
 
+- **Vérification** - mesh-mcp 7.1.10: lecture des notes (non resolu statiquement, Depth limit vs Chain ends), find_dependents ne couvre pas les noms de champ ni les appelants gRPC (claude-code/agent)
 - **Vérification** - confidence explicite sur les 12 motifs topic (7 exact, 5 heuristic), rechargement du démon à la requête (claude-code/agent)
 
 ## 2026-10-12

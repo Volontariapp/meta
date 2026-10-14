@@ -55,7 +55,7 @@ sequenceDiagram
 | Méthode | Rôle |
 | :--- | :--- |
 | `getAggregationConfig(trigger)` | Lit `scatterGather.aggregations` dans la configuration de `ws-service` : retours attendus, `successEvent`, `failureEvent` |
-| `initializeGatherState(correlationId, triggerEvent, metadata)` | Crée l'état à la réception de l'événement déclencheur, avec `emitterId`, `traceId` et le payload |
+| `initializeGatherState(correlationId, triggerEvent, metadata)` | Crée l'état à la réception de l'événement déclencheur, avec `emitterId`, `traceId`, `traceparent` (requis, `''` = aucun contexte ; contexte de trace du déclencheur, rejoué sur l'événement de complétion ; les lignes stockées avant ce champ ne l'ont pas, le lire via `normalizeTraceparent`) et le payload. Metadata stockée en `jsonb` : pas de migration |
 | `updateEventState(correlationId, expectedKey, status, errorReason?)` | Marque un retour attendu `SUCCESS` ou `FAILED` ; renvoie `isComplete`, `isSuccess`, `failedEvents` |
 
 ---

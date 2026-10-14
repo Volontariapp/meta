@@ -18,20 +18,20 @@ generated:
   at: "2026-10-12T11:56:30Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T11:38:31Z"
-    digest: 875cacf93d1db1e9
+    at: "2026-10-13T20:11:52Z"
+    digest: 46fcf30dbc961153
   - by: claude-code/agent
-    at: "2026-10-13T13:50:20Z"
-    digest: 875cacf93d1db1e9
+    at: "2026-10-13T20:29:15Z"
+    digest: 46fcf30dbc961153
   - by: claude-code/agent
-    at: "2026-10-13T16:25:34Z"
-    digest: 3ab9f594f6029d1e
+    at: "2026-10-13T20:30:11Z"
+    digest: 46fcf30dbc961153
   - by: claude-code/agent
-    at: "2026-10-13T16:50:11Z"
-    digest: 2d34ce36c99cc07d
+    at: "2026-10-13T20:48:40Z"
+    digest: 3b11a69526a8f9e5
   - by: claude-code/agent
-    at: "2026-10-13T17:06:55Z"
-    digest: 7a2d2e36a8dcbf64
+    at: "2026-10-13T21:22:38Z"
+    digest: 3b11a69526a8f9e5
 sources:
   - id: sync-mig
     kind: local_file
@@ -81,7 +81,7 @@ Utiliser ce playbook pour toute évolution de schéma relationnel PostgreSQL dan
 Identifier le répertoire cible dans le microservice :
 - **Migration Commune** (`ms-*/src/migrations/common/`) :
   - Concerne l'Outbox transactionnelle (`jobs_outbox`, `event_queue`, `job_audit`)[^data-source] ou un trigger SQL de dispatch.
-  - Doit être créée dans un microservice de référence (ex. `ms-user`), puis **copiée à l'identique** (même nom, même contenu, vérifier le md5) dans `src/migrations/common/` des 5 services : `ms-user`, `ms-social`, `ms-post`, `ms-event`, `ms-storage`. `sync-migrations.sh` ne fait PAS cette propagation inter-services[^sync-mig].
+  - Doit être créée dans un microservice de référence (ex. `ms-user`), puis **copiée à l'identique** (même nom, même contenu, vérifier le md5) dans `src/migrations/common/` de chaque service qui a **sa propre base** : `ms-user`, `ms-social`, `ms-post`, `ms-event`, `ms-storage` **et `ws-service`** (base `ms_ws`, oublié lors de la tâche 2.9 : une colonne ajoutée à `OutboxModel` fait échouer ses écritures tant que la migration manque). `post-processors-runner/post-processor-event` et `workers-runners/worker-event` gardent aussi une copie et utilisent en production la base `ms_event` de `ms-event` (migration déjà appliquée), **mais leur CI reconstruit une base neuve depuis leurs propres migrations** (`global-setup` de `worker-event` : drop du schéma puis `runMigrations`) : sans la copie, `column EventQueueModel.traceparent does not exist` (constaté sur workers-runners#16). Copier aussi la nouvelle migration commune dans ces deux dossiers. Pour reproduire la CI en local sans toucher à sa base : `DB_NAME=<base jetable> yarn test:integration`. `sync-migrations.sh` ne fait PAS cette propagation inter-services[^sync-mig]. Pour repérer les copies : chercher le nom d'une migration commune existante (`1781000000000-AddCorrelationIdToEventQueue.ts`) sur tout le workspace, hors `deploy/`. Ces trois dossiers ont dérivé (migrations plus anciennes que celles de `ms-*`) : ne copier que la nouvelle migration.
 - **Migration Domaine** (`ms-*/src/migrations/domain/`) :
   - Concerne les tables propres au métier (ex. `users`, `badges` dans `ms-user` ; `posts` dans `ms-post`).
   - Reste cantonnée au répertoire `domain/` du microservice concerné.

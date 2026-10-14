@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-13
+
+- **Vérification** - enableShutdownHooks ajoute dans main.ts: aucune regle de la skill ne change (claude-code/agent)
+
 ## 2026-10-12
 
 - **Vérification** - Utilisation du mock MockUserClientGrpc (claude-code/agent)

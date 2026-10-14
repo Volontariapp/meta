@@ -23,9 +23,6 @@ sources:
     title: Schémas des outils (source Rust)
 verified:
   - by: claude-code/agent
-    at: "2026-10-12T08:49:16Z"
-    digest: 47c14f02b485e528
-  - by: claude-code/agent
     at: "2026-10-12T11:52:51Z"
     digest: 47c14f02b485e528
   - by: claude-code/agent
@@ -37,6 +34,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-13T08:06:07Z"
     digest: 81e1d56172d4534c
+  - by: claude-code/agent
+    at: "2026-10-13T20:10:50Z"
+    digest: 76e6f2b75e546cd7
 ---
 
 # MeshMCP Skill
@@ -103,6 +103,8 @@ find_dependents({ "target": "@volontariapp/domain-user" })
 ```
 Préfère cet outil à `smart_search` si l'objectif est uniquement de trouver les dépendances entrantes d'un symbole — pas de scan de fichiers, juste un lookup dans le graphe déjà construit.
 
+Il couvre les imports et l'usage de symboles, pas les appelants gRPC (`analyze_grpc`) ni l'usage d'un **nom de champ**. Constaté le 2026-10-13 sur `correlationId` : `find_dependents` répond 0 (un champ n'est pas un symbole importé) et `smart_search` avec `fuzzy: true` ne renvoie que des noms de fichiers de migration. Pour « qui lit ou recopie ce champ », un `rg` ciblé par repo, sur tous les repos du workspace, en citant la couverture.
+
 ## analyze_impact(target, depth?, include_tests?, limit?, offset?)
 Cartographie causale des flux asynchrones (Redis Streams, BullMQ, post-processors, sagas
 chorégraphiées). **Il n'y a PAS de `direction`** : producteurs et consommateurs sont toujours rendus ensemble.
@@ -120,6 +122,8 @@ analyze_impact({ "target": "EventCreatedPostProcessor" })
 analyze_impact({ "target": "FALLBACK_UPDATE_USER" })
 ```
 Ne pas utiliser pour des appels gRPC synchrones directs — utiliser `analyze_grpc`.
+
+Lecture des notes (mesh-mcp 7.1.10) : « No producer statically resolved » avec un consommateur présent signifie **non résolu statiquement**, jamais « personne ne produit » (nom construit à l'exécution, registre, config, ou racine non indexée), et de même côté consommateur. « Depth limit reached » est un arrêt de profondeur ; « Chain ends » n'est que la fin de la chaîne résolue statiquement, pas de la chaîne réelle. Les lignes et les notes appliquent la même règle de visibilité (tests masqués compris).
 
 ### Ce que le graphe relie (motifs de `.agents/mesh-mcp.toml`)
 

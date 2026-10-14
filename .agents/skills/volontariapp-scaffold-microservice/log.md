@@ -2,6 +2,22 @@
 
 ## 2026-10-13
 
+- **Vérification** - Lockfile regenere: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Runners instrumentes (tracing.ts, monitoring, service.datadog.yaml): aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - enableShutdownHooks ajoute dans main.ts: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - DD_ENV ajoute au compose: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - monitoring 2.2.0: echantillonnage, environnement et arret propre documentes dans trace-async-flow (claude-code/agent)
+- **Vérification** - Correction: la copie de la migration commune dans worker-event et post-processor-event est necessaire (CI = base neuve reconstruite depuis leurs migrations) (claude-code/agent)
+- **Vérification** - Migration traceparent copiee dans post-processor-event: la skill db-migration la liste deja (claude-code/agent)
+- **Vérification** - Migration traceparent copiee dans worker-event: la skill db-migration la liste deja (claude-code/agent)
+- **Vérification** - Montee de post-processors/database dans les post-processors: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Montee de workers/database dans les worker-*: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Montee de database/outbox dans les runners: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Tache 2.11: restauration du contexte de trace (BaseWorker, SinglePostProcessor, BatchPostProcessor) via runInTraceContext / runBatchInTraceContext de database (claude-code/agent)
+- **Vérification** - Correction: seul ws-service a une base propre a migrer; post-processor-event et worker-event partagent ms_event avec ms-event (claude-code/agent)
+- **Vérification** - Migration commune a copier aussi dans ws-service, post-processor-event et worker-event (8 dossiers); gather: traceparent stocke puis rejoue via createFollowUp (claude-code/agent)
+- **Vérification** - GatherStateMetadata.traceparent devient requis (lignes anterieures sans le champ: normalizeTraceparent) (claude-code/agent)
+- **Vérification** - GatherStateMetadata.traceparent (jsonb, sans migration) rejoue sur l'evenement de completion du gather (claude-code/agent)
 - **Vérification** - Relu apres traceparent requis sur RedisEventMessage et createFollowUp: aucune regle de la skill ne change (claude-code/agent)
 - **Vérification** - Relu apres reformatage Prettier de jobs-outbox.pusher.ts (import sur plusieurs lignes): contenu de la skill inchange (claude-code/agent)
 - **Vérification** - Relu apres capture du traceparent et migration job_audit trigger (ms-user 6c360de): aucune regle de la skill ne change (claude-code/agent)

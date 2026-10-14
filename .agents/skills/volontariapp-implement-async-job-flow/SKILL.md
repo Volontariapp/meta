@@ -51,20 +51,20 @@ sources:
     title: job_catalogue.py
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T16:03:31Z"
-    digest: 7470348f214c34c1
-  - by: claude-code/agent
-    at: "2026-10-13T16:03:46Z"
-    digest: 15c1a9cecb2b3890
-  - by: claude-code/agent
-    at: "2026-10-13T16:25:35Z"
-    digest: 49a6b75a4480410a
-  - by: claude-code/agent
-    at: "2026-10-13T16:50:11Z"
-    digest: 173d177dde7c1e82
-  - by: claude-code/agent
     at: "2026-10-13T17:06:56Z"
     digest: 173d177dde7c1e82
+  - by: claude-code/agent
+    at: "2026-10-13T20:48:39Z"
+    digest: 9672efce89c52f9a
+  - by: claude-code/agent
+    at: "2026-10-13T21:22:12Z"
+    digest: 18388b95678d5dca
+  - by: claude-code/agent
+    at: "2026-10-13T21:22:39Z"
+    digest: 18388b95678d5dca
+  - by: claude-code/agent
+    at: "2026-10-13T22:48:38Z"
+    digest: 51b35cd7fa5a6e5a
 ---
 
 # Guide : Implémenter un Job Asynchrone End-to-End
@@ -307,7 +307,7 @@ python3 .agents/skills/volontariapp-implement-async-job-flow/scripts/job_catalog
 
 ## Contexte de trace des jobs
 
-`JobsOutboxEntity.createJob` capture le contexte OpenTelemetry actif dans `traceparent` ; `JobsOutboxPusher` le place dans l'enveloppe BullMQ (`JobEnvelope.traceparent?`, absent sans span actif), en push unitaire et en bulk. Les handlers lisent `JobEnvelope`, pas la ligne outbox. Détails : skill `volontariapp-trace-async-flow`.
+`JobsOutboxEntity.createJob` capture le contexte OpenTelemetry actif dans `traceparent` ; `JobsOutboxPusher` le place dans l'enveloppe BullMQ (`JobEnvelope.traceparent?`, absent sans span actif), en push unitaire et en bulk. Les handlers lisent `JobEnvelope`, pas la ligne outbox. `BaseWorker.process` exécute le job dans un span `job <type>` enfant de ce `traceparent` (`runInTraceContext`) : un handler n'a rien à faire pour s'y rattacher. Détails : skill `volontariapp-trace-async-flow`.
 
 ## Règles d'Or & Checklist Anti-Bugs
 

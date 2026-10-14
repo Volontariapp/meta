@@ -2,6 +2,10 @@
 
 ## 2026-10-13
 
+- **Vérification** - monitoring 2.2.0: echantillonnage, environnement et arret propre documentes dans trace-async-flow (claude-code/agent)
+- **Vérification** - Tache 2.11: restauration du contexte de trace (BaseWorker, SinglePostProcessor, BatchPostProcessor) via runInTraceContext / runBatchInTraceContext de database (claude-code/agent)
+- **Vérification** - GatherStateMetadata.traceparent devient requis (lignes anterieures sans le champ: normalizeTraceparent) (claude-code/agent)
+- **Vérification** - Relu apres bump database 3.7.0 et cascade des dependants: aucune regle ne change (claude-code/agent)
 - **Vérification** - Relu apres traceparent requis sur RedisEventMessage et createFollowUp: aucune regle de la skill ne change (claude-code/agent)
 - **Vérification** - Pieges locaux: dist perime (erreurs ESLint error typed), null vs undefined des colonnes nullable, base de tests d'integration (claude-code/agent)
 - **Vérification** - Changeset sans TTY (ecrire le .md), verifier le bump vs origin/main avant version, propagation patch aux dependants, check-changelogs muet tant que non commite (claude-code/agent)

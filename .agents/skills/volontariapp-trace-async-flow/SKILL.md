@@ -44,20 +44,20 @@ sources:
     title: "Scénarios de panne, problèmes P2 et P4"
 verified:
   - by: claude-code/agent
-    at: "2026-10-07T14:12:26Z"
-    digest: cda174fef99dcaa1
-  - by: claude-code/agent
-    at: "2026-10-13T11:38:33Z"
-    digest: cb947c7d92d5aba1
-  - by: claude-code/agent
-    at: "2026-10-13T16:25:37Z"
-    digest: 5c35d5424ae48199
-  - by: claude-code/agent
-    at: "2026-10-13T16:50:09Z"
-    digest: 977a0e3fee62649d
-  - by: claude-code/agent
-    at: "2026-10-13T17:06:54Z"
+    at: "2026-10-13T20:09:40Z"
     digest: 88f6f033dc983e58
+  - by: claude-code/agent
+    at: "2026-10-13T20:11:53Z"
+    digest: 88f6f033dc983e58
+  - by: claude-code/agent
+    at: "2026-10-13T20:29:17Z"
+    digest: 88f6f033dc983e58
+  - by: claude-code/agent
+    at: "2026-10-13T20:30:13Z"
+    digest: 88f6f033dc983e58
+  - by: claude-code/agent
+    at: "2026-10-13T20:48:38Z"
+    digest: 25d3961729597215
 ---
 
 # Trace Async Flow & Diagnostic Runtime
@@ -140,7 +140,13 @@ redis-cli XRANGE <stream>-dlq - + COUNT 20  # messages abandonnés après maxRet
 - NULL est normal : ligne écrite par un trigger SQL (dont `notify_job_audit_status_change`), tâche planifiée, ou tracing désactivé. Ne pas y voir un bug d'émission.
 - Transport : champ `traceparent` du stream Redis (chaîne vide si absent) et dans le JSON `event` ; champ `traceparent` de `JobEnvelope` dans les données du job BullMQ. Les consommateurs doivent traiter `''` et l'absence (messages antérieurs) comme « pas de contexte ».
 - Un événement déclenché par un autre hérite du `traceparent` de la source via `EventQueueEntity.createFollowUp` (comme `traceId` et `correlationId`) ; `correlationId` sert au Scatter-Gather de `ws-service`, `traceparent` à la trace Datadog, les deux n'ont pas le même rôle.
-- Restauration du contexte côté workers et post-processors : tâche 2.11, pas encore faite au 2026-10-13.
+- Restauration du contexte (tâche 2.11) : `BaseWorker.process` exécute le job dans un span `job <type>` enfant du `traceparent` de `JobEnvelope` ; `SinglePostProcessor` ouvre un span `event <type>` enfant du `traceparent` de l'événement ; `BatchPostProcessor` ouvre un span par message (chacun dans la trace de son message) plus un span `batch <groupe>` qui les référence par liens et qui est actif pendant `processEvents`. Helpers `runInTraceContext` / `runBatchInTraceContext` de `@volontariapp/database`, tracer `@volontariapp/async`, spans `CONSUMER`, attributs `type`, `emitter`, `correlation_id` (absent pour un job : `JobEnvelope` n'a pas de `correlationId`). Dans un lot, les spans de message durent autant que le lot (le handler reçoit tous les messages en un appel). Sans `traceparent` (message antérieur, trigger SQL) : nouvelle trace. Un `createFollowUp` appelé dans le handler recopie le `traceparent` de la source, pas celui du span courant.
+
+### Configuration du tracing (`initTracing`, `@volontariapp/monitoring` 2.2.0)
+
+- Échantillonnage `ParentBased(TraceIdRatioBased)` : option `sampleRatio` ou `OTEL_TRACES_SAMPLER_ARG` (0 à 1, défaut 1 ; valeur invalide : retour à 1 avec avertissement). Seules les traces racines sont tirées ; une saga asynchrone suit la décision de son parent, donc une trace écartée à la gateway reste écartée dans les workers et post-processors. Le défaut reste à fixer avec les quotas Datadog (ticket 0.4 : quotas non documentés).
+- Attribut `deployment.environment` : option `environment` ou `DD_ENV`, absent sinon (jamais déduit de `NODE_ENV`). `DD_ENV` n'est injecté ni dans `deploy` (YAML) ni dans `ci-tools/docker-compose.yml` : à ajouter dans les manifests pour que l'attribut apparaisse.
+- SIGTERM : le SDK est vidé sans `process.exit`. Si un autre listener SIGTERM existe au moment du signal (NestJS `enableShutdownHooks`) il termine le processus, sinon le signal est renvoyé après le vidage. Piège : un seul listener SIGTERM sans `exit` fige le processus (Node n'applique plus l'arrêt par défaut) ; au 2026-10-13 seuls `ws-service` appelle `enableShutdownHooks`, pas les autres services.
 
 ## 5. Règles
 

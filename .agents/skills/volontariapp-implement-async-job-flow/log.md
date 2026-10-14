@@ -2,6 +2,10 @@
 
 ## 2026-10-13
 
+- **Vérification** - Runners instrumentes (tracing.ts, monitoring, service.datadog.yaml): aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Correction: la copie de la migration commune dans worker-event et post-processor-event est necessaire (CI = base neuve reconstruite depuis leurs migrations) (claude-code/agent)
+- **Vérification** - Migration traceparent copiee dans worker-event: la skill db-migration la liste deja (claude-code/agent)
+- **Vérification** - Tache 2.11: restauration du contexte de trace (BaseWorker, SinglePostProcessor, BatchPostProcessor) via runInTraceContext / runBatchInTraceContext de database (claude-code/agent)
 - **Vérification** - Relu apres traceparent requis sur RedisEventMessage et createFollowUp: aucune regle de la skill ne change (claude-code/agent)
 - **Vérification** - Section contexte de trace des jobs (JobEnvelope.traceparent) (claude-code/agent)
 - **Vérification** - Validation trigger notify_job_audit_status_change avec emitterId safe (claude-code/agent)

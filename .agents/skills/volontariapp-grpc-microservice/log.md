@@ -2,6 +2,7 @@
 
 ## 2026-10-13
 
+- **Vérification** - enableShutdownHooks ajoute dans main.ts: aucune regle de la skill ne change (claude-code/agent)
 - **Vérification** - Migration commune 1792000000000 répliquée dans ms-* (claude-code/agent)
 - **Vérification** - Relu apres ajout de la migration commune AddTraceparent et de la colonne traceparent sur OutboxModel: aucune regle ni commande de la skill ne change (claude-code/agent)
 - **Vérification** - withFallback ms-event: 403 hors fallback, extraPayload; deleteEvent passe l'acteur au service (claude-code/agent)

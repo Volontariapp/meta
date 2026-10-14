@@ -19,12 +19,6 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-07T18:32:09Z"
-    digest: 63f58acd042a28d8
-  - by: claude-code/agent
-    at: "2026-10-07T22:10:32Z"
-    digest: d341743f2ba7a6c4
-  - by: claude-code/agent
     at: "2026-10-12T09:58:03Z"
     digest: a4bfb8e622c69f12
   - by: claude-code/agent
@@ -33,6 +27,12 @@ verified:
   - by: claude-code/agent
     at: "2026-10-12T12:04:10Z"
     digest: a4bfb8e622c69f12
+  - by: claude-code/agent
+    at: "2026-10-13T21:57:15Z"
+    digest: bd241183e70b06ad
+  - by: claude-code/agent
+    at: "2026-10-13T22:48:54Z"
+    digest: 83aab92f21d80575
 sources:
   - id: c4
     resource: docs/C4-Deployment-And-Infrastructure.md

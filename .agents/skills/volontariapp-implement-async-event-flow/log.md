@@ -2,6 +2,15 @@
 
 ## 2026-10-13
 
+- **Vérification** - Lockfile regenere: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Runners instrumentes (tracing.ts, monitoring, service.datadog.yaml): aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Migration traceparent copiee dans post-processor-event: la skill db-migration la liste deja (claude-code/agent)
+- **Vérification** - Montee de post-processors/database dans les post-processors: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Tache 2.11: restauration du contexte de trace (BaseWorker, SinglePostProcessor, BatchPostProcessor) via runInTraceContext / runBatchInTraceContext de database (claude-code/agent)
+- **Vérification** - Correction: seul ws-service a une base propre a migrer; post-processor-event et worker-event partagent ms_event avec ms-event (claude-code/agent)
+- **Vérification** - Migration commune a copier aussi dans ws-service, post-processor-event et worker-event (8 dossiers); gather: traceparent stocke puis rejoue via createFollowUp (claude-code/agent)
+- **Vérification** - GatherStateMetadata.traceparent devient requis (lignes anterieures sans le champ: normalizeTraceparent) (claude-code/agent)
+- **Vérification** - GatherStateMetadata.traceparent (jsonb, sans migration) rejoue sur l'evenement de completion du gather (claude-code/agent)
 - **Vérification** - createFollowUp pour les evenements declenches, traceparent requis sur RedisEventMessage (legacy sans champ), DeepPartial de save n'impose rien (claude-code/agent)
 - **Vérification** - Relu apres reformatage Prettier de jobs-outbox.pusher.ts (import sur plusieurs lignes): contenu de la skill inchange (claude-code/agent)
 - **Vérification** - Section contexte de trace des evenements (champ traceparent du stream et du JSON) (claude-code/agent)

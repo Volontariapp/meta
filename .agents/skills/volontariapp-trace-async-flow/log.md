@@ -2,6 +2,11 @@
 
 ## 2026-10-13
 
+- **Vérification** - Tache 2.11: restauration du contexte de trace (BaseWorker, SinglePostProcessor, BatchPostProcessor) via runInTraceContext / runBatchInTraceContext de database (claude-code/agent)
+- **Vérification** - Correction: seul ws-service a une base propre a migrer; post-processor-event et worker-event partagent ms_event avec ms-event (claude-code/agent)
+- **Vérification** - Migration commune a copier aussi dans ws-service, post-processor-event et worker-event (8 dossiers); gather: traceparent stocke puis rejoue via createFollowUp (claude-code/agent)
+- **Vérification** - GatherStateMetadata.traceparent devient requis (lignes anterieures sans le champ: normalizeTraceparent) (claude-code/agent)
+- **Vérification** - GatherStateMetadata.traceparent (jsonb, sans migration) rejoue sur l'evenement de completion du gather (claude-code/agent)
 - **Vérification** - createFollowUp pour les evenements declenches, traceparent requis sur RedisEventMessage (legacy sans champ), DeepPartial de save n'impose rien (claude-code/agent)
 - **Vérification** - Ajout du contexte de trace des lignes outbox: traceparent capture, transporte (stream, JobEnvelope), NULL attendu, restauration en 2.11 (claude-code/agent)
 - **Vérification** - Trigger job_audit résilient aux job_id non-UUID (claude-code/agent)
