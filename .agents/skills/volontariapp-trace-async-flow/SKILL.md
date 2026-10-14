@@ -44,9 +44,6 @@ sources:
     title: "Scénarios de panne, problèmes P2 et P4"
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T20:09:40Z"
-    digest: 88f6f033dc983e58
-  - by: claude-code/agent
     at: "2026-10-13T20:11:53Z"
     digest: 88f6f033dc983e58
   - by: claude-code/agent
@@ -58,6 +55,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-13T20:48:38Z"
     digest: 25d3961729597215
+  - by: claude-code/agent
+    at: "2026-10-14T11:23:40Z"
+    digest: 839b4282fe8b1b6d
 ---
 
 # Trace Async Flow & Diagnostic Runtime

@@ -19,8 +19,6 @@ generated:
   at: "2026-10-06T09:12:34Z"
 verified:
   - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T09:12:34Z"
-  - by: claude-code/claude-opus-5-5
     at: "2026-10-06T09:14:39Z"
     digest: 4ea45a7ba03d5217
   - by: claude-code/claude-sonnet-5-5
@@ -32,6 +30,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-13T21:57:01Z"
     digest: 1d56e70c2352bbd2
+  - by: claude-code/agent
+    at: "2026-10-14T11:23:52Z"
+    digest: df16d0c27e86980d
 sources:
   - id: workflows
     resource: ci-tools/.github/workflows

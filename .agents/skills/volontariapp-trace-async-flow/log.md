@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-14
+
+- **Vérification** - Document outbox producer spans and exponential backoff (claude-code/agent)
+
 ## 2026-10-13
 
 - **Vérification** - Tache 2.11: restauration du contexte de trace (BaseWorker, SinglePostProcessor, BatchPostProcessor) via runInTraceContext / runBatchInTraceContext de database (claude-code/agent)

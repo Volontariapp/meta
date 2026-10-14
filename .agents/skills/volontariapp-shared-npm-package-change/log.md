@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-14
+
+- **Vérification** - Bump logger to 0.3.1 across npm-packages (claude-code/agent)
+
 ## 2026-10-13
 
 - **Vérification** - monitoring 2.2.0: echantillonnage, environnement et arret propre documentes dans trace-async-flow (claude-code/agent)

@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-14
+
+- **Vérification** - Document status attribute in JSON payload for Datadog (claude-code/agent)
+
 ## 2026-10-12
 
 - **Vérification** - Retypage OKF: type Standard (claude-code/agent)

@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-14
+
+- **Vérification** - Verify deploy manifests for runners (claude-code/agent)
+
 ## 2026-10-13
 
 - **Vérification** - Variables OTEL et memoire des runners dans deploy: aucune regle de la skill ne change (claude-code/agent)

@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-14
+
+- **Vérification** - Update ci-tools local datadog log collection (claude-code/agent)
+
 ## 2026-10-13
 
 - **Vérification** - DD_ENV ajoute au compose: aucune regle de la skill ne change (claude-code/agent)

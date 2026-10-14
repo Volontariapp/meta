@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-14
+
+- **Vérification** - Bump dependencies across all microservices and runners (claude-code/agent)
+
 ## 2026-10-13
 
 - **Vérification** - Lockfile regenere: aucune regle de la skill ne change (claude-code/agent)
