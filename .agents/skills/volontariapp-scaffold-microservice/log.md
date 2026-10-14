@@ -2,6 +2,7 @@
 
 ## 2026-10-14
 
+- **Vérification** - Add Logger.setDefaultConfig to microservices bootstrap (claude-code/agent)
 - **Vérification** - Update logger test digest (claude-code/agent)
 - **Vérification** - Bump logger to 0.4.0 in monorepo packages (claude-code/agent)
 - **Vérification** - Bump dependencies across all microservices and runners (claude-code/agent)

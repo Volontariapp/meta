@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-14
+
+- **Vérification** - Propagate Logger.setDefaultConfig in workers (claude-code/agent)
+
 ## 2026-10-13
 
 - **Vérification** - Runners instrumentes (tracing.ts, monitoring, service.datadog.yaml): aucune regle de la skill ne change (claude-code/agent)

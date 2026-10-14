@@ -24,9 +24,6 @@ generated:
   at: "2026-10-12T12:18:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T22:48:38Z"
-    digest: eef644d14f77ddbb
-  - by: claude-code/agent
     at: "2026-10-13T22:54:41Z"
     digest: 1d611836842b6530
   - by: claude-code/agent
@@ -38,6 +35,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-14T12:24:03Z"
     digest: 5a6c4c10f905b3e8
+  - by: claude-code/agent
+    at: "2026-10-14T12:48:40Z"
+    digest: 37dae7e1ff166d70
 sources:
   - id: doc-creation
     kind: local_file

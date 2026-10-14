@@ -51,9 +51,6 @@ sources:
     title: job_catalogue.py
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T17:06:56Z"
-    digest: 173d177dde7c1e82
-  - by: claude-code/agent
     at: "2026-10-13T20:48:39Z"
     digest: 9672efce89c52f9a
   - by: claude-code/agent
@@ -65,6 +62,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-13T22:48:38Z"
     digest: 51b35cd7fa5a6e5a
+  - by: claude-code/agent
+    at: "2026-10-14T12:48:39Z"
+    digest: 0b15a6bf770845f4
 ---
 
 # Guide : Implémenter un Job Asynchrone End-to-End
