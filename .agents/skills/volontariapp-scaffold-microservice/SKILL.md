@@ -24,12 +24,6 @@ generated:
   at: "2026-10-12T12:18:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T21:57:02Z"
-    digest: afff7e545d1ef682
-  - by: claude-code/agent
-    at: "2026-10-13T22:04:17Z"
-    digest: 77739bcc592c0eda
-  - by: claude-code/agent
     at: "2026-10-13T22:48:38Z"
     digest: eef644d14f77ddbb
   - by: claude-code/agent
@@ -38,6 +32,12 @@ verified:
   - by: claude-code/agent
     at: "2026-10-14T11:23:39Z"
     digest: f0ba122f5c0f4628
+  - by: claude-code/agent
+    at: "2026-10-14T12:23:31Z"
+    digest: db8bcf96d3534efb
+  - by: claude-code/agent
+    at: "2026-10-14T12:24:03Z"
+    digest: 5a6c4c10f905b3e8
 sources:
   - id: doc-creation
     kind: local_file

@@ -2,6 +2,7 @@
 
 ## 2026-10-14
 
+- **Vérification** - Bump logger to 0.4.0 (claude-code/agent)
 - **Vérification** - Bump logger to 0.3.1 across npm-packages (claude-code/agent)
 
 ## 2026-10-13

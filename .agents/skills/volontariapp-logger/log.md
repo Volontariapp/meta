@@ -2,6 +2,8 @@
 
 ## 2026-10-14
 
+- **Vérification** - Add tests and formatting for setDefaultConfig (claude-code/agent)
+- **Vérification** - Add static setDefaultConfig to Logger for global format inheritance (claude-code/agent)
 - **Vérification** - Document status attribute in JSON payload for Datadog (claude-code/agent)
 
 ## 2026-10-12
