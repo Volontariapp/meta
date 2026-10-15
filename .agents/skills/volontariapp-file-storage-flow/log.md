@@ -2,6 +2,7 @@
 
 ## 2026-10-15
 
+- **Vérification** - ms-storage directly configures PresignedPostSigner in StorageModule; deprecated s3 provider removed (process:ms-storage-s3-refactor)
 - **Vérification** - Add test:integration script (claude-code/agent)
 - **Vérification** - Implement ms-storage GenerateUploadUrl (ticket 3.4) (claude-code/agent)
 - **Vérification** - Storage pipeline client and Apple HEIC/HEIF format (process:agent)

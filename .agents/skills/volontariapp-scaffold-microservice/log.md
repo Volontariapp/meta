@@ -2,6 +2,7 @@
 
 ## 2026-10-15
 
+- **Vérification** - ms-storage test linting enabled and s3 provider cleaned (process:ms-storage-s3-refactor)
 - **Vérification** - Add test:integration script (claude-code/agent)
 - **Vérification** - Add ms-storage GenerateUploadUrl handler (claude-code/agent)
 - **Vérification** - Separate unit and integration Jest configs in storage-pipeline (process:agent)
