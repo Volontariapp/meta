@@ -2,6 +2,7 @@
 
 ## 2026-10-15
 
+- **Vérification** - ms-storage confirmUpload: pipeline SYNC et bascule ASYNC (claude-code/agent)
 - **Vérification** - Use RejectionReason.MALWARE enum in confirm-upload integration test (process:fix-rejection-reason)
 - **Vérification** - Implement gRPC ConfirmUpload handler and ASYNC pipeline in ms-storage (ticket 3.6) (claude-code/agent)
 - **Vérification** - Expose models and repositories from @volontariapp/domain-storage root entrypoint (human:victor)

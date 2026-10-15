@@ -23,9 +23,6 @@ generated:
   by: claude-code/agent
   at: "2026-10-12T12:18:00Z"
 verified:
-  - by: "process:implement-confirm-file-attachment"
-    at: "2026-10-15T17:53:03Z"
-    digest: c0a54ebf1082000c
   - by: "process:export-domain-storage-root"
     at: "2026-10-15T18:12:27Z"
     digest: 1053b258852c8aba
@@ -38,6 +35,9 @@ verified:
   - by: "process:fix-rejection-reason"
     at: "2026-10-15T21:08:30Z"
     digest: b26cd7cffdf35367
+  - by: claude-code/agent
+    at: "2026-10-15T22:06:09Z"
+    digest: 932fa72418ae11db
 sources:
   - id: doc-creation
     kind: local_file
