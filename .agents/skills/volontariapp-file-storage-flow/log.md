@@ -2,6 +2,7 @@
 
 ## 2026-10-15
 
+- **Vérification** - Use RejectionReason.MALWARE enum in confirm-upload integration test (process:fix-rejection-reason)
 - **Vérification** - Implement gRPC ConfirmUpload handler and ASYNC pipeline in ms-storage (ticket 3.6) (process:implement-confirm-upload)
 - **Vérification** - Expose models and repositories from @volontariapp/domain-storage root entrypoint (human:victor)
 - **Vérification** - Export models and repositories from root of domain-storage (process:export-domain-storage-root)

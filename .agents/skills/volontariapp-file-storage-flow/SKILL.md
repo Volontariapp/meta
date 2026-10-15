@@ -26,9 +26,6 @@ sources:
     resource: npm-packages/packages/domain-storage/src
     title: "@volontariapp/domain-storage"
 verified:
-  - by: "process:spies-refactor"
-    at: "2026-10-15T16:25:02Z"
-    digest: f98f4c9ab0892af6
   - by: "process:implement-confirm-file-attachment"
     at: "2026-10-15T17:52:59Z"
     digest: a7bbbda9c7c69ead
@@ -41,6 +38,9 @@ verified:
   - by: "process:implement-confirm-upload"
     at: "2026-10-15T20:59:40Z"
     digest: 78c06281b26a6ba5
+  - by: "process:fix-rejection-reason"
+    at: "2026-10-15T21:08:30Z"
+    digest: e7ef094d93e8a3e7
 ---
 
 # Playbook : Stockage de Fichiers
