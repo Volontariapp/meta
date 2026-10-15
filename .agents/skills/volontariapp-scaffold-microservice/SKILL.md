@@ -23,9 +23,6 @@ generated:
   by: claude-code/agent
   at: "2026-10-12T12:18:00Z"
 verified:
-  - by: "process:spies-refactor"
-    at: "2026-10-15T16:25:03Z"
-    digest: e4ee897fce404a3c
   - by: "process:ci-integration-tests"
     at: "2026-10-15T16:45:32Z"
     digest: 75f2d805ba4baed1
@@ -38,6 +35,9 @@ verified:
   - by: "human:victor"
     at: "2026-10-15T18:21:00Z"
     digest: debb014cd987ccca
+  - by: claude-code/agent
+    at: "2026-10-15T20:59:01Z"
+    digest: 667e9845240e6455
 sources:
   - id: doc-creation
     kind: local_file

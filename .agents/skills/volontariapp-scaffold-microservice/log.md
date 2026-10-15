@@ -2,6 +2,7 @@
 
 ## 2026-10-15
 
+- **Vérification** - Implement gRPC ConfirmUpload handler and ASYNC pipeline in ms-storage (ticket 3.6) (claude-code/agent)
 - **Vérification** - Expose models and repositories from @volontariapp/domain-storage root entrypoint (human:victor)
 - **Vérification** - Export models and repositories from root of domain-storage (process:export-domain-storage-root)
 - **Vérification** - Implement ConfirmFileAttachment gRPC handler in ms-storage (ticket 3.5) (process:implement-confirm-file-attachment)
