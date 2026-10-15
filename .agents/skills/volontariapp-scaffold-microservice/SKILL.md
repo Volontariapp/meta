@@ -23,21 +23,21 @@ generated:
   by: claude-code/agent
   at: "2026-10-12T12:18:00Z"
 verified:
-  - by: claude-code/agent
-    at: "2026-10-15T15:57:45Z"
-    digest: 4bff24d456f09c2b
-  - by: "process:ms-storage-s3-refactor"
-    at: "2026-10-15T16:09:06Z"
-    digest: 4079a6604d0b63e9
-  - by: "process:ms-storage-test-mock-fix"
-    at: "2026-10-15T16:18:59Z"
-    digest: 08df5d5bb2435d79
   - by: "process:spies-refactor"
     at: "2026-10-15T16:25:03Z"
     digest: e4ee897fce404a3c
   - by: "process:ci-integration-tests"
     at: "2026-10-15T16:45:32Z"
     digest: 75f2d805ba4baed1
+  - by: "process:implement-confirm-file-attachment"
+    at: "2026-10-15T17:53:03Z"
+    digest: c0a54ebf1082000c
+  - by: "process:export-domain-storage-root"
+    at: "2026-10-15T18:12:27Z"
+    digest: 1053b258852c8aba
+  - by: "human:victor"
+    at: "2026-10-15T18:21:00Z"
+    digest: debb014cd987ccca
 sources:
   - id: doc-creation
     kind: local_file

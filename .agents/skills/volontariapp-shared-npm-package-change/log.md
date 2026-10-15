@@ -2,6 +2,7 @@
 
 ## 2026-10-15
 
+- **Vérification** - Export models and repositories from root of domain-storage (process:export-domain-storage-root)
 - **Vérification** - Separate unit and integration Jest configs in storage-pipeline (process:agent)
 - **Vérification** - Storage pipeline and domain-storage updates (process:agent)
 

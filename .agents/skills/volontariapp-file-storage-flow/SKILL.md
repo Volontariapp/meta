@@ -26,21 +26,21 @@ sources:
     resource: npm-packages/packages/domain-storage/src
     title: "@volontariapp/domain-storage"
 verified:
-  - by: claude-code/agent
-    at: "2026-10-15T15:51:23Z"
-    digest: c91b465b79b48545
-  - by: claude-code/agent
-    at: "2026-10-15T15:57:44Z"
-    digest: d119a12ec40b2f06
-  - by: "process:ms-storage-s3-refactor"
-    at: "2026-10-15T16:09:02Z"
-    digest: ec6b4ba45cc520b4
   - by: "process:ms-storage-test-mock-fix"
     at: "2026-10-15T16:18:59Z"
     digest: 5674a06d22e2039d
   - by: "process:spies-refactor"
     at: "2026-10-15T16:25:02Z"
     digest: f98f4c9ab0892af6
+  - by: "process:implement-confirm-file-attachment"
+    at: "2026-10-15T17:52:59Z"
+    digest: a7bbbda9c7c69ead
+  - by: "process:export-domain-storage-root"
+    at: "2026-10-15T18:12:26Z"
+    digest: b9cf2d8ac46fb8af
+  - by: "human:victor"
+    at: "2026-10-15T18:20:57Z"
+    digest: 73844f290a19ec23
 ---
 
 # Playbook : Stockage de Fichiers

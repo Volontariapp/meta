@@ -2,6 +2,9 @@
 
 ## 2026-10-15
 
+- **Vérification** - Expose models and repositories from @volontariapp/domain-storage root entrypoint (human:victor)
+- **Vérification** - Export models and repositories from root of domain-storage (process:export-domain-storage-root)
+- **Vérification** - Implement ConfirmFileAttachment gRPC handler in ms-storage (ticket 3.5) (process:implement-confirm-file-attachment)
 - **Vérification** - Migrate storage service and controller tests to jest.spyOn without unbound-method exception (process:spies-refactor)
 - **Vérification** - Cleaned test mock typing using createMock and excluded src/test from tsconfig.build.json (process:ms-storage-test-mock-fix)
 - **Vérification** - ms-storage directly configures PresignedPostSigner in StorageModule; deprecated s3 provider removed (process:ms-storage-s3-refactor)
