@@ -18,12 +18,6 @@ generated:
   by: claude-code/claude-opus-5-5
   at: "2026-10-06T09:12:34Z"
 verified:
-  - by: claude-code/claude-opus-5-5
-    at: "2026-10-06T09:14:39Z"
-    digest: 4ea45a7ba03d5217
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-06T22:51:25Z"
-    digest: 4ea45a7ba03d5217
   - by: claude-code/agent
     at: "2026-10-12T11:52:51Z"
     digest: d23b5b9bbc66d392
@@ -33,6 +27,12 @@ verified:
   - by: claude-code/agent
     at: "2026-10-14T11:23:52Z"
     digest: df16d0c27e86980d
+  - by: "process:agent"
+    at: "2026-10-15T15:05:58Z"
+    digest: 7c0dbfc54639c48f
+  - by: "process:agent"
+    at: "2026-10-15T15:17:18Z"
+    digest: 931c6ef98f172bfc
 sources:
   - id: workflows
     resource: ci-tools/.github/workflows

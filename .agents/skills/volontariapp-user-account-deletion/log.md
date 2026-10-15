@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-14
+
+- **Vérification** - Add avatar_file_id and remove deprecated logoPath (agent:antigravity)
+
 ## 2026-10-13
 
 - **Vérification** - Propagation migration commune 1792000000000 (claude-code/agent)

@@ -1,7 +1,22 @@
 # Historique
 
+## 2026-10-15
+
+- **Vérification** - Separate unit and integration Jest configs in storage-pipeline (process:agent)
+- **Vérification** - Separate Run Unit Tests and Run Integration Tests steps (process:agent)
+- **Vérification** - Storage pipeline package (process:agent)
+- **Vérification** - Verify CI test-build and domain-package-ci MinIO support (process:agent)
+- **Vérification** - Allow UUIDv5 in comment and post command/query DTOs (process:agent)
+- **Vérification** - Allow UUIDv5 in search events query DTO (process:agent)
+
 ## 2026-10-14
 
+- **Vérification** - Vérification DTO event coverFileId (agent:antigravity)
+- **Vérification** - ms-post: make postIdNamespace strictly required (claude-code/agent)
+- **Vérification** - ms-post: clean spec typing with interfaces (claude-code/agent)
+- **Vérification** - ms-post: clean up controller spec linting (claude-code/agent)
+- **Vérification** - ms-post: integrate StorageClient and confirmPostAttachment (claude-code/agent)
+- **Vérification** - Add storage-client package (agent:antigravity)
 - **Vérification** - Configure outbox.logger to json in production (claude-code/agent)
 - **Vérification** - Add Logger.setDefaultConfig to microservices bootstrap (claude-code/agent)
 - **Vérification** - Update logger test digest (claude-code/agent)

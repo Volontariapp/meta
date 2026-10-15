@@ -1,5 +1,14 @@
 # Historique
 
+## 2026-10-15
+
+- **Vérification** - Storage pipeline client and Apple HEIC/HEIF format (process:agent)
+- **Vérification** - Add @volontariapp/storage-pipeline with S3 client, presigned POST, magic bytes, clamd, and sharp transformer (claude-code/agent)
+
+## 2026-10-14
+
+- **Leçon** - Résolution DI ClientsModule dans StorageClientModule.registerAsync (pitfall) (human:victoragahi)
+
 ## 2026-10-13
 
 - **Vérification** - enableShutdownHooks ajoute dans main.ts: aucune regle de la skill ne change (claude-code/agent)

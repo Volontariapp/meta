@@ -2,6 +2,7 @@
 
 ## 2026-10-14
 
+- **Vérification** - Add storage streams and avatar/cover replacement (agent:antigravity)
 - **Vérification** - Propagate Logger.setDefaultConfig in post-processors (claude-code/agent)
 - **Vérification** - Verify post-processors runner dependencies (claude-code/agent)
 

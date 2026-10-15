@@ -11,9 +11,18 @@ sources:
   - id: src-3aa1bf0d
     resource: ci-tools/scripts/init-buckets.sh
     title: ci-tools/scripts/init-buckets.sh
+  - id: src-a764acb3
+    resource: ms-event/src/modules/event/storage-client-config.module.ts
+    title: ms-event/src/modules/event/storage-client-config.module.ts
 ---
 
 # Leçons
+
+## 2026-10-14 - Résolution DI ClientsModule dans StorageClientModule.registerAsync
+
+- **Type :** pitfall
+- **Leçon :** StorageClientModule.registerAsync délègue à ClientsModule.registerAsync avec inject: [STORAGE_CLIENT_OPTIONS]. Comme ClientsModule est un module dynamique interne isolé sans extraProviders, il ne peut pas résoudre ce symbole sauf si un module fournissant et exportant STORAGE_CLIENT_OPTIONS est passé dans imports via StorageClientConfigModule avec useExisting: StorageClientConfigService.[^src-a764acb3]
+- **Consigné par :** human:victoragahi
 
 ## 2026-10-07 - Test manuel local de ms-storage : ce qui est testable et ce qui ne l'est pas
 
@@ -22,3 +31,4 @@ sources:
 - **Consigné par :** claude-code/agent
 
 [^src-3aa1bf0d]: ci-tools/scripts/init-buckets.sh
+[^src-a764acb3]: ms-event/src/modules/event/storage-client-config.module.ts

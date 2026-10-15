@@ -2,6 +2,7 @@
 
 ## 2026-10-14
 
+- **Vérification** - ms-post: add migration 1781000000000-AddPostMediaAndMediaStatus.ts (claude-code/agent)
 - **Vérification** - Verify database repository and outbox runner traces (claude-code/agent)
 
 ## 2026-10-13

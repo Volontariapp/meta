@@ -23,21 +23,21 @@ generated:
   by: claude-code/agent
   at: "2026-10-12T12:18:00Z"
 verified:
-  - by: claude-code/agent
-    at: "2026-10-14T11:23:39Z"
-    digest: f0ba122f5c0f4628
-  - by: claude-code/agent
-    at: "2026-10-14T12:23:31Z"
-    digest: db8bcf96d3534efb
-  - by: claude-code/agent
-    at: "2026-10-14T12:24:03Z"
-    digest: 5a6c4c10f905b3e8
-  - by: claude-code/agent
-    at: "2026-10-14T12:48:40Z"
-    digest: 37dae7e1ff166d70
-  - by: claude-code/agent
-    at: "2026-10-14T13:09:18Z"
-    digest: 5e0ebbb1b3d381fa
+  - by: "process:agent"
+    at: "2026-10-15T13:12:15Z"
+    digest: 55208698e2ccd54a
+  - by: "process:agent"
+    at: "2026-10-15T15:06:11Z"
+    digest: 3824bc54e1fdba74
+  - by: "process:agent"
+    at: "2026-10-15T15:11:37Z"
+    digest: 02393be8c1053ad8
+  - by: "process:agent"
+    at: "2026-10-15T15:17:19Z"
+    digest: 722d5ed3afc17c84
+  - by: "process:agent"
+    at: "2026-10-15T15:18:15Z"
+    digest: 722d5ed3afc17c84
 sources:
   - id: doc-creation
     kind: local_file

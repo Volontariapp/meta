@@ -2,6 +2,7 @@
 
 ## 2026-10-14
 
+- **Vérification** - Package version bumps (agent:antigravity)
 - **Vérification** - Bump post-processors for logger 0.4.0 (claude-code/agent)
 - **Vérification** - Verify post-processors runner and dlq remediation dependencies (claude-code/agent)
 

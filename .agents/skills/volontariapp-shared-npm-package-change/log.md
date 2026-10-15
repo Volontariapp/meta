@@ -1,7 +1,13 @@
 # Historique
 
+## 2026-10-15
+
+- **Vérification** - Separate unit and integration Jest configs in storage-pipeline (process:agent)
+- **Vérification** - Storage pipeline and domain-storage updates (process:agent)
+
 ## 2026-10-14
 
+- **Vérification** - Storage wave 2 package updates (agent:antigravity)
 - **Vérification** - Bump logger to 0.4.0 (claude-code/agent)
 - **Vérification** - Bump logger to 0.3.1 across npm-packages (claude-code/agent)
 

@@ -36,20 +36,20 @@ sources:
     title: Pipeline réutilisable npm-packages (ci-tools)
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T20:11:54Z"
-    digest: 784a93eafb50b568
-  - by: claude-code/agent
-    at: "2026-10-13T20:48:42Z"
-    digest: f974e9b2101d4ae7
-  - by: claude-code/agent
-    at: "2026-10-13T21:49:08Z"
-    digest: fedb832bb9ae40d7
-  - by: claude-code/agent
     at: "2026-10-14T11:23:39Z"
     digest: 14e324fcb097f2e5
   - by: claude-code/agent
     at: "2026-10-14T12:23:30Z"
     digest: 2f6d4c2a7ee37dae
+  - by: "agent:antigravity"
+    at: "2026-10-14T14:37:09Z"
+    digest: db11deb9ce4df88c
+  - by: "process:agent"
+    at: "2026-10-15T15:11:35Z"
+    digest: ff93736675c1366d
+  - by: "process:agent"
+    at: "2026-10-15T15:18:14Z"
+    digest: fcb9880cac9d0ec7
 ---
 
 # Shared NPM Package Change & Règle d'Or du Stop Immédiat

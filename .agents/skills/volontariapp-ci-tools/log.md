@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-15
+
+- **Vérification** - Separate Run Unit Tests and Run Integration Tests steps (process:agent)
+- **Vérification** - Support MinIO and S3 environment variables for storage packages (process:agent)
+
 ## 2026-10-14
 
 - **Vérification** - Update ci-tools local datadog log collection (claude-code/agent)

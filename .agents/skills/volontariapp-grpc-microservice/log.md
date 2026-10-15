@@ -1,5 +1,17 @@
 # Historique
 
+## 2026-10-15
+
+- **Vérification** - Allow UUIDv5 in comment and post command/query DTOs (process:agent)
+- **Vérification** - Allow UUIDv5 in search events query DTO (process:agent)
+
+## 2026-10-14
+
+- **Vérification** - ms-post: make postIdNamespace strictly required (claude-code/agent)
+- **Vérification** - ms-post: clean spec typing with interfaces (claude-code/agent)
+- **Vérification** - ms-post: clean up controller spec linting (claude-code/agent)
+- **Vérification** - ms-post: integrate StorageClient and confirmPostAttachment (claude-code/agent)
+
 ## 2026-10-13
 
 - **Vérification** - enableShutdownHooks ajoute dans main.ts: aucune regle de la skill ne change (claude-code/agent)
