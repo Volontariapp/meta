@@ -2,6 +2,7 @@
 
 ## 2026-10-15
 
+- **Vérification** - Add test:integration script (claude-code/agent)
 - **Vérification** - Implement ms-storage GenerateUploadUrl (ticket 3.4) (claude-code/agent)
 - **Vérification** - Storage pipeline client and Apple HEIC/HEIF format (process:agent)
 - **Vérification** - Add @volontariapp/storage-pipeline with S3 client, presigned POST, magic bytes, clamd, and sharp transformer (claude-code/agent)

@@ -2,6 +2,7 @@
 
 ## 2026-10-15
 
+- **Vérification** - Add test:integration script (claude-code/agent)
 - **Vérification** - Add ms-storage GenerateUploadUrl handler (claude-code/agent)
 - **Vérification** - Separate unit and integration Jest configs in storage-pipeline (process:agent)
 - **Vérification** - Separate Run Unit Tests and Run Integration Tests steps (process:agent)
