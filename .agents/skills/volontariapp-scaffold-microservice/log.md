@@ -2,6 +2,7 @@
 
 ## 2026-10-15
 
+- **Vérification** - Migrate storage service and controller tests to jest.spyOn without unbound-method exception (process:spies-refactor)
 - **Vérification** - Cleaned test mock typing using createMock and excluded src/test from tsconfig.build.json (process:ms-storage-test-mock-fix)
 - **Vérification** - ms-storage test linting enabled and s3 provider cleaned (process:ms-storage-s3-refactor)
 - **Vérification** - Add test:integration script (claude-code/agent)
