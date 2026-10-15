@@ -24,9 +24,6 @@ generated:
   at: "2026-10-12T12:18:00Z"
 verified:
   - by: "process:agent"
-    at: "2026-10-15T13:12:15Z"
-    digest: 55208698e2ccd54a
-  - by: "process:agent"
     at: "2026-10-15T15:06:11Z"
     digest: 3824bc54e1fdba74
   - by: "process:agent"
@@ -38,6 +35,9 @@ verified:
   - by: "process:agent"
     at: "2026-10-15T15:18:15Z"
     digest: 722d5ed3afc17c84
+  - by: claude-code/agent
+    at: "2026-10-15T15:51:59Z"
+    digest: fcb274af9133a2b2
 sources:
   - id: doc-creation
     kind: local_file
