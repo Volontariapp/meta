@@ -2,6 +2,7 @@
 
 ## 2026-10-15
 
+- **Vérification** - service-ci starts database dependencies, runs migrations, and executes integration tests (process:ci-integration-tests)
 - **Vérification** - Migrate storage service and controller tests to jest.spyOn without unbound-method exception (process:spies-refactor)
 - **Vérification** - Cleaned test mock typing using createMock and excluded src/test from tsconfig.build.json (process:ms-storage-test-mock-fix)
 - **Vérification** - ms-storage test linting enabled and s3 provider cleaned (process:ms-storage-s3-refactor)

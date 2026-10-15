@@ -2,6 +2,7 @@
 
 ## 2026-10-15
 
+- **Vérification** - service-ci starts database dependencies, runs migrations, and executes integration tests (process:ci-integration-tests)
 - **Vérification** - Separate Run Unit Tests and Run Integration Tests steps (process:agent)
 - **Vérification** - Support MinIO and S3 environment variables for storage packages (process:agent)
 

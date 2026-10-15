@@ -24,9 +24,6 @@ generated:
   at: "2026-10-12T12:18:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-15T15:51:59Z"
-    digest: fcb274af9133a2b2
-  - by: claude-code/agent
     at: "2026-10-15T15:57:45Z"
     digest: 4bff24d456f09c2b
   - by: "process:ms-storage-s3-refactor"
@@ -38,6 +35,9 @@ verified:
   - by: "process:spies-refactor"
     at: "2026-10-15T16:25:03Z"
     digest: e4ee897fce404a3c
+  - by: "process:ci-integration-tests"
+    at: "2026-10-15T16:45:32Z"
+    digest: 75f2d805ba4baed1
 sources:
   - id: doc-creation
     kind: local_file
