@@ -26,20 +26,20 @@ sources:
     resource: npm-packages/packages/domain-storage/src
     title: "@volontariapp/domain-storage"
 verified:
-  - by: "human:victor"
-    at: "2026-10-15T18:20:57Z"
-    digest: 73844f290a19ec23
-  - by: "process:implement-confirm-upload"
-    at: "2026-10-15T20:59:40Z"
-    digest: 78c06281b26a6ba5
-  - by: "process:fix-rejection-reason"
-    at: "2026-10-15T21:08:30Z"
-    digest: e7ef094d93e8a3e7
-  - by: "human:victoragahi"
-    at: "2026-10-15T22:06:27Z"
-    digest: d9b3d5366e18fae9
-  - by: "human:victoragahi"
-    at: "2026-10-16T08:05:12Z"
+  - by: claude-code/agent
+    at: "2026-10-16T22:33:09Z"
+    digest: c2af7436c571d364
+  - by: claude-code/agent
+    at: "2026-10-16T23:29:45Z"
+    digest: c2af7436c571d364
+  - by: claude-code/agent
+    at: "2026-10-16T23:31:30Z"
+    digest: c2af7436c571d364
+  - by: claude-code/agent
+    at: "2026-10-16T23:48:47Z"
+    digest: c2af7436c571d364
+  - by: claude-code/agent
+    at: "2026-10-17T00:15:13Z"
     digest: c2af7436c571d364
 ---
 

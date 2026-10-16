@@ -7,7 +7,6 @@ tags: [mcp, causalmesh, search]
 status: stable
 paths:
   - .agents/mesh-mcp.toml
-  - "causalmesh/crates/mesh-server/src/tools/**"
 mesh_keys:
   - causalmesh
   - mesh-mcp
@@ -19,12 +18,9 @@ sources:
     resource: .agents/mesh-mcp.toml
     title: Configuration mesh-mcp
   - id: mesh-tools
-    resource: causalmesh/crates/mesh-server/src/tools
+    resource: ../causalmesh/crates/mesh-server/src/tools
     title: Schémas des outils (source Rust)
 verified:
-  - by: claude-code/agent
-    at: "2026-10-12T11:52:51Z"
-    digest: 47c14f02b485e528
   - by: claude-code/agent
     at: "2026-10-12T12:03:26Z"
     digest: 3553ec91204b4b88
@@ -37,6 +33,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-13T20:10:50Z"
     digest: 76e6f2b75e546cd7
+  - by: claude-code/sonnet-5-5
+    at: "2026-10-16T12:34:42Z"
+    digest: f15c13cb08a391a0
 ---
 
 # MeshMCP Skill
@@ -47,7 +46,7 @@ distribuée de Volontariapp via **mesh-mcp** (projet `causalmesh`, binaire local
 massif de 17 microservices/packages.
 
 Tous les schémas ci-dessous sont vérifiés directement dans le code source
-(`causalmesh/crates/mesh-server/src/tools/*.rs`), pas dans `docs/mcp-tools.md` du même repo
+(`../causalmesh/crates/mesh-server/src/tools/*.rs`), pas dans `docs/mcp-tools.md` du même repo
 qui contient des signatures obsolètes (`service_name`/`method_name` pour `analyze_grpc`,
 `changed_file` pour `analyze_impact` — ni l'un ni l'autre n'existe réellement).
 

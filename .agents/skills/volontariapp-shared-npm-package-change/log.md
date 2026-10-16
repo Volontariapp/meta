@@ -1,5 +1,20 @@
 # Historique
 
+## 2026-10-17
+
+- **Vérification** - ticket 5.11: contrat EventDTO (coverUrl, CoverStatusWeb) et bump de versions; regles inchangees (claude-code/agent)
+
+## 2026-10-16
+
+- **Vérification** - contracts 4.7.0: media et mediaStatus optionnels sur PostWeb (url calculee par la gateway), meme motif que avatarUrl; aucune regle modifiee (claude-code/agent)
+- **Vérification** - contracts 4.6.0: avatarUrl optionnel sur UserWeb et UserPublicWeb, lecon ajoutee (claude-code/agent)
+- **Leçon** - Les types web de la gateway sont ecrits a la main dans contracts, a tenir alignes avec les DTO (rule) (claude-code/agent)
+- **Vérification** - domain-storage 0.12.0: sous-chemin ./enums, catalogue mis a jour, storage-pipeline 0.3.4 (claude-code/agent)
+- **Leçon** - domain-storage: importer par sous-chemin dans les services sans typeorm (rule) (claude-code/agent)
+- **Vérification** - storage-client 0.3.0: relais des erreurs metier de ms-storage, isStorageUnavailable et StorageUnavailableError; ligne ajoutee au catalogue (claude-code/sonnet-5-5)
+- **Vérification** - contracts: le module storage est exporte a la racine (src/index.ts), bump 4.5.0 et patchs en cascade (claude-code/sonnet-5-5)
+- **Vérification** - contracts: src/gateway est ecrit a la main (types Request/WebResponse partages gateway et front), ajout du module gateway/storage (claude-code/sonnet-5-5)
+
 ## 2026-10-15
 
 - **Vérification** - Export models and repositories from root of domain-storage (process:export-domain-storage-root)

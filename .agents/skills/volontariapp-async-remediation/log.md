@@ -1,5 +1,16 @@
 # Historique
 
+## 2026-10-17
+
+- **Vérification** - ticket 5.11: contrat EventDTO (coverUrl, CoverStatusWeb) et bump de versions; regles inchangees (claude-code/agent)
+
+## 2026-10-16
+
+- **Vérification** - bump patch de post-processors par changeset version (cascade contracts 4.7.0); aucune regle modifiee (claude-code/agent)
+- **Vérification** - bumps patch de messaging et outbox seulement (propagation du changeset contracts), procedure inchangee (claude-code/agent)
+- **Vérification** - contracts: le module storage est exporte a la racine (src/index.ts), bump 4.5.0 et patchs en cascade (claude-code/sonnet-5-5)
+- **Vérification** - relue: seul le bump de version de post-processors change, aucune regle impactee (claude-code/sonnet-5-5)
+
 ## 2026-10-14
 
 - **Vérification** - Package version bumps (agent:antigravity)

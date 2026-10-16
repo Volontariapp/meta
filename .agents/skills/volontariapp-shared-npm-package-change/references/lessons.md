@@ -20,9 +20,27 @@ sources:
   - id: src-a7f33c12
     resource: ms-event/package.json
     title: ms-event/package.json
+  - id: src-b58c39b2
+    resource: npm-packages/packages/domain-storage/package.json
+    title: npm-packages/packages/domain-storage/package.json
+  - id: src-8ba4158b
+    resource: npm-packages/packages/contracts/src/gateway/user/response/user.response.ts
+    title: npm-packages/packages/contracts/src/gateway/user/response/user.response.ts
 ---
 
 # Leçons
+
+## 2026-10-16 - Les types web de la gateway sont ecrits a la main dans contracts, a tenir alignes avec les DTO
+
+- **Type :** rule
+- **Leçon :** UserWeb, UserPublicWeb et les reponses web de @volontariapp/contracts vivent dans packages/contracts/src/gateway/**, ecrits a la main et non generes depuis les .proto. Un champ ajoute a un DTO de api-gateway (ex. avatarUrl, calcule par la gateway) doit etre ajoute aussi a ces interfaces, sinon nativapp ne peut pas le lire de facon typee. Le champ est optionnel donc le changement est minor et non cassant. changeset version propage un bump patch a une douzaine de dependants internes (messaging, database, outbox, domain-*, storage-client, workers...), c'est attendu. contracts n'a pas de tests (No tests yet): verifier par yarn build et le .d.ts genere.[^src-8ba4158b]
+- **Consigné par :** claude-code/agent
+
+## 2026-10-16 - domain-storage: importer par sous-chemin dans les services sans typeorm
+
+- **Type :** rule
+- **Leçon :** La racine de @volontariapp/domain-storage exporte les modeles et repositories typeorm: elle ne se charge pas dans api-gateway (ERR_MODULE_NOT_FOUND @nestjs/typeorm). Depuis 0.12.0, utiliser @volontariapp/domain-storage/enums pour EntityType et @volontariapp/domain-storage/helpers pour buildPublicFileUrl. L'URL d'un avatar a la forme {base}/user-avatar/{fileId}.webp. Un nouveau sous-chemin se declare dans exports de package.json, se verifie par un import dynamique du nom de package apres build, et reste un changement additif (minor).[^src-b58c39b2]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-13 - Apres yarn up dans un consommateur, verifier qu'il n'y a qu'une copie de @volontariapp/database
 
@@ -100,3 +118,5 @@ sources:
 [^src-9f856e83]: npm-packages/.changeset/config.json
 [^src-b40f1e79]: npm-packages/yarn.lock
 [^src-a7f33c12]: ms-event/package.json
+[^src-b58c39b2]: npm-packages/packages/domain-storage/package.json
+[^src-8ba4158b]: npm-packages/packages/contracts/src/gateway/user/response/user.response.ts

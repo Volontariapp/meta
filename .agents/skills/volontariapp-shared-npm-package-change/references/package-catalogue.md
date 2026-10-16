@@ -26,8 +26,9 @@ Versions relevées le 2026-10-06 dans `packages/*/package.json`[^packages]. Pour
 | Package | Version | Rôle | Point d'entrée réel |
 | :--- | :--- | :--- | :--- |
 | `shared` | 0.9.1 | Enums et types partagés avec `nativapp` (dont l'enum `Streams`) | `src/enums`, `src/types` |
-| `contracts` | 4.3.8 | Types TS générés depuis `proto-registry`, compatibles front | généré par la CI, ne pas éditer `src/` |
+| `contracts` | 4.3.8 | Types TS générés depuis `proto-registry`, compatibles front | généré par la CI, ne pas éditer `src/` hors `src/gateway/` (écrit à la main : types `*Request` et `*WebResponse` partagés avec api-gateway et nativapp) ; chaque module généré (dont `storage`) doit être exporté dans `src/index.ts`, sinon le front n'a pas accès à ses enums |
 | `contracts-nest` | 3.3.0 | Clients et décorateurs NestJS gRPC | `getGrpcOptions`, `GRPC_MICROSERVICES`, `GRPC_SERVICES`, `*_METHODS`, `*_SERVICE_NAME` ; seul `grpc.helpers.ts` est édité à la main |
+| `storage-client` | 0.3.0 | Client gRPC de ms-storage pour le rattachement de fichiers (ms-user, ms-post, ms-event) | `StorageClientModule`, `StorageClientService.confirm*Attachment`. Les erreurs métier de ms-storage sont relayées avec leur statut et leur code (`StorageRelayedError`) ; les pannes de transport restent `STORAGE_TIMEOUT` et `STORAGE_ATTACHMENT_FAILED`. `isStorageUnavailable(error)` et `StorageUnavailableError` (503) pour les consommateurs sans repli asynchrone |
 | `messaging` | 2.17.1 | Contrats Jobs, Events, WebSockets, sagas | `JobMessagingType`, `JobRegistry`, `EventMessagingType`, `EventRegistry`, `WebsocketMessagingType`, `SagaGatherType` |
 | `database` | 3.4.17 | Modèles et moteur outbox TypeORM, gather | `EventQueueEntity.createEvent`, `JobsOutboxEntity.createJob`, `OutboxConsumer`, `OutboxDispatcher`, `OutboxStatus`, `GatherStateModel` |
 | `outbox` | 0.9.54 | Writers, consumers, dispatchers, pushers par table | `EventQueueWriter`, `JobsOutboxWriter`, repositories `EventQueueRepository`, `JobsOutboxRepository` |
@@ -49,7 +50,7 @@ Versions relevées le 2026-10-06 dans `packages/*/package.json`[^packages]. Pour
 | `domain-event` | 3.7.11 | Domaine Event, géocodage, triggers CDC | `EventService`, `PostgresEventRepository`, `GeocodingService`, `EVENTS_TRIGGER` |
 | `domain-post` | 3.6.25 | Domaine Post et Comment | `PostService`, `CommentService`, `PostgresPostRepository` (outbox intégré) |
 | `domain-social` | 0.12.9 | Graphe Neo4j | services et `Neo4j*Repository`, value objects d'id |
-| `domain-storage` | 0.3.0 | Enums et value objects storage, **pas de modèle ni repository** | `FileStatus`, `EntityType`, `FileId`, `MimeType` ; pas de README |
+| `domain-storage` | 0.12.0 | Enums, value objects, politiques, helpers d'URL et d'object key, modèles et repositories typeorm | `FileStatus`, `EntityType`, `FileId`, `MimeType`, `buildPublicFileUrl` ; sous-chemins `./helpers` et `./enums` sans typeorm, la racine charge les modèles et ne se charge pas dans la gateway ; pas de README |
 
 # Écarts README / code
 

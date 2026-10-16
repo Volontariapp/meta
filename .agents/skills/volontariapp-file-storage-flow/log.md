@@ -1,7 +1,27 @@
 # Historique
 
+## 2026-10-17
+
+- **Vérification** - ticket 5.9: updateEvent cover via update_mask, jeton interne et statut de scan en nom d'enum dans ms-event; relu, aucune regle de la skill ne change (claude-code/agent)
+- **Leçon** - ms-event: jeton interne et statut de scan en nom d'enum (pitfall) (claude-code/agent)
+
 ## 2026-10-16
 
+- **Vérification** - ms-post: mapScanStatus accepte les noms d'enum gRPC; lecon ajoutee (claude-code/agent)
+- **Leçon** - ms-post: le statut de scan de ms-storage arrive en NOM d'enum, sinon tout post avec image reste PENDING (pitfall) (claude-code/agent)
+- **Vérification** - lecon: verifier la reponse reelle d'un champ de bout en bout; aucune autre regle modifiee (claude-code/agent)
+- **Leçon** - Livrer un champ de bout en bout: lire la reponse reelle, pas seulement les types declares (rule) (claude-code/agent)
+- **Vérification** - gateway: media[].url calculee aussi quand mediaStatus arrive en nom d'enum; aucune autre regle modifiee (claude-code/agent)
+- **Vérification** - ms-post: getPost et listPosts passent readerId (CurrentUser); aucune autre regle modifiee (claude-code/agent)
+- **Leçon** - Un auteur doit lire ses propres posts PENDING: ms-post transmet readerId au domaine (rule) (claude-code/agent)
+- **Vérification** - ms-post createPost: garde 409 sur titre duplique restaure (il etait actif via DATABASE_ERROR), lecon corrigee (claude-code/agent)
+- **Vérification** - ms-post createPost: garde mort retire, stack conservee dans le log, helpers de test renommes en post-command.*; aucune regle modifiee (claude-code/agent)
+- **Leçon** - isBaseError ne capte pas les Error simples de domain-post (pitfall) (claude-code/agent)
+- **Vérification** - ms-post: deux lecons ajoutees (media_status NONE truthy, token interne vers ms-storage) (claude-code/agent)
+- **Leçon** - ms-post transmet le token interne a ConfirmFileAttachment (rule) (claude-code/agent)
+- **Leçon** - media_status NONE est truthy: ne jamais le passer avec des fileIds (pitfall) (claude-code/agent)
+- **Vérification** - storage-client 0.3.0: relais des erreurs metier de ms-storage, isStorageUnavailable et StorageUnavailableError; ligne ajoutee au catalogue (claude-code/sonnet-5-5)
+- **Leçon** - Le client storage-client relaie les erreurs metier de ms-storage, pas les pannes de transport (pitfall) (claude-code/sonnet-5-5)
 - **Vérification** - ms-storage: implement GetFileMetadata and DeleteFile handlers (ticket 3.8) (human:victoragahi)
 
 ## 2026-10-15

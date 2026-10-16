@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-16
+
+- **Vérification** - verification rattachement avatar migration 1791500000000-AddUserAvatarFileId.ts (claude-code/agent)
+- **Vérification** - Revue des migrations ms-event (cover_file_id/cover_status) et ms-post (post_media, media_status) : migrations de domaine additives, regles de la skill inchangees (claude-code/sonnet-5-5)
+
 ## 2026-10-14
 
 - **Vérification** - ms-post: add migration 1781000000000-AddPostMediaAndMediaStatus.ts (claude-code/agent)

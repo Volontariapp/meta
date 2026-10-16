@@ -21,20 +21,20 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-11T20:48:30Z"
-    digest: fc2b234309989b93
+    at: "2026-10-16T18:46:35Z"
+    digest: 3232ebffce40d722
   - by: claude-code/agent
-    at: "2026-10-12T11:52:53Z"
-    digest: fc2b234309989b93
+    at: "2026-10-16T19:09:04Z"
+    digest: 201fd20cc29f731e
   - by: claude-code/agent
-    at: "2026-10-12T11:54:00Z"
-    digest: fc2b234309989b93
+    at: "2026-10-16T21:02:49Z"
+    digest: 5b0f63e0e501e5b7
   - by: claude-code/agent
-    at: "2026-10-13T22:04:16Z"
-    digest: 3ad1303ca37462f8
-  - by: "agent:antigravity"
-    at: "2026-10-14T18:09:51Z"
-    digest: 9992f31b73f43205
+    at: "2026-10-16T23:29:43Z"
+    digest: 28677ad63261075b
+  - by: claude-code/agent
+    at: "2026-10-17T00:38:23Z"
+    digest: cbc6d3cd897a445a
 sources:
   - id: gw-claude
     resource: api-gateway/src/modules

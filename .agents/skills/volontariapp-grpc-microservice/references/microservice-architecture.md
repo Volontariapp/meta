@@ -55,7 +55,7 @@ Le guide détaillé des patterns (structure de module, DTO, contrôleurs, tests)
 ## 2. Dettes Techniques Existantes (à ne pas reproduire)
 
 - `BaseCommandController` dupliqué dans chaque service, avec un `@ts-expect-error` sur le payload du job.
-- Clients sortants et `StorageClientService` dupliqués, avec des casts (`as QueryServiceWithMetadata`, `err as Error`).
+- Clients sortants dupliqués, avec des casts (`as QueryServiceWithMetadata`, `err as Error`). Pour ms-storage, ne pas recréer de client local : utiliser `StorageClientModule.registerAsync` de `@volontariapp/storage-client`. Son `STORAGE_CLIENT_OPTIONS` doit être exporté par un module listé dans `imports` (ms-user : `StorageClientConfigModule`), un `useFactory` direct ne suffit pas.
 
 [^agent-md]: AGENT.md (structure de module, DTO, contrôleurs, tests)
 [^main-user]: Bootstrap hybride (gRPC + HTTP /health)

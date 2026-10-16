@@ -35,21 +35,21 @@ sources:
     resource: ci-tools/.github/workflows/npm-packages-pipeline.yml
     title: Pipeline réutilisable npm-packages (ci-tools)
 verified:
+  - by: claude-code/sonnet-5-5
+    at: "2026-10-16T12:20:58Z"
+    digest: bea7721af4fad642
   - by: claude-code/agent
-    at: "2026-10-14T12:23:30Z"
-    digest: 2f6d4c2a7ee37dae
-  - by: "agent:antigravity"
-    at: "2026-10-14T14:37:09Z"
-    digest: db11deb9ce4df88c
-  - by: "process:agent"
-    at: "2026-10-15T15:11:35Z"
-    digest: ff93736675c1366d
-  - by: "process:agent"
-    at: "2026-10-15T15:18:14Z"
-    digest: fcb9880cac9d0ec7
-  - by: "process:export-domain-storage-root"
-    at: "2026-10-15T18:12:27Z"
-    digest: 3141a51bc9d1b1cf
+    at: "2026-10-16T18:52:02Z"
+    digest: a498236b95fda7fd
+  - by: claude-code/agent
+    at: "2026-10-16T19:34:56Z"
+    digest: 97e64587d9dda1dd
+  - by: claude-code/agent
+    at: "2026-10-16T20:40:54Z"
+    digest: b84ed43aff30c744
+  - by: claude-code/agent
+    at: "2026-10-17T00:26:38Z"
+    digest: e829210badfd08d8
 ---
 
 # Shared NPM Package Change & Règle d'Or du Stop Immédiat

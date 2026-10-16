@@ -25,20 +25,20 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-14T15:51:14Z"
-    digest: e3685a48a006dfad
+    at: "2026-10-16T22:33:08Z"
+    digest: dd6431d79990ed19
   - by: claude-code/agent
-    at: "2026-10-14T15:54:43Z"
-    digest: 94e8099a91a8ae7b
+    at: "2026-10-16T23:48:48Z"
+    digest: c2997e6d346ac4c0
   - by: claude-code/agent
-    at: "2026-10-14T15:57:32Z"
-    digest: c4534362e9493db8
-  - by: "process:agent"
-    at: "2026-10-15T13:05:29Z"
-    digest: 50b64fd2cd10434a
-  - by: "process:agent"
-    at: "2026-10-15T13:12:29Z"
-    digest: a1deac5e9e4e4d19
+    at: "2026-10-17T00:15:12Z"
+    digest: 8a599a3c49074d43
+  - by: claude-code/agent
+    at: "2026-10-17T00:21:41Z"
+    digest: 8a599a3c49074d43
+  - by: claude-code/agent
+    at: "2026-10-17T00:22:20Z"
+    digest: f43c93e5676f8c19
 sources:
   - id: agent-md
     resource: AGENT.md

@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-16
+
+- **Vérification** - Revue domain-user (avatar_file_id, updateAvatar) : sans effet sur le flux PENDING_DELETION ; log antigravity corrige en process:antigravity (claude-code/sonnet-5-5)
+
 ## 2026-10-14
 
 - **Vérification** - Add avatar_file_id and remove deprecated logoPath (agent:antigravity)

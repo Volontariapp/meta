@@ -23,21 +23,21 @@ generated:
   by: claude-code/agent
   at: "2026-10-12T12:18:00Z"
 verified:
-  - by: "human:victor"
-    at: "2026-10-15T18:21:00Z"
-    digest: debb014cd987ccca
   - by: claude-code/agent
-    at: "2026-10-15T20:59:01Z"
-    digest: 667e9845240e6455
-  - by: "process:fix-rejection-reason"
-    at: "2026-10-15T21:08:30Z"
-    digest: b26cd7cffdf35367
+    at: "2026-10-16T23:48:49Z"
+    digest: 99d584eb9eb2f752
   - by: claude-code/agent
-    at: "2026-10-15T22:06:09Z"
-    digest: 932fa72418ae11db
-  - by: "human:victoragahi"
-    at: "2026-10-16T08:05:13Z"
-    digest: de6790672fdd7593
+    at: "2026-10-17T00:15:13Z"
+    digest: 16ba1fa636b76ff9
+  - by: claude-code/agent
+    at: "2026-10-17T00:22:21Z"
+    digest: 0c25e378201f5d34
+  - by: claude-code/agent
+    at: "2026-10-17T00:26:38Z"
+    digest: 6be2210a3c73bbec
+  - by: claude-code/agent
+    at: "2026-10-17T00:38:24Z"
+    digest: 46d39cdebf05ff1c
 sources:
   - id: doc-creation
     kind: local_file
@@ -189,7 +189,7 @@ Une fois la PR Protobuf générée dans `npm-packages`[^doc-creation] :
 Dans le dépôt `api-gateway` :
 1. Créer le module `src/modules/<domaine>/`.
 2. Implémenter le contrôleur REST `@GatewayController('<domaine>')` :
-   - DTO Swagger complets avec décorateurs `class-validator`.
+   - DTO Swagger complets avec décorateurs `class-validator`, qui `implements` les types `<X>Request` de `@volontariapp/contracts` (`npm-packages/packages/contracts/src/gateway/<domaine>/{request,response}`, partagés avec nativapp). Les créer d'abord dans npm-packages (règle du STOP) s'ils n'existent pas.
    - Propagation de la métadonnée interne d'autorisation : `req['internalMetadata']`.
    - Gestion des codes de retour (HTTP 200 standard, HTTP 206 `FALLBACK_ACTIVATED` en cas de mode dégradé).
 3. Déclarer le client gRPC et le token d'injection correspondant dans `src/grpc/`.

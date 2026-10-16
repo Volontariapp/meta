@@ -18,12 +18,6 @@ generated:
   at: "2026-10-12T11:56:30Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T20:30:11Z"
-    digest: 46fcf30dbc961153
-  - by: claude-code/agent
-    at: "2026-10-13T20:48:40Z"
-    digest: 3b11a69526a8f9e5
-  - by: claude-code/agent
     at: "2026-10-13T21:22:38Z"
     digest: 3b11a69526a8f9e5
   - by: claude-code/agent
@@ -32,6 +26,12 @@ verified:
   - by: claude-code/agent
     at: "2026-10-14T15:48:09Z"
     digest: 84b11f521b929050
+  - by: claude-code/sonnet-5-5
+    at: "2026-10-16T12:24:43Z"
+    digest: 56f23cd207ec47db
+  - by: claude-code/agent
+    at: "2026-10-16T13:16:54Z"
+    digest: 39bb5a94654fe962
 sources:
   - id: sync-mig
     kind: local_file

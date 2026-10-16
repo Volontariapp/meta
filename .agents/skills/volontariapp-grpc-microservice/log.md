@@ -1,5 +1,24 @@
 # Historique
 
+## 2026-10-17
+
+- **Vérification** - test ms-event: assertion de valeur au lieu de toHaveProperty; regles inchangees (claude-code/agent)
+- **Vérification** - lecon: toHaveProperty sur champ de classe undefined; regles inchangees (claude-code/agent)
+- **Leçon** - Tests d'entite: toHaveProperty echoue sur un champ de classe undefined (pitfall) (claude-code/agent)
+- **Vérification** - ticket 5.9: updateEvent cover via update_mask, jeton interne et statut de scan en nom d'enum dans ms-event; relu, aucune regle de la skill ne change (claude-code/agent)
+
+## 2026-10-16
+
+- **Vérification** - ms-post: mapScanStatus accepte les noms d'enum gRPC; lecon ajoutee (claude-code/agent)
+- **Vérification** - ms-post: getPost et listPosts passent readerId (CurrentUser); aucune autre regle modifiee (claude-code/agent)
+- **Vérification** - ms-post createPost: garde 409 sur titre duplique restaure (il etait actif via DATABASE_ERROR), lecon corrigee (claude-code/agent)
+- **Vérification** - ms-post createPost: garde mort retire, stack conservee dans le log, helpers de test renommes en post-command.*; aucune regle modifiee (claude-code/agent)
+- **Vérification** - ms-post createPost: token interne transmis a ms-storage, media_status non force a NONE avec fileIds, isStorageUnavailable partage; aucune regle du playbook modifiee (claude-code/agent)
+- **Vérification** - ms-user: client storage local supprime (storage.client.ts), StorageClientModule.registerAsync exige STORAGE_CLIENT_OPTIONS exporte par un module importe; dette technique mise a jour (claude-code/agent)
+- **Vérification** - verify user avatar attachment controller tests with storage client (agent/antigravity)
+- **Vérification** - verification integration storage-client 0.3.0 et rattachement avatar dans ms-user (claude-code/agent)
+- **Vérification** - Revue ms-post : DTO en IsUUID('all') et traduction du conflit d'unicite en POST_ALREADY_EXISTS ; patron de la skill inchange (claude-code/sonnet-5-5)
+
 ## 2026-10-15
 
 - **Vérification** - Allow UUIDv5 in comment and post command/query DTOs (process:agent)

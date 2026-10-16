@@ -23,9 +23,18 @@ sources:
   - id: src-8fc3ad1d
     resource: ms-event/src/modules/event/controllers/commands/base.command.controller.ts
     title: ms-event/src/modules/event/controllers/commands/base.command.controller.ts
+  - id: src-300927cf
+    resource: ms-event/src/test/unit/controllers/event.command.controller.unit.spec.ts
+    title: ms-event/src/test/unit/controllers/event.command.controller.unit.spec.ts
 ---
 
 # Leçons
+
+## 2026-10-17 - Tests d'entite: toHaveProperty echoue sur un champ de classe undefined
+
+- **Type :** pitfall
+- **Leçon :** Une entite de domain-* (classe) declare ses champs comme proprietes propres: un champ non renseigne existe avec la valeur undefined. expect(entity).not.toHaveProperty('x') echoue alors (Received value: undefined). Asserter la valeur: expect(entity.x).toBeUndefined(), ou la forme serialisee JSON.stringify. Constate sur ms-event (ticket 5.9, CI).[^src-300927cf]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-13 - withFallback ms-event: 403 sans job, extraPayload pour les droits au replay
 
@@ -68,3 +77,4 @@ sources:
 [^src-855ad96a]: ms-post/src/modules/post/transformers/post.transformer.ts
 [^src-c5886b21]: npm-packages/packages/domain-event/src/services/event.service.ts
 [^src-8fc3ad1d]: ms-event/src/modules/event/controllers/commands/base.command.controller.ts
+[^src-300927cf]: ms-event/src/test/unit/controllers/event.command.controller.unit.spec.ts

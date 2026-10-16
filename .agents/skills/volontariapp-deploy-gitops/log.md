@@ -1,5 +1,14 @@
 # Historique
 
+## 2026-10-16
+
+- **Leçon** - Nouvel appel gRPC inter-services: variable d'URL et deux NetworkPolicies, sinon ECONNREFUSED sur localhost (pitfall) (claude-code/agent)
+- **Vérification** - ms-post: MS_STORAGE_URL et policies ms-post vers ms-storage; lecon ajoutee (claude-code/agent)
+- **Vérification** - ConfigMap partage storage-public-config (deploy#22): lecon ajoutee (claude-code/agent)
+- **Leçon** - Config partagee entre services: un ConfigMap possede par une seule Application ArgoCD (rule) (claude-code/agent)
+- **Vérification** - ConfigMap partage storage-public-config (deploy#22): motif ajoute, ordre de sync et --enable-helm consignes (claude-code/agent)
+- **Leçon** - Chaque ms-* doit definir MS_<SERVICE>_URL=0.0.0.0:3000 et la StorageClass local-path detruit les volumes (pitfall) (claude-code/sonnet-5-5)
+
 ## 2026-10-14
 
 - **Vérification** - Verify deploy manifests for runners (claude-code/agent)

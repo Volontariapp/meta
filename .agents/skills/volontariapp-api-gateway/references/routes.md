@@ -28,6 +28,7 @@ Préfixe global `api/v1`[^modules].
 | `/posts`, `/posts/:postId/comments` | `ms-post` | `src/modules/post`, `BasePostGrpcController` vers `PostServiceClient` |
 | `/events`, `/events/:id/requirements`, `/tags` | `ms-event` | `src/modules/event` |
 | `/social/*` (likes, follow/block, participate/wish, feed, liens event-post) | `ms-social` | `src/modules/social`, contrôleurs commands/queries et `event-post-link.controller.ts` |
+| `POST /storage/upload-url`, `POST /storage/files/:id/confirm` (deadline 10 s), `GET /storage/files/:id` | `ms-storage` | `src/modules/storage`, contrôleurs commands/queries, `common/storage-grpc-errors.ts` (UNAVAILABLE, DEADLINE_EXCEEDED et timeout local vers HTTP 503) |
 | `POST /system/seed` | plusieurs | `system-seed.controller.ts` (voir risques connus dans la skill) |
 | `/health` | local | santé des connexions |
 | `/helpers/tokens/*` (`@Public`) | local | génération de tokens de test (voir risques connus) |

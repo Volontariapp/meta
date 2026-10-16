@@ -1,7 +1,34 @@
 # Historique
 
+## 2026-10-17
+
+- **Vérification** - ticket 5.11: coverUrl/coverStatus et validation sur les evenements; relu (claude-code/agent)
+- **Vérification** - ticket 5.11: contrat EventDTO (coverUrl, CoverStatusWeb) et bump de versions; regles inchangees (claude-code/agent)
+- **Vérification** - test ms-event: assertion de valeur au lieu de toHaveProperty; regles inchangees (claude-code/agent)
+- **Vérification** - ticket 5.9: updateEvent cover via update_mask, jeton interne et statut de scan en nom d'enum dans ms-event; relu, aucune regle de la skill ne change (claude-code/agent)
+
 ## 2026-10-16
 
+- **Vérification** - ms-post: mapScanStatus accepte les noms d'enum gRPC; lecon ajoutee (claude-code/agent)
+- **Vérification** - gateway: mapper de statut de media (noms d'enum), aucune regle de scaffold modifiee (claude-code/agent)
+- **Vérification** - ms-post: getPost et listPosts passent readerId (CurrentUser); aucune autre regle modifiee (claude-code/agent)
+- **Vérification** - ticket 5.7: gateway post media url, aucune regle de scaffold modifiee (claude-code/agent)
+- **Vérification** - contracts 4.7.0 (PostWeb media/mediaStatus) et bumps patch en cascade; aucune regle modifiee (claude-code/agent)
+- **Vérification** - contracts 4.6.0 et bumps patch propages aux dependants internes; aucune regle modifiee (claude-code/agent)
+- **Vérification** - api-gateway: avatarFileId relaye, avatarUrl via PublicFileUrlService, config storage.publicBaseUrl, domain-storage 0.12.0 (claude-code/agent)
+- **Vérification** - domain-storage 0.12.0: sous-chemin ./enums, catalogue mis a jour, storage-pipeline 0.3.4 (claude-code/agent)
+- **Vérification** - api-gateway: avatarFileId relaye dans UpdateUserRequestDTO, factory de test utilisateur, blocage domain-storage consigne; aucune regle du playbook modifiee (claude-code/agent)
+- **Vérification** - ms-post createPost: garde 409 sur titre duplique restaure (il etait actif via DATABASE_ERROR), lecon corrigee (claude-code/agent)
+- **Vérification** - ms-post createPost: garde mort retire, stack conservee dans le log, helpers de test renommes en post-command.*; aucune regle modifiee (claude-code/agent)
+- **Vérification** - ms-post createPost relu (token interne, media_status, storage-client 0.3.0); aucune regle modifiee (claude-code/agent)
+- **Vérification** - ms-user: relu storage.client.ts (supprime) et user.transformer.ts (avatarFileId), aucune regle modifiee (claude-code/agent)
+- **Vérification** - verify user avatar attachment controller tests with storage client (agent/antigravity)
+- **Vérification** - verification suppression legacy storage client et config storage-client dans ms-user (claude-code/agent)
+- **Vérification** - storage-client 0.3.0: relais des erreurs metier de ms-storage, isStorageUnavailable et StorageUnavailableError; ligne ajoutee au catalogue (claude-code/sonnet-5-5)
+- **Vérification** - contracts: le module storage est exporte a la racine (src/index.ts), bump 4.5.0 et patchs en cascade (claude-code/sonnet-5-5)
+- **Vérification** - relue: renommage de DTO storage sans impact sur les etapes du playbook (claude-code/sonnet-5-5)
+- **Vérification** - relue: etape 7 deja a jour (DTO implements les Request de contracts), module storage suit le meme schema (claude-code/sonnet-5-5)
+- **Vérification** - contracts: src/gateway est ecrit a la main (types Request/WebResponse partages gateway et front), ajout du module gateway/storage (claude-code/sonnet-5-5)
 - **Vérification** - ms-storage: implement GetFileMetadata and DeleteFile handlers (ticket 3.8) (human:victoragahi)
 
 ## 2026-10-15

@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-16
+
+- **Vérification** - Source des outils pointee vers ../causalmesh (repo frere de meta, hors workspace) ; glob retire de paths car non resolu hors racine (claude-code/sonnet-5-5)
+
 ## 2026-10-13
 
 - **Vérification** - mesh-mcp 7.1.10: lecture des notes (non resolu statiquement, Depth limit vs Chain ends), find_dependents ne couvre pas les noms de champ ni les appelants gRPC (claude-code/agent)

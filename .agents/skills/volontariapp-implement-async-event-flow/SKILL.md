@@ -64,7 +64,7 @@ verified:
   - by: claude-code/agent
     at: "2026-10-14T12:48:38Z"
     digest: 4ea164ca905fe18f
-  - by: "agent:antigravity"
+  - by: process:antigravity
     at: "2026-10-14T14:37:10Z"
     digest: 4501c36cd057c496
 ---
