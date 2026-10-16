@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-16
+
+- **Vérification** - ms-storage: implement GetFileMetadata and DeleteFile handlers (ticket 3.8) (human:victoragahi)
+
 ## 2026-10-15
 
 - **Vérification** - ms-storage confirmUpload: chemin SYNC et bascule ASYNC ticket 3.7 (human:victoragahi)

@@ -23,9 +23,6 @@ generated:
   by: claude-code/agent
   at: "2026-10-12T12:18:00Z"
 verified:
-  - by: "process:export-domain-storage-root"
-    at: "2026-10-15T18:12:27Z"
-    digest: 1053b258852c8aba
   - by: "human:victor"
     at: "2026-10-15T18:21:00Z"
     digest: debb014cd987ccca
@@ -38,6 +35,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-15T22:06:09Z"
     digest: 932fa72418ae11db
+  - by: "human:victoragahi"
+    at: "2026-10-16T08:05:13Z"
+    digest: de6790672fdd7593
 sources:
   - id: doc-creation
     kind: local_file
