@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-17
+
+- **Vérification** - Verifie: worker-event recoit une migration de test manquante; aucun flux de job ni handler modifie (claude-code/agent)
+
 ## 2026-10-14
 
 - **Vérification** - Propagate Logger.setDefaultConfig in workers (claude-code/agent)

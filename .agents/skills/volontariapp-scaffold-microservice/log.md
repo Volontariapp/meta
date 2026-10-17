@@ -2,6 +2,7 @@
 
 ## 2026-10-17
 
+- **Vérification** - Verifie: migration cover_file_id copiee dans worker-event; aucune etape de scaffold modifiee (claude-code/agent)
 - **Vérification** - Verifie: ajout du processor ws-service user-impact-score-credited, du crediter outbox dans pp-user et bumps domain-event; aucune etape de scaffold modifiee (claude-code/agent)
 - **Vérification** - Verifie: ajout d'un evenement de notification (user.impact_score_credited) dans messaging et shared; aucune etape de scaffold modifiee (claude-code/agent)
 - **Vérification** - Verifie: ajout du processor event-finished-impact-score et de la migration impact_score_credits; aucune etape de scaffold modifiee (claude-code/agent)

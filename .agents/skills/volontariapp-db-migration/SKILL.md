@@ -18,9 +18,6 @@ generated:
   at: "2026-10-12T11:56:30Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-14T11:23:53Z"
-    digest: 755d1369c2941b2d
-  - by: claude-code/agent
     at: "2026-10-14T15:48:09Z"
     digest: 84b11f521b929050
   - by: claude-code/sonnet-5-5
@@ -31,6 +28,9 @@ verified:
     digest: 39bb5a94654fe962
   - by: claude-code/agent
     at: "2026-10-17T12:52:55Z"
+    digest: 7f47c10f90d470fa
+  - by: claude-code/agent
+    at: "2026-10-17T14:27:12Z"
     digest: 7f47c10f90d470fa
 sources:
   - id: sync-mig
@@ -143,6 +143,7 @@ export const AppDataSource = new DataSource({
 ```
 
 3. Si un `post-processor-*` ou un `worker-*` lit ou écrit la nouvelle table via le `DataSource` de la base de `ms-<d>` (ex. `post-processor-user` sur `ms_user`), ajouter aussi l'entité à la liste `entities` de son `infrastructure.module.ts` : sans cela, TypeORM lève « No metadata for X was found » au premier traitement, et les tests unitaires qui mockent le `DataSource` ne le voient pas. Exemple : `impact_score_credits` (`ImpactScoreCreditModel`, migration `1792100000000-CreateImpactScoreCredits` dans `ms-user`).
+4. **Monter `domain-<d>` dans un `worker-*` ou un `post-processor-*` casse sa CI si ses copies de migrations ont dérivé.** Leur CI rebuild une base neuve depuis `src/migrations/` (`global-setup`), et le `domain-<d>` récent mappe des colonnes que la copie n'a pas. Constaté sur `workers-runners#19` : `domain-event@3.12.1` mappe `cover_file_id`, absente de `worker-event` → `column "cover_file_id" of relation "events" does not exist`, 24 tests rouges. Correctif : copier la migration manquante à l'identique (`diff <(ls ms-event/src/migrations/domain) <(ls worker-event/src/migrations/domain)`, puis `md5`). `post-processor-event` a la même dérive : elle cassera à sa prochaine montée de `domain-event`. Reproduire en local sans toucher aux données : `global-setup` fait `DROP SCHEMA public CASCADE` sur `DB_NAME`, dont la valeur par défaut est `ms_event`. Créer une base jetable (`CREATE DATABASE worker_event_ci_check`) et lancer `DB_NAME=worker_event_ci_check REDIS_PORT=<port> yarn test:integration` avec un Redis jetable (`docker run redis:7-alpine redis-server --requirepass password`) : `REDIS_DB_INDEX` ne suffit pas, les jobs BullMQ ne sont alors jamais traités (`handlerSpy` appelé 0 fois).
 
 ---
 

@@ -2,6 +2,7 @@
 
 ## 2026-10-17
 
+- **Vérification** - Lecon: monter domain-<d> dans worker/post-processor casse la CI si les copies de migrations ont derive; reproduction locale sur base et Redis jetables (claude-code/agent)
 - **Vérification** - Etape 3: entite a declarer aussi dans l'infrastructure.module des post-processors/workers qui lisent la table; exemple impact_score_credits (claude-code/agent)
 
 ## 2026-10-16
