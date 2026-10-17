@@ -2,6 +2,7 @@
 
 ## 2026-10-17
 
+- **Vérification** - Checklist notification utilisateur en push direct sans gather: 7 sites npm-packages a calquer sur USER_BADGE_AWARDED, test a calquer, cote ws-service (claude-code/agent)
 - **Vérification** - Phase 2 impact score: deux processors sur un meme stream (groupName distinct), entite a declarer dans infrastructure.module, types de payload perimes si post-processors/database/outbox pas montes avec messaging (claude-code/agent)
 - **Vérification** - IEventFinishedPayload porte awardedImpactScore; pieges: message deja en stream sans le champ, credit hors fast-path badges (claude-code/agent)
 

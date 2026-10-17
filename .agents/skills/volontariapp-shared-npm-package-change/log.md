@@ -2,6 +2,7 @@
 
 ## 2026-10-17
 
+- **Vérification** - Verifie: bump shared 0.16.0 et messaging 2.27.0 propage un patch a 11 dependants (auth, database, domain-*, outbox, post-processors, storage-pipeline, workers); procedure inchangee (claude-code/agent)
 - **Vérification** - Piege: migrations de test domain-* perimees vs ms-*; bump propage un patch aux dependants (claude-code/agent)
 - **Vérification** - ticket 5.11: contrat EventDTO (coverUrl, CoverStatusWeb) et bump de versions; regles inchangees (claude-code/agent)
 
