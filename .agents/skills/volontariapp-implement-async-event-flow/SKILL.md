@@ -52,9 +52,6 @@ sources:
     resource: npm-packages/packages/messaging/src/sagas/gather-registry.ts
     title: SAGA_GATHER_COMPLETION_MAPPING
 verified:
-  - by: claude-code/agent
-    at: "2026-10-14T12:48:38Z"
-    digest: 4ea164ca905fe18f
   - by: "process:antigravity"
     at: "2026-10-14T14:37:10Z"
     digest: 4501c36cd057c496
@@ -67,6 +64,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-17T13:28:22Z"
     digest: a8f2601263215faa
+  - by: claude-code/agent
+    at: "2026-10-17T14:06:14Z"
+    digest: 22161daa37e6ae05
 ---
 
 # Guide : Implémenter un Flux Asynchrone End-to-End
@@ -315,6 +315,9 @@ Lorsque plusieurs post-processors travaillent en parallèle (ex : `post-processo
 - [ ] **Deux processors sur le même stream dans un même runner :** chacun DOIT avoir son propre `groupName` (ex. `${groupName}-impact-score` pour `Streams.EVENT_FINISHED`, à côté des badges). Avec le même groupe, Redis se partage les messages entre eux, et la clé d'idempotence (`acquireIdempotencyLock(redis, groupName, id)`) est aussi par groupe.
 - [ ] **Nouveau modèle lu par un runner :** l'ajouter à la liste `entities` du `PostgresBridgeModule.register` de `post-processor-<d>/src/infrastructure/infrastructure.module.ts`. Les tests unitaires mockent le `DataSource` et ne voient pas « No metadata for X was found », qui n'apparaît qu'au premier traitement réel.
 - [ ] **Types de payload périmés après `yarn up messaging` :** `@volontariapp/post-processors`, `database` et `outbox` embarquent leur propre `messaging` tant qu'ils ne sont pas montés avec lui, et `BatchEventItem<K>` hérite du vieux registre. Monter les quatre ensemble (`yarn up @volontariapp/messaging@X @volontariapp/post-processors@Y @volontariapp/database@Z @volontariapp/outbox@W`, versions lues avec `npm view`), vérifier qu'il ne reste qu'une copie (`find node_modules -path '*@volontariapp/messaging/package.json'`), et lancer `tsc --noEmit --incremental false` : le cache incrémental garde l'ancienne erreur.
+- [ ] **`yarn up` échoue avec `YN0082 ... No candidates found` juste après une release :** un package publié (ex. `domain-event@3.12.1`, `post-processors@3.3.12`) dépend en version exacte d'un package interne qui n'est pas encore sur le registre (`outbox@0.10.14` est apparu avec du retard, comme `domain-event@3.12.0` la fois précédente), alors que la CI de `main` est verte. Avant de monter un consommateur, vérifier CHAQUE version attendue (`npm view @volontariapp/<pkg>@<version> version`), attendre, ne pas contourner avec un snapshot `next` ni une `resolutions`.
+- [ ] **Montée partielle = deux copies de `database` :** dans `ws-service`, `domain-event ^3.10.9` tirait `outbox 0.10.6` et un vieux `database` ; `tsc` signalait `Repository<EventQueueModel> is not assignable` (`gather-reaper.service.ts`) et 8 tests échouaient. Monter aussi les packages DÉCLARÉS qui embarquent `database`, `outbox` ou `messaging` (ici `domain-event`), puis `find node_modules -path '*@volontariapp/database/package.json'` : une seule copie. Un `resolutions` ancien (ex. `@volontariapp/database: 3.8.0` dans `worker-event`) annule la montée sans prévenir : le lire avant.
+- [ ] **Ligne outbox écrite depuis un post-processor (`createFollowUp`) :** `traceId`, `emitterId` et `correlation_id` sont des colonnes `uuid` de `event_queue` ; une valeur de test fictive (`'trace-verify'`) échoue avec `22P02` sur la vraie base. Dans une spec unitaire, `eventQueueRepo.save` est appelé avec un second argument `undefined` : `toHaveBeenCalledWith(expect.objectContaining({...}), undefined)`. L'écriture dans la même transaction que le crédit garantit que le push arrive après un score validé en base.
 - [ ] **Saut de version `domain-user` dans les mocks :** `createMockUserRepository` (`tests/mocks/user-deletion-success.mock.ts`) doit implémenter tout `IUserRepository`. Après un `yarn up @volontariapp/domain-user`, `tsc` signale la méthode manquante (ex. `updateAvatar`).
 - [ ] **Stream de complétion de gather :** Dans `SAGA_GATHER_COMPLETION_MAPPING` (`gather-registry.ts`), le champ `stream` DOIT être le stream de complétion (ex: `Streams.EVENT_SUCCESSFULLY_CREATED`), et JAMAIS le stream déclencheur (ex: `event:created`).
 

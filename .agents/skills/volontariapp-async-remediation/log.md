@@ -2,6 +2,7 @@
 
 ## 2026-10-17
 
+- **Vérification** - Verifie: nouveau stream user:impact_score_credited consomme par ws-service; procedures DLQ/XCLAIM inchangees (nom du DLQ par groupe non verifie) (claude-code/agent)
 - **Vérification** - Verifie: seul le bump de version de post-processors a change; procedures DLQ/XCLAIM inchangees (claude-code/agent)
 - **Vérification** - Verifie: nouveau consumer group <group>-impact-score sur event:finished; procedures DLQ/XCLAIM inchangees (nom du DLQ par groupe non verifie) (claude-code/agent)
 - **Vérification** - Verifie: seul le bump de version de post-processors a change; aucune procedure DLQ/XCLAIM modifiee (claude-code/agent)
