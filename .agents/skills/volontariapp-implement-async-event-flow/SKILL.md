@@ -53,9 +53,6 @@ sources:
     title: SAGA_GATHER_COMPLETION_MAPPING
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T22:48:41Z"
-    digest: e475e128b58f829d
-  - by: claude-code/agent
     at: "2026-10-13T22:54:48Z"
     digest: 48f15e675dc27359
   - by: claude-code/agent
@@ -64,9 +61,12 @@ verified:
   - by: claude-code/agent
     at: "2026-10-14T12:48:38Z"
     digest: 4ea164ca905fe18f
-  - by: process:antigravity
+  - by: "process:antigravity"
     at: "2026-10-14T14:37:10Z"
     digest: 4501c36cd057c496
+  - by: claude-code/agent
+    at: "2026-10-17T12:32:07Z"
+    digest: 5230c494361a9d33
 ---
 
 # Guide : Implémenter un Flux Asynchrone End-to-End
@@ -309,6 +309,8 @@ Lorsque plusieurs post-processors travaillent en parallèle (ex : `post-processo
 - [ ] **Toujours `getEventStreamName` dans les options de post-processor :** L'outbox pusher préfixe systématiquement les flux par `stream:`. Le provider d'options d'un post-processor DOIT obligatoirement faire `streamName: getEventStreamName(Streams.MON_STREAM)`.
 - [ ] **Fan-out vers plusieurs domaines :** `event-queue.pusher.ts` fait un `XADD` par stream de `targetServices`. Un événement lu par plusieurs services (ex: `user.deleted`) exige donc UN stream par consommateur (`Streams.USER_DELETED_POST`, `USER_DELETED_EVENT`, `USER_DELETED_STORAGE`, `SOCIAL_USER`, plus `USER_DELETED` pour `ws-service`). Les événements de complétion partagent le stream de feedback WS (`WS_USER_DELETED_FEEDBACK`), avec un consumer group distinct par classe de processor côté `ws-service`.
 - [ ] **Ne pas avaler les erreurs d'un post-processor de purge :** un `catch` qui logue sans relancer acquitte le message, donc ni retry (`RetryHelper`, 5 tentatives) ni DLQ, et le gather reste `PENDING` sans timeout. Relancer, et émettre `*_DELETION_FAILED` quand les retries sont épuisés. Les purges doivent être idempotentes ("déjà supprimé" = succès).
+- [ ] **Champ requis ajouté à un payload d'événement :** les messages déjà présents dans le stream n'ont pas le champ (le parsing est un `JSON.parse(...) as StreamEvent`). Le post-processor doit le détecter, journaliser et ne rien créditer, jamais prendre `0` par défaut. Exemple : `IEventFinishedPayload.awardedImpactScore` (crédit de score par `ImpactScoreCreditModel`, dédup `(event_id, user_id)` dans la même transaction que l'incrément de `users.total_impact_score`).
+- [ ] **Crédit à `event.finished` hors du chemin badges :** `BadgeEvaluator.evaluateParticipantEventFinished` sort tôt quand le user possède déjà les 9 badges de participation. Un crédit placé dans cette méthode ne serait jamais appliqué à ces users.
 - [ ] **Stream de complétion de gather :** Dans `SAGA_GATHER_COMPLETION_MAPPING` (`gather-registry.ts`), le champ `stream` DOIT être le stream de complétion (ex: `Streams.EVENT_SUCCESSFULLY_CREATED`), et JAMAIS le stream déclencheur (ex: `event:created`).
 
 [^streams]: Enum Streams

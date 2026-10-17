@@ -2,6 +2,7 @@
 
 ## 2026-10-17
 
+- **Vérification** - Piege: migrations de test domain-* perimees vs ms-*; bump propage un patch aux dependants (claude-code/agent)
 - **Vérification** - ticket 5.11: contrat EventDTO (coverUrl, CoverStatusWeb) et bump de versions; regles inchangees (claude-code/agent)
 
 ## 2026-10-16

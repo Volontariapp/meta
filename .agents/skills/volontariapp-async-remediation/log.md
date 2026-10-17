@@ -2,6 +2,7 @@
 
 ## 2026-10-17
 
+- **Vérification** - Verifie: seul le bump de version de post-processors a change; aucune procedure DLQ/XCLAIM modifiee (claude-code/agent)
 - **Vérification** - ticket 5.11: contrat EventDTO (coverUrl, CoverStatusWeb) et bump de versions; regles inchangees (claude-code/agent)
 
 ## 2026-10-16

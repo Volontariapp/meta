@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-17
+
+- **Vérification** - IEventFinishedPayload porte awardedImpactScore; pieges: message deja en stream sans le champ, credit hors fast-path badges (claude-code/agent)
+
 ## 2026-10-14
 
 - **Vérification** - Add storage streams and avatar/cover replacement (agent:antigravity)

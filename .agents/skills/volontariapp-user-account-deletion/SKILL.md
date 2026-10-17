@@ -17,9 +17,6 @@ generated:
   at: "2026-10-11T16:59:33Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T09:11:14Z"
-    digest: 2b6792d3efa8b352
-  - by: claude-code/agent
     at: "2026-10-13T11:38:33Z"
     digest: f83c020a514803cb
   - by: claude-code/agent
@@ -31,6 +28,9 @@ verified:
   - by: claude-code/sonnet-5-5
     at: "2026-10-16T12:24:45Z"
     digest: a911501d005746f0
+  - by: claude-code/agent
+    at: "2026-10-17T12:32:08Z"
+    digest: f72b7f94d3a033ce
 sources: []
 ---
 
@@ -51,6 +51,7 @@ Ce document spécifie les **invariants de domaine et règles d'architecture** po
 - Ne jamais supprimer un compte avec `IUserRepository.delete` (hérité de `BaseRepository`, `DELETE` physique sans événement).
 - Un user `PENDING_DELETION` doit être refusé au login et au refresh (côté `ms-user`, via `UserEntity.status`).
 - La migration réelle de `status` et `deletion_requested_at` vit dans `ms-user`; `domain-user/src/test/migrations` ne sert qu'aux tests d'intégration.
+- Les lignes de `impact_score_credits` (`ImpactScoreCreditModel`, dédup du crédit de score par `(event_id, user_id)`) ont une FK `ON DELETE CASCADE` sur `users` : `finalizeDeletion` les supprime avec le user, sans purge dédiée. La migration de la table vit dans `ms-user`.
 - Voir la skill `volontariapp-implement-async-event-flow` pour le gather et les pièges des post-processors de purge.
 
 ## Références

@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-17
+
+- **Vérification** - ImpactScoreCreditModel (impact_score_credits) supprime en cascade avec le user (claude-code/agent)
+
 ## 2026-10-16
 
 - **Vérification** - Revue domain-user (avatar_file_id, updateAvatar) : sans effet sur le flux PENDING_DELETION ; log antigravity corrige en process:antigravity (claude-code/sonnet-5-5)
