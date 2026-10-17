@@ -2,6 +2,7 @@
 
 ## 2026-10-17
 
+- **Vérification** - Verifie: aucune regle de flux modifiee; migrations copiees dans post-processor-event, resolutions retire de worker-event (claude-code/agent)
 - **Vérification** - Phase push: yarn up YN0082 si release incomplete, montee partielle = deux copies de database, ligne outbox createFollowUp avec colonnes uuid (claude-code/agent)
 - **Vérification** - Checklist notification utilisateur en push direct sans gather: 7 sites npm-packages a calquer sur USER_BADGE_AWARDED, test a calquer, cote ws-service (claude-code/agent)
 - **Vérification** - Phase 2 impact score: deux processors sur un meme stream (groupName distinct), entite a declarer dans infrastructure.module, types de payload perimes si post-processors/database/outbox pas montes avec messaging (claude-code/agent)
