@@ -53,9 +53,6 @@ sources:
     title: SAGA_GATHER_COMPLETION_MAPPING
 verified:
   - by: claude-code/agent
-    at: "2026-10-17T12:32:07Z"
-    digest: 5230c494361a9d33
-  - by: claude-code/agent
     at: "2026-10-17T12:52:54Z"
     digest: d1776ea250987880
   - by: claude-code/agent
@@ -66,6 +63,9 @@ verified:
     digest: 22161daa37e6ae05
   - by: claude-code/agent
     at: "2026-10-17T14:46:43Z"
+    digest: 2ebfc5d803819427
+  - by: claude-code/agent
+    at: "2026-10-17T14:48:07Z"
     digest: 2ebfc5d803819427
 ---
 
