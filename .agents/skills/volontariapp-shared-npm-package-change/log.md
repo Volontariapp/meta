@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-18
+
+- **Vérification** - contracts/src/gateway ecrit a la main, le reste genere depuis les proto: confirme par le Lead Dev le 2026-10-18 (claude-code/sonnet-5-5)
+
 ## 2026-10-17
 
 - **Vérification** - Lecon: sous-agent en parallele sur un depot consommateur peut contourner le hook STOP via heredoc Bash (claude-code/agent)

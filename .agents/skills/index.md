@@ -22,7 +22,7 @@ Le cycle de vie des skills est géré par [volontariapp-skill-evolution](/volont
 | [volontariapp-proto-contract-evolution](/volontariapp-proto-contract-evolution/SKILL.md) | Proto Contract Evolution | 2026-10-12 |
 | [volontariapp-scaffold-microservice](/volontariapp-scaffold-microservice/SKILL.md) | Scaffolding d'un Nouveau Microservice gRPC et de ses Runners | 2026-10-17 |
 | [volontariapp-sealed-secrets](/volontariapp-sealed-secrets/SKILL.md) | Gestion des Secrets Scellés GitOps (kubeseal) | 2026-10-12 |
-| [volontariapp-shared-npm-package-change](/volontariapp-shared-npm-package-change/SKILL.md) | Shared NPM Package Change | 2026-10-17 |
+| [volontariapp-shared-npm-package-change](/volontariapp-shared-npm-package-change/SKILL.md) | Shared NPM Package Change | 2026-10-18 |
 | [volontariapp-skill-evolution](/volontariapp-skill-evolution/SKILL.md) | Évolution des skills (auto-apprentissage) | 2026-10-13 |
 | [volontariapp-trace-async-flow](/volontariapp-trace-async-flow/SKILL.md) | Trace Async Flow | 2026-10-14 |
 | [volontariapp-user-account-deletion](/volontariapp-user-account-deletion/SKILL.md) | User Account Deletion | 2026-10-17 |

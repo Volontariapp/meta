@@ -26,9 +26,27 @@ sources:
   - id: src-92a40169
     resource: post-processors-runner/post-processor-social/src/post-processors/users/user-deleted.post-processor.ts
     title: post-processors-runner/post-processor-social/src/post-processors/users/user-deleted.post-processor.ts
+  - id: src-4f6a6ae1
+    resource: workers-runners/worker-event/package.json
+    title: workers-runners/worker-event/package.json
+  - id: src-3e2c0d08
+    resource: ws-service/src/core/services/gather-reaper.service.ts
+    title: ws-service/src/core/services/gather-reaper.service.ts
 ---
 
 # Leçons
+
+## 2026-10-18 - Ajouter un retour attendu au gather : déployer l'émetteur avant la config ws-service
+
+- **Type :** rule
+- **Leçon :** GatherReaperService (ws-service/src/core/services/gather-reaper.service.ts:45-47,58-81) tourne toutes les 10 s et passe en FAILED toute clé PENDING de plus de 60 s. Ajouter une clé à scatterGather.aggregations[].expects (ws-service/config/default.config.json) avant que le post-processor émetteur de l'acquittement soit déployé fait donc échouer chaque saga de ce déclencheur au bout de 60 s (inférence d'après le reaper, non testée). Pour user.deleted, finalizeDeletion n'étant appelé que sur user.deletion_successfull, le compte resterait PENDING_DELETION. Ordre : déployer le post-processor émetteur, puis la config ws-service. La leçon qui dit qu'aucun reaper n'existe (lessons.md) est périmée.[^src-3e2c0d08]
+- **Consigné par :** claude-code/agent
+
+## 2026-10-17 - Retirer une epingle resolutions perimee dans un runner
+
+- **Type :** rule
+- **Leçon :** Un resolutions annule silencieusement la version declaree : worker-event declarait database 3.10.10 mais un resolutions la fixait a 3.8.0 (ajoute en 601ac5c pour obtenir le mapping traceparent, jamais retire apres 35b7b8c), ce qui gardait aussi une copie de messaging 2.25.0. Methode : lire l'historique de l'entree (git log -S '"resolutions"' -- package.json) pour comprendre pourquoi elle existe, comparer version declaree et installee (find node_modules -path '*@volontariapp/database/package.json'), retirer l'entree, yarn install, verifier qu'il ne reste qu'une copie de database et de messaging, puis tsc --noEmit --incremental false et les tests d'integration sur base et Redis jetables. Le retrait change le comportement reel du runner : le dire dans la PR.[^src-4f6a6ae1]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-12 - Service de domaine avec EventQueueModel: forFeature dans le module qui le declare
 
@@ -90,3 +108,5 @@ sources:
 [^src-57587df4]: npm-packages/packages/messaging/src/sagas/gather-registry.ts
 [^src-cd3f14ee]: npm-packages/packages/domain-user/src/repositories/postgres-user.repository.ts
 [^src-92a40169]: post-processors-runner/post-processor-social/src/post-processors/users/user-deleted.post-processor.ts
+[^src-4f6a6ae1]: workers-runners/worker-event/package.json
+[^src-3e2c0d08]: ws-service/src/core/services/gather-reaper.service.ts
