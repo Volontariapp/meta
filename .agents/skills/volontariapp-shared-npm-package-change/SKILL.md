@@ -35,21 +35,21 @@ sources:
     resource: ci-tools/.github/workflows/npm-packages-pipeline.yml
     title: Pipeline réutilisable npm-packages (ci-tools)
 verified:
-  - by: claude-code/sonnet-5-5
-    at: "2026-10-16T12:20:58Z"
-    digest: bea7721af4fad642
-  - by: claude-code/agent
-    at: "2026-10-16T18:52:02Z"
-    digest: a498236b95fda7fd
-  - by: claude-code/agent
-    at: "2026-10-16T19:34:56Z"
-    digest: 97e64587d9dda1dd
   - by: claude-code/agent
     at: "2026-10-16T20:40:54Z"
     digest: b84ed43aff30c744
   - by: claude-code/agent
     at: "2026-10-17T00:26:38Z"
     digest: e829210badfd08d8
+  - by: claude-code/agent
+    at: "2026-10-17T12:32:09Z"
+    digest: c1cc4cf406d022e2
+  - by: claude-code/agent
+    at: "2026-10-17T13:28:22Z"
+    digest: 4db132529a9fac13
+  - by: claude-code/agent
+    at: "2026-10-17T13:31:01Z"
+    digest: 4db132529a9fac13
 ---
 
 # Shared NPM Package Change & Règle d'Or du Stop Immédiat
@@ -142,6 +142,7 @@ Les README de plusieurs packages décrivent des API qui n'existent pas (`BaseJob
 
 - **Erreurs ESLint « error typed value » / « Unsafe call of an error type » dans un package consommateur** (ex. `outbox` qui importe un nouvel export de `database`) : le consommateur lit le `dist` du package amont, périmé. Reconstruire dans l'ordre (`yarn --cwd packages/<amont> build`, puis le consommateur) avant de relancer ESLint ; ce n'est pas un vrai défaut de typage.
 - **Colonne nullable : `null` à la lecture, `undefined` à la création.** Une valeur relue depuis Postgres est `null` alors que le type dit `string | undefined`. Normaliser à la frontière (pushers, sérialisation) pour qu'aucun `null` ne parte dans un stream Redis ou un job BullMQ ; seuls les tests d'intégration avec une vraie base le révèlent.
+- **Migrations de test périmées dans `domain-*`** : `packages/domain-<d>/src/test/migrations/` est une copie de `ms-<d>/src/migrations/` qui dérive (migration manquante, fichier renommé). Symptôme constaté : passer un événement à `FINISHED` échouait avec `invalid input value for enum events_state_enum: "4"` parce que `1781400000000-AddFinishedAndCancelledToEventStateEnum` n'était pas copiée. Avant d'écrire un test d'intégration, comparer `ls` des deux dossiers et copier la migration manquante à l'identique (`md5`). Ce n'est pas un bug de production.
 - **Tests d'intégration** (`database`, `outbox`) : Postgres sur `127.0.0.1:5433` avec `testuser`/`testpassword`, base `volontariapp_test`, et Redis `6379` mot de passe `password`. `ci-tools/docker-compose.yml` mappe 5433 sur `postgres-post` avec d'autres identifiants : créer le rôle et la base dedans, et ne pas les supprimer s'ils existaient déjà.
 
 ## 3. Lien avec `proto-registry`

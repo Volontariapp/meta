@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-17
+
+- **Vérification** - Etape 3: entite a declarer aussi dans l'infrastructure.module des post-processors/workers qui lisent la table; exemple impact_score_credits (claude-code/agent)
+
 ## 2026-10-16
 
 - **Vérification** - verification rattachement avatar migration 1791500000000-AddUserAvatarFileId.ts (claude-code/agent)
