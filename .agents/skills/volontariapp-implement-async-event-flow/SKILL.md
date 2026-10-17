@@ -53,9 +53,6 @@ sources:
     title: SAGA_GATHER_COMPLETION_MAPPING
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T22:54:48Z"
-    digest: 48f15e675dc27359
-  - by: claude-code/agent
     at: "2026-10-14T11:23:54Z"
     digest: c2fb48f2e2b92a08
   - by: claude-code/agent
@@ -67,6 +64,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-17T12:32:07Z"
     digest: 5230c494361a9d33
+  - by: claude-code/agent
+    at: "2026-10-17T12:52:54Z"
+    digest: d1776ea250987880
 ---
 
 # Guide : Implémenter un Flux Asynchrone End-to-End
@@ -311,6 +311,10 @@ Lorsque plusieurs post-processors travaillent en parallèle (ex : `post-processo
 - [ ] **Ne pas avaler les erreurs d'un post-processor de purge :** un `catch` qui logue sans relancer acquitte le message, donc ni retry (`RetryHelper`, 5 tentatives) ni DLQ, et le gather reste `PENDING` sans timeout. Relancer, et émettre `*_DELETION_FAILED` quand les retries sont épuisés. Les purges doivent être idempotentes ("déjà supprimé" = succès).
 - [ ] **Champ requis ajouté à un payload d'événement :** les messages déjà présents dans le stream n'ont pas le champ (le parsing est un `JSON.parse(...) as StreamEvent`). Le post-processor doit le détecter, journaliser et ne rien créditer, jamais prendre `0` par défaut. Exemple : `IEventFinishedPayload.awardedImpactScore` (crédit de score par `ImpactScoreCreditModel`, dédup `(event_id, user_id)` dans la même transaction que l'incrément de `users.total_impact_score`).
 - [ ] **Crédit à `event.finished` hors du chemin badges :** `BadgeEvaluator.evaluateParticipantEventFinished` sort tôt quand le user possède déjà les 9 badges de participation. Un crédit placé dans cette méthode ne serait jamais appliqué à ces users.
+- [ ] **Deux processors sur le même stream dans un même runner :** chacun DOIT avoir son propre `groupName` (ex. `${groupName}-impact-score` pour `Streams.EVENT_FINISHED`, à côté des badges). Avec le même groupe, Redis se partage les messages entre eux, et la clé d'idempotence (`acquireIdempotencyLock(redis, groupName, id)`) est aussi par groupe.
+- [ ] **Nouveau modèle lu par un runner :** l'ajouter à la liste `entities` du `PostgresBridgeModule.register` de `post-processor-<d>/src/infrastructure/infrastructure.module.ts`. Les tests unitaires mockent le `DataSource` et ne voient pas « No metadata for X was found », qui n'apparaît qu'au premier traitement réel.
+- [ ] **Types de payload périmés après `yarn up messaging` :** `@volontariapp/post-processors`, `database` et `outbox` embarquent leur propre `messaging` tant qu'ils ne sont pas montés avec lui, et `BatchEventItem<K>` hérite du vieux registre. Monter les quatre ensemble (`yarn up @volontariapp/messaging@X @volontariapp/post-processors@Y @volontariapp/database@Z @volontariapp/outbox@W`, versions lues avec `npm view`), vérifier qu'il ne reste qu'une copie (`find node_modules -path '*@volontariapp/messaging/package.json'`), et lancer `tsc --noEmit --incremental false` : le cache incrémental garde l'ancienne erreur.
+- [ ] **Saut de version `domain-user` dans les mocks :** `createMockUserRepository` (`tests/mocks/user-deletion-success.mock.ts`) doit implémenter tout `IUserRepository`. Après un `yarn up @volontariapp/domain-user`, `tsc` signale la méthode manquante (ex. `updateAvatar`).
 - [ ] **Stream de complétion de gather :** Dans `SAGA_GATHER_COMPLETION_MAPPING` (`gather-registry.ts`), le champ `stream` DOIT être le stream de complétion (ex: `Streams.EVENT_SUCCESSFULLY_CREATED`), et JAMAIS le stream déclencheur (ex: `event:created`).
 
 [^streams]: Enum Streams

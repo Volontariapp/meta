@@ -18,9 +18,6 @@ generated:
   at: "2026-10-12T11:56:30Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T21:22:38Z"
-    digest: 3b11a69526a8f9e5
-  - by: claude-code/agent
     at: "2026-10-14T11:23:53Z"
     digest: 755d1369c2941b2d
   - by: claude-code/agent
@@ -32,6 +29,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-16T13:16:54Z"
     digest: 39bb5a94654fe962
+  - by: claude-code/agent
+    at: "2026-10-17T12:52:55Z"
+    digest: 7f47c10f90d470fa
 sources:
   - id: sync-mig
     kind: local_file
@@ -141,6 +141,8 @@ export const AppDataSource = new DataSource({
   ],
 });
 ```
+
+3. Si un `post-processor-*` ou un `worker-*` lit ou écrit la nouvelle table via le `DataSource` de la base de `ms-<d>` (ex. `post-processor-user` sur `ms_user`), ajouter aussi l'entité à la liste `entities` de son `infrastructure.module.ts` : sans cela, TypeORM lève « No metadata for X was found » au premier traitement, et les tests unitaires qui mockent le `DataSource` ne le voient pas. Exemple : `impact_score_credits` (`ImpactScoreCreditModel`, migration `1792100000000-CreateImpactScoreCredits` dans `ms-user`).
 
 ---
 

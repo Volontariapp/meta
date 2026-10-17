@@ -2,6 +2,7 @@
 
 ## 2026-10-17
 
+- **Vérification** - Phase 2 impact score: deux processors sur un meme stream (groupName distinct), entite a declarer dans infrastructure.module, types de payload perimes si post-processors/database/outbox pas montes avec messaging (claude-code/agent)
 - **Vérification** - IEventFinishedPayload porte awardedImpactScore; pieges: message deja en stream sans le champ, credit hors fast-path badges (claude-code/agent)
 
 ## 2026-10-14

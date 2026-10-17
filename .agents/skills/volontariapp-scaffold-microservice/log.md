@@ -2,6 +2,7 @@
 
 ## 2026-10-17
 
+- **Vérification** - Verifie: ajout du processor event-finished-impact-score et de la migration impact_score_credits; aucune etape de scaffold modifiee (claude-code/agent)
 - **Vérification** - Verifie: seuls domain-event (emission event.finished avec awardedImpactScore, migration de test) et bumps de version ont change; aucune etape de scaffold modifiee (claude-code/agent)
 - **Vérification** - ticket 5.11: coverUrl/coverStatus et validation sur les evenements; relu (claude-code/agent)
 - **Vérification** - ticket 5.11: contrat EventDTO (coverUrl, CoverStatusWeb) et bump de versions; regles inchangees (claude-code/agent)

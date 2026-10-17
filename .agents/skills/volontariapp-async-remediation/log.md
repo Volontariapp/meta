@@ -2,6 +2,7 @@
 
 ## 2026-10-17
 
+- **Vérification** - Verifie: nouveau consumer group <group>-impact-score sur event:finished; procedures DLQ/XCLAIM inchangees (nom du DLQ par groupe non verifie) (claude-code/agent)
 - **Vérification** - Verifie: seul le bump de version de post-processors a change; aucune procedure DLQ/XCLAIM modifiee (claude-code/agent)
 - **Vérification** - ticket 5.11: contrat EventDTO (coverUrl, CoverStatusWeb) et bump de versions; regles inchangees (claude-code/agent)
 
