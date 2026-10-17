@@ -26,9 +26,18 @@ sources:
   - id: src-8ba4158b
     resource: npm-packages/packages/contracts/src/gateway/user/response/user.response.ts
     title: npm-packages/packages/contracts/src/gateway/user/response/user.response.ts
+  - id: src-19653288
+    resource: .claude/hooks/stop-rule-guard.sh
+    title: .claude/hooks/stop-rule-guard.sh
 ---
 
 # Leçons
+
+## 2026-10-17 - Sous-agent en parallele sur un depot consommateur apres edition de npm-packages
+
+- **Type :** rule
+- **Leçon :** Le hook stop-rule-guard ne surveille que les outils Write et Edit : un sous-agent peut ecrire dans nativapp ou un ms-* par heredoc Bash apres le verrou, ce que AGENTS.md interdit (cat >, sed). Constate le 2026-10-17 : verrou pose a 15:26:08, 12 fichiers crees dans nativapp entre 15:26:43 et 15:28:31. Ne pas deleguer a un sous-agent un travail dans un depot qui depend de @volontariapp/* tant qu'npm-packages ou proto-registry a ete modifie dans la session. Si le Lead Dev demande ce parallelisme, ecrire dans le brief que toute ecriture dans ce depot, outil Edit ou Bash, est interdite apres le premier edit npm-packages, puis comparer les dates de creation des fichiers (stat) au marqueur .git/volontariapp-stop-guard/<session> et signaler tout ecart.[^src-19653288]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-16 - Les types web de la gateway sont ecrits a la main dans contracts, a tenir alignes avec les DTO
 
@@ -120,3 +129,4 @@ sources:
 [^src-a7f33c12]: ms-event/package.json
 [^src-b58c39b2]: npm-packages/packages/domain-storage/package.json
 [^src-8ba4158b]: npm-packages/packages/contracts/src/gateway/user/response/user.response.ts
+[^src-19653288]: .claude/hooks/stop-rule-guard.sh
