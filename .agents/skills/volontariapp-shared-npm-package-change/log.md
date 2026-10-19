@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-19
+
+- **Leçon** - Un nouveau paquet domain-* suit la forme des autres domaines (rule) (human:victor)
+
 ## 2026-10-18
 
 - **Vérification** - contracts/src/gateway ecrit a la main, le reste genere depuis les proto: confirme par le Lead Dev le 2026-10-18 (claude-code/sonnet-5-5)

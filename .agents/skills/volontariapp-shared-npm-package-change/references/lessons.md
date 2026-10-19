@@ -29,9 +29,18 @@ sources:
   - id: src-19653288
     resource: .claude/hooks/stop-rule-guard.sh
     title: .claude/hooks/stop-rule-guard.sh
+  - id: src-ca59d5f3
+    resource: npm-packages/packages/domain-post/src/repositories/postgres-post.repository.ts
+    title: npm-packages/packages/domain-post/src/repositories/postgres-post.repository.ts
 ---
 
 # Leçons
+
+## 2026-10-19 - Un nouveau paquet domain-* suit la forme des autres domaines
+
+- **Type :** rule
+- **Leçon :** Un repository de domaine étend BaseRepository de @volontariapp/database (decorateurs Injectable et InjectRepository, nommage Postgres<Nom>Repository), avec une entité par table, un modèle TypeORM, un registerXMappings() appelé dans index.ts et des interfaces dans repositories/interfaces. Le SQL spécifique reste dans le repository (this.repository.query). Ne pas écrire de classes de repository maison ni de factory. Les noms find, remove, create, update, delete, upsert et count sont pris par BaseRepository : nommer autrement les méthodes de domaine. Piège : le paquet a sa propre copie de typeorm dans node_modules, donc ne pas importer EntityManager ou MoreThan depuis typeorm dans le code de production (types incompatibles avec ceux de database) : dériver le type du manager de executeInTransaction et passer par createQueryBuilder. Modèle : domain-post et domain-storage.[^src-ca59d5f3]
+- **Consigné par :** human:victor
 
 ## 2026-10-17 - Sous-agent en parallele sur un depot consommateur apres edition de npm-packages
 
@@ -130,3 +139,4 @@ sources:
 [^src-b58c39b2]: npm-packages/packages/domain-storage/package.json
 [^src-8ba4158b]: npm-packages/packages/contracts/src/gateway/user/response/user.response.ts
 [^src-19653288]: .claude/hooks/stop-rule-guard.sh
+[^src-ca59d5f3]: npm-packages/packages/domain-post/src/repositories/postgres-post.repository.ts
