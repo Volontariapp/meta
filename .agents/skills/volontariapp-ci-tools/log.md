@@ -2,6 +2,7 @@
 
 ## 2026-10-19
 
+- **Vérification** - etape de normalisation du dossier des resumes de coverage (snapshot report) (human:victor)
 - **Vérification** - postgres-ranking ajoute; piege profil migrations (human:victor)
 
 ## 2026-10-15

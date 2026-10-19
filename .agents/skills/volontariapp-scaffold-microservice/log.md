@@ -2,6 +2,7 @@
 
 ## 2026-10-19
 
+- **Vérification** - snap-release normalise le dossier de coverage, aucune regle de scaffold changee (human:victor)
 - **Vérification** - ms-social AdminGetRecommendedEventIds ajoute, aucune regle changee (human:victor)
 - **Vérification** - paquet proto ranking ajoute, aucune regle changee (human:victor)
 - **Vérification** - ms-ranking: squelette NestJS copie de ms-storage, migrations communes (human:victor)
