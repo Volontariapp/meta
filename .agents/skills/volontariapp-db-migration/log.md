@@ -2,6 +2,7 @@
 
 ## 2026-10-19
 
+- **Vérification** - sync-migrations.sh gere storage et les options --all et --packages; ranking pas encore dans SERVICES (claude-code/agent)
 - **Vérification** - Support non-interactif (--all, --packages) et ajout de storage dans sync-migrations.sh (claude-code/agent)
 - **Vérification** - ms-ranking: squelette NestJS copie de ms-storage, migrations communes (human:victor)
 

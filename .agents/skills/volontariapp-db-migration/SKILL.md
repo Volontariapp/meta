@@ -18,12 +18,6 @@ generated:
   at: "2026-10-12T11:56:30Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-16T13:16:54Z"
-    digest: 39bb5a94654fe962
-  - by: claude-code/agent
-    at: "2026-10-17T12:52:55Z"
-    digest: 7f47c10f90d470fa
-  - by: claude-code/agent
     at: "2026-10-17T14:27:12Z"
     digest: 7f47c10f90d470fa
   - by: claude-code/agent
@@ -35,6 +29,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-19T09:19:15Z"
     digest: 4500b5b797e29edc
+  - by: claude-code/agent
+    at: "2026-10-19T10:15:04Z"
+    digest: d519f37d67d4f55c
 sources:
   - id: sync-mig
     kind: local_file
@@ -163,7 +160,7 @@ Pour toute modification dans `src/migrations/` (commune ou domaine pour les test
      ```bash
      ./sync-migrations.sh
      ```
-2. Microservices gérés dans `SERVICES` : `user`, `social`, `post`, `event`, `storage`.
+2. Microservices gérés dans `SERVICES` : `user`, `social`, `post`, `event`, `storage`. `ranking` n'y figure pas encore (ticket 1.4 de `ms-ranking`) : son dossier `domain-ranking/src/test/migrations/domain/` contient pour l'instant la migration `CreateRankingTables` écrite à la main, à copier à l'identique dans `ms-ranking/src/migrations/domain/` (ticket 3.2) tant que le script ne le gère pas.
 3. Le script synchronise par `rsync -avc --delete` les fichiers vers `npm-packages/packages/domain-<service>/src/test/migrations` (copie `ms-*` vers `domain-*`, jamais entre services) afin de garantir que les tests du domaine s'exécutent sur un schéma strictement identique.
 4. **Piège : dérive.** Ces dossiers `test/migrations` ne sont pas à jour (au 2026-10-13 : migrations absentes ou renommées, `--delete` supprimerait des fichiers dans `domain-post`, `domain-event`, `domain-storage`). Vérifier avec `rsync -avcn --delete <src>/ <dest>/` avant. Pour une migration commune isolée, copier uniquement le nouveau fichier plutôt que de resynchroniser le dossier entier.
 5. **Copie `workers`** : `npm-packages/packages/workers/src/test/migrations/` contient aussi les migrations communes (outbox, `job_audit`, triggers), hors de `sync-migrations.sh`. Y ajouter toute nouvelle migration commune, sinon les tests de `workers` tournent sur un schéma obsolète (la PR traceparent l'a réalignée le 2026-10-13).

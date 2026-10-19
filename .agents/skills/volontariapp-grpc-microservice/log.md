@@ -2,6 +2,7 @@
 
 ## 2026-10-19
 
+- **Vérification** - relu apres le commit fc51d42 de sync-migrations.sh, aucune regle changee (claude-code/agent)
 - **Vérification** - ms-social AdminGetRecommendedEventIds ajoute, aucune regle changee (human:victor)
 
 ## 2026-10-17
