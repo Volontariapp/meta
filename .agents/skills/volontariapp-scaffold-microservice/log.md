@@ -2,6 +2,13 @@
 
 ## 2026-10-19
 
+- **Vérification** - Relu le commit cc6b759 (secrets scelles ms-ranking, deja commites a la main apres le wizard) et l'ajout de MS_RANKING_URL dans apps/base/api-gateway/deployment.yaml (81a2615) : conformes aux lecons deja consignees (claude-code/agent)
+- **Vérification** - Relu les secrets scelles ms-ranking produits par le wizard (ranking-sealed-secret.yaml, ms-ranking-password dans shared-infra/db-sealed-secret.yaml, ressource ajoutee a la kustomization de l'overlay) : conformes a la lecon deja consignee, aucun changement de skill (claude-code/agent)
+- **Vérification** - Relu apres le ticket 1.4 (manifests ms-ranking dans la PR deploy #25, wizard de scellement, bumps de sous-modules) ; lecons ajoutees pour deploy-gitops et sealed-secrets (claude-code/agent)
+- **Vérification** - Relu le commit bot a9d0ce0 d'outbox-runners (ci-tools, versions exactes des dependances dans les package.json et yarn.lock des runners) : aucun impact sur la skill (claude-code/agent)
+- **Vérification** - relue apres le rangement par role de fichier du ticket 4.2 : les skills ne citent aucun fichier deplace, regles inchangees; regle de fichier unique consignee dans scaffold-microservice (claude-code/agent)
+- **Leçon** - Un fichier a un seul role : la classe seule dans son fichier, le reste dans interfaces, types, constants, helpers (rule) (claude-code/agent)
+- **Vérification** - relue apres le ticket 4.1 : regles inchangees (derive = squelettes ranking et lockfiles), lecon ajoutee dans event-flow (claude-code/agent)
 - **Vérification** - snap-release normalise le dossier de coverage, aucune regle de scaffold changee (human:victor)
 - **Vérification** - ms-social AdminGetRecommendedEventIds ajoute, aucune regle changee (human:victor)
 - **Vérification** - paquet proto ranking ajoute, aucune regle changee (human:victor)

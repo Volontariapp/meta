@@ -20,9 +20,18 @@ sources:
   - id: src-44389df8
     resource: deploy/apps/base/ms-user/deployment.yaml
     title: deploy/apps/base/ms-user/deployment.yaml
+  - id: src-86e8c1ef
+    resource: deploy/apps/overlays/prod/shared-infra/kustomization.yaml
+    title: deploy/apps/overlays/prod/shared-infra/kustomization.yaml
 ---
 
 # Leçons
+
+## 2026-10-19 - Checklist d'un nouveau service dans deploy : NetworkPolicies, runners, prod-policies.yaml inutilisé
+
+- **Type :** pitfall
+- **Leçon :** Pour un nouveau domaine, ajouter dans deploy : apps/base/<ms>/ (deployment, 3 runners, service), l'overlay prod avec la base bitnami, l'Application ArgoCD (infrastructure/argocd/apps/prod), les NetworkPolicies dans infrastructure/security/network-policies/overlays/prod/<ms>.yaml (policies distinctes plutôt que de modifier celles des autres services) et les listes de global-policies, runners-policies et de l'egress api-gateway. Le fichier racine prod-policies.yaml n'est référencé par aucune kustomization ni Application : ne pas le mettre à jour. Si un worker appelle un autre ms (ex. worker-ranking vers ms-post), il faut MS_<X>_URL et une NetworkPolicy ingress sur le ms cible. L'api-gateway a besoin de MS_<SERVICE>_URL, sinon elle retombe sur localhost. Les images des runners sont épinglées par sha de sous-module, à vérifier sur GHCR. Un worktree sur deploy ne résout pas toujours les sous-modules (non bloquant pour kustomize build --enable-helm).[^src-86e8c1ef]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-16 - Nouvel appel gRPC inter-services: variable d'URL et deux NetworkPolicies, sinon ECONNREFUSED sur localhost
 
@@ -58,3 +67,4 @@ sources:
 [^src-9d62093b]: deploy/apps/base/ms-storage/deployment.yaml
 [^src-18c87cb4]: https://github.com/Volontariapp/deploy/pull/22
 [^src-44389df8]: deploy/apps/base/ms-user/deployment.yaml
+[^src-86e8c1ef]: deploy/apps/overlays/prod/shared-infra/kustomization.yaml

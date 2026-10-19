@@ -35,9 +35,18 @@ sources:
   - id: src-ae6d3d91
     resource: ms-post/package.json
     title: ms-post/package.json
+  - id: src-f6aa5050
+    resource: ws-service/tsconfig.json
+    title: ws-service/tsconfig.json
 ---
 
 # Leçons
+
+## 2026-10-19 - Erreurs tsc fantomes apres un yarn up : supprimer le cache incremental
+
+- **Type :** pitfall
+- **Leçon :** Apres un yarn up qui retire des copies imbriquees de @volontariapp/messaging ou shared, tsc peut afficher des dizaines d'erreurs 'not assignable' qui citent encore node_modules/@volontariapp/<pkg>/node_modules/... alors que ce dossier n'existe plus : c'est le cache incremental dist/tsconfig.tsbuildinfo (incremental: true). Le supprimer (fichier ignore par git) puis relancer tsc avant de conclure qu'une copie double subsiste. Verifier d'abord l'existence du dossier cite avec test -d.[^src-f6aa5050]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-19 - Apres yarn up, verifier qu'une seule copie de @volontariapp/database subsiste
 
@@ -150,3 +159,4 @@ sources:
 [^src-19653288]: .claude/hooks/stop-rule-guard.sh
 [^src-ca59d5f3]: npm-packages/packages/domain-post/src/repositories/postgres-post.repository.ts
 [^src-ae6d3d91]: ms-post/package.json
+[^src-f6aa5050]: ws-service/tsconfig.json

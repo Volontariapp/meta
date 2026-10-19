@@ -21,6 +21,12 @@ verified:
   - by: claude-code/agent
     at: "2026-10-12T12:03:25Z"
     digest: e072979af423343f
+  - by: claude-code/agent
+    at: "2026-10-19T20:12:10Z"
+    digest: 3b98fe28c7362101
+  - by: claude-code/agent
+    at: "2026-10-19T20:14:19Z"
+    digest: 2b94b6c4a16a0340
 sources:
   - id: datadog-doc
     kind: local_file

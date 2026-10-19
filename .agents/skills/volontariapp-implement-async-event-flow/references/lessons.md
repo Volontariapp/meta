@@ -32,9 +32,18 @@ sources:
   - id: src-3e2c0d08
     resource: ws-service/src/core/services/gather-reaper.service.ts
     title: ws-service/src/core/services/gather-reaper.service.ts
+  - id: src-8f29c4a0
+    resource: post-processors-runner/post-processor-storage/src/post-processors/user-deleted.post-processor.ts
+    title: post-processors-runner/post-processor-storage/src/post-processors/user-deleted.post-processor.ts
 ---
 
 # Leçons
+
+## 2026-10-19 - Un nouveau domaine consommateur de user.deleted a besoin de son stream, et ses demandes de calcul s'ecrivent en transaction
+
+- **Type :** rule
+- **Leçon :** Pour post-processor-ranking : Streams.USER_DELETED_RANKING (user:deleted:ranking) est le stream propre au domaine, et l'acquittement USER_RANKING_DELETED part vers WS_USER_DELETED_FEEDBACK ; ws-service ne doit attendre cet acquittement qu'apres le deploiement du post-processor (deux vagues). Un declencheur qui doit produire un calcul ecrit la demande (ranking_request) et la ligne jobs_outbox dans UNE transaction ; les interfaces de payload de messaging n'ont pas de signature d'index, donc la ligne est ecrite avec un payload JSON explicite plutot qu'avec un cast. Tous les evenements du flux portent leur donnee dans event.payload.after. Modele : post-processor-storage ; vu le 2026-10-19 (PR post-processors-runner 28).[^src-8f29c4a0]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-18 - Ajouter un retour attendu au gather : déployer l'émetteur avant la config ws-service
 
@@ -110,3 +119,4 @@ sources:
 [^src-92a40169]: post-processors-runner/post-processor-social/src/post-processors/users/user-deleted.post-processor.ts
 [^src-4f6a6ae1]: workers-runners/worker-event/package.json
 [^src-3e2c0d08]: ws-service/src/core/services/gather-reaper.service.ts
+[^src-8f29c4a0]: post-processors-runner/post-processor-storage/src/post-processors/user-deleted.post-processor.ts
