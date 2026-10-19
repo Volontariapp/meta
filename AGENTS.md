@@ -238,3 +238,18 @@ S'applique à toute question sur le workspace multi-repos (qui appelle, qui prod
 - **Principe de Moindre Privilège & Token Interne :** Aucun microservice n'est exposé sur Internet. L'API Gateway génère un `INTERNAL_TOKEN` signé contenant l'identité et les permissions spécifiques. Toute requête gRPC sans ce token est rejetée (`UNAUTHENTICATED`).
 - **Gestion des Secrets :** Chiffrement asymétrique via **Sealed Secrets** (`kubeseal`). Zéro mot de passe en clair dans Git.
 - **Transparence et Auditabilité :** Chaque action et chaque erreur DOIT être tracée à l'aide d'un logger dédié (`@volontariapp/logger`).
+
+---
+
+## 7. Règle d'or Discord Webhook pour les Pull Requests (1 PR = 1 Message)
+
+> [!IMPORTANT]
+> **OBJECTIF STRICT : 1 PR = 1 SEUL MESSAGE DISCORD (ZÉRO SPAM, ZÉRO NOTIFICATION PRÉMATURÉE).**
+>
+> Il est formellement interdit d'envoyer un webhook Discord dès l'ouverture d'une PR si les vérifications ne sont pas achevées.
+> L'agent DOIT obligatoirement vérifier activement les deux conditions suivantes avant tout envoi de webhook :
+> 1. **Absence totale de conflits de merge** (`mergeable === true` contre la branche cible `main`).
+> 2. **CI GitHub Actions passée avec succès** (tous les checks obligatoires sont validés / `success`).
+>
+> Tant que la CI tourne ou que des conflits existent, **aucun webhook ne doit être émis**. C'est seulement une fois la PR 100% prête et verte qu'une notification unique est déclenchée.
+

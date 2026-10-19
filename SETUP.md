@@ -77,7 +77,14 @@ Ne jamais copier-coller un skill dans plusieurs repos "au cas où" — c'est exa
   - L'intégration Claude Code (`graphify claude install`) est **activée** dans les 14 repos : une section "graphify" a été ajoutée en bas de chaque `CLAUDE.md`, et un hook `PreToolUse` (`.claude/settings.json`) rappelle d'utiliser `graphify query`/`explain`/`path` avant de grepper ou lire du code brut sur `Bash|Grep|Read|Glob`. Le hook est purement informatif (il ajoute du contexte, il ne bloque jamais un outil).
   - Après une modif de code dans un repo, lancer `graphify update .` dans ce repo pour garder le graphe à jour (AST seul, pas d'appel LLM).
 
-## 6. Notifications Discord pour les Pull Requests
+## 6. Notifications Discord pour les Pull Requests (Règle d'or : 1 PR = 1 Message)
+
+> [!IMPORTANT]
+> **Règle stricte : 1 PR = 1 seul message Discord (zéro spam).**
+> Le webhook Discord ne doit être déclenché **qu'une fois la PR totalement prête** :
+> 1. **Zéro conflit de merge** avec la branche cible (`main`).
+> 2. **Tous les checks CI GitHub Actions validés avec succès** (la CI doit être verte).
+> Ne jamais envoyer de notification intermédiaire ou pendant l'exécution des tests de la CI.
 
 Pour que l'agent ou les scripts annoncent automatiquement les PRs dans votre salon Discord d'équipe :
 1. Créez un Webhook dans votre salon Discord (*Clic droit sur le salon > Modifier le salon > Intégrations > Webhooks > Nouveau Webhook*).
@@ -86,7 +93,7 @@ Pour que l'agent ou les scripts annoncent automatiquement les PRs dans votre sal
    cp .env.example .env.local
    # Puis renseignez votre URL : DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/..."
    ```
-3. Envoyez une notification manuelle ou via script :
+3. Envoyez la notification (uniquement après succès de la CI et vérification des conflits) :
    ```bash
    ./scripts/notify-discord.sh "<Titre de la PR>" "<Description>" "<Lien PR GitHub>" "<statut: success|info|warning|error>"
    ```
