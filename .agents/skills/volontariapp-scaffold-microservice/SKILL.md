@@ -24,9 +24,6 @@ generated:
   at: "2026-10-12T12:18:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-17T12:52:56Z"
-    digest: 65c65fd246383ab4
-  - by: claude-code/agent
     at: "2026-10-17T13:28:23Z"
     digest: a63cd08b4891b185
   - by: claude-code/agent
@@ -38,6 +35,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-17T14:46:43Z"
     digest: e2eb1795fd6ff6dc
+  - by: "human:victor"
+    at: "2026-10-19T07:56:57Z"
+    digest: 0f500de758abedc2
 sources:
   - id: doc-creation
     kind: local_file
@@ -222,7 +222,7 @@ Dans le dépôt `deploy` :
 ### Étape 9 : Outillage Local & Synchronisation CI (`ci-tools/`)
 
 1. **Docker Compose Local** :
-   - Ajouter l'instance PostgreSQL (`postgres-<domaine>`) sur un port dédié (ex. 5437) dans `ci-tools/docker-compose.yml`[^compose].
+   - Ajouter l'instance PostgreSQL (`postgres-<domaine>`) sur un port dédié (ex. 5437 pour storage, 5438 pour ranking) dans `ci-tools/docker-compose.yml`[^compose]. Le service `ms-<domaine>-migration` ne s'ajoute qu'une fois l'image GHCR publiée (l'E2E tire toutes les images du profil `migrations`).
    - Déclarer le conteneur de migration `<domaine>-migration`.
 2. **Script de synchronisation** :
    - Ajouter le nouveau domaine dans `SERVICES=(...)` du script [sync-migrations.sh](file:///Users/victoragahi/Developer/meta/sync-migrations.sh)[^sync-mig].

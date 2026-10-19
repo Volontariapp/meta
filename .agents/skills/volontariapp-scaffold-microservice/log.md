@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-19
+
+- **Vérification** - port ranking, migration apres publication image (human:victor)
+
 ## 2026-10-17
 
 - **Vérification** - Verifie: dependances et migrations de test alignees sur ms-event; aucune etape de scaffold modifiee (claude-code/agent)

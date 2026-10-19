@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-19
+
+- **Vérification** - postgres-ranking ajoute; piege profil migrations (human:victor)
+
 ## 2026-10-15
 
 - **Vérification** - service-ci starts database dependencies, runs migrations, and executes integration tests (process:ci-integration-tests)
