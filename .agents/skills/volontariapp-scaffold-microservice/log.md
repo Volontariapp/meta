@@ -2,6 +2,7 @@
 
 ## 2026-10-19
 
+- **Vérification** - paquet proto ranking ajoute, aucune regle changee (human:victor)
 - **Vérification** - ms-ranking: squelette NestJS copie de ms-storage, migrations communes (human:victor)
 - **Vérification** - port ranking, migration apres publication image (human:victor)
 

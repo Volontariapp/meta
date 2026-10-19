@@ -19,7 +19,7 @@ Le cycle de vie des skills est géré par [volontariapp-skill-evolution](/volont
 | [volontariapp-logger](/volontariapp-logger/SKILL.md) | Logger partagé : masquage et corrélation de traces | 2026-10-14 |
 | [volontariapp-mesh-mcp](/volontariapp-mesh-mcp/SKILL.md) | mesh-mcp | 2026-10-16 |
 | [volontariapp-mesh-mcp-verification](/volontariapp-mesh-mcp-verification/SKILL.md) | Verification des anomalies mesh-mcp | 2026-10-12 |
-| [volontariapp-proto-contract-evolution](/volontariapp-proto-contract-evolution/SKILL.md) | Proto Contract Evolution | 2026-10-12 |
+| [volontariapp-proto-contract-evolution](/volontariapp-proto-contract-evolution/SKILL.md) | Proto Contract Evolution | 2026-10-19 |
 | [volontariapp-scaffold-microservice](/volontariapp-scaffold-microservice/SKILL.md) | Scaffolding d'un Nouveau Microservice gRPC et de ses Runners | 2026-10-19 |
 | [volontariapp-sealed-secrets](/volontariapp-sealed-secrets/SKILL.md) | Gestion des Secrets Scellés GitOps (kubeseal) | 2026-10-12 |
 | [volontariapp-shared-npm-package-change](/volontariapp-shared-npm-package-change/SKILL.md) | Shared NPM Package Change | 2026-10-18 |
