@@ -2,6 +2,7 @@
 
 ## 2026-10-19
 
+- **Vérification** - ms-ranking: squelette NestJS copie de ms-storage, migrations communes (human:victor)
 - **Vérification** - port ranking, migration apres publication image (human:victor)
 
 ## 2026-10-17

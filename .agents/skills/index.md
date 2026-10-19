@@ -9,7 +9,7 @@ Le cycle de vie des skills est géré par [volontariapp-skill-evolution](/volont
 | [volontariapp-api-gateway](/volontariapp-api-gateway/SKILL.md) | Exposer ou Modifier une Route REST Edge | 2026-10-17 |
 | [volontariapp-async-remediation](/volontariapp-async-remediation/SKILL.md) | Remédiation et Dépilement des Files Asynchrones (DLQ & Streams) | 2026-10-17 |
 | [volontariapp-ci-tools](/volontariapp-ci-tools/SKILL.md) | CI partagée et infra locale (ci-tools) | 2026-10-19 |
-| [volontariapp-db-migration](/volontariapp-db-migration/SKILL.md) | Migrations PostgreSQL et Synchronisation Multi-Services | 2026-10-17 |
+| [volontariapp-db-migration](/volontariapp-db-migration/SKILL.md) | Migrations PostgreSQL et Synchronisation Multi-Services | 2026-10-19 |
 | [volontariapp-deploy-gitops](/volontariapp-deploy-gitops/SKILL.md) | Déploiement GitOps (Cluster K3s & ArgoCD) | 2026-10-16 |
 | [volontariapp-docx-reports](/volontariapp-docx-reports/SKILL.md) | Modification et relecture de documents Word DOCX | 2026-10-07 |
 | [volontariapp-file-storage-flow](/volontariapp-file-storage-flow/SKILL.md) | File Storage Flow | 2026-10-17 |
@@ -24,7 +24,7 @@ Le cycle de vie des skills est géré par [volontariapp-skill-evolution](/volont
 | [volontariapp-sealed-secrets](/volontariapp-sealed-secrets/SKILL.md) | Gestion des Secrets Scellés GitOps (kubeseal) | 2026-10-12 |
 | [volontariapp-shared-npm-package-change](/volontariapp-shared-npm-package-change/SKILL.md) | Shared NPM Package Change | 2026-10-18 |
 | [volontariapp-skill-evolution](/volontariapp-skill-evolution/SKILL.md) | Évolution des skills (auto-apprentissage) | 2026-10-19 |
-| [volontariapp-trace-async-flow](/volontariapp-trace-async-flow/SKILL.md) | Trace Async Flow | 2026-10-14 |
+| [volontariapp-trace-async-flow](/volontariapp-trace-async-flow/SKILL.md) | Trace Async Flow | 2026-10-19 |
 | [volontariapp-user-account-deletion](/volontariapp-user-account-deletion/SKILL.md) | User Account Deletion | 2026-10-17 |
 
 ## Skills du plugin matt-pocock
