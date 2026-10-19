@@ -2,6 +2,7 @@
 
 ## 2026-10-19
 
+- **Leçon** - Apres yarn up, verifier qu'une seule copie de @volontariapp/database subsiste (rule) (claude-code/agent)
 - **Leçon** - Un nouveau paquet domain-* suit la forme des autres domaines (rule) (human:victor)
 
 ## 2026-10-18

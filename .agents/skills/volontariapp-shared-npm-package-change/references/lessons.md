@@ -32,9 +32,18 @@ sources:
   - id: src-ca59d5f3
     resource: npm-packages/packages/domain-post/src/repositories/postgres-post.repository.ts
     title: npm-packages/packages/domain-post/src/repositories/postgres-post.repository.ts
+  - id: src-ae6d3d91
+    resource: ms-post/package.json
+    title: ms-post/package.json
 ---
 
 # Leçons
+
+## 2026-10-19 - Apres yarn up, verifier qu'une seule copie de @volontariapp/database subsiste
+
+- **Type :** rule
+- **Leçon :** Deux copies de @volontariapp/database (racine ^3.10.x et version exacte imbriquee sous outbox ou un domain-*) scindent le registre de mapping : l'ecriture outbox leve 'No mapping registered from EventQueueEntity to EventQueueModel' (500 sur toute creation) et l'e2e de tous les depots qui tirent l'image casse. Verifier avec find node_modules -path '*@volontariapp/database/package.json' -not -path '*/dist/*', puis epingler database a la version exacte demandee par outbox (yarn up @volontariapp/database@<version exacte>). Vu sur ms-post (PR 43) et ms-ranking, 2026-10-19.[^src-ae6d3d91]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-19 - Un nouveau paquet domain-* suit la forme des autres domaines
 
@@ -140,3 +149,4 @@ sources:
 [^src-8ba4158b]: npm-packages/packages/contracts/src/gateway/user/response/user.response.ts
 [^src-19653288]: .claude/hooks/stop-rule-guard.sh
 [^src-ca59d5f3]: npm-packages/packages/domain-post/src/repositories/postgres-post.repository.ts
+[^src-ae6d3d91]: ms-post/package.json
