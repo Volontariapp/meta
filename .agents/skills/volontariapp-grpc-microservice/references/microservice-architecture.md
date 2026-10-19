@@ -48,7 +48,7 @@ Le guide détaillé des patterns (structure de module, DTO, contrôleurs, tests)
 | **Logique métier** | Services et repositories du package `domain-<d>`, injectés comme providers ; transformers DTO vers entité dans le service (`ms-event`) |
 | **Fallback** | `BaseCommandController.withFallback(jobType, userId, payload, op)` dans `ms-user` et `ms-event` : aucun job sur 400/404/409 (et 403 dans `ms-event` uniquement), sinon job `FALLBACK_*` et réponse `FALLBACK_ACTIVATED` (HTTP 206 côté gateway)[^base-cmd] |
 | **Clients sortants** | `ClientGrpc` sur le package du service cible ; propager le `x-internal-token` reçu dans les `Metadata` de l'appel |
-| **Migrations** | `src/migrations/common/` (outbox, `job_audit`, triggers) synchronisées entre services par `sync-migrations.sh` (`SERVICES=("user" "social" "post" "event")`, sans `storage`)[^sync-mig] ; `src/migrations/domain/` propres au service, souvent copiées du package `domain-*` |
+| **Migrations** | `src/migrations/common/` (outbox, `job_audit`, triggers) synchronisées entre services par `sync-migrations.sh` (`SERVICES=("user" "social" "post" "event" "storage")`)[^sync-mig] ; `src/migrations/domain/` propres au service, souvent copiées du package `domain-*` |
 
 ---
 

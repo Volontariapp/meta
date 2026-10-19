@@ -2,6 +2,7 @@
 
 ## 2026-10-19
 
+- **Vérification** - Support non-interactif (--all, --packages) et ajout de storage dans sync-migrations.sh (claude-code/agent)
 - **Vérification** - ms-ranking: squelette NestJS copie de ms-storage, migrations communes (human:victor)
 
 ## 2026-10-17

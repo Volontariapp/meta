@@ -12,60 +12,144 @@ NC='\033[0m'
 DIM='\033[2m'
 
 # --- Services List ---
-SERVICES=("user" "social" "post" "event")
-
-# --- Selection System (Interactive) ---
-printf "\n  ${BOLD}${MAGENTA}Select Microservices to sync migrations:${NC}\n"
-printf "  ${DIM}(Arrows: Move, Space: Toggle, Enter: Done)${NC}\n\n"
-
-selected=()
-for i in "${!SERVICES[@]}"; do selected+=(0); done
-cursor=0
-
-# Hide cursor
-tput civis
-
-while true; do
-  for i in "${!SERVICES[@]}"; do
-    if [ "$i" -eq "$cursor" ]; then prefix="${CYAN}▸${NC} "; else prefix="  "; fi
-    if [ "${selected[$i]}" -eq 1 ]; then check="${GREEN}[x]${NC}"; else check="[ ]"; fi
-    printf "${prefix}${check} ms-${SERVICES[$i]}\033[K\n"
-  done
-
-  # Read key (handling escape sequences for arrows)
-  IFS= read -rsn1 key
-  case "$key" in
-    $'\x1b') 
-      read -rsn1 key2
-      if [[ "$key2" == "[" || "$key2" == "O" ]]; then
-        read -rsn1 key3
-        case "$key3" in
-          'A') ((cursor--)); [ $cursor -lt 0 ] && cursor=$((${#SERVICES[@]}-1)) ;;
-          'B') ((cursor++)); [ $cursor -ge ${#SERVICES[@]} ] && cursor=0 ;;
-        esac
-      fi
-      ;;
-    " ") 
-      if [ "${selected[$cursor]}" -eq 1 ]; then selected[$cursor]=0; else selected[$cursor]=1; fi ;;
-    "") 
-      break ;;
-  esac
-
-  # Move cursor back up for redraw
-  for ((i=0; i<${#SERVICES[@]}; i++)); do printf "\033[A"; done
-done
-
-# Show cursor
-tput cnorm
-
-# Move past the menu
-for ((i=0; i<${#SERVICES[@]}; i++)); do printf "\n"; done
-printf "\n"
+SERVICES=("user" "social" "post" "event" "storage")
 
 # --- Dependency Check ---
 if ! command -v rsync &> /dev/null; then
   echo -e "${RED}✖ Error: rsync is required but not installed.${NC}"
   exit 1
+fi
+
+# --- Argument Parsing ---
+MODE="interactive"
+EXPLICIT_PACKAGES=()
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --all|-a)
+      MODE="all"
+      shift
+      ;;
+    --packages|-p)
+      MODE="packages"
+      shift
+      while [[ $# -gt 0 && ! "$1" =~ ^- ]]; do
+        IFS=',' read -ra ADDR <<< "$1"
+        for p in "${ADDR[@]}"; do
+          clean_p="${p#ms-}"
+          clean_p="${clean_p#domain-}"
+          if [[ -n "$clean_p" ]]; then
+            EXPLICIT_PACKAGES+=("$clean_p")
+          fi
+        done
+        shift
+      done
+      ;;
+    --help|-h)
+      echo -e "${BOLD}Usage:${NC} ./sync-migrations.sh [options]"
+      echo ""
+      echo -e "${BOLD}Options:${NC}"
+      echo "  --all, -a                   Sync all microservices without interactive prompt"
+      echo "  --packages, -p <p1,p2...>   Sync specified microservices (e.g. storage, user or ms-storage ms-user)"
+      echo "  --help, -h                  Show this help message"
+      echo ""
+      echo -e "${BOLD}Available services:${NC} ${SERVICES[*]}"
+      exit 0
+      ;;
+    *)
+      echo -e "${RED}✖ Unknown option: $1${NC}"
+      echo "Run ./sync-migrations.sh --help for usage."
+      exit 1
+      ;;
+  esac
+done
+
+selected=()
+for i in "${!SERVICES[@]}"; do selected+=(0); done
+
+# --- Selection Logic ---
+if [[ "$MODE" == "all" ]]; then
+  echo -e "${BOLD}${CYAN}Syncing all services (--all)...${NC}\n"
+  for i in "${!SERVICES[@]}"; do selected[$i]=1; done
+elif [[ "$MODE" == "packages" ]]; then
+  if [[ ${#EXPLICIT_PACKAGES[@]} -eq 0 ]]; then
+    echo -e "${RED}✖ Error: --packages requires at least one package name.${NC}"
+    echo -e "Available services: ${SERVICES[*]}"
+    exit 1
+  fi
+
+  matched_count=0
+  for req in "${EXPLICIT_PACKAGES[@]}"; do
+    found=false
+    for i in "${!SERVICES[@]}"; do
+      if [[ "${SERVICES[$i]}" == "$req" ]]; then
+        selected[$i]=1
+        found=true
+        matched_count=$((matched_count + 1))
+        break
+      fi
+    done
+    if [[ "$found" == false ]]; then
+      echo -e "  ${YELLOW}⚠ Warning: Service '${req}' not recognized. Skipping.${NC}"
+    fi
+  done
+
+  if [[ $matched_count -eq 0 ]]; then
+    echo -e "${RED}✖ Error: None of the requested packages matched available services.${NC}"
+    echo -e "Available services: ${SERVICES[*]}"
+    exit 1
+  fi
+  printf "\n"
+else
+  # --- Selection System (Interactive) ---
+  printf "\n  ${BOLD}${MAGENTA}Select Microservices to sync migrations:${NC}\n"
+  printf "  ${DIM}(Arrows: Move, Space: Toggle, Enter: Done)${NC}\n\n"
+
+  cursor=0
+
+  # Ensure cursor is restored on exit
+  trap 'tput cnorm 2>/dev/null || true' EXIT INT TERM
+
+  # Hide cursor
+  tput civis
+
+  while true; do
+    for i in "${!SERVICES[@]}"; do
+      if [ "$i" -eq "$cursor" ]; then prefix="${CYAN}▸${NC} "; else prefix="  "; fi
+      if [ "${selected[$i]}" -eq 1 ]; then check="${GREEN}[x]${NC}"; else check="[ ]"; fi
+      printf "${prefix}${check} ms-${SERVICES[$i]}\033[K\n"
+    done
+
+    # Read key (handling escape sequences for arrows)
+    IFS= read -rsn1 key
+    case "$key" in
+      $'\x1b') 
+        read -rsn1 key2
+        if [[ "$key2" == "[" || "$key2" == "O" ]]; then
+          read -rsn1 key3
+          case "$key3" in
+            'A') ((cursor--)); [ $cursor -lt 0 ] && cursor=$((${#SERVICES[@]}-1)) ;;
+            'B') ((cursor++)); [ $cursor -ge ${#SERVICES[@]} ] && cursor=0 ;;
+          esac
+        fi
+        ;;
+      " ") 
+        if [ "${selected[$cursor]}" -eq 1 ]; then selected[$cursor]=0; else selected[$cursor]=1; fi ;;
+      "") 
+        break ;;
+    esac
+
+    # Move cursor back up for redraw
+    for ((i=0; i<${#SERVICES[@]}; i++)); do printf "\033[A"; done
+  done
+
+  # Show cursor
+  tput cnorm
+  trap - EXIT INT TERM
+
+  # Move past the menu
+  for ((i=0; i<${#SERVICES[@]}; i++)); do printf "\n"; done
+  printf "\n"
 fi
 
 # --- Processing ---

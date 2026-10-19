@@ -76,3 +76,18 @@ Ne jamais copier-coller un skill dans plusieurs repos "au cas où" — c'est exa
 - **graphify** (`graphify update <repo>`) : graphe de code par repo (`<repo>/graphify-out/graph.json`, ignoré par git, régénérable). Utile pour `graphify query`/`graphify affected`/`graphify god-nodes` sur un repo précis.
   - L'intégration Claude Code (`graphify claude install`) est **activée** dans les 14 repos : une section "graphify" a été ajoutée en bas de chaque `CLAUDE.md`, et un hook `PreToolUse` (`.claude/settings.json`) rappelle d'utiliser `graphify query`/`explain`/`path` avant de grepper ou lire du code brut sur `Bash|Grep|Read|Glob`. Le hook est purement informatif (il ajoute du contexte, il ne bloque jamais un outil).
   - Après une modif de code dans un repo, lancer `graphify update .` dans ce repo pour garder le graphe à jour (AST seul, pas d'appel LLM).
+
+## 6. Notifications Discord pour les Pull Requests
+
+Pour que l'agent ou les scripts annoncent automatiquement les PRs dans votre salon Discord d'équipe :
+1. Créez un Webhook dans votre salon Discord (*Clic droit sur le salon > Modifier le salon > Intégrations > Webhooks > Nouveau Webhook*).
+2. Créez votre fichier local `.env.local` à la racine de `meta` à partir du template :
+   ```bash
+   cp .env.example .env.local
+   # Puis renseignez votre URL : DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/..."
+   ```
+3. Envoyez une notification manuelle ou via script :
+   ```bash
+   ./scripts/notify-discord.sh "<Titre de la PR>" "<Description>" "<Lien PR GitHub>" "<statut: success|info|warning|error>"
+   ```
+   Le fichier `.env.local` est strictement ignoré par Git via `.gitignore`.

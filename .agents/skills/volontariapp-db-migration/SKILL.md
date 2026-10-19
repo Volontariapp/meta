@@ -32,6 +32,9 @@ verified:
   - by: "human:victor"
     at: "2026-10-19T08:21:45Z"
     digest: dbd687978078cac2
+  - by: claude-code/agent
+    at: "2026-10-19T09:19:15Z"
+    digest: 4500b5b797e29edc
 sources:
   - id: sync-mig
     kind: local_file
@@ -151,11 +154,16 @@ export const AppDataSource = new DataSource({
 
 Pour toute modification dans `src/migrations/` (commune ou domaine pour les tests) :
 1. Lancer le script de synchronisation à la racine de `meta`[^sync-mig] :
-   ```bash
-   ./sync-migrations.sh
-   ```
-2. Sélectionner les microservices concernés (`ms-user`, `ms-social`, `ms-post`, `ms-event`).
-   *(Note : `ms-storage` a bien un dossier `common/` mais n'est pas dans la liste `SERVICES` du script ; son dossier `domain-storage/src/test/migrations` existe, à synchroniser à la main.)*
+   - Mode non-interactif (recommandé pour les scripts et agents IA) :
+     ```bash
+     ./sync-migrations.sh --all                         # Tout synchroniser
+     ./sync-migrations.sh --packages storage,user      # Synchroniser des microservices précis
+     ```
+   - Mode interactif (menu TUI avec flèches et espace) :
+     ```bash
+     ./sync-migrations.sh
+     ```
+2. Microservices gérés dans `SERVICES` : `user`, `social`, `post`, `event`, `storage`.
 3. Le script synchronise par `rsync -avc --delete` les fichiers vers `npm-packages/packages/domain-<service>/src/test/migrations` (copie `ms-*` vers `domain-*`, jamais entre services) afin de garantir que les tests du domaine s'exécutent sur un schéma strictement identique.
 4. **Piège : dérive.** Ces dossiers `test/migrations` ne sont pas à jour (au 2026-10-13 : migrations absentes ou renommées, `--delete` supprimerait des fichiers dans `domain-post`, `domain-event`, `domain-storage`). Vérifier avec `rsync -avcn --delete <src>/ <dest>/` avant. Pour une migration commune isolée, copier uniquement le nouveau fichier plutôt que de resynchroniser le dossier entier.
 5. **Copie `workers`** : `npm-packages/packages/workers/src/test/migrations/` contient aussi les migrations communes (outbox, `job_audit`, triggers), hors de `sync-migrations.sh`. Y ajouter toute nouvelle migration commune, sinon les tests de `workers` tournent sur un schéma obsolète (la PR traceparent l'a réalignée le 2026-10-13).
