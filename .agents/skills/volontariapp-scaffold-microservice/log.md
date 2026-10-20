@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-20
+
+- **Vérification** - Ajout de MS_POST_URL et ingress ms-post pour worker-ranking (claude-code/agent)
+
 ## 2026-10-19
 
 - **Vérification** - Relu le commit cc6b759 (secrets scelles ms-ranking, deja commites a la main apres le wizard) et l'ajout de MS_RANKING_URL dans apps/base/api-gateway/deployment.yaml (81a2615) : conformes aux lecons deja consignees (claude-code/agent)
