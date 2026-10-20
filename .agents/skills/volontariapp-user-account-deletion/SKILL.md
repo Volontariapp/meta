@@ -17,9 +17,6 @@ generated:
   at: "2026-10-11T16:59:33Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T11:38:33Z"
-    digest: f83c020a514803cb
-  - by: claude-code/agent
     at: "2026-10-13T16:25:37Z"
     digest: 1355deb6d953b9c8
   - by: "process:antigravity"
@@ -31,6 +28,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-17T12:32:08Z"
     digest: f72b7f94d3a033ce
+  - by: claude-code/agent
+    at: "2026-10-23T14:44:32Z"
+    digest: 42ff7c20c027a49a
 sources: []
 ---
 
@@ -46,7 +46,7 @@ Ce document spécifie les **invariants de domaine et règles d'architecture** po
 ## Règles
 
 - `UserService.requestDeletion` appelle `PostgresUserRepository.requestDeletionWithUserDeleted` : dans une seule transaction, le user passe `PENDING_DELETION` (`deletion_requested_at` renseigné) et `user.deleted` est écrit dans `event_queue`. Il n'y a aucun `DELETE` à ce stade.
-- `targetServices` de `user.deleted` : `USER_DELETED` (ws-service, créateur du gather), `SOCIAL_USER`, `USER_DELETED_POST`, `USER_DELETED_EVENT`, `USER_DELETED_STORAGE`. Le pusher fait un `XADD` par stream, donc un stream par consommateur.
+- `targetServices` de `user.deleted` : `USER_DELETED` (ws-service, créateur du gather), `SOCIAL_USER`, `USER_DELETED_POST`, `USER_DELETED_EVENT`, `USER_DELETED_STORAGE`, `USER_DELETED_RANKING` (ajouté par npm-packages@91040d72, `postgres-user.repository.ts:116`; le test d'intégration `user-deletion.int.spec.ts` liste les mêmes streams). Le pusher fait un `XADD` par stream, donc un stream par consommateur.
 - `UserService.finalizeDeletion` ne supprime que les users encore `PENDING_DELETION` (idempotent) et n'est appelé qu'après le succès du gather `user.deleted` côté ws-service.
 - Ne jamais supprimer un compte avec `IUserRepository.delete` (hérité de `BaseRepository`, `DELETE` physique sans événement).
 - Un user `PENDING_DELETION` doit être refusé au login et au refresh (côté `ms-user`, via `UserEntity.status`).

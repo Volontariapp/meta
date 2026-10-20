@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-21
+
+- **Vérification** - reseal ranking-secrets with full valid TYPESAFE_API_KEY (claude-code/agent)
+
 ## 2026-10-19
 
 - **Vérification** - Relu les secrets scelles ms-ranking produits par le wizard (ranking-sealed-secret.yaml, ms-ranking-password dans shared-infra/db-sealed-secret.yaml, ressource ajoutee a la kustomization de l'overlay) : conformes a la lecon deja consignee, aucun changement de skill (claude-code/agent)

@@ -1,5 +1,12 @@
 # Historique
 
+## 2026-10-21
+
+- **Vérification** - use fixed golden personas length for persona indexing (claude-code/agent)
+- **Vérification** - enrich seed with 500 events, 500 posts, 500 users and materials with quantities (claude-code/agent)
+- **Vérification** - use os.tmpdir for seed images cache (claude-code/agent)
+- **Vérification** - support system seed v2 modular endpoints and sub-services (claude-code/agent)
+
 ## 2026-10-17
 
 - **Vérification** - ticket 5.11: coverUrl/coverStatus et validation sur les evenements; relu (claude-code/agent)

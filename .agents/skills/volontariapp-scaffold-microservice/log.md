@@ -1,7 +1,16 @@
 # Historique
 
+## 2026-10-21
+
+- **Vérification** - update ranking-sealed-secret for prod ms-ranking (claude-code/agent)
+- **Vérification** - use fixed golden personas offset for user batch indexing (claude-code/agent)
+- **Vérification** - enrich seed with 500 events, 500 posts, 500 users and materials with quantities (claude-code/agent)
+- **Vérification** - use os.tmpdir for seed images cache (claude-code/agent)
+- **Vérification** - refactor system seed v2 in api-gateway into dedicated sub-services (claude-code/agent)
+
 ## 2026-10-20
 
+- **Vérification** - Commit deploy@47e4a73 vérifié (claude-code/agent)
 - **Vérification** - Ajout de MS_POST_URL et ingress ms-post pour worker-ranking (claude-code/agent)
 
 ## 2026-10-19
