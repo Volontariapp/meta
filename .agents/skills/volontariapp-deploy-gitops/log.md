@@ -2,6 +2,7 @@
 
 ## 2026-10-20
 
+- **Vérification** - Commit deploy@47e4a73 vérifié (claude-code/agent)
 - **Vérification** - Ajout de MS_POST_URL et ouverture ingress ms-post pour worker-ranking (claude-code/agent)
 
 ## 2026-10-19
