@@ -36,9 +36,6 @@ sources:
     title: "Contrats et évolutions (numérotation, trou du champ 5)"
 verified:
   - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-06T15:05:28Z"
-    digest: f305ac39a0987635
-  - by: claude-code/claude-sonnet-5-5
     at: "2026-10-06T15:21:22Z"
     digest: f305ac39a0987635
   - by: claude-code/claude-sonnet-5-5
@@ -50,6 +47,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-12T12:03:25Z"
     digest: 603980fa2fea4e5d
+  - by: "human:victor"
+    at: "2026-10-19T08:45:16Z"
+    digest: 935ad3f0ccce0f4e
 ---
 
 # Proto Contract Evolution & Cycle de Propagation gRPC
@@ -123,9 +123,9 @@ flowchart TD
 | :--- | :--- |
 | CI de `proto-registry` | `sync-to-npm.yml` délègue à `proto-sync.yml` de `ci-tools`[^proto-sync] : sur PR, **`buf lint` uniquement** ; sur `main`, lint puis `buf generate` et PR « chore: sync proto typings » dans `npm-packages` (`contracts` et `contracts-nest`). **`buf breaking` n'est lancé nulle part en CI** : c'est à toi de le lancer avant de rendre la main. `emergency-reset.yml` régénère tout en cas de désynchronisation[^proto-ci]. |
 | `buf breaking` local | `buf.yaml` n'a pas de section `breaking` : catégorie par défaut `FILE`[^buf]. Elle ne détecte pas la réutilisation d'un numéro de champ supprimé sans `reserved`. |
-| Lint | `STANDARD` sauf `PACKAGE_VERSION_SUFFIX`, `FILE_LOWER_SNAKE_CASE`, `RPC_REQUEST_STANDARD_NAME`, `RPC_RESPONSE_STANDARD_NAME`[^buf]. Les enums suivent `STANDARD` : préfixe du type et valeur `_UNSPECIFIED = 0`. |
+| Lint | `STANDARD` (dont `RPC_REQUEST_RESPONSE_UNIQUE` : un message de réponse par RPC, pas de réponse partagée) sauf `PACKAGE_VERSION_SUFFIX`, `FILE_LOWER_SNAKE_CASE`, `RPC_REQUEST_STANDARD_NAME`, `RPC_RESPONSE_STANDARD_NAME`[^buf]. Les enums suivent `STANDARD` : préfixe du type et valeur `_UNSPECIFIED = 0`. |
 | Génération | `ts_proto` vers `gen/ts`, options `nestJs=true`, `outputClientImpl=false`, `useDate=false`, `addMetadata=true`, `importSuffix=.js`[^bufgen]. Ne jamais éditer `contracts/src` ni `contracts-nest/src` (sauf `grpc.helpers.ts`). |
-| Structure | Domaines `common`, `user`, `event`, `post`, `social`, `storage`. Un domaine = 5 fichiers : `<d>.proto` (entité), `.command.proto`, `.query.proto`, `.responses.proto`, `.services.proto`. Exception : `post/comment*.proto` sans `comment.services.proto`, RPC exposés par `post.services.proto`. Un nouveau champ va dans le fichier du bon type. |
+| Structure | Domaines `common`, `user`, `event`, `post`, `social`, `storage`, `ranking`. Un domaine = 5 fichiers : `<d>.proto` (entité), `.command.proto`, `.query.proto`, `.responses.proto`, `.services.proto`. Exception : `post/comment*.proto` sans `comment.services.proto`, RPC exposés par `post.services.proto`. Un nouveau champ va dans le fichier du bon type. |
 | Dette connue | Aucun `reserved` dans le registre ; `CreateEventCommand` a un trou au champ 5 (ancien `location`) à réserver[^contrats]. |
 
 ### Checklist avant de rendre la main

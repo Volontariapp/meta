@@ -18,12 +18,6 @@ generated:
   by: claude-code/claude-opus-5-5
   at: "2026-10-06T09:12:34Z"
 verified:
-  - by: claude-code/agent
-    at: "2026-10-13T21:57:01Z"
-    digest: 1d56e70c2352bbd2
-  - by: claude-code/agent
-    at: "2026-10-14T11:23:52Z"
-    digest: df16d0c27e86980d
   - by: "process:agent"
     at: "2026-10-15T15:05:58Z"
     digest: 7c0dbfc54639c48f
@@ -33,6 +27,12 @@ verified:
   - by: "process:ci-integration-tests"
     at: "2026-10-15T16:45:31Z"
     digest: 0e0ef7a227942811
+  - by: "human:victor"
+    at: "2026-10-19T07:56:56Z"
+    digest: 7bf5b1801e7c1341
+  - by: "human:victor"
+    at: "2026-10-19T10:36:04Z"
+    digest: ce7f4f9576a18e94
 sources:
   - id: workflows
     resource: ci-tools/.github/workflows
@@ -63,7 +63,9 @@ Règle : `@main` est consommé immédiatement par tous les repos. Avant de chang
 
 ## Infra locale[^compose]
 
-- `docker-compose.yml` : une base Postgres par service (`postgres-user`, `-post`, `-event`, `-social`, `-ws`, `-storage`), `neo4j-social`, `redis` et `redis-ws-service`, MinIO (`minio-init` exécute `scripts/init-buckets.sh`[^buckets]), un conteneur `*-migration` avant chaque `ms-*`, `api-gateway` et `api-gateway-e2e`. `otel-collector` et `jaeger` sont encore déclarés à côté de `datadog-agent`.
+- `docker-compose.yml` : une base Postgres par service (`postgres-user`, `-post`, `-event`, `-social`, `-ws`, `-storage`, `-ranking` sur le port 5438), `neo4j-social`, `redis` et `redis-ws-service`, MinIO (`minio-init` exécute `scripts/init-buckets.sh`[^buckets]), un conteneur `*-migration` avant chaque `ms-*`, `api-gateway` et `api-gateway-e2e`. `otel-collector` et `jaeger` sont encore déclarés à côté de `datadog-agent`.
+- Piège : `e2e-orchestrator.yml` lance `--profile migrations pull`, qui tire l'image de TOUS les `*-migration` déclarés. Déclarer `ms-<x>-migration` avant la première publication de `ghcr.io/volontariapp/ms-<x>` casse l'E2E de tous les repos : ajouter d'abord `postgres-<x>` seul (suffisant pour `service-ci.yml`), puis le service de migration une fois l'image publiée.
+- Piège (commentaire « CI Snapshot Report » de `npm-packages`) : `npm-packages-snap-release.yml` télécharge les résumés de coverage avec `pattern: coverage-summary-*`. Avec **un seul** artefact correspondant (une PR qui ne construit qu'un paquet), `download-artifact` l'extrait directement dans `coverage-artifacts/` au lieu d'un dossier par artefact, et `scripts/ci-pr-comment.py` (qui lit `coverage-artifacts/coverage-summary-<id>/coverage-summary.json`) affichait des tirets. L'étape « Normalize the coverage artifact layout » range le fichier dans son dossier quand un seul paquet est en `BUILD`.
 - Observabilité locale : service `datadog-agent` (`gcr.io/datadoghq/agent:7`), OTLP gRPC sur 4317, APM sur 8126 ; `OTEL_EXPORTER_OTLP_ENDPOINT=http://datadog-agent:4317` dans `x-ms-common-env` ; `DD_API_KEY` lu dans le `.env` local.
 - `MS_STORAGE_URL: ms-storage:5006` est déjà déclaré, mais `ms-storage` n'écoute pas encore en gRPC (voir `volontariapp-file-storage-flow`).
 

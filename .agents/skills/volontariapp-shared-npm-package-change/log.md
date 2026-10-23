@@ -1,5 +1,15 @@
 # Historique
 
+## 2026-10-19
+
+- **Leçon** - Erreurs tsc fantomes apres un yarn up : supprimer le cache incremental (pitfall) (claude-code/agent)
+- **Leçon** - Apres yarn up, verifier qu'une seule copie de @volontariapp/database subsiste (rule) (claude-code/agent)
+- **Leçon** - Un nouveau paquet domain-* suit la forme des autres domaines (rule) (human:victor)
+
+## 2026-10-18
+
+- **Vérification** - contracts/src/gateway ecrit a la main, le reste genere depuis les proto: confirme par le Lead Dev le 2026-10-18 (claude-code/sonnet-5-5)
+
 ## 2026-10-17
 
 - **Vérification** - Lecon: sous-agent en parallele sur un depot consommateur peut contourner le hook STOP via heredoc Bash (claude-code/agent)

@@ -17,21 +17,21 @@ generated:
   by: claude-code/agent
   at: "2026-10-12T11:56:30Z"
 verified:
-  - by: claude-code/sonnet-5-5
-    at: "2026-10-16T12:24:43Z"
-    digest: 56f23cd207ec47db
-  - by: claude-code/agent
-    at: "2026-10-16T13:16:54Z"
-    digest: 39bb5a94654fe962
-  - by: claude-code/agent
-    at: "2026-10-17T12:52:55Z"
-    digest: 7f47c10f90d470fa
   - by: claude-code/agent
     at: "2026-10-17T14:27:12Z"
     digest: 7f47c10f90d470fa
   - by: claude-code/agent
     at: "2026-10-17T14:46:41Z"
     digest: 7f47c10f90d470fa
+  - by: "human:victor"
+    at: "2026-10-19T08:21:45Z"
+    digest: dbd687978078cac2
+  - by: claude-code/agent
+    at: "2026-10-19T09:19:15Z"
+    digest: 4500b5b797e29edc
+  - by: claude-code/agent
+    at: "2026-10-19T10:15:04Z"
+    digest: d519f37d67d4f55c
 sources:
   - id: sync-mig
     kind: local_file
@@ -51,7 +51,7 @@ sources:
 
 ## Quand utiliser ce playbook
 
-Utiliser ce playbook pour toute évolution de schéma relationnel PostgreSQL dans un microservice (`ms-user`, `ms-post`, `ms-event`, `ms-social`, `ms-storage`) :
+Utiliser ce playbook pour toute évolution de schéma relationnel PostgreSQL dans un microservice (`ms-user`, `ms-post`, `ms-event`, `ms-social`, `ms-storage`, `ms-ranking`) :
 - Ajout, renommage ou modification d'une table, colonne ou index métier.
 - Évolution des tables transactionnelles partagées (`jobs_outbox`, `event_queue`, `job_audit`).
 - Modification des triggers SQL de notification outbox.
@@ -81,7 +81,7 @@ Utiliser ce playbook pour toute évolution de schéma relationnel PostgreSQL dan
 Identifier le répertoire cible dans le microservice :
 - **Migration Commune** (`ms-*/src/migrations/common/`) :
   - Concerne l'Outbox transactionnelle (`jobs_outbox`, `event_queue`, `job_audit`)[^data-source] ou un trigger SQL de dispatch.
-  - Doit être créée dans un microservice de référence (ex. `ms-user`), puis **copiée à l'identique** (même nom, même contenu, vérifier le md5) dans `src/migrations/common/` de chaque service qui a **sa propre base** : `ms-user`, `ms-social`, `ms-post`, `ms-event`, `ms-storage` **et `ws-service`** (base `ms_ws`, oublié lors de la tâche 2.9 : une colonne ajoutée à `OutboxModel` fait échouer ses écritures tant que la migration manque). `post-processors-runner/post-processor-event` et `workers-runners/worker-event` gardent aussi une copie et utilisent en production la base `ms_event` de `ms-event` (migration déjà appliquée), **mais leur CI reconstruit une base neuve depuis leurs propres migrations** (`global-setup` de `worker-event` : drop du schéma puis `runMigrations`) : sans la copie, `column EventQueueModel.traceparent does not exist` (constaté sur workers-runners#16). Copier aussi la nouvelle migration commune dans ces deux dossiers. Pour reproduire la CI en local sans toucher à sa base : `DB_NAME=<base jetable> yarn test:integration`. `sync-migrations.sh` ne fait PAS cette propagation inter-services[^sync-mig]. Pour repérer les copies : chercher le nom d'une migration commune existante (`1781000000000-AddCorrelationIdToEventQueue.ts`) sur tout le workspace, hors `deploy/`. Ces trois dossiers ont dérivé (migrations plus anciennes que celles de `ms-*`) : ne copier que la nouvelle migration.
+  - Doit être créée dans un microservice de référence (ex. `ms-user`), puis **copiée à l'identique** (même nom, même contenu, vérifier le md5) dans `src/migrations/common/` de chaque service qui a **sa propre base** : `ms-user`, `ms-social`, `ms-post`, `ms-event`, `ms-storage`, `ms-ranking` **et `ws-service`** (base `ms_ws`, oublié lors de la tâche 2.9 : une colonne ajoutée à `OutboxModel` fait échouer ses écritures tant que la migration manque). `post-processors-runner/post-processor-event` et `workers-runners/worker-event` gardent aussi une copie et utilisent en production la base `ms_event` de `ms-event` (migration déjà appliquée), **mais leur CI reconstruit une base neuve depuis leurs propres migrations** (`global-setup` de `worker-event` : drop du schéma puis `runMigrations`) : sans la copie, `column EventQueueModel.traceparent does not exist` (constaté sur workers-runners#16). Copier aussi la nouvelle migration commune dans ces deux dossiers. Pour reproduire la CI en local sans toucher à sa base : `DB_NAME=<base jetable> yarn test:integration`. `sync-migrations.sh` ne fait PAS cette propagation inter-services[^sync-mig]. Pour repérer les copies : chercher le nom d'une migration commune existante (`1781000000000-AddCorrelationIdToEventQueue.ts`) sur tout le workspace, hors `deploy/`. Ces trois dossiers ont dérivé (migrations plus anciennes que celles de `ms-*`) : ne copier que la nouvelle migration.
 - **Migration Domaine** (`ms-*/src/migrations/domain/`) :
   - Concerne les tables propres au métier (ex. `users`, `badges` dans `ms-user` ; `posts` dans `ms-post`).
   - Reste cantonnée au répertoire `domain/` du microservice concerné.
@@ -151,11 +151,16 @@ export const AppDataSource = new DataSource({
 
 Pour toute modification dans `src/migrations/` (commune ou domaine pour les tests) :
 1. Lancer le script de synchronisation à la racine de `meta`[^sync-mig] :
-   ```bash
-   ./sync-migrations.sh
-   ```
-2. Sélectionner les microservices concernés (`ms-user`, `ms-social`, `ms-post`, `ms-event`).
-   *(Note : `ms-storage` a bien un dossier `common/` mais n'est pas dans la liste `SERVICES` du script ; son dossier `domain-storage/src/test/migrations` existe, à synchroniser à la main.)*
+   - Mode non-interactif (recommandé pour les scripts et agents IA) :
+     ```bash
+     ./sync-migrations.sh --all                         # Tout synchroniser
+     ./sync-migrations.sh --packages storage,user      # Synchroniser des microservices précis
+     ```
+   - Mode interactif (menu TUI avec flèches et espace) :
+     ```bash
+     ./sync-migrations.sh
+     ```
+2. Microservices gérés dans `SERVICES` : `user`, `social`, `post`, `event`, `storage`. `ranking` n'y figure pas encore (ticket 1.4 de `ms-ranking`) : son dossier `domain-ranking/src/test/migrations/domain/` contient pour l'instant la migration `CreateRankingTables` écrite à la main, à copier à l'identique dans `ms-ranking/src/migrations/domain/` (ticket 3.2) tant que le script ne le gère pas.
 3. Le script synchronise par `rsync -avc --delete` les fichiers vers `npm-packages/packages/domain-<service>/src/test/migrations` (copie `ms-*` vers `domain-*`, jamais entre services) afin de garantir que les tests du domaine s'exécutent sur un schéma strictement identique.
 4. **Piège : dérive.** Ces dossiers `test/migrations` ne sont pas à jour (au 2026-10-13 : migrations absentes ou renommées, `--delete` supprimerait des fichiers dans `domain-post`, `domain-event`, `domain-storage`). Vérifier avec `rsync -avcn --delete <src>/ <dest>/` avant. Pour une migration commune isolée, copier uniquement le nouveau fichier plutôt que de resynchroniser le dossier entier.
 5. **Copie `workers`** : `npm-packages/packages/workers/src/test/migrations/` contient aussi les migrations communes (outbox, `job_audit`, triggers), hors de `sync-migrations.sh`. Y ajouter toute nouvelle migration commune, sinon les tests de `workers` tournent sur un schéma obsolète (la PR traceparent l'a réalignée le 2026-10-13).

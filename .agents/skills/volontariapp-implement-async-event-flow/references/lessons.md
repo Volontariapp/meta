@@ -29,9 +29,27 @@ sources:
   - id: src-4f6a6ae1
     resource: workers-runners/worker-event/package.json
     title: workers-runners/worker-event/package.json
+  - id: src-3e2c0d08
+    resource: ws-service/src/core/services/gather-reaper.service.ts
+    title: ws-service/src/core/services/gather-reaper.service.ts
+  - id: src-8f29c4a0
+    resource: post-processors-runner/post-processor-storage/src/post-processors/user-deleted.post-processor.ts
+    title: post-processors-runner/post-processor-storage/src/post-processors/user-deleted.post-processor.ts
 ---
 
 # Leçons
+
+## 2026-10-19 - Un nouveau domaine consommateur de user.deleted a besoin de son stream, et ses demandes de calcul s'ecrivent en transaction
+
+- **Type :** rule
+- **Leçon :** Pour post-processor-ranking : Streams.USER_DELETED_RANKING (user:deleted:ranking) est le stream propre au domaine, et l'acquittement USER_RANKING_DELETED part vers WS_USER_DELETED_FEEDBACK ; ws-service ne doit attendre cet acquittement qu'apres le deploiement du post-processor (deux vagues). Un declencheur qui doit produire un calcul ecrit la demande (ranking_request) et la ligne jobs_outbox dans UNE transaction ; les interfaces de payload de messaging n'ont pas de signature d'index, donc la ligne est ecrite avec un payload JSON explicite plutot qu'avec un cast. Tous les evenements du flux portent leur donnee dans event.payload.after. Modele : post-processor-storage ; vu le 2026-10-19 (PR post-processors-runner 28).[^src-8f29c4a0]
+- **Consigné par :** claude-code/agent
+
+## 2026-10-18 - Ajouter un retour attendu au gather : déployer l'émetteur avant la config ws-service
+
+- **Type :** rule
+- **Leçon :** GatherReaperService (ws-service/src/core/services/gather-reaper.service.ts:45-47,58-81) tourne toutes les 10 s et passe en FAILED toute clé PENDING de plus de 60 s. Ajouter une clé à scatterGather.aggregations[].expects (ws-service/config/default.config.json) avant que le post-processor émetteur de l'acquittement soit déployé fait donc échouer chaque saga de ce déclencheur au bout de 60 s (inférence d'après le reaper, non testée). Pour user.deleted, finalizeDeletion n'étant appelé que sur user.deletion_successfull, le compte resterait PENDING_DELETION. Ordre : déployer le post-processor émetteur, puis la config ws-service. La leçon qui dit qu'aucun reaper n'existe (lessons.md) est périmée.[^src-3e2c0d08]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-17 - Retirer une epingle resolutions perimee dans un runner
 
@@ -100,3 +118,5 @@ sources:
 [^src-cd3f14ee]: npm-packages/packages/domain-user/src/repositories/postgres-user.repository.ts
 [^src-92a40169]: post-processors-runner/post-processor-social/src/post-processors/users/user-deleted.post-processor.ts
 [^src-4f6a6ae1]: workers-runners/worker-event/package.json
+[^src-3e2c0d08]: ws-service/src/core/services/gather-reaper.service.ts
+[^src-8f29c4a0]: post-processors-runner/post-processor-storage/src/post-processors/user-deleted.post-processor.ts

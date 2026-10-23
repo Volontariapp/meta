@@ -1,5 +1,16 @@
 # Historique
 
+## 2026-10-19
+
+- **Vérification** - relue apres le rangement par role de fichier du ticket 4.2 : les skills ne citent aucun fichier deplace, regles inchangees; regle de fichier unique consignee dans scaffold-microservice (claude-code/agent)
+- **Vérification** - lecon ticket 4.1 ajoutee, regles inchangees (claude-code/agent)
+- **Leçon** - Un nouveau domaine consommateur de user.deleted a besoin de son stream, et ses demandes de calcul s'ecrivent en transaction (rule) (claude-code/agent)
+- **Vérification** - relue apres le ticket 4.1 : regles inchangees (derive = squelettes ranking et lockfiles), lecon ajoutee dans event-flow (claude-code/agent)
+
+## 2026-10-18
+
+- **Leçon** - Ajouter un retour attendu au gather : déployer l'émetteur avant la config ws-service (rule) (claude-code/agent)
+
 ## 2026-10-17
 
 - **Vérification** - Lecon: methode pour retirer une epingle resolutions perimee (claude-code/agent)

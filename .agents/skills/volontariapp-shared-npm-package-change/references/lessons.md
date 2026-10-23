@@ -29,9 +29,36 @@ sources:
   - id: src-19653288
     resource: .claude/hooks/stop-rule-guard.sh
     title: .claude/hooks/stop-rule-guard.sh
+  - id: src-ca59d5f3
+    resource: npm-packages/packages/domain-post/src/repositories/postgres-post.repository.ts
+    title: npm-packages/packages/domain-post/src/repositories/postgres-post.repository.ts
+  - id: src-ae6d3d91
+    resource: ms-post/package.json
+    title: ms-post/package.json
+  - id: src-f6aa5050
+    resource: ws-service/tsconfig.json
+    title: ws-service/tsconfig.json
 ---
 
 # Leçons
+
+## 2026-10-19 - Erreurs tsc fantomes apres un yarn up : supprimer le cache incremental
+
+- **Type :** pitfall
+- **Leçon :** Apres un yarn up qui retire des copies imbriquees de @volontariapp/messaging ou shared, tsc peut afficher des dizaines d'erreurs 'not assignable' qui citent encore node_modules/@volontariapp/<pkg>/node_modules/... alors que ce dossier n'existe plus : c'est le cache incremental dist/tsconfig.tsbuildinfo (incremental: true). Le supprimer (fichier ignore par git) puis relancer tsc avant de conclure qu'une copie double subsiste. Verifier d'abord l'existence du dossier cite avec test -d.[^src-f6aa5050]
+- **Consigné par :** claude-code/agent
+
+## 2026-10-19 - Apres yarn up, verifier qu'une seule copie de @volontariapp/database subsiste
+
+- **Type :** rule
+- **Leçon :** Deux copies de @volontariapp/database (racine ^3.10.x et version exacte imbriquee sous outbox ou un domain-*) scindent le registre de mapping : l'ecriture outbox leve 'No mapping registered from EventQueueEntity to EventQueueModel' (500 sur toute creation) et l'e2e de tous les depots qui tirent l'image casse. Verifier avec find node_modules -path '*@volontariapp/database/package.json' -not -path '*/dist/*', puis epingler database a la version exacte demandee par outbox (yarn up @volontariapp/database@<version exacte>). Vu sur ms-post (PR 43) et ms-ranking, 2026-10-19.[^src-ae6d3d91]
+- **Consigné par :** claude-code/agent
+
+## 2026-10-19 - Un nouveau paquet domain-* suit la forme des autres domaines
+
+- **Type :** rule
+- **Leçon :** Un repository de domaine étend BaseRepository de @volontariapp/database (decorateurs Injectable et InjectRepository, nommage Postgres<Nom>Repository), avec une entité par table, un modèle TypeORM, un registerXMappings() appelé dans index.ts et des interfaces dans repositories/interfaces. Le SQL spécifique reste dans le repository (this.repository.query). Ne pas écrire de classes de repository maison ni de factory. Les noms find, remove, create, update, delete, upsert et count sont pris par BaseRepository : nommer autrement les méthodes de domaine. Piège : le paquet a sa propre copie de typeorm dans node_modules, donc ne pas importer EntityManager ou MoreThan depuis typeorm dans le code de production (types incompatibles avec ceux de database) : dériver le type du manager de executeInTransaction et passer par createQueryBuilder. Modèle : domain-post et domain-storage.[^src-ca59d5f3]
+- **Consigné par :** human:victor
 
 ## 2026-10-17 - Sous-agent en parallele sur un depot consommateur apres edition de npm-packages
 
@@ -130,3 +157,6 @@ sources:
 [^src-b58c39b2]: npm-packages/packages/domain-storage/package.json
 [^src-8ba4158b]: npm-packages/packages/contracts/src/gateway/user/response/user.response.ts
 [^src-19653288]: .claude/hooks/stop-rule-guard.sh
+[^src-ca59d5f3]: npm-packages/packages/domain-post/src/repositories/postgres-post.repository.ts
+[^src-ae6d3d91]: ms-post/package.json
+[^src-f6aa5050]: ws-service/tsconfig.json

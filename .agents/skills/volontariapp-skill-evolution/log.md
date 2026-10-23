@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-19
+
+- **Vérification** - AGENTS.md: nouvelle section 7 (webhook Discord des PR), aucune regle de la skill changee (claude-code/agent)
+- **Vérification** - hook pre-commit copie dans ms-ranking, aucun changement de regle (human:victor)
+
 ## 2026-10-13
 
 - **Vérification** - hook absence: couverture par ligne; learn valide --source; AGENTS.md R8 (claude-code/agent)

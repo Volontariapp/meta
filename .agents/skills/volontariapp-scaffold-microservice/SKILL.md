@@ -24,20 +24,20 @@ generated:
   at: "2026-10-12T12:18:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-17T12:52:56Z"
-    digest: 65c65fd246383ab4
+    at: "2026-10-19T20:12:09Z"
+    digest: 7d060210cc9a5b65
   - by: claude-code/agent
-    at: "2026-10-17T13:28:23Z"
-    digest: a63cd08b4891b185
+    at: "2026-10-19T20:14:19Z"
+    digest: 9cb2cd122583c44c
   - by: claude-code/agent
-    at: "2026-10-17T14:06:15Z"
-    digest: 114087f904be823b
+    at: "2026-10-19T20:20:05Z"
+    digest: 3594d1a8327ab30c
   - by: claude-code/agent
-    at: "2026-10-17T14:27:14Z"
-    digest: 757a6062fd9bc828
+    at: "2026-10-20T07:14:13Z"
+    digest: 9e103fc15adc5c68
   - by: claude-code/agent
-    at: "2026-10-17T14:46:43Z"
-    digest: e2eb1795fd6ff6dc
+    at: "2026-10-20T07:18:50Z"
+    digest: 59c2154d52dfd407
 sources:
   - id: doc-creation
     kind: local_file
@@ -222,7 +222,7 @@ Dans le dépôt `deploy` :
 ### Étape 9 : Outillage Local & Synchronisation CI (`ci-tools/`)
 
 1. **Docker Compose Local** :
-   - Ajouter l'instance PostgreSQL (`postgres-<domaine>`) sur un port dédié (ex. 5437) dans `ci-tools/docker-compose.yml`[^compose].
+   - Ajouter l'instance PostgreSQL (`postgres-<domaine>`) sur un port dédié (ex. 5437 pour storage, 5438 pour ranking) dans `ci-tools/docker-compose.yml`[^compose]. Le service `ms-<domaine>-migration` ne s'ajoute qu'une fois l'image GHCR publiée (l'E2E tire toutes les images du profil `migrations`).
    - Déclarer le conteneur de migration `<domaine>-migration`.
 2. **Script de synchronisation** :
    - Ajouter le nouveau domaine dans `SERVICES=(...)` du script [sync-migrations.sh](file:///Users/victoragahi/Developer/meta/sync-migrations.sh)[^sync-mig].

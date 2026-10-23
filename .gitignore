@@ -57,6 +57,7 @@ lerna-debug.log*
 /ws-service
 graphify-out/
 /ms-storage
+/ms-ranking
 /mcp-meta-indexer
 /docs
 /causalmesh

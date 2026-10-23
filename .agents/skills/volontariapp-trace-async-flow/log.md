@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-19
+
+- **Vérification** - ms-ranking: squelette NestJS copie de ms-storage, migrations communes (human:victor)
+
 ## 2026-10-14
 
 - **Vérification** - Document outbox producer spans and exponential backoff (claude-code/agent)

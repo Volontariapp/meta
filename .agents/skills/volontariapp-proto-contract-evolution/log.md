@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-19
+
+- **Vérification** - domaine ranking; regle lint une reponse par RPC (human:victor)
+
 ## 2026-10-12
 
 - **Vérification** - Ajout du playbook de dépréciation Protobuf et tombstoning (claude-code/agent)
