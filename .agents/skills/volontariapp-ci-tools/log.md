@@ -2,6 +2,8 @@
 
 ## 2026-10-27
 
+- **Vérification** - chemin templates et reapplication apres merge de main (process:agent)
+- **Vérification** - reapplication apres merge de main (process:agent)
 - **Vérification** - labels docker-e2e et docker-and-e2e (process:agent)
 
 ## 2026-10-19
