@@ -19,9 +19,6 @@ generated:
   at: "2026-10-06T09:12:34Z"
 verified:
   - by: "human:victor"
-    at: "2026-10-19T07:56:56Z"
-    digest: 7bf5b1801e7c1341
-  - by: "human:victor"
     at: "2026-10-19T10:36:04Z"
     digest: ce7f4f9576a18e94
   - by: "process:agent"
@@ -32,6 +29,9 @@ verified:
     digest: 5677798d764b2fc2
   - by: "process:agent"
     at: "2026-10-27T22:52:59Z"
+    digest: 5677798d764b2fc2
+  - by: "process:agent"
+    at: "2026-10-27T22:58:43Z"
     digest: 5677798d764b2fc2
 sources:
   - id: workflows

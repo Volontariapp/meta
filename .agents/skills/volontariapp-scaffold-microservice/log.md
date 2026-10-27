@@ -2,6 +2,7 @@
 
 ## 2026-10-27
 
+- **Vérification** - revérifiée après commit ci-tools (security-scan, templates Dependabot) (process:agent)
 - **Vérification** - templates Dependabot avec label docker-and-e2e (process:agent)
 - **Vérification** - dependabot.yml et job security fournis par ci-tools (process:agent)
 - **Vérification** - Relu apres modification de api-gateway/src/modules/ws-proxy : la skill ne decrit pas ws-proxy (etape 7 = routes REST), aucun changement (claude-code/agent)
