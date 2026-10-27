@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-27
+
+- **Vérification** - WsProxyMiddleware: un token expire ou invalide (InternalServerError de JwtService) est converti en 401 au lieu d'un crash 500 (claude-code/agent)
+
 ## 2026-10-21
 
 - **Vérification** - use fixed golden personas length for persona indexing (claude-code/agent)

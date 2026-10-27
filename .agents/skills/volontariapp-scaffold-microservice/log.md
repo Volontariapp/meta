@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-27
+
+- **Vérification** - Relu apres modification de api-gateway/src/modules/ws-proxy : la skill ne decrit pas ws-proxy (etape 7 = routes REST), aucun changement (claude-code/agent)
+
 ## 2026-10-21
 
 - **Vérification** - update ranking-sealed-secret for prod ms-ranking (claude-code/agent)
