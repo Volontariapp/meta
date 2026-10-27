@@ -18,9 +18,6 @@ generated:
   by: claude-code/claude-opus-5-5
   at: "2026-10-06T09:12:34Z"
 verified:
-  - by: "human:victor"
-    at: "2026-10-19T10:36:04Z"
-    digest: ce7f4f9576a18e94
   - by: "process:agent"
     at: "2026-10-27T22:50:58Z"
     digest: 5677798d764b2fc2
@@ -32,6 +29,9 @@ verified:
     digest: 5677798d764b2fc2
   - by: "process:agent"
     at: "2026-10-27T22:58:43Z"
+    digest: 5677798d764b2fc2
+  - by: "process:agent"
+    at: "2026-10-27T23:03:16Z"
     digest: 5677798d764b2fc2
 sources:
   - id: workflows
@@ -60,7 +60,7 @@ sources:
 | Sécurité | `security-scan.yml` (Trivy fs : vulnérabilités, secrets, misconfigurations ; input `blocking`, `false` par défaut = mode warning ; appelé en job `security` par `service-ci`, `runner-pipeline`, `npm-packages-pipeline` et `nativapp-ci`, donc aucun repo appelant à modifier) |
 | Autres | `runner-pipeline.yml`, `nativapp-ci.yml`, `validate-compose.yml`, `ghcr-cleanup.yml`, `sync-all.yml` |
 
-Dependabot : `ci-tools/.github/dependabot.yml` ne couvre que ci-tools. Les modèles pour les autres repos sont dans `ci-tools/templates/dependabot/` (`service.yml`, `runner.yml`) et se copient dans `<repo>/.github/dependabot.yml` : `sync-all.yml` ne propage que le pointeur du sous-module, jamais ce fichier. Le modèle runner liste tous les sous-packages dans `directories` pour obtenir une seule PR groupée ; garder cette liste alignée sur l'input `services` du `ci.yml` du runner. Les PR Dependabot portent le label `docker-and-e2e` (exigé par `service-docker-build-push.yml`) ; le label doit exister dans le repo. Dependabot n'expose pas les secrets du repo à la CI : `ORG_REPO_TOKEN` doit aussi être déclaré dans les secrets Dependabot (repo ou organisation) et son `GITHUB_TOKEN` est en lecture seule, ce qui bloque le push GHCR. Services : le groupe `@volontariapp/*` passe en premier (première correspondance gagne). Runners : un seul groupe `runner-dependencies` (toutes les mises à jour de version, `@volontariapp/*` inclus) plus un groupe sécurité, soit au plus deux PR par runner.
+Dependabot : `ci-tools/.github/dependabot.yml` ne couvre que ci-tools. Les modèles pour les autres repos sont dans `ci-tools/templates/dependabot/` (`service.yml`, `runner.yml`) et se copient dans `<repo>/.github/dependabot.yml` : `sync-all.yml` ne propage que le pointeur du sous-module, jamais ce fichier. Le modèle runner liste tous les sous-packages dans `directories` pour obtenir une seule PR groupée ; garder cette liste alignée sur l'input `services` du `ci.yml` du runner. Les PR Dependabot portent les labels `docker-e2e` (demandé par le Lead Dev) et `docker-and-e2e` (celui qu'exige `service-docker-build-push.yml`, sans lui la CI complète refuse la PR) ; les deux labels doivent exister dans le repo. Dependabot n'expose pas les secrets du repo à la CI : `ORG_REPO_TOKEN` doit aussi être déclaré dans les secrets Dependabot (repo ou organisation) et son `GITHUB_TOKEN` est en lecture seule, ce qui bloque le push GHCR. Services : le groupe `@volontariapp/*` passe en premier (première correspondance gagne). Runners : un seul groupe `runner-dependencies` (toutes les mises à jour de version, `@volontariapp/*` inclus) plus un groupe sécurité, soit au plus deux PR par runner.
 
 Règle : `@main` est consommé immédiatement par tous les repos. Avant de changer les `inputs` ou `secrets` d'un workflow, lister ses appelants (`rg "ci-tools/.github/workflows/<x>.yml" <repo>` repo par repo) et garder la compatibilité.
 
