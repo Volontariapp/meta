@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-27
+
+- **Vérification** - labels docker-e2e et docker-and-e2e (process:agent)
+
 ## 2026-10-19
 
 - **Vérification** - etape de normalisation du dossier des resumes de coverage (snapshot report) (human:victor)
