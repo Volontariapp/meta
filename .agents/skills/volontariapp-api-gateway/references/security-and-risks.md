@@ -59,7 +59,7 @@ Carte complète des routes : [Carte des routes REST](/volontariapp-api-gateway/r
 
 - `GrpcInternalInterceptor` (`@volontariapp/auth`), enregistré en `APP_INTERCEPTOR`[^app-module], signe l'`INTERNAL_TOKEN` et injecte `req['internalMetadata']` (`grpc.Metadata`). Tout appel RPC sans cette métadonnée est rejeté en `UNAUTHENTICATED` par les microservices.
 - `GrpcClientModule`[^grpc-module] configure les clients des microservices : `UserPackage`, `PostPackage`, `EventPackage`, `SocialPackage`.
-- Le WebSocket n'étant pas gRPC, `WsProxyMiddleware`[^ws-proxy] vérifie le JWT utilisateur, génère un token interne signé et relaie la connexion vers `msWsUrl` avec l'en-tête `x-internal-token`.
+- Le WebSocket n'étant pas gRPC, `WsProxyMiddleware`[^ws-proxy] vérifie le JWT utilisateur, génère un token interne signé et relaie la connexion vers `msWsUrl` avec l'en-tête `x-internal-token`. `JwtService.verifyAccessToken` lève une `InternalServerError` pour un token expiré ou invalide : le middleware doit l'attraper et répondre 401 (`UnauthorizedException`, log `warn`), sinon le catch générique le traite en `[CRASH]` + `next(err)` (500) et le client Socket.IO en polling spamme les logs en boucle.
 
 ---
 
