@@ -2,6 +2,7 @@
 
 ## 2026-10-27
 
+- **Vérification** - security.yml dans ci-tools (process:agent)
 - **Vérification** - labels docker-e2e et docker-and-e2e (process:agent)
 - **Vérification** - revérifiée après commit ci-tools (security-scan, templates Dependabot) (process:agent)
 - **Vérification** - label docker-and-e2e et secrets Dependabot (process:agent)
