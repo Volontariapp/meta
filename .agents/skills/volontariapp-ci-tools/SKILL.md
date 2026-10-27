@@ -9,6 +9,7 @@ paths:
   - "ci-tools/.github/workflows/**"
   - ci-tools/docker-compose.yml
   - "ci-tools/scripts/**"
+  - "ci-tools/templates/**"
 mesh_keys:
   - ci-tools
   - docker-compose
@@ -18,21 +19,21 @@ generated:
   by: claude-code/claude-opus-5-5
   at: "2026-10-06T09:12:34Z"
 verified:
+  - by: "human:victor"
+    at: "2026-10-19T07:56:56Z"
+    digest: 7bf5b1801e7c1341
+  - by: "human:victor"
+    at: "2026-10-19T10:36:04Z"
+    digest: ce7f4f9576a18e94
   - by: "process:agent"
-    at: "2026-10-27T22:52:35Z"
+    at: "2026-10-27T23:01:57Z"
     digest: 5677798d764b2fc2
   - by: "process:agent"
-    at: "2026-10-27T22:52:59Z"
-    digest: 5677798d764b2fc2
-  - by: "process:agent"
-    at: "2026-10-27T22:58:43Z"
-    digest: 5677798d764b2fc2
-  - by: "process:agent"
-    at: "2026-10-27T23:03:16Z"
-    digest: 5677798d764b2fc2
-  - by: "process:agent"
-    at: "2026-10-27T23:04:50Z"
+    at: "2026-10-27T23:12:15Z"
     digest: a2bf41485a502ea6
+  - by: "process:agent"
+    at: "2026-10-27T23:12:32Z"
+    digest: 7853cdac21207e4b
 sources:
   - id: workflows
     resource: ci-tools/.github/workflows

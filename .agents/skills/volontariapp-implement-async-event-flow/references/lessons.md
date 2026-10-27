@@ -66,7 +66,7 @@ sources:
 ## 2026-10-11 - TypeORM forFeature et relations par chaine
 
 - **Type :** rule
-- **Leçon :** Dans un post-processor avec TypeOrmModule.forRoot en autoLoadEntities, chaque modele cible d'une relation par chaine (ex: UserModel.userBadges -> UserBadgeModel) doit etre dans un forFeature, sinon 'Entity metadata for UserModel#userBadges was not found' au demarrage. Corrige dans post-processor-user (DomainUserModule).
+- **Leçon :** Dans un post-processor avec TypeOrmModule.forRoot en autoLoadEntities, chaque modele cible d'une relation par chaine (ex: UserModel.userBadges -> UserBadgeModel) doit etre dans un forFeature, sinon 'Entity metadata for UserModel#userBadges was not found' au demarrage. Corrige dans post-processor-user (DomainUserModule) et post-processor-post (DomainPostModule, PostModel.media -> PostMediaModel).
 - **Consigné par :** claude-code/agent
 
 ## 2026-10-11 - post-processor-social avale les erreurs de USER_DELETED

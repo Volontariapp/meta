@@ -2,12 +2,9 @@
 
 ## 2026-10-27
 
-- **Vérification** - security.yml dans ci-tools (process:agent)
+- **Vérification** - chemin templates et reapplication apres merge de main (process:agent)
+- **Vérification** - reapplication apres merge de main (process:agent)
 - **Vérification** - labels docker-e2e et docker-and-e2e (process:agent)
-- **Vérification** - revérifiée après commit ci-tools (security-scan, templates Dependabot) (process:agent)
-- **Vérification** - label docker-and-e2e et secrets Dependabot (process:agent)
-- **Vérification** - groupe unique pour les runners (process:agent)
-- **Vérification** - security-scan.yml et modeles Dependabot (process:agent)
 
 ## 2026-10-19
 

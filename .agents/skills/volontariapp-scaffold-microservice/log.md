@@ -2,11 +2,10 @@
 
 ## 2026-10-27
 
-- **Vérification** - security.yml dans ci-tools (process:agent)
+- **Vérification** - chemin templates et reapplication apres merge de main (process:agent)
+- **Vérification** - reapplication apres merge de main (process:agent)
 - **Vérification** - labels docker-e2e et docker-and-e2e (process:agent)
-- **Vérification** - revérifiée après commit ci-tools (security-scan, templates Dependabot) (process:agent)
-- **Vérification** - templates Dependabot avec label docker-and-e2e (process:agent)
-- **Vérification** - dependabot.yml et job security fournis par ci-tools (process:agent)
+- **Vérification** - post-processor-post: PostMediaModel ajoute au forFeature de DomainPostModule (piege relations par chaine) (claude-code/agent)
 - **Vérification** - Relu apres modification de api-gateway/src/modules/ws-proxy : la skill ne decrit pas ws-proxy (etape 7 = routes REST), aucun changement (claude-code/agent)
 
 ## 2026-10-21
