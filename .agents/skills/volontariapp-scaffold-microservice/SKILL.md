@@ -24,12 +24,6 @@ generated:
   at: "2026-10-12T12:18:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-21T07:52:50Z"
-    digest: 7e4858e7afdee1bd
-  - by: claude-code/agent
-    at: "2026-10-21T08:14:46Z"
-    digest: 26d817f26c9c461b
-  - by: claude-code/agent
     at: "2026-10-21T08:20:29Z"
     digest: bcd2a07d921789cd
   - by: claude-code/agent
@@ -38,6 +32,12 @@ verified:
   - by: claude-code/agent
     at: "2026-10-27T22:42:01Z"
     digest: 499ab8a96ab16d18
+  - by: "process:agent"
+    at: "2026-10-27T22:51:18Z"
+    digest: 1a97f9f44636f764
+  - by: "process:agent"
+    at: "2026-10-27T22:53:11Z"
+    digest: 6402470d5bd9a32f
 sources:
   - id: doc-creation
     kind: local_file
@@ -135,6 +135,7 @@ Une fois la PR Protobuf générée dans `npm-packages`[^doc-creation] :
 
 1. Créer le dépôt `ms-<domaine>` (prendre modèle sur `ms-social` ou `ms-user`)[^doc-creation] :
    - Initialiser les dépendances via `yarn up` sur les nouveaux paquets publiés.
+   - Copier `ci-tools/templates/dependabot/service.yml` dans `.github/dependabot.yml` (retirer le bloc `docker` sans Dockerfile). Le job `security` (Trivy) est déjà fourni par `service-ci.yml`, rien à ajouter dans le `ci.yml`.
 2. **Bootstrap et Observabilité** :
    - `src/main.ts` : Démarrage hybride (serveur gRPC sur port 3000 + serveur HTTP Express pour la sonde `/health`).
    - `src/tracing.ts` : Initialisation du SDK OpenTelemetry (Datadog OTLP) avant l'instanciation de NestJS.

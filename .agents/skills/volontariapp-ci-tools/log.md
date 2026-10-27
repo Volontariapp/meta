@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-10-27
+
+- **Vérification** - label docker-and-e2e et secrets Dependabot (process:agent)
+- **Vérification** - groupe unique pour les runners (process:agent)
+- **Vérification** - security-scan.yml et modeles Dependabot (process:agent)
+
 ## 2026-10-19
 
 - **Vérification** - etape de normalisation du dossier des resumes de coverage (snapshot report) (human:victor)

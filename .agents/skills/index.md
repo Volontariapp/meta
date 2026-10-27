@@ -8,7 +8,7 @@ Le cycle de vie des skills est géré par [volontariapp-skill-evolution](/volont
 | :--- | :--- | :--- |
 | [volontariapp-api-gateway](/volontariapp-api-gateway/SKILL.md) | Exposer ou Modifier une Route REST Edge | 2026-10-27 |
 | [volontariapp-async-remediation](/volontariapp-async-remediation/SKILL.md) | Remédiation et Dépilement des Files Asynchrones (DLQ & Streams) | 2026-10-19 |
-| [volontariapp-ci-tools](/volontariapp-ci-tools/SKILL.md) | CI partagée et infra locale (ci-tools) | 2026-10-19 |
+| [volontariapp-ci-tools](/volontariapp-ci-tools/SKILL.md) | CI partagée et infra locale (ci-tools) | 2026-10-27 |
 | [volontariapp-db-migration](/volontariapp-db-migration/SKILL.md) | Migrations PostgreSQL et Synchronisation Multi-Services | 2026-10-19 |
 | [volontariapp-deploy-gitops](/volontariapp-deploy-gitops/SKILL.md) | Déploiement GitOps (Cluster K3s & ArgoCD) | 2026-10-21 |
 | [volontariapp-docx-reports](/volontariapp-docx-reports/SKILL.md) | Modification et relecture de documents Word DOCX | 2026-10-07 |
