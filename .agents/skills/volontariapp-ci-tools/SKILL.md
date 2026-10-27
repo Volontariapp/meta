@@ -19,9 +19,6 @@ generated:
   at: "2026-10-06T09:12:34Z"
 verified:
   - by: "process:agent"
-    at: "2026-10-15T15:05:58Z"
-    digest: 7c0dbfc54639c48f
-  - by: "process:agent"
     at: "2026-10-15T15:17:18Z"
     digest: 931c6ef98f172bfc
   - by: "process:ci-integration-tests"
@@ -33,6 +30,9 @@ verified:
   - by: "human:victor"
     at: "2026-10-19T10:36:04Z"
     digest: ce7f4f9576a18e94
+  - by: "process:agent"
+    at: "2026-10-27T23:01:57Z"
+    digest: 5677798d764b2fc2
 sources:
   - id: workflows
     resource: ci-tools/.github/workflows
