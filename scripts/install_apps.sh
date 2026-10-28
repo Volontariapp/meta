@@ -112,7 +112,7 @@ install_cli_tool() {
 
 if [[ "${OS}" == "Darwin" ]]; then
   if ! command -v brew &> /dev/null; then
-    echo -e "${YELLOW}⚠  Homebrew required on macOS. Run install_runtime.sh first.${NC}"
+    echo -e "${YELLOW}⚠  Homebrew required on macOS. Lancer ./setup.sh d abord.${NC}"
     exit 1
   fi
 

@@ -1,3 +1,30 @@
+{
+  "folders": [
+    {
+      "name": "ms-user",
+      "path": "../ms-user"
+    },
+    {
+      "name": "ms-post",
+      "path": "../ms-post"
+    },
+    {
+      "name": "ms-event",
+      "path": "../ms-event"
+    },
+    {
+      "name": "ms-social",
+      "path": "../ms-social"
+    },
+    {
+      "name": "outbox-runners",
+      "path": "../outbox-runners"
+    },
+    {
+      "name": "npm-packages",
+      "path": "../npm-packages"
+    }
+  ],
   "settings": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
@@ -14,9 +41,7 @@
       "**/node_modules": true,
       "**/dist": true,
       "**/.yarn": true
-    },
-    "protoc.options": ["--proto_path=proto-registry/proto"],
-    "proto3.lint.enable": false
+    }
   },
   "extensions": {
     "recommendations": [

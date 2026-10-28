@@ -1,3 +1,18 @@
+{
+  "folders": [
+    {
+      "name": "ms-post",
+      "path": "../ms-post"
+    },
+    {
+      "name": "api-gateway",
+      "path": "../api-gateway"
+    },
+    {
+      "name": "npm-packages",
+      "path": "../npm-packages"
+    }
+  ],
   "settings": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
@@ -14,9 +29,7 @@
       "**/node_modules": true,
       "**/dist": true,
       "**/.yarn": true
-    },
-    "protoc.options": ["--proto_path=proto-registry/proto"],
-    "proto3.lint.enable": false
+    }
   },
   "extensions": {
     "recommendations": [

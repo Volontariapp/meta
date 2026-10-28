@@ -1,3 +1,42 @@
+{
+  "folders": [
+    {
+      "name": "api-gateway",
+      "path": "../api-gateway"
+    },
+    {
+      "name": "ms-user",
+      "path": "../ms-user"
+    },
+    {
+      "name": "ms-post",
+      "path": "../ms-post"
+    },
+    {
+      "name": "ms-event",
+      "path": "../ms-event"
+    },
+    {
+      "name": "ms-social",
+      "path": "../ms-social"
+    },
+    {
+      "name": "ms-storage",
+      "path": "../ms-storage"
+    },
+    {
+      "name": "ms-ranking",
+      "path": "../ms-ranking"
+    },
+    {
+      "name": "outbox-runners",
+      "path": "../outbox-runners"
+    },
+    {
+      "name": "proto-registry",
+      "path": "../proto-registry"
+    }
+  ],
   "settings": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
@@ -14,9 +53,7 @@
       "**/node_modules": true,
       "**/dist": true,
       "**/.yarn": true
-    },
-    "protoc.options": ["--proto_path=proto-registry/proto"],
-    "proto3.lint.enable": false
+    }
   },
   "extensions": {
     "recommendations": [

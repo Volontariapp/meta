@@ -1,4 +1,18 @@
 {
+  "folders": [
+    {
+      "name": "ms-user",
+      "path": "../ms-user"
+    },
+    {
+      "name": "api-gateway",
+      "path": "../api-gateway"
+    },
+    {
+      "name": "npm-packages",
+      "path": "../npm-packages"
+    }
+  ],
   "settings": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
@@ -14,10 +28,8 @@
     "search.exclude": {
       "**/node_modules": true,
       "**/dist": true,
-      "**/.yarn": true,
-    },
-    "protoc.options": ["--proto_path=proto-registry/proto"],
-    "proto3.lint.enable": false,
+      "**/.yarn": true
+    }
   },
   "extensions": {
     "recommendations": [
@@ -26,18 +38,7 @@
       "ms-vscode.vscode-typescript-next",
       "firsttris.vscode-jest-runner",
       "EditorConfig.EditorConfig",
-      "bufbuild.vscode-buf",
-    ],
-  },
-  "folders": [
-    {
-      "path": "../npm-packages",
-    },
-    {
-      "path": "../ms-user",
-    },
-    {
-      "path": "../api-gateway",
-    },
-  ],
+      "bufbuild.vscode-buf"
+    ]
+  }
 }

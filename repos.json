@@ -1,0 +1,388 @@
+{
+  "version": 1,
+  "org": "Volontariapp",
+  "repos": [
+    {
+      "name": ".github",
+      "role": "org-profile",
+      "description": "Profil GitHub de l'organisation"
+    },
+    {
+      "name": "docs",
+      "role": "docs",
+      "description": "Documentation d'architecture C4, ADR et guides"
+    },
+    {
+      "name": "ci-tools",
+      "role": "tooling",
+      "description": "Workflows GitHub Actions partages et docker-compose local"
+    },
+    {
+      "name": "changelog-checker",
+      "role": "tooling",
+      "description": "Validation automatisee des versions et changelogs"
+    },
+    {
+      "name": "deploy",
+      "role": "infra",
+      "description": "GitOps Kubernetes (ArgoCD)"
+    },
+    {
+      "name": "proto-registry",
+      "role": "contracts",
+      "description": "Registre Protobuf (SSOT gRPC)"
+    },
+    {
+      "name": "npm-packages",
+      "role": "library",
+      "description": "Monorepo des packages @volontariapp/*",
+      "install": true,
+      "build": true
+    },
+    {
+      "name": "api-gateway",
+      "role": "gateway",
+      "description": "Passerelle HTTP/REST",
+      "install": true
+    },
+    {
+      "name": "ws-service",
+      "role": "gateway",
+      "description": "Passerelle WebSocket",
+      "install": true
+    },
+    {
+      "name": "ms-user",
+      "role": "microservice",
+      "description": "Identite et profils",
+      "install": true
+    },
+    {
+      "name": "ms-social",
+      "role": "microservice",
+      "description": "Relations sociales (Neo4j)",
+      "install": true
+    },
+    {
+      "name": "ms-post",
+      "role": "microservice",
+      "description": "Publications et commentaires",
+      "install": true
+    },
+    {
+      "name": "ms-event",
+      "role": "microservice",
+      "description": "Evenements et participations",
+      "install": true
+    },
+    {
+      "name": "ms-storage",
+      "role": "microservice",
+      "description": "Medias et stockage objet",
+      "install": true
+    },
+    {
+      "name": "ms-ranking",
+      "role": "microservice",
+      "description": "Classements",
+      "install": true
+    },
+    {
+      "name": "outbox-runners",
+      "role": "runner-group",
+      "description": "Daemons outbox PostgreSQL vers Redis Streams"
+    },
+    {
+      "name": "workers-runners",
+      "role": "runner-group",
+      "description": "Consommateurs BullMQ"
+    },
+    {
+      "name": "post-processors-runner",
+      "role": "runner-group",
+      "description": "Consommateurs Redis Streams"
+    },
+    {
+      "name": "nativapp",
+      "role": "mobile",
+      "description": "Application React Native (Expo)",
+      "install": true
+    }
+  ],
+  "units": [
+    {
+      "name": "ms-user",
+      "repo": "ms-user",
+      "path": "ms-user",
+      "kind": "microservice",
+      "order": 10,
+      "migrations": true,
+      "certs": true
+    },
+    {
+      "name": "ms-social",
+      "repo": "ms-social",
+      "path": "ms-social",
+      "kind": "microservice",
+      "order": 11,
+      "migrations": true,
+      "certs": true
+    },
+    {
+      "name": "ms-post",
+      "repo": "ms-post",
+      "path": "ms-post",
+      "kind": "microservice",
+      "order": 12,
+      "migrations": true,
+      "certs": true
+    },
+    {
+      "name": "ms-event",
+      "repo": "ms-event",
+      "path": "ms-event",
+      "kind": "microservice",
+      "order": 13,
+      "migrations": true,
+      "certs": true
+    },
+    {
+      "name": "ms-storage",
+      "repo": "ms-storage",
+      "path": "ms-storage",
+      "kind": "microservice",
+      "order": 14,
+      "migrations": true,
+      "certs": true
+    },
+    {
+      "name": "ms-ranking",
+      "repo": "ms-ranking",
+      "path": "ms-ranking",
+      "kind": "microservice",
+      "order": 15,
+      "migrations": true,
+      "certs": true
+    },
+    {
+      "name": "api-gateway",
+      "repo": "api-gateway",
+      "path": "api-gateway",
+      "kind": "gateway",
+      "order": 20,
+      "migrations": false,
+      "certs": true
+    },
+    {
+      "name": "ws-service",
+      "repo": "ws-service",
+      "path": "ws-service",
+      "kind": "gateway",
+      "order": 21,
+      "migrations": true,
+      "certs": true
+    },
+    {
+      "name": "outbox-user",
+      "repo": "outbox-runners",
+      "path": "outbox-runners/outbox-user",
+      "kind": "outbox",
+      "order": 30
+    },
+    {
+      "name": "outbox-social",
+      "repo": "outbox-runners",
+      "path": "outbox-runners/outbox-social",
+      "kind": "outbox",
+      "order": 31
+    },
+    {
+      "name": "outbox-post",
+      "repo": "outbox-runners",
+      "path": "outbox-runners/outbox-post",
+      "kind": "outbox",
+      "order": 32
+    },
+    {
+      "name": "outbox-event",
+      "repo": "outbox-runners",
+      "path": "outbox-runners/outbox-event",
+      "kind": "outbox",
+      "order": 33
+    },
+    {
+      "name": "outbox-storage",
+      "repo": "outbox-runners",
+      "path": "outbox-runners/outbox-storage",
+      "kind": "outbox",
+      "order": 34
+    },
+    {
+      "name": "outbox-ranking",
+      "repo": "outbox-runners",
+      "path": "outbox-runners/outbox-ranking",
+      "kind": "outbox",
+      "order": 35
+    },
+    {
+      "name": "outbox-ws",
+      "repo": "outbox-runners",
+      "path": "outbox-runners/outbox-ws",
+      "kind": "outbox",
+      "order": 36
+    },
+    {
+      "name": "post-processor-user",
+      "repo": "post-processors-runner",
+      "path": "post-processors-runner/post-processor-user",
+      "kind": "post-processor",
+      "order": 40
+    },
+    {
+      "name": "post-processor-social",
+      "repo": "post-processors-runner",
+      "path": "post-processors-runner/post-processor-social",
+      "kind": "post-processor",
+      "order": 41
+    },
+    {
+      "name": "post-processor-post",
+      "repo": "post-processors-runner",
+      "path": "post-processors-runner/post-processor-post",
+      "kind": "post-processor",
+      "order": 42
+    },
+    {
+      "name": "post-processor-event",
+      "repo": "post-processors-runner",
+      "path": "post-processors-runner/post-processor-event",
+      "kind": "post-processor",
+      "order": 43
+    },
+    {
+      "name": "post-processor-storage",
+      "repo": "post-processors-runner",
+      "path": "post-processors-runner/post-processor-storage",
+      "kind": "post-processor",
+      "order": 44
+    },
+    {
+      "name": "post-processor-ranking",
+      "repo": "post-processors-runner",
+      "path": "post-processors-runner/post-processor-ranking",
+      "kind": "post-processor",
+      "order": 45
+    },
+    {
+      "name": "worker-user",
+      "repo": "workers-runners",
+      "path": "workers-runners/worker-user",
+      "kind": "worker",
+      "order": 50
+    },
+    {
+      "name": "worker-social",
+      "repo": "workers-runners",
+      "path": "workers-runners/worker-social",
+      "kind": "worker",
+      "order": 51
+    },
+    {
+      "name": "worker-post",
+      "repo": "workers-runners",
+      "path": "workers-runners/worker-post",
+      "kind": "worker",
+      "order": 52
+    },
+    {
+      "name": "worker-event",
+      "repo": "workers-runners",
+      "path": "workers-runners/worker-event",
+      "kind": "worker",
+      "order": 53
+    },
+    {
+      "name": "worker-storage",
+      "repo": "workers-runners",
+      "path": "workers-runners/worker-storage",
+      "kind": "worker",
+      "order": 54
+    },
+    {
+      "name": "worker-ranking",
+      "repo": "workers-runners",
+      "path": "workers-runners/worker-ranking",
+      "kind": "worker",
+      "order": 55
+    },
+    {
+      "name": "nativapp",
+      "repo": "nativapp",
+      "path": "nativapp",
+      "kind": "mobile",
+      "order": 90
+    }
+  ],
+  "profiles": {
+    "backend-core": [
+      "microservice",
+      "gateway"
+    ],
+    "services": [
+      "microservice"
+    ],
+    "outbox": [
+      "outbox"
+    ],
+    "backend": [
+      "microservice",
+      "gateway",
+      "outbox",
+      "post-processor",
+      "worker"
+    ],
+    "all-no-mobile": [
+      "microservice",
+      "gateway",
+      "outbox",
+      "post-processor",
+      "worker"
+    ],
+    "all": [
+      "microservice",
+      "gateway",
+      "outbox",
+      "post-processor",
+      "worker",
+      "mobile"
+    ]
+  },
+  "envs": {
+    "local": "start:local",
+    "dev": "start:dev",
+    "test": "start:test",
+    "prod": "start:prod"
+  },
+  "infra": {
+    "compose": "ci-tools/docker-compose.yml",
+    "services": [
+      "postgres-user",
+      "postgres-post",
+      "postgres-event",
+      "postgres-social",
+      "postgres-ws",
+      "postgres-storage",
+      "postgres-ranking",
+      "neo4j-social",
+      "redis",
+      "redis-ws-service",
+      "minio"
+    ],
+    "init": [
+      "minio-init"
+    ],
+    "optional": [
+      "clamd"
+    ]
+  }
+}
