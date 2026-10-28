@@ -17,7 +17,7 @@ paths:
   - "*/.githooks/pre-commit"
   - "*/.husky/pre-commit"
   - scripts/install-skill-hooks.sh
-  - scripts/init_repos.sh
+  - scripts/cli/commands/setup.mjs
 mesh_keys:
   - skill-evolution
   - evolve.py
@@ -43,12 +43,6 @@ sources:
     title: check_symbols.py
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T08:17:57Z"
-    digest: bad4e16f3e66064b
-  - by: claude-code/agent
-    at: "2026-10-13T08:20:14Z"
-    digest: bad4e16f3e66064b
-  - by: claude-code/agent
     at: "2026-10-13T09:15:57Z"
     digest: 0164ca15f8d1b2d6
   - by: "human:victor"
@@ -57,6 +51,12 @@ verified:
   - by: claude-code/agent
     at: "2026-10-19T10:15:06Z"
     digest: 814126809e621f8a
+  - by: claude-code/agent
+    at: "2026-10-28T22:51:03Z"
+    digest: c741a7ca5ed9331c
+  - by: claude-code/agent
+    at: "2026-10-28T23:02:35Z"
+    digest: 910b66d93a906c92
 ---
 
 # Évolution des skills (auto-apprentissage)

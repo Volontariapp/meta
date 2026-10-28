@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-28
+
+- **Vérification** - mesh-mcp.toml regenere par evolve.py index : ajout de la table de la skill volontariapp-meta-scripts, aucun changement de configuration mesh-mcp (claude-code/agent)
+
 ## 2026-10-16
 
 - **Vérification** - Source des outils pointee vers ../causalmesh (repo frere de meta, hors workspace) ; glob retire de paths car non resolu hors racine (claude-code/sonnet-5-5)

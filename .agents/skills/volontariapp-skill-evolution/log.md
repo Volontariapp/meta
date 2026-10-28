@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-28
+
+- **Vérification** - init_repos.sh remplace par yarn meta setup (setup.mjs), AGENTS.md regenere par index (claude-code/agent)
+- **Vérification** - Scripts remplaces par la CLI meta (yarn meta), repos.json source unique (claude-code/agent)
+
 ## 2026-10-19
 
 - **Vérification** - AGENTS.md: nouvelle section 7 (webhook Discord des PR), aucune regle de la skill changee (claude-code/agent)

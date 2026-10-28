@@ -2,6 +2,16 @@
 
 ## 2026-10-28
 
+- **Vérification** - request-flow.json: trois Service Maps async ajoutees, aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json: Service Map centree sur api-gateway, aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json: coordonnees free-layout remises a l'echelle, aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json sans widget list_stream, README ajuste: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json: schema list_stream corrige, aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json: champ service vide requis par topology_map, aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json aplati sans widget group: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json passe en layout free: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - relue apres ajout de request-flow.json: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Scripts remplaces par la CLI meta (yarn meta), repos.json source unique (claude-code/agent)
 - **Vérification** - skill relue et alignée sur le code (process:agent)
 - **Vérification** - skill relue et alignée sur le code (process:agent)
 - **Vérification** - skill relue et alignée sur le code (process:agent)

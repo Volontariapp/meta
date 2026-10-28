@@ -1,6 +1,6 @@
 ---
 name: volontariapp-db-migration
-description: "Playbook opérationnel pas-à-pas pour concevoir, tester et propager une migration TypeORM sans coupure de service (Zero-Downtime Expand/Contract, partition common/domain, sync-migrations.sh)."
+description: "Playbook opérationnel pas-à-pas pour concevoir, tester et propager une migration TypeORM sans coupure de service (Zero-Downtime Expand/Contract, partition common/domain, yarn meta sync-migrations)."
 type: Playbook
 title: Migrations PostgreSQL et Synchronisation Multi-Services
 tags: [db-migration, postgresql, typeorm, zero-downtime, expand-contract, playbook]
@@ -8,7 +8,7 @@ status: stable
 paths:
   - "ms-*/src/migrations/**"
   - "npm-packages/packages/database/src/**"
-  - sync-migrations.sh
+  - scripts/cli/commands/sync-migrations.mjs
 mesh_keys:
   - migrations
   - sync-migrations
@@ -17,9 +17,6 @@ generated:
   by: claude-code/agent
   at: "2026-10-12T11:56:30Z"
 verified:
-  - by: claude-code/agent
-    at: "2026-10-17T14:46:41Z"
-    digest: 7f47c10f90d470fa
   - by: "human:victor"
     at: "2026-10-19T08:21:45Z"
     digest: dbd687978078cac2
@@ -32,11 +29,14 @@ verified:
   - by: claude-code/claude-sonnet-5-5
     at: "2026-10-28T20:25:05Z"
     digest: 7aa8ef72e09461e5
+  - by: claude-code/agent
+    at: "2026-10-28T22:51:01Z"
+    digest: e6846197c94a5bd8
 sources:
   - id: sync-mig
     kind: local_file
-    resource: sync-migrations.sh
-    title: sync-migrations.sh
+    resource: scripts/cli/commands/sync-migrations.mjs
+    title: sync-migrations.mjs
   - id: compose
     kind: local_file
     resource: ci-tools/docker-compose.yml
@@ -81,7 +81,7 @@ Utiliser ce playbook pour toute évolution de schéma relationnel PostgreSQL dan
 Identifier le répertoire cible dans le microservice :
 - **Migration Commune** (`ms-*/src/migrations/common/`) :
   - Concerne l'Outbox transactionnelle (`jobs_outbox`, `event_queue`, `job_audit`)[^data-source] ou un trigger SQL de dispatch.
-  - Doit être créée dans un microservice de référence (ex. `ms-user`), puis **copiée à l'identique** (même nom, même contenu, vérifier le md5) dans `src/migrations/common/` de chaque service qui a **sa propre base** : `ms-user`, `ms-social`, `ms-post`, `ms-event`, `ms-storage`, `ms-ranking` **et `ws-service`** (base `ms_ws`, oublié lors de la tâche 2.9 : une colonne ajoutée à `OutboxModel` fait échouer ses écritures tant que la migration manque). `post-processors-runner/post-processor-event` et `workers-runners/worker-event` gardent aussi une copie et utilisent en production la base `ms_event` de `ms-event` (migration déjà appliquée), **mais leur CI reconstruit une base neuve depuis leurs propres migrations** (`global-setup` de `worker-event` : drop du schéma puis `runMigrations`) : sans la copie, `column EventQueueModel.traceparent does not exist` (constaté sur workers-runners#16). Copier aussi la nouvelle migration commune dans ces deux dossiers. Pour reproduire la CI en local sans toucher à sa base : `DB_NAME=<base jetable> yarn test:integration`. `sync-migrations.sh` ne fait PAS cette propagation inter-services[^sync-mig]. Pour repérer les copies : chercher le nom d'une migration commune existante (`1781000000000-AddCorrelationIdToEventQueue.ts`) sur tout le workspace, hors `deploy/`. Ces trois dossiers ont dérivé (migrations plus anciennes que celles de `ms-*`) : ne copier que la nouvelle migration.
+  - Doit être créée dans un microservice de référence (ex. `ms-user`), puis **copiée à l'identique** (même nom, même contenu, vérifier le md5) dans `src/migrations/common/` de chaque service qui a **sa propre base** : `ms-user`, `ms-social`, `ms-post`, `ms-event`, `ms-storage`, `ms-ranking` **et `ws-service`** (base `ms_ws`, oublié lors de la tâche 2.9 : une colonne ajoutée à `OutboxModel` fait échouer ses écritures tant que la migration manque). `post-processors-runner/post-processor-event` et `workers-runners/worker-event` gardent aussi une copie et utilisent en production la base `ms_event` de `ms-event` (migration déjà appliquée), **mais leur CI reconstruit une base neuve depuis leurs propres migrations** (`global-setup` de `worker-event` : drop du schéma puis `runMigrations`) : sans la copie, `column EventQueueModel.traceparent does not exist` (constaté sur workers-runners#16). Copier aussi la nouvelle migration commune dans ces deux dossiers. Pour reproduire la CI en local sans toucher à sa base : `DB_NAME=<base jetable> yarn test:integration`. `yarn meta sync-migrations` ne fait PAS cette propagation inter-services[^sync-mig]. Pour repérer les copies : chercher le nom d'une migration commune existante (`1781000000000-AddCorrelationIdToEventQueue.ts`) sur tout le workspace, hors `deploy/`. Ces trois dossiers ont dérivé (migrations plus anciennes que celles de `ms-*`) : ne copier que la nouvelle migration.
 - **Migration Domaine** (`ms-*/src/migrations/domain/`) :
   - Concerne les tables propres au métier (ex. `users`, `badges` dans `ms-user` ; `posts` dans `ms-post`).
   - Reste cantonnée au répertoire `domain/` du microservice concerné.
@@ -147,23 +147,20 @@ export const AppDataSource = new DataSource({
 
 ---
 
-### Étape 4 : Propager les migrations avec `sync-migrations.sh` (si applicable)
+### Étape 4 : Propager les migrations avec `yarn meta sync-migrations` (si applicable)
 
 Pour toute modification dans `src/migrations/` (commune ou domaine pour les tests) :
-1. Lancer le script de synchronisation à la racine de `meta`[^sync-mig] :
-   - Mode non-interactif (recommandé pour les scripts et agents IA) :
-     ```bash
-     ./sync-migrations.sh --all                         # Tout synchroniser
-     ./sync-migrations.sh --packages storage,user      # Synchroniser des microservices précis
-     ```
-   - Mode interactif (menu TUI avec flèches et espace) :
-     ```bash
-     ./sync-migrations.sh
-     ```
-2. Microservices gérés dans `SERVICES` : `user`, `social`, `post`, `event`, `storage`. `ranking` n'y figure pas encore (ticket 1.4 de `ms-ranking`) : son dossier `domain-ranking/src/test/migrations/domain/` contient pour l'instant la migration `CreateRankingTables` écrite à la main, copiée à l'identique dans `ms-ranking/src/migrations/domain/` (vérifié le 2026-10-28 : fichiers identiques, 10 tables `ranking_*` : `ranking_score`, `ranking_post_score`, `ranking_run`, `ranking_request`, `ranking_like_log`, `ranking_event_feedback`, `ranking_event_wish`, `ranking_event_mention`, `ranking_user_location`, `ranking_rate_bucket`). Les 16 migrations communes de `ms-ranking` sont identiques à celles de `ms-user`. Tant que le script ne gère pas `ranking`, toute nouvelle migration `ranking` se copie à la main dans les deux dossiers.
-3. Le script synchronise par `rsync -avc --delete` les fichiers vers `npm-packages/packages/domain-<service>/src/test/migrations` (copie `ms-*` vers `domain-*`, jamais entre services) afin de garantir que les tests du domaine s'exécutent sur un schéma strictement identique.
-4. **Piège : dérive.** Ces dossiers `test/migrations` ne sont pas à jour (au 2026-10-13 : migrations absentes ou renommées, `--delete` supprimerait des fichiers dans `domain-post`, `domain-event`, `domain-storage`). Vérifier avec `rsync -avcn --delete <src>/ <dest>/` avant. Pour une migration commune isolée, copier uniquement le nouveau fichier plutôt que de resynchroniser le dossier entier.
-5. **Copie `workers`** : `npm-packages/packages/workers/src/test/migrations/` contient aussi les migrations communes (outbox, `job_audit`, triggers), hors de `sync-migrations.sh`. Y ajouter toute nouvelle migration commune, sinon les tests de `workers` tournent sur un schéma obsolète (la PR traceparent l'a réalignée le 2026-10-13).
+1. Lancer la commande à la racine de `meta`[^sync-mig] (toujours non interactive) :
+   ```bash
+   yarn meta sync-migrations --dry-run                    # Prévisualiser (+ ajouté, ~ modifié, - supprimé), sans rien écrire
+   yarn meta sync-migrations                              # Tout synchroniser
+   yarn meta sync-migrations --packages storage,user      # Microservices précis (avec ou sans préfixe ms-)
+   yarn meta sync-migrations --pr                         # Branche, changeset, build, test, PR dans npm-packages, puis arrêt (règle STOP)
+   ```
+2. Microservices gérés : tous les `ms-*` de `repos.json` avec `migrations: true` et un package `domain-*` présent (`user`, `social`, `post`, `event`, `storage`, `ranking`). Pour `ranking` (état vérifié le 2026-10-28 avant la CLI) : son dossier `domain-ranking/src/test/migrations/domain/` contient pour l'instant la migration `CreateRankingTables` écrite à la main, copiée à l'identique dans `ms-ranking/src/migrations/domain/` (vérifié le 2026-10-28 : fichiers identiques, 10 tables `ranking_*` : `ranking_score`, `ranking_post_score`, `ranking_run`, `ranking_request`, `ranking_like_log`, `ranking_event_feedback`, `ranking_event_wish`, `ranking_event_mention`, `ranking_user_location`, `ranking_rate_bucket`). Les 16 migrations communes de `ms-ranking` sont identiques à celles de `ms-user`.
+3. La commande synchronise par un miroir équivalent à `rsync -ac --delete` (comparaison par contenu) les fichiers vers `npm-packages/packages/domain-<service>/src/test/migrations` (copie `ms-*` vers `domain-*`, jamais entre services) afin de garantir que les tests du domaine s'exécutent sur un schéma strictement identique.
+4. **Piège : dérive.** Ces dossiers `test/migrations` ne sont pas à jour (au 2026-10-13 : migrations absentes ou renommées, `--delete` supprimerait des fichiers dans `domain-post`, `domain-event`, `domain-storage`). Vérifier avec `yarn meta sync-migrations --dry-run` avant. Pour une migration commune isolée, copier uniquement le nouveau fichier plutôt que de resynchroniser le dossier entier.
+5. **Copie `workers`** : `npm-packages/packages/workers/src/test/migrations/` contient aussi les migrations communes (outbox, `job_audit`, triggers), hors de `yarn meta sync-migrations`. Y ajouter toute nouvelle migration commune, sinon les tests de `workers` tournent sur un schéma obsolète (la PR traceparent l'a réalignée le 2026-10-13).
 6. **STOP rule** : `domain-*/src/test/migrations` et `database` sont sous `npm-packages`. Faire d'abord toutes les éditions `ms-*`, puis `npm-packages` en dernier : le hook `stop-rule-guard.sh` refuse les éditions `ms-*` après la première édition `npm-packages`.
 
 ---
@@ -199,7 +196,7 @@ Pour toute modification dans `src/migrations/` (commune ou domaine pour les test
 - [ ] La migration applique le pattern **Expand / Contract** (aucun `DROP COLUMN` ni renommage brutal direct).
 - [ ] La méthode `down()` est strictement l'inverse de la méthode `up()`.
 - [ ] Les nouvelles entités sont exportées et enregistrées dans `entities` de `src/config/data-source.ts`[^data-source].
-- [ ] Si une migration commune a été touchée, `./sync-migrations.sh` a été exécuté[^sync-mig].
+- [ ] Si une migration commune a été touchée, `yarn meta sync-migrations` a été exécuté[^sync-mig].
 - [ ] Le cycle `migration:run` $\rightarrow$ `migration:revert` $\rightarrow$ `migration:run` s'exécute sans erreur sur la base locale[^compose].
 - [ ] `yarn test` passe avec succès sur le microservice.
 
@@ -207,6 +204,6 @@ Pour toute modification dans `src/migrations/` (commune ou domaine pour les test
 
 ## Références
 
-[^sync-mig]: sync-migrations.sh
+[^sync-mig]: scripts/cli/commands/sync-migrations.mjs
 [^compose]: ci-tools/docker-compose.yml
 [^data-source]: ms-user/src/config/data-source.ts

@@ -39,7 +39,7 @@ Trois points d'entrée, du plus fréquent au plus tardif :
 | `git commit` dans `meta` | Hook pre-commit[^pre-commit] | `evolve.py validate` si des fichiers de `.agents/skills/` sont commités. |
 | `git commit` dans un sous-repo | Bloc ajouté à `.husky/pre-commit`, ou `.githooks/pre-commit` pour les repos sans Husky[^installer] | Si `../.agents/skills/.../evolve.py` existe (repo cloné dans `meta`) : `evolve.py check-staged` bloque tant qu'une skill qui décrit un fichier commité n'a pas été revérifiée (`sync`). Repo cloné seul (CI) : aucun effet. `SKILL_CHECK_MODE=warn` avertit sans bloquer, `SKIP_SKILL_CHECK=1` contourne. |
 
-Les commits des sous-repos passent par leur propre hook, qui appelle le `evolve.py` de `meta`. `scripts/install-skill-hooks.sh` (lancé par `init_repos.sh`) active `core.hooksPath .githooks` dans les repos sans Husky : config locale, à relancer sur chaque poste. Une vérification faite depuis un sous-repo modifie la skill dans `meta` : commiter aussi `meta`.
+Les commits des sous-repos passent par leur propre hook, qui appelle le `evolve.py` de `meta`. `scripts/install-skill-hooks.sh` (lancé par `yarn meta setup`) active `core.hooksPath .githooks` dans les repos sans Husky : config locale, à relancer sur chaque poste. Une vérification faite depuis un sous-repo modifie la skill dans `meta` : commiter aussi `meta`.
 
 # Steps
 

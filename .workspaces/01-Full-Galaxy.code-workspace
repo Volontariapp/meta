@@ -1,3 +1,86 @@
+{
+  "folders": [
+    {
+      "name": "meta",
+      "path": ".."
+    },
+    {
+      "name": ".github",
+      "path": "../.github"
+    },
+    {
+      "name": "docs",
+      "path": "../docs"
+    },
+    {
+      "name": "ci-tools",
+      "path": "../ci-tools"
+    },
+    {
+      "name": "changelog-checker",
+      "path": "../changelog-checker"
+    },
+    {
+      "name": "deploy",
+      "path": "../deploy"
+    },
+    {
+      "name": "proto-registry",
+      "path": "../proto-registry"
+    },
+    {
+      "name": "npm-packages",
+      "path": "../npm-packages"
+    },
+    {
+      "name": "api-gateway",
+      "path": "../api-gateway"
+    },
+    {
+      "name": "ws-service",
+      "path": "../ws-service"
+    },
+    {
+      "name": "ms-user",
+      "path": "../ms-user"
+    },
+    {
+      "name": "ms-social",
+      "path": "../ms-social"
+    },
+    {
+      "name": "ms-post",
+      "path": "../ms-post"
+    },
+    {
+      "name": "ms-event",
+      "path": "../ms-event"
+    },
+    {
+      "name": "ms-storage",
+      "path": "../ms-storage"
+    },
+    {
+      "name": "ms-ranking",
+      "path": "../ms-ranking"
+    },
+    {
+      "name": "outbox-runners",
+      "path": "../outbox-runners"
+    },
+    {
+      "name": "workers-runners",
+      "path": "../workers-runners"
+    },
+    {
+      "name": "post-processors-runner",
+      "path": "../post-processors-runner"
+    },
+    {
+      "name": "nativapp",
+      "path": "../nativapp"
+    }
+  ],
   "settings": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
@@ -14,9 +97,7 @@
       "**/node_modules": true,
       "**/dist": true,
       "**/.yarn": true
-    },
-    "protoc.options": ["--proto_path=proto-registry/proto"],
-    "proto3.lint.enable": false
+    }
   },
   "extensions": {
     "recommendations": [

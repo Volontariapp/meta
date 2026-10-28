@@ -19,11 +19,11 @@ sources:
 
 Visualiser les paragraphes et reperer les index ou passages a verifier :
 ```bash
-python3 scripts/modify_docx.py view "docs/coaching/Rapport.docx" --limit 100
+python3 docs/scripts/modify_docx.py view "docs/coaching/Rapport.docx" --limit 100
 ```
 Pour cibler un mot cle ou une section specifique :
 ```bash
-python3 scripts/modify_docx.py view "docs/coaching/Rapport.docx" --search "Conclusion"
+python3 docs/scripts/modify_docx.py view "docs/coaching/Rapport.docx" --search "Conclusion"
 ```
 
 ## 2. Preparation des substitutions
@@ -45,11 +45,11 @@ Exemple de fichier `replacements.json` :
 
 Executer la commande de remplacement (qui cree automatiquement une sauvegarde `.bak.docx`)[^modify-script] :
 ```bash
-python3 scripts/modify_docx.py replace "docs/coaching/Rapport.docx" --json /tmp/replacements.json
+python3 docs/scripts/modify_docx.py replace "docs/coaching/Rapport.docx" --json /tmp/replacements.json
 ```
 Ou pour un remplacement direct unique :
 ```bash
-python3 scripts/modify_docx.py replace "docs/coaching/Rapport.docx" --find "envents" --replace-with "evenements"
+python3 docs/scripts/modify_docx.py replace "docs/coaching/Rapport.docx" --find "envents" --replace-with "evenements"
 ```
 
 ## 4. Verification post-modification
@@ -57,6 +57,6 @@ python3 scripts/modify_docx.py replace "docs/coaching/Rapport.docx" --find "enve
 1. Verifier le bilan affiche dans le terminal (nombre d'occurrences modifiees pour chaque entree).
 2. Relire les paragraphes modifies avec la commande `view` :
 ```bash
-python3 scripts/modify_docx.py view "docs/coaching/Rapport.docx" --search "evenements"
+python3 docs/scripts/modify_docx.py view "docs/coaching/Rapport.docx" --search "evenements"
 ```
 3. S'assurer que le fichier Word s'ouvre sans erreur de syntaxe XML.

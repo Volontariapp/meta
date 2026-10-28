@@ -1,5 +1,17 @@
 # Historique
 
+## 2026-10-28
+
+- **Vérification** - request-flow.json: trois Service Maps async ajoutees, aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json: Service Map centree sur api-gateway, aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json: coordonnees free-layout remises a l'echelle, aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json sans widget list_stream, README ajuste: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json: schema list_stream corrige, aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json: champ service vide requis par topology_map, aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json aplati sans widget group: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json passe en layout free: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - monitoring: ajout du dashboard request-flow.json, dossier dashboards decrit dans cluster-specifications (claude-code/agent)
+
 ## 2026-10-21
 
 - **Vérification** - update ranking-sealed-secret for prod ms-ranking (claude-code/agent)

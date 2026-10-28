@@ -23,21 +23,21 @@ generated:
   by: claude-code/agent
   at: "2026-10-12T12:18:00Z"
 verified:
-  - by: "process:agent"
-    at: "2026-10-28T12:43:50Z"
-    digest: 254a09ebf98e8ad7
-  - by: "process:agent"
-    at: "2026-10-28T12:57:46Z"
-    digest: 254a09ebf98e8ad7
-  - by: "process:agent"
-    at: "2026-10-28T13:11:57Z"
-    digest: 254a09ebf98e8ad7
-  - by: "process:agent"
-    at: "2026-10-28T14:03:30Z"
-    digest: 254a09ebf98e8ad7
-  - by: "process:agent"
-    at: "2026-10-28T14:41:35Z"
-    digest: 254a09ebf98e8ad7
+  - by: claude-code/agent
+    at: "2026-10-28T23:00:50Z"
+    digest: 56b88e96f541f0d0
+  - by: claude-code/agent
+    at: "2026-10-28T23:01:19Z"
+    digest: d739d82d7abd242e
+  - by: claude-code/agent
+    at: "2026-10-28T23:02:22Z"
+    digest: cd8832869edf8657
+  - by: claude-code/agent
+    at: "2026-10-28T23:04:12Z"
+    digest: f7b41594c7a106ed
+  - by: claude-code/agent
+    at: "2026-10-28T23:06:19Z"
+    digest: 8f0d662a1e845ef0
 sources:
   - id: doc-creation
     kind: local_file
@@ -57,8 +57,8 @@ sources:
     title: ci-tools/docker-compose.yml
   - id: sync-mig
     kind: local_file
-    resource: sync-migrations.sh
-    title: sync-migrations.sh
+    resource: scripts/cli/commands/sync-migrations.mjs
+    title: sync-migrations.mjs
 ---
 
 # Scaffolding d'un Nouveau Microservice gRPC et de ses Runners
@@ -142,7 +142,7 @@ Une fois la PR Protobuf générée dans `npm-packages`[^doc-creation] :
    - `src/app.module.ts` : Enregistrement de `AppConfigModule`, `DatabaseModule`, `HealthModule`, `GrpcValidationPipe` et `GrpcInternalGuard` global[^agent-md].
 3. **Configuration & Data Source TypeORM** :
    - `src/config/data-source.ts` : Déclaration de `AppDataSource` référençant les entités du domaine et le glob des migrations.
-   - `src/migrations/common/` : Récupérer les migrations partagées via `./sync-migrations.sh`[^sync-mig].
+   - `src/migrations/common/` : Récupérer les migrations partagées via `yarn meta sync-migrations`[^sync-mig].
    - `src/migrations/domain/` : Déposer la migration initiale de schéma métier.
 4. **Contrôleurs CQRS** :
    - Contrôleurs séparés pour les commandes (`BaseCommandController` avec `withFallback`) et les requêtes de lecture.
@@ -226,7 +226,7 @@ Dans le dépôt `deploy` :
    - Ajouter l'instance PostgreSQL (`postgres-<domaine>`) sur un port dédié (ex. 5437 pour storage, 5438 pour ranking) dans `ci-tools/docker-compose.yml`[^compose]. Le service `ms-<domaine>-migration` ne s'ajoute qu'une fois l'image GHCR publiée (l'E2E tire toutes les images du profil `migrations`).
    - Déclarer le conteneur de migration `<domaine>-migration`.
 2. **Script de synchronisation** :
-   - Ajouter le nouveau domaine dans `SERVICES=(...)` du script [sync-migrations.sh](file:///Users/victoragahi/Developer/meta/sync-migrations.sh)[^sync-mig].
+   - Déclarer le nouveau microservice dans `repos.json` (`repos` et `units`, avec `migrations: true`, `certs: true`) : les commandes `sync-migrations`, `migrate`, `certs`, `start` le lisent[^sync-mig].
 3. **Gouvernance et Hooks** :
    - Référencer le service dans [AGENT.md](file:///Users/victoragahi/Developer/meta/AGENT.md) et [AGENTS.md](file:///Users/victoragahi/Developer/meta/AGENTS.md).
    - Déclarer le nouveau chemin dans [.agents/mesh-mcp.toml](file:///Users/victoragahi/Developer/meta/.agents/mesh-mcp.toml).
@@ -252,7 +252,7 @@ Dans `nativapp` :
 - [ ] `JobOutboxSuccessPostProcessor` et `JobOutboxFailedPostProcessor` sont déclarés dans le post-processor[^doc-creation].
 - [ ] L'API Gateway expose la route avec `@GatewayController` et propage `req['internalMetadata']`.
 - [ ] Les manifests K8s respectent PSA Restricted et les NetworkPolicies bloquent tout trafic non explicitement autorisé.
-- [ ] La base locale est déclarée dans `ci-tools/docker-compose.yml`[^compose] et synchronisée dans `sync-migrations.sh`[^sync-mig].
+- [ ] La base locale est déclarée dans `ci-tools/docker-compose.yml`[^compose] et déclarée dans `repos.json` (`yarn meta manifest` valide la cohérence avec `.gitignore`)[^sync-mig].
 - [ ] Les hooks pre-commit sont installés via `./scripts/install-skill-hooks.sh`.
 
 ---
@@ -263,4 +263,4 @@ Dans `nativapp` :
 [^agent-md]: AGENT.md
 [^outbox-script]: outbox-runners/scripts/create-outbox.sh
 [^compose]: ci-tools/docker-compose.yml
-[^sync-mig]: sync-migrations.sh
+[^sync-mig]: scripts/cli/commands/sync-migrations.mjs

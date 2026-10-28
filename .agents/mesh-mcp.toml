@@ -459,6 +459,9 @@ read_governance_mode = "allow_all"
 "mesh-mcp" = "skills/volontariapp-mesh-mcp/SKILL.md"
 # volontariapp-mesh-mcp-verification
 "rex" = "skills/volontariapp-mesh-mcp-verification/SKILL.md"
+# volontariapp-meta-scripts
+"meta-cli" = "skills/volontariapp-meta-scripts/SKILL.md"
+"repos.json" = "skills/volontariapp-meta-scripts/SKILL.md"
 # volontariapp-proto-contract-evolution
 "analyze_grpc" = "skills/volontariapp-proto-contract-evolution/SKILL.md"
 "proto-registry" = "skills/volontariapp-proto-contract-evolution/SKILL.md"

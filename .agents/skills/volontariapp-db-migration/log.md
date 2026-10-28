@@ -2,6 +2,7 @@
 
 ## 2026-10-28
 
+- **Vérification** - Scripts remplaces par la CLI meta (yarn meta), repos.json source unique (claude-code/agent)
 - **Vérification** - ms-ranking: migration CreateRankingTables et migrations communes verifiees identiques aux copies domain-ranking et ms-user (claude-code/claude-sonnet-5-5)
 
 ## 2026-10-19
