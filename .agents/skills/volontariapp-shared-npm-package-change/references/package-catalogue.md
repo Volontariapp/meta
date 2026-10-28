@@ -21,36 +21,38 @@ sources:
 
 # Schema
 
-Versions relevées le 2026-10-06 dans `packages/*/package.json`[^packages]. Pour les consommateurs d'un package : `scripts/consumers.py <package>`[^consumers].
+Versions relevées le 2026-10-28 dans `packages/*/package.json`[^packages]. Pour les consommateurs d'un package : `scripts/consumers.py <package>`[^consumers].
 
 | Package | Version | Rôle | Point d'entrée réel |
 | :--- | :--- | :--- | :--- |
-| `shared` | 0.9.1 | Enums et types partagés avec `nativapp` (dont l'enum `Streams`) | `src/enums`, `src/types` |
-| `contracts` | 4.3.8 | Types TS générés depuis `proto-registry`, compatibles front | généré par la CI, ne pas éditer `src/` hors `src/gateway/` (écrit à la main : types `*Request` et `*WebResponse` partagés avec api-gateway et nativapp) ; chaque module généré (dont `storage`) doit être exporté dans `src/index.ts`, sinon le front n'a pas accès à ses enums |
-| `contracts-nest` | 3.3.0 | Clients et décorateurs NestJS gRPC | `getGrpcOptions`, `GRPC_MICROSERVICES`, `GRPC_SERVICES`, `*_METHODS`, `*_SERVICE_NAME` ; seul `grpc.helpers.ts` est édité à la main |
-| `storage-client` | 0.3.0 | Client gRPC de ms-storage pour le rattachement de fichiers (ms-user, ms-post, ms-event) | `StorageClientModule`, `StorageClientService.confirm*Attachment`. Les erreurs métier de ms-storage sont relayées avec leur statut et leur code (`StorageRelayedError`) ; les pannes de transport restent `STORAGE_TIMEOUT` et `STORAGE_ATTACHMENT_FAILED`. `isStorageUnavailable(error)` et `StorageUnavailableError` (503) pour les consommateurs sans repli asynchrone |
-| `messaging` | 2.17.1 | Contrats Jobs, Events, WebSockets, sagas | `JobMessagingType`, `JobRegistry`, `EventMessagingType`, `EventRegistry`, `WebsocketMessagingType`, `SagaGatherType` |
-| `database` | 3.4.17 | Modèles et moteur outbox TypeORM, gather | `EventQueueEntity.createEvent`, `JobsOutboxEntity.createJob`, `OutboxConsumer`, `OutboxDispatcher`, `OutboxStatus`, `GatherStateModel` |
-| `outbox` | 0.9.54 | Writers, consumers, dispatchers, pushers par table | `EventQueueWriter`, `JobsOutboxWriter`, repositories `EventQueueRepository`, `JobsOutboxRepository` |
-| `workers` | 1.3.22 | Base des workers BullMQ | `BaseWorker`, `JobOf`, `JobAuditRepository`, `createBullConfig`, `DiagnosticServer` |
-| `post-processors` | 3.2.21 | Base des consommateurs de streams | `BasePostProcessor`, `SinglePostProcessor`, `BatchPostProcessor`, `JobOutboxSuccessPostProcessor`, `JobOutboxFailedPostProcessor` |
-| `auth` | 3.3.12 | JWT et token interne, **couplé à NestJS** | `JwtService`, `AccessTokenGuard`, `RolesGuard`, `GrpcInternalGuard`, `GrpcInternalInterceptor`, `@CurrentUser`, `@Public` |
-| `errors` | 0.6.2 | Erreurs typées HTTP + gRPC | `BaseError`, `BaseApiError` (`statusCode`, `grpcCode`), `NotFoundError`, `InternalServerError`... `isBaseApiError` |
-| `errors-nest` | 0.13.2 | Erreurs nommées et réponses Swagger | constantes `*_NOT_FOUND`, `FALLBACK_ACTIVATED`, `Api*Response` |
-| `config` | 3.2.2 | Configs typées, fail fast | `loadConfig(dirPath, schema)`, `BaseConfig`, configs db/auth/outbox |
+| `shared` | 0.17.0 | Enums et types partagés avec `nativapp` (dont l'enum `Streams`) | `src/enums`, `src/types` |
+| `contracts` | 4.8.2 | Types TS générés depuis `proto-registry`, compatibles front | généré par la CI, ne pas éditer `src/` hors `src/gateway/` (écrit à la main : types `*Request` et `*WebResponse` partagés avec api-gateway et nativapp) ; chaque module généré (dont `storage`) doit être exporté dans `src/index.ts`, sinon le front n'a pas accès à ses enums |
+| `contracts-nest` | 3.4.1 | Clients et décorateurs NestJS gRPC | `getGrpcOptions`, `GRPC_MICROSERVICES`, `GRPC_SERVICES`, `*_METHODS`, `*_SERVICE_NAME` ; seul `grpc.helpers.ts` est édité à la main |
+| `storage-client` | 0.3.6 | Client gRPC de ms-storage pour le rattachement de fichiers (ms-user, ms-post, ms-event) | `StorageClientModule`, `StorageClientService.confirm*Attachment`. Les erreurs métier de ms-storage sont relayées avec leur statut et leur code (`StorageRelayedError`) ; les pannes de transport restent `STORAGE_TIMEOUT` et `STORAGE_ATTACHMENT_FAILED`. `isStorageUnavailable(error)` et `StorageUnavailableError` (503) pour les consommateurs sans repli asynchrone |
+| `messaging` | 2.28.1 | Contrats Jobs, Events, WebSockets, sagas | `JobMessagingType`, `JobRegistry`, `EventMessagingType`, `EventRegistry`, `WebsocketMessagingType`, `SagaGatherType` |
+| `database` | 3.10.13 | Modèles et moteur outbox TypeORM, gather | `EventQueueEntity.createEvent`, `JobsOutboxEntity.createJob`, `OutboxConsumer`, `OutboxDispatcher`, `OutboxStatus`, `GatherStateModel` |
+| `outbox` | 0.10.17 | Writers, consumers, dispatchers, pushers par table | `EventQueueWriter`, `JobsOutboxWriter`, repositories `EventQueueRepository`, `JobsOutboxRepository` |
+| `workers` | 1.4.15 | Base des workers BullMQ | `BaseWorker`, `JobOf`, `JobAuditRepository`, `createBullConfig`, `DiagnosticServer` |
+| `post-processors` | 3.3.15 | Base des consommateurs de streams | `BasePostProcessor`, `SinglePostProcessor`, `BatchPostProcessor`, `JobOutboxSuccessPostProcessor`, `JobOutboxFailedPostProcessor` |
+| `auth` | 3.3.23 | JWT et token interne, **couplé à NestJS** | `JwtService`, `AccessTokenGuard`, `RolesGuard`, `GrpcInternalGuard`, `GrpcInternalInterceptor`, `@CurrentUser`, `@Public` |
+| `errors` | 0.6.5 | Erreurs typées HTTP + gRPC | `BaseError`, `BaseApiError` (`statusCode`, `grpcCode`), `NotFoundError`, `InternalServerError`... `isBaseApiError` |
+| `errors-nest` | 0.14.0 | Erreurs nommées et réponses Swagger | constantes `*_NOT_FOUND`, `FALLBACK_ACTIVATED`, `Api*Response` |
+| `config` | 3.3.2 | Configs typées, fail fast | `loadConfig(dirPath, schema)`, `BaseConfig`, configs db/auth/outbox |
 | `validation-nest` | 0.1.5 | Pipe gRPC (Int64, `""` vers `undefined`, enums string vers number) | `GrpcValidationPipe` |
-| `bridge` / `bridge-nest` | 1.0.6 / 0.3.17 | Connexions Postgres, Neo4j, Redis | `PostgresProvider`... / `PostgresBridgeModule`, `NestPostgresProvider`... |
-| `health-check` / `health-check-nest` | 1.0.6 / 0.1.37 | Santé des connexions existantes | `DatabaseHealthOrchestrator` / `HealthModule` (`GET /health`) |
-| `logger` | 0.2.7 | Logs JSON ou texte, Node, Nest, React Native | `Logger` |
-| `crypto` | 0.3.10 | AES-GCM, RSA, scrypt, HMAC | `encrypt`, `hashPassword`, `calculateHash`, `safeCompare` |
-| `monitoring` | 2.1.7 | Tracing OpenTelemetry | `initTracing` |
+| `bridge` / `bridge-nest` | 1.0.10 / 0.3.21 | Connexions Postgres, Neo4j, Redis | `PostgresProvider`... / `PostgresBridgeModule`, `NestPostgresProvider`... |
+| `health-check` / `health-check-nest` | 1.0.10 / 0.1.42 | Santé des connexions existantes | `DatabaseHealthOrchestrator` / `HealthModule` (`GET /health`) |
+| `logger` | 0.4.0 | Logs JSON ou texte, Node, Nest, React Native | `Logger` |
+| `crypto` | 0.3.13 | AES-GCM, RSA, scrypt, HMAC | `encrypt`, `hashPassword`, `calculateHash`, `safeCompare` |
+| `monitoring` | 2.2.2 | Tracing OpenTelemetry | `initTracing` |
 | `testing` | 1.0.3 | Mocks et helpers de test | `createMock`, `createMockLogger`, `waitFor`, `randomUuid` |
 | `eslint-config` | 2.2.5 | Config ESLint flat partagée | |
-| `domain-user` | 2.8.37 | Domaine User, auth, badges | `AuthService`, `UserService`, `BadgeService`, repositories Postgres, triggers SQL |
-| `domain-event` | 3.7.11 | Domaine Event, géocodage, triggers CDC | `EventService`, `PostgresEventRepository`, `GeocodingService`, `EVENTS_TRIGGER` |
-| `domain-post` | 3.6.25 | Domaine Post et Comment | `PostService`, `CommentService`, `PostgresPostRepository` (outbox intégré) |
-| `domain-social` | 0.12.9 | Graphe Neo4j | services et `Neo4j*Repository`, value objects d'id |
-| `domain-storage` | 0.12.0 | Enums, value objects, politiques, helpers d'URL et d'object key, modèles et repositories typeorm | `FileStatus`, `EntityType`, `FileId`, `MimeType`, `buildPublicFileUrl` ; sous-chemins `./helpers` et `./enums` sans typeorm, la racine charge les modèles et ne se charge pas dans la gateway ; pas de README |
+| `domain-user` | 2.13.1 | Domaine User, auth, badges | `AuthService`, `UserService`, `BadgeService`, repositories Postgres, triggers SQL |
+| `domain-event` | 3.12.4 | Domaine Event, géocodage, triggers CDC | `EventService`, `PostgresEventRepository`, `GeocodingService`, `EVENTS_TRIGGER` |
+| `domain-post` | 3.9.1 | Domaine Post et Comment | `PostService`, `CommentService`, `PostgresPostRepository` (outbox intégré) |
+| `domain-social` | 0.14.20 | Graphe Neo4j | services et `Neo4j*Repository`, value objects d'id |
+| `domain-storage` | 0.12.8 | Enums, value objects, politiques, helpers d'URL et d'object key, modèles et repositories typeorm | `FileStatus`, `EntityType`, `FileId`, `MimeType`, `buildPublicFileUrl` ; sous-chemins `./helpers` et `./enums` sans typeorm, la racine charge les modèles et ne se charge pas dans la gateway ; pas de README |
+| `domain-ranking` | 0.2.0 | Domaine Ranking (`ms-ranking`, `worker-ranking`, `post-processor-ranking`) : modèles `ranking_*`, repositories, services et politiques de score purs, port `RankingScorer` (Jev) | `RankingRequestService`, `RankingScorer`, `NoopRankingScorer`, `registerRankingMappings()` (appelé à l'import de la racine, comme `domain-post`) ; README du package pour le détail |
+| `storage-pipeline` | 0.3.12 | Pipeline de fichiers : client S3, signature de POST, magic bytes, scanner clamd, ré-encodage d'images | `config/`, `s3/`, `validation/`, `scanner/`, `processing/`, `pipeline/` (exports de `src/index.ts`) |
 
 # Écarts README / code
 
