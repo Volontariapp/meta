@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-28
+
+- **Vérification** - skill relue et alignée sur le code (process:agent)
+
 ## 2026-10-27
 
 - **Vérification** - Dependabot en une seule PR (process:agent)
