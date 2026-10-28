@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-28
+
+- **Vérification** - ms-ranking: migration CreateRankingTables et migrations communes verifiees identiques aux copies domain-ranking et ms-user (claude-code/claude-sonnet-5-5)
+
 ## 2026-10-19
 
 - **Vérification** - sync-migrations.sh gere storage et les options --all et --packages; ranking pas encore dans SERVICES (claude-code/agent)

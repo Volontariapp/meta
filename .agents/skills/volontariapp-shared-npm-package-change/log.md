@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-28
+
+- **Vérification** - catalogue: versions relevees le 2026-10-28, ajout de domain-ranking et storage-pipeline (claude-code/claude-sonnet-5-5)
+
 ## 2026-10-19
 
 - **Leçon** - Erreurs tsc fantomes apres un yarn up : supprimer le cache incremental (pitfall) (claude-code/agent)

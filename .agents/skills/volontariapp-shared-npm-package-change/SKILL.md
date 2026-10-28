@@ -36,9 +36,6 @@ sources:
     title: Pipeline réutilisable npm-packages (ci-tools)
 verified:
   - by: claude-code/agent
-    at: "2026-10-17T00:26:38Z"
-    digest: e829210badfd08d8
-  - by: claude-code/agent
     at: "2026-10-17T12:32:09Z"
     digest: c1cc4cf406d022e2
   - by: claude-code/agent
@@ -50,6 +47,9 @@ verified:
   - by: claude-code/sonnet-5-5
     at: "2026-10-18T15:59:43Z"
     digest: 4db132529a9fac13
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-28T20:27:13Z"
+    digest: 3d560bd6306ddd7c
 ---
 
 # Shared NPM Package Change & Règle d'Or du Stop Immédiat

@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-28
+
+- **Vérification** - worker-ranking: 3 workers par queue, producteurs ranking indirects (catalogue), drapeau Jev (claude-code/claude-sonnet-5-5)
+
 ## 2026-10-19
 
 - **Vérification** - relue apres le rangement par role de fichier du ticket 4.2 : les skills ne citent aucun fichier deplace, regles inchangees; regle de fichier unique consignee dans scaffold-microservice (claude-code/agent)

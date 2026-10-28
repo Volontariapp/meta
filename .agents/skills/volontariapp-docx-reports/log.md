@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-28
+
+- **Vérification** - Seul le contenu binaire des rapports 8 et template a change (commit 439eab2) ; script modify_docx.py et chemins verifies, regles inchangees (claude-code/claude-sonnet-5-5)
+
 ## 2026-10-07
 
 - **Vérification** - Sanitization XML et insertion propre images coaching 8 (human:victoragahi)

@@ -51,9 +51,6 @@ sources:
     title: job_catalogue.py
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T22:48:38Z"
-    digest: 51b35cd7fa5a6e5a
-  - by: claude-code/agent
     at: "2026-10-14T12:48:39Z"
     digest: 0b15a6bf770845f4
   - by: claude-code/agent
@@ -65,6 +62,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-19T16:33:36Z"
     digest: 066cb00aae837d44
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-28T20:26:40Z"
+    digest: 67707c26ad01327c
 ---
 
 # Guide : Implémenter un Job Asynchrone End-to-End
@@ -297,6 +297,9 @@ Vous n'avez **aucun code de nettoyage manuel à écrire** :
 | Idempotence | `BaseWorker` saute un job déjà `COMPLETED` dans `job_audit`[^base-worker] | Un rejeu BullMQ d'un job terminé est sans effet ; un job interrompu en `PROCESSING` est rejoué. |
 | Workers existants | `throw new Error` et cast `as Promise<...>` dans `processJob` | Dette : utiliser `InternalServerError` (`@volontariapp/errors`) comme dans l'exemple ci-dessus. |
 | Handlers sans producteur | 8 handlers (`FALLBACK_GET_*`, `FALLBACK_SIGN_UP`) n'ont aucun producteur ; 5 jobs (`PUBLISH_EVENT`, `SEND_WELCOME_EMAIL`...) ne sont produits que par `ms-user/.../controllers/tests/user.test.controller.ts` | Vérifier avec le catalogue avant de supposer qu'un job tourne en production. |
+| `worker-ranking` (2026-10-28) | Trois workers `BaseWorker` dans `src/workers/` : `ranking.worker.ts` (`RankingQueue.RANKING`, handlers `ComputeUserRankingHandler` et `FanoutRankingHandler`), `ranking-feed.worker.ts` (`RankingQueue.FEED`, `ComputeUserFeedHandler`) et `fallback-ranking.worker.ts` (`RankingQueue.FALLBACK_RANKING`), chacun avec `concurrency: config.ranking.workerConcurrency`. Handlers sous `src/workers/handlers/`, types de job dans `handlers/types/`. | Plusieurs queues pour un même domaine : un worker par queue, pas une `handlerMap` unique. |
+| Producteurs de jobs ranking (2026-10-28) | `job_catalogue.py` affiche « aucun » producteur pour `COMPUTE_USER_RANKING`, `COMPUTE_USER_FEED` et `FANOUT_RANKING`, alors qu'ils sont écrits dans `jobs_outbox` : le type vient d'une table `[RankingListKind] -> JobMessagingType` (`ms-ranking/.../ranking-job.constants.ts`, `post-processor-ranking/src/domain/constants/ranking-job.constants.ts`, `worker-ranking/src/domain/constants/ranking-job.constants.ts`) et `FANOUT_RANKING` par `post-processor-ranking/src/domain/ranking-job-writer.ts:85`. | Le script ne résout pas un type de job indirect (R3 d'AGENTS.md) : « aucun producteur » du catalogue n'est pas une preuve d'absence pour ces jobs. |
+| Drapeau Jev (2026-10-28) | `RANKING_JEV_ENABLED` (`worker-ranking/src/config/helpers/boolean-flag.helpers.ts`, `scoring/adapters/jev-ranking-scorer.ts`, disjoncteur `circuit-breaker.ts`) ; activé par défaut dans `deploy/apps/base/ms-ranking/deployment-worker.yaml`. | Un handler peut dépendre d'un adaptateur externe derrière un drapeau et un disjoncteur : prévoir le repli structurel. |
 
 Catalogue à jour, calculé depuis le code[^catalogue] :
 
