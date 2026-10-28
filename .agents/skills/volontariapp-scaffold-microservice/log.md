@@ -12,6 +12,7 @@
 - **Vérification** - skill relue et alignée sur le code (process:agent)
 - **Vérification** - skill relue et alignée sur le code (process:agent)
 - **Vérification** - skill relue et alignée sur le code (process:agent)
+- **Vérification** - skill relue et alignée sur le code (process:agent)
 
 ## 2026-10-27
 
