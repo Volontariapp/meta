@@ -158,7 +158,7 @@ analyze_grpc({ "target": "UserService" })
 Ne pas utiliser pour des flux asynchrones (queues, streams) — utiliser `analyze_impact`.
 
 ## search_docs(query, max_sections?)
-Recherche dans `meta/docs/` (C1-C4, Monorepo-Structure.md, `stockage-fichiers/`), les `CLAUDE.md`/`README.md` des repos et les skills `.agents/skills/volontariapp-*`, avec sanitisation anti prompt-injection intégrée.
+Recherche dans `meta/docs/` (`architecture/` : C1-C4 et Monorepo-Structure.md, puis `stockage-fichiers/`, `matching/`, `badges/`), les `CLAUDE.md`/`README.md` des repos et les skills `.agents/skills/volontariapp-*`, avec sanitisation anti prompt-injection intégrée.
 
 Chaque mot de la requête passe par les alias du `.toml`, qui le **remplacent** (`pp` devient `post-processor`, `idempotence` devient `idempot`). Les mots vides français et anglais (`comment`, `un`, `the`, `how`...) sont ignorés : une question en langage naturel marche aussi bien qu'un mot-clé.
 

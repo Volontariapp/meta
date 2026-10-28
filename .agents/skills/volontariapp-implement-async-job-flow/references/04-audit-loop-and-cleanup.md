@@ -11,7 +11,7 @@ generated:
 
 # Deep-Dive : Étape 4 - La Boucle d'Audit et le SQL Trigger
 
-Ce document détaille la machinerie interne qui garantit la résilience des jobs dans Volontariapp (la **Audit Loop** décrite dans C3-Async-Patterns-And-Flows.md (`docs/C3-Async-Patterns-And-Flows.md`)). Tout ce qui suit est tiré des migrations communes (`src/migrations/common/` de chaque service) et de `@volontariapp/post-processors`.
+Ce document détaille la machinerie interne qui garantit la résilience des jobs dans Volontariapp (la **Audit Loop** décrite dans C3-Async-Patterns-And-Flows.md (`docs/architecture/C3-Async-Patterns-And-Flows.md`)). Tout ce qui suit est tiré des migrations communes (`src/migrations/common/` de chaque service) et de `@volontariapp/post-processors`.
 
 ---
 

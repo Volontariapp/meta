@@ -9,7 +9,7 @@ generated:
   at: "2026-10-06T08:54:04Z"
 sources:
   - id: c4
-    resource: docs/C4-Deployment-And-Infrastructure.md
+    resource: docs/architecture/C4-Deployment-And-Infrastructure.md
     title: "C4 Deployment & Infrastructure"
   - id: readme
     resource: deploy/README.md

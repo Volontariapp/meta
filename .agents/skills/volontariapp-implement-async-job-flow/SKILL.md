@@ -29,7 +29,7 @@ sources:
     resource: npm-packages/packages/workers/src
     title: "@volontariapp/workers"
   - id: c3-async
-    resource: docs/C3-Async-Patterns-And-Flows.md
+    resource: docs/architecture/C3-Async-Patterns-And-Flows.md
     title: C3 Async Patterns and Flows
   - id: base-cmd
     resource: ms-event/src/modules/event/controllers/commands/base.command.controller.ts

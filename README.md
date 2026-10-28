@@ -31,11 +31,11 @@ La documentation de référence est structurée selon le modèle **C4** pour une
 
 | Document | Objet | Description |
 | :--- | :--- | :--- |
-| **[C1 - System Context](docs/C1-System-Context.md)** | Vue Macro | Acteurs (Bénévoles, Associations), frontières du système et intégrations tierces. |
-| **[C2 - Containers](docs/C2-Containers.md)** | Topologie | Microservices NestJS (gRPC), bases PostgreSQL dédiées, Neo4j, Redis et API Gateway. |
-| **[C3 - Async Patterns & Flows](docs/C3-Async-Patterns-And-Flows.md)** | Événements & Sagas | Transactional Outbox, Redis Streams, BullMQ, Post-Processors, compensations de sagas et Scatter-Gather WebSocket. |
-| **[C4 - Deployment & Infrastructure](docs/C4-Deployment-And-Infrastructure.md)** | GitOps & K8s | Cluster Kubernetes, ArgoCD, Sealed Secrets, Network Policies et sidecar git-sync. |
-| **[Structure Monorepo & NPM](docs/Monorepo-Structure.md)** | Contrats & Domaines | Mutualisation par `@volontariapp/domain-*`, `@volontariapp/contracts`, `@volontariapp/contracts-nest`. |
+| **[C1 - System Context](docs/architecture/C1-System-Context.md)** | Vue Macro | Acteurs (Bénévoles, Associations), frontières du système et intégrations tierces. |
+| **[C2 - Containers](docs/architecture/C2-Containers.md)** | Topologie | Microservices NestJS (gRPC), bases PostgreSQL dédiées, Neo4j, Redis et API Gateway. |
+| **[C3 - Async Patterns & Flows](docs/architecture/C3-Async-Patterns-And-Flows.md)** | Événements & Sagas | Transactional Outbox, Redis Streams, BullMQ, Post-Processors, compensations de sagas et Scatter-Gather WebSocket. |
+| **[C4 - Deployment & Infrastructure](docs/architecture/C4-Deployment-And-Infrastructure.md)** | GitOps & K8s | Cluster Kubernetes, ArgoCD, Sealed Secrets, Network Policies et sidecar git-sync. |
+| **[Structure Monorepo & NPM](docs/architecture/Monorepo-Structure.md)** | Contrats & Domaines | Mutualisation par `@volontariapp/domain-*`, `@volontariapp/contracts`, `@volontariapp/contracts-nest`. |
 
 ---
 

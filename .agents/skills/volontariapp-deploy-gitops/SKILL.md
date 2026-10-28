@@ -35,7 +35,7 @@ verified:
     digest: a6538c6cb5af3741
 sources:
   - id: c4
-    resource: docs/C4-Deployment-And-Infrastructure.md
+    resource: docs/architecture/C4-Deployment-And-Infrastructure.md
     title: "C4 Deployment & Infrastructure"
   - id: readme
     resource: deploy/README.md
