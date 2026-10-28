@@ -8,7 +8,6 @@ status: stable
 paths:
   - "docs/coaching/**"
   - "docs/scripts/**"
-  - scripts/modify_docx.py
 mesh_keys:
   - docx
   - coaching-report
@@ -17,9 +16,6 @@ generated:
   by: claude-code/agent
   at: "2026-10-06T11:15:27Z"
 verified:
-  - by: claude-code/agent
-    at: "2026-10-06T13:36:48Z"
-    digest: 5b6f11cdf63a4484
   - by: claude-code/agent
     at: "2026-10-06T13:38:27Z"
     digest: 58318fe7e465799d
@@ -32,6 +28,9 @@ verified:
   - by: claude-code/claude-sonnet-5-5
     at: "2026-10-28T20:27:28Z"
     digest: e770fb2a980866aa
+  - by: claude-code/agent
+    at: "2026-10-28T22:51:02Z"
+    digest: 2c865e8568f4f00e
 sources:
   - id: modify-script
     resource: .agents/skills/volontariapp-docx-reports/scripts/modify_docx.py
@@ -68,9 +67,9 @@ Cette skill encadre l'inspection, la relecture orthographique et la modification
 
 ## Scripts
 
-- `python3 scripts/modify_docx.py view <fichier.docx>` : inspecte les paragraphes et recherche de texte[^modify-script].
-- `python3 scripts/modify_docx.py replace <fichier.docx> --json <replacements.json>` : applique un ensemble de substitutions avec sauvegarde et validation de conformite ZIP/XML[^modify-script].
-- `python3 scripts/modify_docx.py insert-image <fichier.docx> --after-heading "<Titre>" --image "<img.png>"` : insere un diagramme de Gantt PNG sous une section cible[^modify-script].
+- `python3 docs/scripts/modify_docx.py view <fichier.docx>` : inspecte les paragraphes et recherche de texte[^modify-script].
+- `python3 docs/scripts/modify_docx.py replace <fichier.docx> --json <replacements.json>` : applique un ensemble de substitutions avec sauvegarde et validation de conformite ZIP/XML[^modify-script].
+- `python3 docs/scripts/modify_docx.py insert-image <fichier.docx> --after-heading "<Titre>" --image "<img.png>"` : insere un diagramme de Gantt PNG sous une section cible[^modify-script].
 - `python3 docs/scripts/export_notion_backlog.py --sprint <N>` : extrait le backlog Notion avec resolution des dependances Bloque / Bloque par et des dates[^coaching-report].
 - `node docs/scripts/fetch_gantt_images.mjs --sprint <N>` : automatisation Chromium Playwright sans interface pour exporter le PDF Gantt et extraire les PNG[^coaching-report].
 - `python3 docs/scripts/create_template_docx.py` : génère le document modèle `docs/coaching/Rapport de suivi coaching template.docx` avec des balises `Sprint <TODO>` et `[TODO]` pour servir de base neutre[^coaching-report].

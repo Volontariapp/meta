@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-28
+
+- **Vérification** - Scripts remplaces par la CLI meta (yarn meta), repos.json source unique (claude-code/agent)
+
 ## 2026-10-19
 
 - **Vérification** - relu apres le commit fc51d42 de sync-migrations.sh, aucune regle changee (claude-code/agent)

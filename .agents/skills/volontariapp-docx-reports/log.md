@@ -2,6 +2,7 @@
 
 ## 2026-10-28
 
+- **Vérification** - Scripts remplaces par la CLI meta (yarn meta), repos.json source unique (claude-code/agent)
 - **Vérification** - Seul le contenu binaire des rapports 8 et template a change (commit 439eab2) ; script modify_docx.py et chemins verifies, regles inchangees (claude-code/claude-sonnet-5-5)
 
 ## 2026-10-07

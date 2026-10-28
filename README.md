@@ -120,38 +120,40 @@ Tous les services sont hébergés dans l'organisation GitHub **[Volontariapp](ht
 
 ## Quick Start & Setup
 
-Le point d'entrée central du méta-projet est le script interactif **`root.sh`**.
+Le point d'entree est la CLI `meta` (Node, sans dependance), pilotee par le manifeste `repos.json`. Details, depannage par OS et flux de travail : [`SETUP.md`](SETUP.md).
 
-### 1. Installation Initiale (Full Setup)
+### 1. Installation initiale
 
-Pour initialiser l'ensemble de l'environnement de développement :
+Prerequis : Git, GitHub CLI connecte (`gh auth login`) et Docker demarre. Node et Yarn sont installes par le bootstrap.
 
 ```bash
-bash root.sh
-# Sélectionnez l'option 1) Full Setup
-```
-Cette commande automatise :
-- L'installation de Node.js, Yarn Berry (Corepack) et des outils locaux.
-- Le clonage et l'initialisation de **tous les dépôts** de l'organisation.
-- L'installation des dépendances transverses.
+# macOS, Linux, WSL2
+./setup.sh
 
-### 2. Démarrage Quotidien (Dev Mode)
-
-Exécutez `bash root.sh` et choisissez l'option de démarrage souhaitée :
-- **`11) Dev All`** : Démarre l'ensemble des microservices, l'API Gateway, les runners et l'application mobile.
-- **`13) Dev Backend`** : Démarre uniquement la stack serveur backend.
-- **`15) Dev Microservices`** : Démarre uniquement les microservices gRPC synchrones.
-
-*Raccourci direct sans passer par le menu :*
-```bash
-echo 11 | ./root.sh
+# Windows 11 (PowerShell)
+powershell -ExecutionPolicy Bypass -File .\setup.ps1
 ```
 
-### 3. Synchronisation des Dépôts
+La commande clone tous les repos (HTTPS), installe les dependances, genere les certificats, demarre l'infra Docker (bases, Redis, MinIO), applique les migrations et verifie le resultat. Elle est idempotente et s'arrete a la premiere erreur.
 
-Pour récupérer les dernières modifications de tous les dépôts rebasées sur `main` :
+### 2. Demarrage quotidien
+
 ```bash
-bash scripts/sync-repos.sh
+yarn meta start                      # backend-core (gateway + microservices), env local
+yarn meta start all-no-mobile        # + outbox, post-processors, workers
+yarn meta start all --env dev        # tout, y compris nativapp
+yarn meta logs ms-user               # logs d'une unite
+```
+
+### 3. Commandes courantes
+
+```bash
+yarn meta help                       # toutes les commandes
+yarn meta repos status --fetch       # etat de tous les repos
+yarn meta repos sync                 # fast-forward des repos propres
+yarn meta migrate --all              # migrations de tous les services
+yarn meta sync-migrations --pr       # migrations vers npm-packages, PR, puis arret
+yarn meta bump                       # PR de mise a jour chez les consommateurs (apres publication CI)
 ```
 
 ---

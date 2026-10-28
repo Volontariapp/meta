@@ -21,8 +21,8 @@ sources:
     resource: ms-event/src/modules/event/controllers/commands/base.command.controller.ts
     title: BaseCommandController.withFallback
   - id: sync-mig
-    resource: sync-migrations.sh
-    title: sync-migrations.sh
+    resource: scripts/cli/commands/sync-migrations.mjs
+    title: sync-migrations.mjs
   - id: validation
     resource: npm-packages/packages/validation-nest
     title: GrpcValidationPipe
@@ -48,7 +48,7 @@ Le guide détaillé des patterns (structure de module, DTO, contrôleurs, tests)
 | **Logique métier** | Services et repositories du package `domain-<d>`, injectés comme providers ; transformers DTO vers entité dans le service (`ms-event`) |
 | **Fallback** | `BaseCommandController.withFallback(jobType, userId, payload, op)` dans `ms-user` et `ms-event` : aucun job sur 400/404/409 (et 403 dans `ms-event` uniquement), sinon job `FALLBACK_*` et réponse `FALLBACK_ACTIVATED` (HTTP 206 côté gateway)[^base-cmd] |
 | **Clients sortants** | `ClientGrpc` sur le package du service cible ; propager le `x-internal-token` reçu dans les `Metadata` de l'appel |
-| **Migrations** | `src/migrations/common/` (outbox, `job_audit`, triggers) synchronisées entre services par `sync-migrations.sh` (`SERVICES=("user" "social" "post" "event" "storage")`)[^sync-mig] ; `src/migrations/domain/` propres au service, souvent copiées du package `domain-*` |
+| **Migrations** | `src/migrations/common/` (outbox, `job_audit`, triggers) synchronisées entre services vers `domain-*` par `yarn meta sync-migrations` (services listés dans `repos.json`)[^sync-mig] ; `src/migrations/domain/` propres au service, souvent copiées du package `domain-*` |
 
 ---
 
@@ -62,4 +62,4 @@ Le guide détaillé des patterns (structure de module, DTO, contrôleurs, tests)
 [^app-event]: AppModule ms-event (GrpcValidationPipe, APP_GUARD)
 [^validation]: GrpcValidationPipe
 [^base-cmd]: BaseCommandController.withFallback
-[^sync-mig]: sync-migrations.sh
+[^sync-mig]: scripts/cli/commands/sync-migrations.mjs

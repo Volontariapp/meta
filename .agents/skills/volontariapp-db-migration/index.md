@@ -1,6 +1,6 @@
 # Migrations PostgreSQL et Synchronisation Multi-Services
 
-Playbook opérationnel pas-à-pas pour concevoir, tester et propager une migration TypeORM sans coupure de service (Zero-Downtime Expand/Contract, partition common/domain, sync-migrations.sh).
+Playbook opérationnel pas-à-pas pour concevoir, tester et propager une migration TypeORM sans coupure de service (Zero-Downtime Expand/Contract, partition common/domain, yarn meta sync-migrations).
 
 ## Concepts
 

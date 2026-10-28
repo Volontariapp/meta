@@ -40,7 +40,7 @@ Le dépôt `deploy` est l'unique source de vérité de l'infrastructure de produ
 | `infrastructure/argocd/` | `bootstrap/`, `apps/`, `projects/`, `ingress.yaml` |
 | `infrastructure/databases/` | Un dossier par base (`ms-user`, `ms-event`, `ms-post`, `ms-social`, `ws-service`, `neo4j`, `redis`) ; **pas de base `ms-storage`**[^dbs] |
 | `infrastructure/security/` | `cert-manager`, `network-policies`, `sealed-secrets`, `resource-quotas`, `traefik` |
-| `infrastructure/monitoring/` | Agent Datadog |
+| `infrastructure/monitoring/` | Agent Datadog et dashboards JSON versionnés (`dashboards/*.json`, import manuel dans Datadog, voir son README) |
 | `submodules/` | Code source des services, en lecture seule : mis à jour par la CI de chaque repo |
 
 ---

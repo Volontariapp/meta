@@ -1,5 +1,9 @@
 # Historique des skills
 
+## 2026-10-28
+
+- **Nouvelle skill** - [volontariapp-meta-scripts](/volontariapp-meta-scripts/SKILL.md) - Scripts et CLI du workspace meta (claude-code/agent)
+
 ## 2026-10-12
 
 - **Nouvelle skill** - [volontariapp-scaffold-microservice](/volontariapp-scaffold-microservice/SKILL.md) - Scaffolding d'un Nouveau Microservice gRPC et de ses Runners (claude-code/agent)

@@ -10,7 +10,7 @@ paths:
   - "ms-event/src/**"
   - "ms-post/src/**"
   - "ms-social/src/**"
-  - sync-migrations.sh
+  - scripts/cli/commands/sync-migrations.mjs
 mesh_keys:
   - ms-user
   - ms-event
@@ -25,9 +25,6 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-17T00:21:41Z"
-    digest: 8a599a3c49074d43
-  - by: claude-code/agent
     at: "2026-10-17T00:22:20Z"
     digest: f43c93e5676f8c19
   - by: claude-code/agent
@@ -39,6 +36,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-19T10:15:05Z"
     digest: d6982dde4daaa934
+  - by: claude-code/agent
+    at: "2026-10-28T22:51:01Z"
+    digest: 5bd2910680d873aa
 sources:
   - id: agent-md
     resource: AGENT.md
@@ -53,8 +53,8 @@ sources:
     resource: ms-event/src/modules/event/controllers/commands/base.command.controller.ts
     title: BaseCommandController.withFallback
   - id: sync-mig
-    resource: sync-migrations.sh
-    title: sync-migrations.sh
+    resource: scripts/cli/commands/sync-migrations.mjs
+    title: sync-migrations.mjs
   - id: validation
     resource: npm-packages/packages/validation-nest
     title: GrpcValidationPipe
@@ -230,11 +230,11 @@ Avant de déclarer la tâche terminée :
 - [ ] Les mappers transforment proprement les entités en DTOs gRPC.
 - [ ] `yarn test` passe avec succès sur le microservice.
 - [ ] `yarn tsc` et `yarn lint` ne produisent aucune erreur.
-- [ ] En cas de migration de base de données associée : exécuter `sync-migrations.sh` si commune[^sync-mig].
+- [ ] En cas de migration de base de données associée : exécuter `yarn meta sync-migrations` si commune[^sync-mig].
 
 [^agent-md]: AGENT.md (structure de module, DTO, contrôleurs, tests)
 [^main-user]: Bootstrap hybride (gRPC + HTTP /health)
 [^app-event]: AppModule ms-event (GrpcValidationPipe, APP_GUARD)
 [^validation]: GrpcValidationPipe
 [^base-cmd]: BaseCommandController.withFallback
-[^sync-mig]: sync-migrations.sh
+[^sync-mig]: scripts/cli/commands/sync-migrations.mjs

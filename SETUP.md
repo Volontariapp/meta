@@ -1,100 +1,78 @@
-# SETUP.md — Travailler avec les agents IA sur ce projet
+# SETUP.md : demarrer sur Volontariapp
 
-Ce document explique comment un développeur (humain) doit s'appuyer sur l'outillage IA déjà en place dans ce repo — pas comment le code fonctionne (voir `AGENT.md` pour les patterns techniques, `.agents/AGENTS.md` pour l'architecture globale).
+Objectif : cloner `meta`, lancer une commande, travailler. Tout est pilote par la CLI `meta` (Node, aucune dependance) et par le manifeste `repos.json`, source unique de la liste des repos, des services et de l'infra locale.
 
-## 1. Vue d'ensemble de l'écosystème
+## 1. Prerequis
 
-```
-meta/
-├── .agents/AGENTS.md              ← règles globales pour tout agent IA (archi, DDD/CQRS, PII, rg obligatoire...)
-├── .agents/skills/global/         ← skills transverses (proto, npm partagé, flux async) — utiles à TOUT profil
-├── .agents/skills/domain/         ← skills archi backend commune (utiles aux profils backend)
-├── META_CONTEXT.md                ← résumé 1 page des 14 repos (généré, à lire AVANT d'explorer un repo inconnu)
-├── META_GRAPH.json                ← même info en JSON (dépendances cross-repo machine-readable)
-├── scripts/setup-ai-context.sh    ← régénère META_CONTEXT.md/META_GRAPH.json après un changement structurel
-└── <repo>/CLAUDE.md               ← contenu spécifique à CE repo (domaine, événements, endpoints) — pas de généralités
-```
+| Outil | Pourquoi | Installe par `setup` ? |
+| :--- | :--- | :--- |
+| Git | clone des repos | non |
+| GitHub CLI (`gh`), connecte | clone en HTTPS sans cle SSH, PR automatiques | non (`gh auth login`) |
+| Docker (Docker Desktop, Rancher Desktop ou Docker Engine), demarre | bases PostgreSQL, Neo4j, Redis, MinIO, ClamAV | non |
+| Node 24.14.0 (`.node-version`) | execute la CLI et tous les services | oui, par `setup.sh` / `setup.ps1` |
+| Yarn 4.12.0 | gestionnaire de paquets | oui, via corepack |
+| `rg`, `jq`, `mesh-mcp` | recherche, scripts CI, serveur MCP des agents IA | non (facultatifs, signales par `doctor`) |
 
-Principe : le contexte global (archi, règles) est écrit **une seule fois** à la racine. Chaque `CLAUDE.md` de repo ne contient que ce qui est spécifique à ce repo. Les skills transverses vivent dans `.agents/skills/global/` et `domain/`, pas copiés-collés dans chaque repo.
+Les packages `@volontariapp/*` sont publics sur npm : aucune authentification de registre n'est requise.
 
-## 2. Avant de commencer une tâche, dans cet ordre
+## 2. Premier lancement
 
-1. Lire `META_CONTEXT.md` pour savoir quel(s) repo(s) sont concernés et leurs dépendances `@volontariapp/*`.
-2. Lire le `CLAUDE.md` du repo ciblé (domaine, événements, endpoints réels).
-3. Si la tâche touche plusieurs repos, consulter le skill transverse pertinent dans `.agents/skills/global/` (voir §4).
-4. Chercher avec `rg`, jamais un outil de recherche générique lent — voir `.agents/AGENTS.md` §7.
-5. Après un changement structurel (nouveau package, nouvelle route gRPC majeure), relancer `./scripts/setup-ai-context.sh` pour que `META_CONTEXT.md` reste à jour pour les prochains agents.
+Cloner `meta`, puis depuis sa racine :
 
-## 3. Par profil
+| Environnement | Commande |
+| :--- | :--- |
+| macOS, Linux, WSL2 | `./setup.sh` |
+| Windows 11 (PowerShell) | `powershell -ExecutionPolicy Bypass -File .\setup.ps1` |
 
-### Profil "je code uniquement le backend" (ms-user, ms-post, ms-event, ms-social, api-gateway)
+Le bootstrap installe Node et Yarn si besoin, puis lance `meta setup` : clone des repos (HTTPS), `yarn install`, certificats, infra Docker avec attente des health-checks, migrations de tous les services, verification. La commande est idempotente : la relancer ne casse rien. Elle s'arrete a la premiere erreur reelle avec un code non nul.
 
-- Skills à connaître : `.agents/skills/domain/backend-architecture`, `backend-clean-code`, `backend-outbox-pattern`, `backend-npm-workflow`.
-- Toute la logique métier vit dans `npm-packages/packages/domain-<domaine>` — le microservice lui-même ne fait que du câblage NestJS/gRPC (voir le `CLAUDE.md` de chaque `ms-*` qui documente l'agrégat réel et les events émis).
-- Patterns de code (DTO, controller, tests, naming) : `AGENT.md` à la racine — c'est la référence technique, ne pas la redemander à l'agent à chaque fois, juste la citer.
-- Si tu modifies un contrat `.proto` consommé par ton service : lis `.agents/skills/global/proto-contract-evolution` avant de toucher au `.proto`.
-- Si tu modifies un package `npm-packages/packages/*` partagé : lis `.agents/skills/global/shared-npm-package-change` — la propagation aux runners satellites (`outbox-*`, `worker-*`, post-processor) n'est pas automatique.
+Options utiles : `--yes` (aucune question), `--no-apps`, `--no-shell`, `--ssh` (clone SSH), `--skip-infra`, `--skip-migrations`, `--build-packages`.
 
-### Profil "je code uniquement le front / mobile" (nativapp)
+Puis : `yarn meta start` (profil `backend-core`, environnement `local`).
 
-- Les skills sont dans `nativapp/.agents/skills/` (pas dans le dossier global — ce sont des skills React Native spécifiques, importés depuis le pack Callstack, pas de duplication avec le backend).
-- `nativapp/CLAUDE.md` et `nativapp/AGENTS.md` listent les skills **obligatoires** avant toute tâche front : `rn-architecture`, `rn-clean-code`, `rn-styling`, `rn-data-fetching`, `rn-forms`, `rn-verification`, `react-doctor`, `rn-stability`.
-- Les types consommés depuis le backend viennent de `@volontariapp/contracts` (interfaces TS pures, générées depuis `proto-registry`) — ne jamais redéfinir un type déjà présent dans ce package.
-- Tu n'as normalement pas besoin des skills `.agents/skills/domain/` (backend) ni `global/proto-contract-evolution` (tu consommes le contrat, tu ne le fais pas évoluer) — sauf si tu dois demander un changement de contrat, auquel cas c'est une tâche cross-repo (profil suivant).
+## 3. Commandes
 
-### Profil "je fais du cross-repo / lead technique" (proto-registry, npm-packages, ou une tâche qui touche 2+ repos)
+Toutes via `yarn meta <commande>` ou `./root.sh <commande>` (`help` liste tout).
 
-C'est le profil le plus outillé par ce setup, car c'est là que la friction était la plus forte avant ce nettoyage :
+| Besoin | Commande |
+| :--- | :--- |
+| Verifier la machine | `doctor` |
+| Infra locale | `up`, `down`, `nuke-db --yes` |
+| Demarrer la stack | `start [profil] [--env local\|dev\|test\|prod]` (profils : `backend-core`, `services`, `outbox`, `backend`, `all-no-mobile`, `all`) |
+| Voir les logs d'une unite | `logs <unite>` (fichiers `logs/<unite>.log`) |
+| Migrations | `migrate --all` ou `migrate --services user,post` |
+| Certificats | `certs` (n'ecrase rien), `certs --force` |
+| Etat et mise a jour des repos | `repos status [--fetch]`, `repos sync`, `repos rebase` (`--autostash` pour les repos modifies) |
+| build, lint, test partout | `run build`, `run lint`, `run test` |
+| Migrations vers `npm-packages` | `sync-migrations --dry-run`, `sync-migrations`, `sync-migrations --pr` |
+| Propager un package publie | `bump [--only repo,repo] [--dry-run]` |
+| Annoncer une PR sur Discord | `notify-pr <repo> <numero>` |
+| Ajouter une dependance | `add-package <paquet[@version]> --to repo,repo` |
+| Ouvrir un workspace IDE | `ide <cursor\|code\|idea\|antigravity> <filtre>` |
+| Valider `repos.json` | `manifest` |
 
-- **Changer un contrat gRPC** (`proto-registry`) → `.agents/skills/global/proto-contract-evolution` : qui consomme quoi, `buf breaking`, ordre de rollout.
-- **Changer un package npm partagé** (`npm-packages`) → `.agents/skills/global/shared-npm-package-change` : blast radius (domaine vs transverse), snapshot PR / publish main.
-- **Debugger un flux asynchrone** (post créé mais événement jamais consommé, etc.) → `.agents/skills/global/trace-async-flow` : la chaîne complète `jobs_outbox` → `outbox-<domaine>` → BullMQ → `worker-<domaine>` → `job_audit` → `event_outbox` → Redis Stream → post-processor, avec les points de contrôle à chaque étape.
-- Utilise `META_GRAPH.json` pour savoir en une requête quels repos dépendent de quel package `@volontariapp/*` avant de casser une API partagée.
+## 4. Flux de travail sur un package partage
 
-### Profil "CI/CD, infra, outillage" (ci-tools, changelog-checker, outbox-runners, workers-runners, post-processors-runner, ws-service)
+1. Modifier le code des `ms-*`, puis lancer `yarn meta sync-migrations --dry-run` et `yarn meta sync-migrations --pr` si des migrations ont change. La commande ouvre la PR dans `npm-packages` puis s'arrete (regle STOP de `AGENTS.md`).
+2. Attendre la publication par la CI.
+3. Lancer `yarn meta bump` : une PR par consommateur, jamais de push direct sur `main`.
+4. Quand la CI est verte et sans conflit : `yarn meta notify-pr <repo> <numero>` (1 PR = 1 message Discord ; renseigner `DISCORD_WEBHOOK_URL` dans `.env.local`, voir `.env.example`).
 
-- Ces repos n'ont pas de logique métier — leur `CLAUDE.md` (quand il existe) décrit uniquement leur rôle d'infrastructure (voir `ci-tools/CLAUDE.md`, `changelog-checker/CLAUDE.md`, `outbox-runners/CLAUDE.md`).
-- Toute modification d'un workflow réutilisable dans `ci-tools/.github/workflows/` a un impact multi-repo immédiat : vérifier qui consomme le workflow avant de changer sa signature d'input.
-- `workers-runners`, `post-processors-runner`, `ws-service` n'ont pas de `CLAUDE.md` propre — se référer à leur `ARCHITECTURE.md`/`README.md` local.
+## 5. Depannage par environnement
 
-## 4. Où ajouter un nouveau skill
+**macOS** : si `fnm` n'est pas dans le PATH apres `setup.sh`, ouvrir un nouveau terminal. Docker : demarrer Docker Desktop ou Rancher Desktop avant `setup`.
 
-| Le skill s'applique à... | Emplacement |
-|---|---|
-| Une tâche récurrente qui touche 2+ repos | `.agents/skills/global/<nom>/SKILL.md` |
-| Une convention d'architecture backend commune à tous les `ms-*` | `.agents/skills/domain/<nom>/SKILL.md` |
-| Une tâche spécifique au front/mobile React Native | `nativapp/.agents/skills/<nom>/SKILL.md` |
-| Une règle propre à un seul repo backend et non réutilisable ailleurs | dans le `CLAUDE.md` de ce repo directement, pas un skill séparé |
+**Linux** : `setup.sh` utilise `curl` et `unzip` pour installer `fnm` ; les installer au prealable (`apt-get install curl unzip`). Docker Engine doit tourner et l'utilisateur appartenir au groupe `docker`.
 
-Ne jamais copier-coller un skill dans plusieurs repos "au cas où" — c'est exactement le problème qu'on vient de nettoyer (pack `mattpocock/skills` dupliqué dans 14 repos, jamais utilisé). Un skill non centralisé et non référencé depuis un `CLAUDE.md`/`AGENTS.md` ne sera jamais lu par un agent.
+**WSL2** : travailler dans le systeme de fichiers Linux (`~/`), pas sous `/mnt/c` (lenteur et droits). Activer l'integration WSL dans Docker Desktop. Environnement non teste automatiquement : tester a la main avec `./setup.sh` puis `yarn meta doctor`.
 
-## 5. Outils installés
+**Windows 11 natif** : `setup.ps1` installe Node par `winget`. Si `winget` est absent, installer Node 24.14.0 depuis nodejs.org puis relancer. Les etapes `apps` et `shell` sont ignorees (elles necessitent bash). Les hooks de skills (`scripts/install-skill-hooks.sh`) ne sont pas installes sans bash : utiliser WSL2 pour contribuer. Environnement non teste automatiquement.
 
-- **RTK (Rust Token Killer)** : proxy CLI qui réécrit `git`/`npm`/`jest`/etc. à la volée pour réduire la consommation de tokens (~80% sur les opérations de dev courantes). Transparent via hook — voir la section "RTK" en bas de chaque `CLAUDE.md`. Commandes directes utiles : `rtk gain` (analytics d'économie), `rtk discover` (recherche d'opportunités manquées), `rtk read/ls/find/grep` (sorties compressées).
-- **ripgrep (`rg`)** : recherche de code, obligatoire (voir `.agents/AGENTS.md` §7).
-- **repomix** (`npx repomix --compress`) : extraction AST à la demande d'un seul repo (signatures sans corps de fonction), pas de génération systématique.
-- **graphify** (`graphify update <repo>`) : graphe de code par repo (`<repo>/graphify-out/graph.json`, ignoré par git, régénérable). Utile pour `graphify query`/`graphify affected`/`graphify god-nodes` sur un repo précis.
-  - L'intégration Claude Code (`graphify claude install`) est **activée** dans les 14 repos : une section "graphify" a été ajoutée en bas de chaque `CLAUDE.md`, et un hook `PreToolUse` (`.claude/settings.json`) rappelle d'utiliser `graphify query`/`explain`/`path` avant de grepper ou lire du code brut sur `Bash|Grep|Read|Glob`. Le hook est purement informatif (il ajoute du contexte, il ne bloque jamais un outil).
-  - Après une modif de code dans un repo, lancer `graphify update .` dans ce repo pour garder le graphe à jour (AST seul, pas d'appel LLM).
+**Erreur `docker info`** : le daemon n'est pas demarre. **Ports occupes** : une seule instance de l'infra par machine (noms de conteneurs fixes), `yarn meta down` d'abord. **Services non sains apres 3 minutes** : `docker compose -f ci-tools/docker-compose.yml logs <service>`.
 
-## 6. Notifications Discord pour les Pull Requests (Règle d'or : 1 PR = 1 Message)
+## 6. Agents IA
 
-> [!IMPORTANT]
-> **Règle stricte : 1 PR = 1 seul message Discord (zéro spam).**
-> Le webhook Discord ne doit être déclenché **qu'une fois la PR totalement prête** :
-> 1. **Zéro conflit de merge** avec la branche cible (`main`).
-> 2. **Tous les checks CI GitHub Actions validés avec succès** (la CI doit être verte).
-> Ne jamais envoyer de notification intermédiaire ou pendant l'exécution des tests de la CI.
-
-Pour que l'agent ou les scripts annoncent automatiquement les PRs dans votre salon Discord d'équipe :
-1. Créez un Webhook dans votre salon Discord (*Clic droit sur le salon > Modifier le salon > Intégrations > Webhooks > Nouveau Webhook*).
-2. Créez votre fichier local `.env.local` à la racine de `meta` à partir du template :
-   ```bash
-   cp .env.example .env.local
-   # Puis renseignez votre URL : DISCORD_WEBHOOK_URL="https://discord.com/api/webhooks/..."
-   ```
-3. Envoyez la notification (uniquement après succès de la CI et vérification des conflits) :
-   ```bash
-   ./scripts/notify-discord.sh "<Titre de la PR>" "<Description>" "<Lien PR GitHub>" "<statut: success|info|warning|error>"
-   ```
-   Le fichier `.env.local` est strictement ignoré par Git via `.gitignore`.
+- Regles et aiguillage : `AGENTS.md` (matrice des outils MCP et des skills `volontariapp-*`). Guide technique : `AGENT.md`.
+- Serveur MCP `mesh-mcp` (projet `causalmesh`), configure par `.mcp.json` et `.agents/mesh-mcp.toml`.
+- Skill des scripts : `.agents/skills/volontariapp-meta-scripts/SKILL.md`.
+- Apres un clone : `scripts/install-skill-hooks.sh` est lance par `setup` ; il active le pre-commit de verification des skills dans chaque repo.
