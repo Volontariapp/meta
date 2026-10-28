@@ -37,7 +37,7 @@ sources:
     resource: ws-service/src/core/services/gather-state.service.ts
     title: Scatter-Gather ws-service
   - id: c3-async
-    resource: docs/C3-Async-Patterns-And-Flows.md
+    resource: docs/architecture/C3-Async-Patterns-And-Flows.md
     title: C3 Async Patterns and Flows
   - id: streams
     resource: npm-packages/packages/shared/src/enums/streams.enum.ts

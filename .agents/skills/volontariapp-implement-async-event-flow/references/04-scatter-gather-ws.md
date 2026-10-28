@@ -105,7 +105,7 @@ Le stream écouté est déclaré dans le fichier d'options voisin (`options/*.op
 
 ## 4. Sécurité WebSocket & Authentification Interne
 
-Rappel issu de C2-Containers.md (`docs/C2-Containers.md`) :
+Rappel issu de C2-Containers.md (`docs/architecture/C2-Containers.md`) :
 - Le `ws-service` n'est **jamais exposé directement** sur Internet.
 - L'**API Gateway** intercepte les requêtes de handshake (`/socket.io`), valide le JWT OAuth, et injecte un header `x-internal-token`.
 - Le `ws-service` vérifie ce token interne de façon purement cryptographique (ultra-rapide, zéro requête BDD) et associe la socket à l'`userId`.

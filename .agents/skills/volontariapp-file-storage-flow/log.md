@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-28
+
+- **Vérification** - Statut mis a jour au 2026-10-28 (handlers ms-storage, routes gateway, pp-storage, deploy MinIO/ClamAV), limite FILE_SCAN_RESULT_TARGET_SERVICES revérifiée, chemins architecture/ (claude-code/claude-sonnet-5-5)
+
 ## 2026-10-17
 
 - **Vérification** - ticket 5.9: updateEvent cover via update_mask, jeton interne et statut de scan en nom d'enum dans ms-event; relu, aucune regle de la skill ne change (claude-code/agent)
