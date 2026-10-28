@@ -76,3 +76,23 @@ Toutes via `yarn meta <commande>` ou `./root.sh <commande>` (`help` liste tout).
 - Serveur MCP `mesh-mcp` (projet `causalmesh`), configure par `.mcp.json` et `.agents/mesh-mcp.toml`.
 - Skill des scripts : `.agents/skills/volontariapp-meta-scripts/SKILL.md`.
 - Apres un clone : `scripts/install-skill-hooks.sh` est lance par `setup` ; il active le pre-commit de verification des skills dans chaque repo.
+
+## 7. Procedure de test manuelle (Windows 11 et WSL2)
+
+Ces deux environnements ne sont pas couverts par les tests automatiques (pas de runner Windows ni WSL2). A faire sur une machine vierge, puis a coller dans la PR si un point echoue :
+
+**WSL2 (Ubuntu)**
+1. `wsl --install -d Ubuntu`, puis Docker Desktop avec l'integration WSL activee pour cette distribution.
+2. Dans `~/` (jamais `/mnt/c`) : `sudo apt-get update && sudo apt-get install -y git curl unzip`, puis `gh auth login`.
+3. `git clone https://github.com/Volontariapp/meta.git && cd meta && ./setup.sh`.
+4. Attendu : Node 24.14.0 installe par fnm, 7 etapes `[n/7]` sans `[fail]`, code retour 0.
+5. `yarn meta doctor` : `plateforme: wsl`, tous les prerequis obligatoires verts.
+6. `yarn meta start` puis `curl -s -o /dev/null -w '%{http_code}\n' http://localhost:3000/api/v1/health` : `200`.
+7. Relancer `./setup.sh` : code 0, aucun repo modifie (`yarn meta repos status`).
+
+**Windows 11 natif (PowerShell)**
+1. Installer Git, GitHub CLI (`gh auth login`) et Docker Desktop.
+2. `git clone https://github.com/Volontariapp/meta.git; cd meta; powershell -ExecutionPolicy Bypass -File .\setup.ps1`.
+3. Attendu : Node installe par `winget` (ou message explicite si `winget` est absent), puis les etapes de la CLI ; les etapes `apps` et `shell` sont ignorees avec un avertissement.
+4. Verifier `yarn meta doctor` (`plateforme: windows`), `yarn meta start`, puis `Invoke-WebRequest http://localhost:3000/api/v1/health` : `200`.
+5. Points a surveiller : fins de ligne CRLF dans `setup.sh` (le depot impose `\n`), chemins avec espaces, arret de `start` (`taskkill /T`), hooks de skills non installes sans bash (utiliser WSL2 pour contribuer).
