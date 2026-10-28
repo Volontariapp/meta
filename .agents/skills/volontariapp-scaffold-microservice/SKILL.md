@@ -24,9 +24,6 @@ generated:
   at: "2026-10-12T12:18:00Z"
 verified:
   - by: "process:agent"
-    at: "2026-10-28T10:26:55Z"
-    digest: 254a09ebf98e8ad7
-  - by: "process:agent"
     at: "2026-10-28T10:59:19Z"
     digest: 254a09ebf98e8ad7
   - by: "process:agent"
@@ -37,6 +34,9 @@ verified:
     digest: 254a09ebf98e8ad7
   - by: "process:agent"
     at: "2026-10-28T12:36:59Z"
+    digest: 254a09ebf98e8ad7
+  - by: "process:agent"
+    at: "2026-10-28T12:43:50Z"
     digest: 254a09ebf98e8ad7
 sources:
   - id: doc-creation
