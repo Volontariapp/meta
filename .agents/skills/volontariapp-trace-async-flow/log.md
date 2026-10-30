@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-29
+
+- **Vérification** - Relu run-in-trace-context.ts (npm-packages 9719a9d9) : le span batch est enfant du premier message (database 3.11.1) au lieu d'une racine ; textes sur les batchs et createFollowUp mis a jour, autres messages du lot restent freres. (claude-code/agent)
+- **Vérification** - Relu event-queue.entity.ts et capture-traceparent.ts : ajout de continueTraceparent (span actif si meme trace, sinon origine) utilise par createFollowUp et les pushers ; section Contexte de trace mise a jour avec la cause observee en prod (sauts asynchrones freres sous ms-event) et la limite des batchs. Correctif non publie. (claude-code/agent)
+
 ## 2026-10-19
 
 - **Vérification** - ms-ranking: squelette NestJS copie de ms-storage, migrations communes (human:victor)

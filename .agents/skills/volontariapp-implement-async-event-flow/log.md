@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-10-29
+
+- **Vérification** - Relu run-in-trace-context.ts (npm-packages 9719a9d9) : le span batch est enfant du premier message (database 3.11.1) au lieu d'une racine ; textes sur les batchs et createFollowUp mis a jour, autres messages du lot restent freres. (claude-code/agent)
+- **Vérification** - Revalide apres prettier sur event-queue.pusher.ts : import remis sur une ligne, contenu inchange (continueTraceparent dans le pusher). (claude-code/agent)
+- **Vérification** - Relu event-queue.pusher.ts et jobs-outbox.pusher.ts : le traceparent ecrit dans le stream et le job suit continueTraceparent ; paragraphe createFollowUp mis a jour (non publie au 2026-10-29). (claude-code/agent)
+
 ## 2026-10-27
 
 - **Vérification** - post-processor-post: PostMediaModel ajoute au forFeature de DomainPostModule (piege relations par chaine) (claude-code/agent)

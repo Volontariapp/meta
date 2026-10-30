@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-29
+
+- **Vérification** - Relu les bumps de version et changelogs regeneres par changeset apres fusion de main (database minor, outbox patch, dependants en patch) : aucune regle, chemin ou commande de la skill concernee. (claude-code/agent)
+- **Vérification** - Relu le diff de post-processors : bump 3.3.15 vers 3.3.16 et CHANGELOG (dependances), aucune regle de remediation DLQ/XCLAIM concernee. (claude-code/agent)
+
 ## 2026-10-27
 
 - **Vérification** - post-processor-post: PostMediaModel ajoute au forFeature de DomainPostModule (piege relations par chaine) (claude-code/agent)

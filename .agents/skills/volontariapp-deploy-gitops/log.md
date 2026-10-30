@@ -2,6 +2,9 @@
 
 ## 2026-10-28
 
+- **Leçon** - Import JSON de dashboard Datadog : erreurs rencontrees (pitfall) (claude-code/agent)
+- **Leçon** - Monitoring : tout dans un dashboard Datadog, pas d'outil externe (rule) (claude-code/agent)
+- **Vérification** - request-flow.json: section asynchrone native (spans Consumer/Producer), aucune regle de la skill ne change (claude-code/agent)
 - **Vérification** - request-flow.json: trois Service Maps async ajoutees, aucune regle de la skill ne change (claude-code/agent)
 - **Vérification** - request-flow.json: Service Map centree sur api-gateway, aucune regle de la skill ne change (claude-code/agent)
 - **Vérification** - request-flow.json: coordonnees free-layout remises a l'echelle, aucune regle de la skill ne change (claude-code/agent)

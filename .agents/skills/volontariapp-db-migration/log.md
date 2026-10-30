@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-29
+
+- **Vérification** - Relu les changements de event-queue.entity.ts, capture-traceparent.ts et du spec : aucun impact sur migrations ni colonnes traceparent (varchar 55 inchange). sync-migrations.mjs relu : flags --dry-run, --pr, --packages presents comme documentes dans l'etape 4. (claude-code/agent)
+
 ## 2026-10-28
 
 - **Vérification** - Scripts remplaces par la CLI meta (yarn meta), repos.json source unique (claude-code/agent)

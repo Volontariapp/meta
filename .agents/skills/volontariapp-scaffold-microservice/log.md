@@ -1,7 +1,14 @@
 # Historique
 
+## 2026-10-29
+
+- **Vérification** - Relu les bumps de version et changelogs regeneres par changeset apres fusion de main (database minor, outbox patch, dependants en patch) : aucune regle, chemin ou commande de la skill concernee. (claude-code/agent)
+- **Vérification** - Revalide apres prettier sur event-queue.pusher.ts : import remis sur une ligne, contenu inchange (continueTraceparent dans le pusher). (claude-code/agent)
+- **Vérification** - Relu les changements npm-packages : bumps de version et changelog des domain-*, database, outbox, post-processors, workers, storage-pipeline par changeset ; continueTraceparent n'ajoute aucune etape de scaffold (les runners existants le recoivent par la version de database). (claude-code/agent)
+
 ## 2026-10-28
 
+- **Vérification** - request-flow.json: section asynchrone native (spans Consumer/Producer), aucune regle de la skill ne change (claude-code/agent)
 - **Vérification** - request-flow.json: trois Service Maps async ajoutees, aucune regle de la skill ne change (claude-code/agent)
 - **Vérification** - request-flow.json: Service Map centree sur api-gateway, aucune regle de la skill ne change (claude-code/agent)
 - **Vérification** - request-flow.json: coordonnees free-layout remises a l'echelle, aucune regle de la skill ne change (claude-code/agent)

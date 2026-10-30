@@ -21,8 +21,6 @@ generated:
   at: "2026-10-28T22:38:27Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-28T22:38:27Z"
-  - by: claude-code/agent
     at: "2026-10-28T22:51:00Z"
     digest: 7c385aefb496209b
   - by: claude-code/agent
@@ -31,6 +29,12 @@ verified:
   - by: claude-code/agent
     at: "2026-10-28T23:02:36Z"
     digest: 8344fa15702535bd
+  - by: claude-code/agent
+    at: "2026-10-28T23:22:35Z"
+    digest: 36024be2906c9d79
+  - by: claude-code/agent
+    at: "2026-10-28T23:28:57Z"
+    digest: e69071f06e250c57
 sources: []
 ---
 
@@ -51,6 +55,7 @@ Utiliser et faire evoluer la CLI Node de meta (setup, doctor, migrate, certs, re
 - Infra locale : `up` demarre uniquement les services de `infra.services` (jamais les images GHCR des ms du compose de `ci-tools`).
 - `sync-migrations` copie `ms-X/src/migrations` vers `npm-packages/packages/domain-X/src/test/migrations` (miroir avec suppression). Toujours `--dry-run` d'abord. `--pr` cree branche, changeset, build, test, PR dans `npm-packages`, puis s'arrete : regle STOP, aucun consommateur n'est touche avant la publication CI.
 - `bump` (apres publication CI uniquement) ouvre une PR par consommateur ; il ne pousse jamais sur `main`. `notify-pr <repo> <n>` n'envoie le webhook Discord que si la PR est fusionnable et tous les checks verts, une seule fois par PR (`logs/discord-notified.log`).
+- `trace-flow` genere une page HTML Sankey (SVG statique) des flux entre services : un lien relie le service d'un span parent a celui de son enfant, valeur = traces distinctes, rouge si un span enfant est en erreur (`scripts/cli/lib/trace-flow.mjs`). Deux phases : (1) chercher les spans de saut asynchrone `operation_name:(Consumer OR Producer)` et ne garder que les traces ou l'un d'eux a un parent (les taches planifiees comme `job ranking.compute_user_ranking` sont des racines isolees), (2) recuperer tous les spans de ces traces par lots (`trace_id:(a OR b)`). Lecture par `POST https://api.<site>/api/v2/spans/events/search`, limite reelle mesuree : 5 requetes par minute (en-tetes `x-ratelimit-*`, la doc annoncait 300 par heure), geree par attente et nouvelle tentative ; `--max-traces 100 --chunk 10` coute 11 requetes. Ne pas exclure `operation_name:Internal` : certains parents de sauts en font partie. Mode hors ligne : `--input`. Identifiants lus dans l'environnement du terminal, jamais ecrits : `DD_TOKEN` (Bearer), sinon `DD_API_KEY` + `DD_APP_KEY`, ou une `DD_API_KEY` de prefixe `ddpa` utilisee en Bearer ; le secret `datadog-keys` du cluster ne contient que l'`api-key`.
 - `repos sync` ne fait jamais de stash silencieux : un repo sale est ignore (ou `--autostash`), `pull --ff-only` seulement. `repos rebase` abandonne proprement en cas de conflit.
 - Zero emoji et zero tiret cadratin dans le code, les logs et les messages de commit.
 

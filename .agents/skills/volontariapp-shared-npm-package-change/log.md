@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-29
+
+- **Vérification** - Relu les bumps de version et changelogs regeneres par changeset apres fusion de main (database minor, outbox patch, dependants en patch) : aucune regle, chemin ou commande de la skill concernee. (claude-code/agent)
+- **Vérification** - Relu les bumps changeset de cette branche : changeset database minor et outbox patch, bump automatique des dependants ; la regle du STOP a ete suivie (build, tests, lint, changeset version puis arret). (claude-code/agent)
+
 ## 2026-10-28
 
 - **Vérification** - catalogue: versions relevees le 2026-10-28, ajout de domain-ranking et storage-pipeline (claude-code/claude-sonnet-5-5)

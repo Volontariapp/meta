@@ -23,9 +23,24 @@ sources:
   - id: src-86e8c1ef
     resource: deploy/apps/overlays/prod/shared-infra/kustomization.yaml
     title: deploy/apps/overlays/prod/shared-infra/kustomization.yaml
+  - id: src-0dbb6fe8
+    resource: deploy/infrastructure/monitoring/dashboards/request-flow.json
+    title: deploy/infrastructure/monitoring/dashboards/request-flow.json
 ---
 
 # Leçons
+
+## 2026-10-28 - Import JSON de dashboard Datadog : erreurs rencontrees
+
+- **Type :** pitfall
+- **Leçon :** Un dashboard layout ordered ne s'importe pas dans un dashboard d'un autre type ('different layout type'). En layout free, les coordonnees x/y/width/height sont en unites fines (environ 14 px) et non sur 12 colonnes, et le widget group est refuse. topology_map exige query.service (champ deprecie, peut etre vide). list_stream avec trace_stream est rejete sans schema documente : ne pas le deviner. L'API de spans autorise 5 requetes par minute (en-tetes x-ratelimit-*), pas 300 par heure.[^src-0dbb6fe8]
+- **Consigné par :** claude-code/agent
+
+## 2026-10-28 - Monitoring : tout dans un dashboard Datadog, pas d'outil externe
+
+- **Type :** rule
+- **Leçon :** Victor veut toute visualisation de monitoring dans un dashboard Datadog versionne (infrastructure/monitoring/dashboards/*.json). Ne pas proposer de page HTML, script ou hebergement externe en solution principale, meme si un graphe Sankey l'exigerait : chercher d'abord une requete native. Le widget Sankey natif ne lit que RUM et Product Analytics ; pour le flux asynchrone, grouper les spans operation_name:Producer et Consumer par @type et service (le type d'evenement relie producteur et consommateurs sans jointure parent/enfant).[^src-0dbb6fe8]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-19 - Checklist d'un nouveau service dans deploy : NetworkPolicies, runners, prod-policies.yaml inutilisé
 
@@ -68,3 +83,4 @@ sources:
 [^src-18c87cb4]: https://github.com/Volontariapp/deploy/pull/22
 [^src-44389df8]: deploy/apps/base/ms-user/deployment.yaml
 [^src-86e8c1ef]: deploy/apps/overlays/prod/shared-infra/kustomization.yaml
+[^src-0dbb6fe8]: deploy/infrastructure/monitoring/dashboards/request-flow.json

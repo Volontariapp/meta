@@ -15,9 +15,6 @@ generated:
   at: "2026-10-07T09:33:37Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-07T09:33:57Z"
-    digest: 86278baab7297a03
-  - by: claude-code/agent
     at: "2026-10-12T11:52:50Z"
     digest: 86278baab7297a03
   - by: claude-code/agent
@@ -29,6 +26,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-14T12:24:02Z"
     digest: a62d0a28b88580fa
+  - by: claude-code/agent
+    at: "2026-10-29T15:11:46Z"
+    digest: 186ccf2fcdc0e887
 sources:
   - id: masking
     resource: npm-packages/packages/logger/src/masking.ts
@@ -51,7 +51,7 @@ Modifier ou utiliser @volontariapp/logger : masquage des données personnelles (
 - **Pas de mutation, pas de crash** : `Masker` renvoie une copie, gère tableaux, instances de classe, erreurs et cycles (`[Circular]`). Une référence partagée non circulaire n'est pas un cycle (ancêtres suivis dans un `WeakSet`)[^masking].
 - **Corrélation de traces et format JSON Datadog** : en format JSON uniquement, le payload inclut `status` (égal au niveau du log, ex: `debug`, `info`, `warn`, `error` pour que Datadog mappe nativement la sévérité au lieu d'inférer Error depuis stderr) ainsi que `trace_id` (hex), `dd.trace_id` (64 bits de poids faible, décimal) et `dd.span_id` (décimal) qui viennent du span actif via `@opentelemetry/api`. Ils sont écrits après les métadonnées, l'appelant ne peut pas les écraser. Aucune dépendance au SDK : sans span, aucun champ trace[^trace].
 - **Compatibilité et pureté** : le logger sert aussi React Native et NestJS. Ne pas y ajouter de dépendance Node-only, ni de `process.env`/`NODE_ENV`, ni le SDK OpenTelemetry. La configuration (format JSON ou texte) doit rester explicite.
-- **Configuration globale par défaut** : `Logger.setDefaultConfig({ format, minLevel, ... })` définit les options globales héritées par tout `new Logger({ context })` ultérieur. Permet d'activer le format JSON en production au démarrage dans `main.ts` sans modifier chaque contrôleur et sans heuristique `process.env`. `Logger.resetDefaultConfig()` réinitialise la configuration globale (utilisé dans les specs).
+- **Configuration globale par défaut** : `Logger.setDefaultConfig({ format, minLevel, ... })` définit les options globales héritées par tout `new Logger({ context })` ultérieur. Permet d'activer le format JSON en production au démarrage dans `main.ts` sans modifier chaque contrôleur et sans heuristique `process.env`. `Logger.resetDefaultConfig()` réinitialise la configuration globale (utilisé dans les specs) et `Logger.getDefaultConfig()` en renvoie une copie. Fusion superficielle `{ ...defaultConfig, ...config }` faite dans le constructeur : la config passée à `new Logger` l'emporte clé par clé, et un `masking` passé au constructeur remplace celui de la config globale (il n'est pas fusionné avec lui). `setDefaultConfig` fusionne dans la config globale existante.
 - **Tests** : `@opentelemetry/api` sans gestionnaire de contexte ne propage rien ; les specs espionnent `trace.getActiveSpan` avec `trace.wrapSpanContext(createSpanContext())` (`src/test/factories/span-context.factory.ts`). Les erreurs passent par `console.error`, pas `console.log`.
 - Toute modification suit la règle du STOP de `volontariapp-shared-npm-package-change` : le changement de comportement par défaut touche tous les consommateurs au bump.
 

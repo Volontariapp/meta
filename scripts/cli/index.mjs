@@ -11,6 +11,7 @@ import { reposCommand } from './commands/repos.mjs';
 import { setupCommand } from './commands/setup.mjs';
 import { logsCommand, startCommand } from './commands/start.mjs';
 import { syncMigrationsCommand } from './commands/sync-migrations.mjs';
+import { traceFlowCommand } from './commands/trace-flow.mjs';
 import { workspacesCommand } from './commands/workspaces.mjs';
 import { bold, dim, fail } from './lib/log.mjs';
 
@@ -38,6 +39,7 @@ export const COMMANDS = {
   ide: { summary: 'ide <cursor|code|idea|antigravity> <filtre> : ouvre un workspace', run: ideCommand },
   workspaces: { summary: 'Regenere .workspaces/*.code-workspace depuis presets.json [--check]', run: workspacesCommand },
   manifest: { summary: 'Valide repos.json et sa coherence avec .gitignore', run: () => manifestCommand() },
+  'trace-flow': { summary: 'Sankey des flux entre services depuis les spans Datadog [--input spans.json --out f.html --query env:prod --from now-24h --max-traces 100 --chunk 10]', run: traceFlowCommand },
   'nuke-db': { summary: 'Supprime les volumes de donnees locaux (--yes obligatoire)', run: nukeDbCommand },
 };
 

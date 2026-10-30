@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-29
+
+- **Vérification** - Relu logger.ts (commit a6a4fdc4) : setDefaultConfig, getDefaultConfig, resetDefaultConfig et fusion superficielle dans le constructeur ; skill precisee (le masking du constructeur remplace celui de la config globale). CHANGELOG et package.json : bumps seulement. (claude-code/agent)
+
 ## 2026-10-14
 
 - **Vérification** - Add tests and formatting for setDefaultConfig (claude-code/agent)

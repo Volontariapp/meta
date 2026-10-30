@@ -44,12 +44,6 @@ sources:
     title: "Scénarios de panne, problèmes P2 et P4"
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T20:29:17Z"
-    digest: 88f6f033dc983e58
-  - by: claude-code/agent
-    at: "2026-10-13T20:30:13Z"
-    digest: 88f6f033dc983e58
-  - by: claude-code/agent
     at: "2026-10-13T20:48:38Z"
     digest: 25d3961729597215
   - by: claude-code/agent
@@ -58,6 +52,12 @@ verified:
   - by: "human:victor"
     at: "2026-10-19T08:21:45Z"
     digest: df75accd654047e4
+  - by: claude-code/agent
+    at: "2026-10-29T12:13:50Z"
+    digest: d73e705316cfa40d
+  - by: claude-code/agent
+    at: "2026-10-29T17:22:26Z"
+    digest: f39e9f067a5595fa
 ---
 
 # Trace Async Flow & Diagnostic Runtime
@@ -140,7 +140,7 @@ redis-cli XRANGE <stream>-dlq - + COUNT 20  # messages abandonnés après maxRet
 - NULL est normal : ligne écrite par un trigger SQL (dont `notify_job_audit_status_change`), tâche planifiée, ou tracing désactivé. Ne pas y voir un bug d'émission.
 - Transport : champ `traceparent` du stream Redis (chaîne vide si absent) et dans le JSON `event` ; champ `traceparent` de `JobEnvelope` dans les données du job BullMQ. Les consommateurs doivent traiter `''` et l'absence (messages antérieurs) comme « pas de contexte ».
 - Un événement déclenché par un autre hérite du `traceparent` de la source via `EventQueueEntity.createFollowUp` (comme `traceId` et `correlationId`) ; `correlationId` sert au Scatter-Gather de `ws-service`, `traceparent` à la trace Datadog, les deux n'ont pas le même rôle.
-- Restauration du contexte (tâche 2.11) : `BaseWorker.process` exécute le job dans un span `job <type>` enfant du `traceparent` de `JobEnvelope` ; `SinglePostProcessor` ouvre un span `event <type>` enfant du `traceparent` de l'événement ; `BatchPostProcessor` ouvre un span par message (chacun dans la trace de son message) plus un span `batch <groupe>` qui les référence par liens et qui est actif pendant `processEvents`. Helpers `runInTraceContext` / `runBatchInTraceContext` de `@volontariapp/database`, tracer `@volontariapp/async`, spans `CONSUMER`, attributs `type`, `emitter`, `correlation_id` (absent pour un job : `JobEnvelope` n'a pas de `correlationId`). Dans un lot, les spans de message durent autant que le lot (le handler reçoit tous les messages en un appel). Sans `traceparent` (message antérieur, trigger SQL) : nouvelle trace. Un `createFollowUp` appelé dans le handler recopie le `traceparent` de la source, pas celui du span courant.
+- Restauration du contexte (tâche 2.11) : `BaseWorker.process` exécute le job dans un span `job <type>` enfant du `traceparent` de `JobEnvelope` ; `SinglePostProcessor` ouvre un span `event <type>` enfant du `traceparent` de l'événement ; `BatchPostProcessor` ouvre un span par message (chacun dans la trace de son message) plus un span `batch <groupe>` qui les référence par liens et qui est actif pendant `processEvents`. Helpers `runInTraceContext` / `runBatchInTraceContext` de `@volontariapp/database`, tracer `@volontariapp/async`, spans `CONSUMER`, attributs `type`, `emitter`, `correlation_id` (absent pour un job : `JobEnvelope` n'a pas de `correlationId`). Dans un lot, les spans de message durent autant que le lot (le handler reçoit tous les messages en un appel). Sans `traceparent` (message antérieur, trigger SQL) : nouvelle trace. Jusqu'à `@volontariapp/database` 3.10.13, un `createFollowUp` appelé dans le handler recopie le `traceparent` de la source, pas celui du span courant, et les pushers recopient celui de la ligne : tous les sauts asynchrones d'une requête sont alors des enfants directs du même span (observé en prod le 2026-10-29 sur `POST /api/v1/events` : 14 sauts `Producer`/`Consumer` enfants du span gRPC `ms-event`), donc la Flow Map Datadog dessine une étoile `ms-event -> chaque runner` et non la chaîne `outbox -> post-processor -> ws-service`. Correctif en cours (branche `fix/trace-parent-child-async-hops` de `npm-packages`, non publié au 2026-10-29) : `continueTraceparent(origin)` renvoie le span actif s'il est dans la même trace que `origin`, sinon `origin` ; `EventQueuePusher`, `JobsOutboxPusher` et `createFollowUp` l'utilisent. Un `BatchPostProcessor` ouvre son span `batch` comme enfant du span du premier message (correctif `@volontariapp/database` 3.11.1, publié le 2026-10-29) : le travail du lot (appels, écritures, événements de suite, jobs) reste dans la trace de ce premier message, et `continueTraceparent` chaîne dessus ; les autres messages du lot gardent leur span et un lien, et leurs événements de suite retombent sur le `traceparent` d'origine (frères). Avant 3.11.1, le span `batch` était une racine d'une autre trace.
 
 ### Configuration du tracing (`initTracing`, `@volontariapp/monitoring` 2.2.0)
 

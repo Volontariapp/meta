@@ -53,20 +53,20 @@ sources:
     title: SAGA_GATHER_COMPLETION_MAPPING
 verified:
   - by: claude-code/agent
-    at: "2026-10-17T14:48:07Z"
-    digest: 2ebfc5d803819427
-  - by: claude-code/agent
-    at: "2026-10-19T14:40:41Z"
-    digest: 6602640c6dbbefb4
-  - by: claude-code/agent
-    at: "2026-10-19T14:40:59Z"
-    digest: 6602640c6dbbefb4
-  - by: claude-code/agent
     at: "2026-10-19T16:33:36Z"
     digest: c0e11799d2f27928
   - by: claude-code/agent
     at: "2026-10-27T23:00:37Z"
     digest: de6bcfa56e7fe059
+  - by: claude-code/agent
+    at: "2026-10-29T12:13:51Z"
+    digest: 3eb7f2267921a742
+  - by: claude-code/agent
+    at: "2026-10-29T12:15:54Z"
+    digest: 248b4b6d3728e2ba
+  - by: claude-code/agent
+    at: "2026-10-29T17:22:27Z"
+    digest: 3948a49d8aeac949
 ---
 
 # Guide : Implémenter un Flux Asynchrone End-to-End
@@ -298,7 +298,7 @@ Lorsque plusieurs post-processors travaillent en parallèle (ex : `post-processo
 
 `EventQueueEntity.createEvent` capture le contexte OpenTelemetry actif dans `traceparent` (`captureTraceparent()` de `@volontariapp/database`) ; `EventQueuePusher` l'écrit dans le champ `traceparent` du stream (vide si absent) et dans le JSON `event` (`RedisEventMessage.traceparent?`). `RedisEventMessage.traceparent` est un `string` requis (`''` = aucun contexte), mais les messages déjà dans un stream avant l'ajout du champ ne l'ont pas à l'exécution (le parsing est un `JSON.parse(...) as StreamEvent`).
 
-**Événement déclenché par un autre (post-processor, étape de saga)** : utiliser `EventQueueEntity.createFollowUp(event, { type, emitter, emitterId, payload, targetServices })`, qui recopie `traceId`, `traceparent` et `correlationId` de l'événement consommé et tolère `''` et l'absence. Ne pas appeler `createEvent` en recopiant ces champs à la main, ni écrire une ligne `event_queue` en objet simple : le compilateur n'impose rien sur un `repo.save({...})` (TypeORM le type en `DeepPartial`). `createEvent` reste pour le premier événement d'une chaîne, où le contexte vient du span actif. `SinglePostProcessor` et `BatchPostProcessor` exécutent le handler dans un span enfant du `traceparent` du message (un span par message pour un lot, plus un span de lot actif pendant `processEvents`). Détails et NULL attendus : skill `volontariapp-trace-async-flow`.
+**Événement déclenché par un autre (post-processor, étape de saga)** : utiliser `EventQueueEntity.createFollowUp(event, { type, emitter, emitterId, payload, targetServices })`, qui recopie `traceId` et `correlationId` de l'événement consommé et tolère `''` et l'absence. Le `traceparent` suit `continueTraceparent` (correctif non publié au 2026-10-29, après `@volontariapp/database` 3.10.13) : le span actif s'il est dans la même trace que l'événement source (`SinglePostProcessor`, premier message d'un lot), sinon le `traceparent` de la source (les autres messages d'un `BatchPostProcessor`, dont le span de lot est enfant du premier message depuis `@volontariapp/database` 3.11.1). `EventQueuePusher` et `JobsOutboxPusher` appliquent la même règle avec le span `outbox` actif. Ne pas appeler `createEvent` en recopiant ces champs à la main, ni écrire une ligne `event_queue` en objet simple : le compilateur n'impose rien sur un `repo.save({...})` (TypeORM le type en `DeepPartial`). `createEvent` reste pour le premier événement d'une chaîne, où le contexte vient du span actif. `SinglePostProcessor` et `BatchPostProcessor` exécutent le handler dans un span enfant du `traceparent` du message (un span par message pour un lot, plus un span de lot actif pendant `processEvents`). Détails et NULL attendus : skill `volontariapp-trace-async-flow`.
 
 ## Règles d'Or & Checklist Anti-Bugs
 
