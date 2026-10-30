@@ -1,0 +1,26 @@
+{
+  "name": "volontariapp",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "yarn@4.12.0",
+  "scripts": {
+    "meta": "node scripts/cli/index.mjs",
+    "setup": "node scripts/cli/index.mjs setup",
+    "dev": "node scripts/cli/index.mjs start all-no-mobile",
+    "dev:backend": "node scripts/cli/index.mjs start backend",
+    "dev:mobile": "node scripts/cli/index.mjs start all",
+    "build": "node scripts/cli/index.mjs run build",
+    "lint": "node scripts/cli/index.mjs run lint",
+    "test": "node scripts/cli/index.mjs run test",
+    "test:cli": "node --test \"scripts/cli/test/*.test.mjs\"",
+    "audit:report": "node scripts/cli/index.mjs audit",
+    "fix:peers": "node scripts/cli/index.mjs fix-peers"
+  },
+  "devDependencies": {
+    "@nestjs/common": "11.1.17",
+    "@nestjs/core": "11.1.17",
+    "concurrently": "^9.1.0",
+    "js-yaml": "^4.1.1"
+  }
+}

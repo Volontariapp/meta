@@ -1,0 +1,10 @@
+---
+description: Instructions de l'écosystème Volontariapp, communes à tous les agents
+alwaysApply: true
+---
+
+Appliquer @AGENTS.md (source unique des instructions du dépôt).
+
+- Les skills sont dans `.agents/skills/` (aussi sous `.cursor/skills`) : ouvrir le `SKILL.md` indiqué par la table « Workflow » d'`AGENTS.md` avant chaque étape.
+- Pas de hooks : appliquer soi-même la règle du STOP (section 1) et le routage `mesh-mcp` (section 2).
+- Avant de terminer une tâche qui a modifié du code : `python3 .agents/skills/volontariapp-skill-evolution/scripts/evolve.py plan`, puis suivre le plan.

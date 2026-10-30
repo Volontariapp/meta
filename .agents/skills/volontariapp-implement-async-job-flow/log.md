@@ -1,0 +1,73 @@
+# Historique
+
+## 2026-10-30
+
+- **Vérification** - Relu: seul changement non commite sur 1792200000000-AddScoringVersionToEvent.ts est une ligne vide finale, skill inchangee (claude-code/agent)
+- **Vérification** - Migration scoring_version dans worker-event (claude-code/agent)
+- **Vérification** - Relu: le worker-ranking exclut desormais les posts deja likes ou commentes (isEligiblePost), au lieu de les retrograder; aucune mention dans les skills, rien a corriger (claude-code/claude-sonnet-5-5)
+- **Vérification** - Relu: EventRankingClient.upcoming prend excludedIds, EventCandidateService les calcule avant l'appel; aucune mention dans les skills, rien a corriger (claude-code/claude-sonnet-5-5)
+- **Vérification** - RankingJobWriter recopie traceparent du job source (workers-runners#45) : phrase ajoutee a la section Contexte de trace (claude-code/sonnet-5.5)
+
+## 2026-10-28
+
+- **Vérification** - worker-ranking: 3 workers par queue, producteurs ranking indirects (catalogue), drapeau Jev (claude-code/claude-sonnet-5-5)
+
+## 2026-10-19
+
+- **Vérification** - relue apres le rangement par role de fichier du ticket 4.2 : les skills ne citent aucun fichier deplace, regles inchangees; regle de fichier unique consignee dans scaffold-microservice (claude-code/agent)
+- **Vérification** - relue apres le ticket 4.1 : regles inchangees (derive = squelettes ranking et lockfiles), lecon ajoutee dans event-flow (claude-code/agent)
+
+## 2026-10-17
+
+- **Vérification** - Verifie: worker-event recoit une migration de test manquante; aucun flux de job ni handler modifie (claude-code/agent)
+
+## 2026-10-14
+
+- **Vérification** - Propagate Logger.setDefaultConfig in workers (claude-code/agent)
+
+## 2026-10-13
+
+- **Vérification** - Runners instrumentes (tracing.ts, monitoring, service.datadog.yaml): aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Correction: la copie de la migration commune dans worker-event et post-processor-event est necessaire (CI = base neuve reconstruite depuis leurs migrations) (claude-code/agent)
+- **Vérification** - Migration traceparent copiee dans worker-event: la skill db-migration la liste deja (claude-code/agent)
+- **Vérification** - Tache 2.11: restauration du contexte de trace (BaseWorker, SinglePostProcessor, BatchPostProcessor) via runInTraceContext / runBatchInTraceContext de database (claude-code/agent)
+- **Vérification** - Relu apres traceparent requis sur RedisEventMessage et createFollowUp: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Section contexte de trace des jobs (JobEnvelope.traceparent) (claude-code/agent)
+- **Vérification** - Validation trigger notify_job_audit_status_change avec emitterId safe (claude-code/agent)
+- **Vérification** - BaseWorker fallback emitter (claude-code/agent)
+- **Vérification** - Fallback pour emitter dans recordAuditStart et correction des tests pour contrainte NOT NULL sur job_audit.emitter (claude-code/agent)
+- **Vérification** - Chargement dynamique des migrations dans le test data-source de workers (claude-code/agent)
+- **Vérification** - Relu apres realignement de workers/src/test/migrations sur les migrations communes (dont traceparent): aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - lecons: precision que l'exemple ms-event n'est verifie qu'en local (claude-code/agent)
+- **Vérification** - worker-event: resolution retiree, alignement par versions (domain-event 3.10.1); lecons corrigees (pas de resolutions) (claude-code/agent)
+- **Vérification** - worker-event: resolution database 3.4.32 (copies multiples); skill inchangee, piege consigne (claude-code/agent)
+- **Leçon** - Une seule copie de @volontariapp/database dans un worker, sinon 'No mapping registered' (pitfall) (claude-code/agent)
+- **Vérification** - worker-event: limite eslint default project relevee a 20; skill inchangee, piege consigne (claude-code/agent)
+- **Leçon** - worker-event: limite de 8 specs pour le lint typed (pitfall) (claude-code/agent)
+- **Vérification** - worker-event: handler fallback delete avec acteur et refus des anciens jobs, test:unit ajoute, workers 1.3.37 (claude-code/agent)
+- **Leçon** - Un handler fallback rejoue avec l'acteur d'origine et refuse les anciens jobs (rule) (claude-code/agent)
+- **Vérification** - Bump messaging 2.24.0 et domain-event 3.10.0 dans worker-event: skill inchangee; piege de test worker-event consigne (claude-code/agent)
+- **Leçon** - worker-event: yarn test est casse, test:integration fait DROP SCHEMA (pitfall) (claude-code/agent)
+- **Vérification** - withFallback ms-event: 403 hors fallback, extraPayload; deleteEvent passe l'acteur au service (claude-code/agent)
+- **Vérification** - Ajout du piege 403 hors liste de court-circuit withFallback et de userRole obligatoire dans IFallbackDeleteEventJobPayload (messaging 2.24.0) (claude-code/agent)
+
+## 2026-10-12
+
+- **Vérification** - worker-social app.module: commentaire trigger, aucune regle modifiee (claude-code/agent)
+
+## 2026-10-11
+
+- **Leçon** - Notification WebSocket de fin de job: mapping messaging obligatoire (pitfall) (claude-code/agent)
+- **Leçon** - Outbox: un push BullMQ en echec laisse le job FAILED, jamais repousse (pitfall) (claude-code/agent)
+
+## 2026-10-07
+
+- **Vérification** - Add EventQueueModel provider and entity registration in worker-social for domain services (claude-code/agent)
+- **Vérification** - Relu : workers-runners bump @volontariapp/* (logger 0.3.0) et factories de test worker-event alignees (idempotencyKey, eventId, coverStatus), aucune regle modifiee (claude-code/agent)
+- **Vérification** - Relu contre messaging/jobs : arborescence storage (SCAN_FILE, CLEANUP_FILES, StorageQueue) toujours exacte, aucun changement necessaire (claude-code/agent)
+
+## 2026-10-06
+
+- **Vérification** - Relu apres ajout du domaine storage dans messaging (jobs et events), procedure inchangee; arborescence des jobs completee (claude-code/claude-sonnet-5-5)
+- **Vérification** - faits vérifiés (IJobHandler local, statuts outbox, bug P4, handlers sans producteur), job_catalogue.py, liens et erreurs typées corrigés (claude-code/claude-opus-5-5)
+- **Vérification** - migration au format OKF v0.2 (setup agentique repris d'Aureum, multi-repo) (claude-code/claude-opus-5-5)

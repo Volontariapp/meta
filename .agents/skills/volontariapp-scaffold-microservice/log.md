@@ -1,0 +1,207 @@
+# Historique
+
+## 2026-10-30
+
+- **Vérification** - Relu: changement de test uniquement (Date au lieu de chaines ISO dans participation.query.controller.spec.ts), skill inchangee (claude-code/agent)
+- **Vérification** - Relu: seul changement non commite sur 1792200000000-AddScoringVersionToEvent.ts est une ligne vide finale, skill inchangee (claude-code/agent)
+- **Vérification** - add attendance check-in routes to api-gateway (claude-code/agent)
+- **Vérification** - enrich impact score crediter with dynamic scoring (claude-code/agent)
+- **Vérification** - Migration scoring_version dans worker-event (claude-code/agent)
+- **Vérification** - ScoringVersion dans ms-event (claude-code/agent)
+- **Vérification** - Handlers gRPC SetEventAttendance et GetEventAttendees dans ms-social (claude-code/agent)
+- **Vérification** - Migration et entité ImpactScoreCredits dans ms-user (claude-code/agent)
+- **Vérification** - Ajout migration test domain-event scoring_version (claude-code/agent)
+- **Vérification** - Changements staged dans npm-packages pour scoring (claude-code/agent)
+- **Vérification** - Vérification contrats proto et packages (claude-code/agent)
+- **Vérification** - Ajout contrats SetEventAttendance, GetEventAttendees et scoring_version (claude-code/agent)
+- **Vérification** - Relu: le worker-ranking exclut desormais les posts deja likes ou commentes (isEligiblePost), au lieu de les retrograder; aucune mention dans les skills, rien a corriger (claude-code/claude-sonnet-5-5)
+- **Vérification** - Relu: feedMinItems passe de 20 a 100 dans worker-ranking default.config.json, aucune mention dans les skills, rien a corriger (claude-code/claude-sonnet-5-5)
+- **Vérification** - Relu: EventRankingClient.upcoming prend excludedIds, EventCandidateService les calcule avant l'appel; aucune mention dans les skills, rien a corriger (claude-code/claude-sonnet-5-5)
+- **Vérification** - Relu: feedMaxAgeDays passe de 7 a 60 dans worker-ranking default.config.json, aucune mention dans la skill, rien a corriger (claude-code/sonnet-5.5)
+- **Vérification** - Relu: feedMaxAgeDays passe de 7 a 60 dans worker-ranking default.config.json, aucune mention dans la skill, rien a corriger (agent:claude)
+
+## 2026-10-29
+
+- **Vérification** - Relu les bumps de version et changelogs regeneres par changeset apres fusion de main (database minor, outbox patch, dependants en patch) : aucune regle, chemin ou commande de la skill concernee. (claude-code/agent)
+- **Vérification** - Revalide apres prettier sur event-queue.pusher.ts : import remis sur une ligne, contenu inchange (continueTraceparent dans le pusher). (claude-code/agent)
+- **Vérification** - Relu les changements npm-packages : bumps de version et changelog des domain-*, database, outbox, post-processors, workers, storage-pipeline par changeset ; continueTraceparent n'ajoute aucune etape de scaffold (les runners existants le recoivent par la version de database). (claude-code/agent)
+
+## 2026-10-28
+
+- **Vérification** - request-flow.json: section asynchrone native (spans Consumer/Producer), aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json: trois Service Maps async ajoutees, aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json: Service Map centree sur api-gateway, aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json: coordonnees free-layout remises a l'echelle, aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json sans widget list_stream, README ajuste: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json: schema list_stream corrige, aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json: champ service vide requis par topology_map, aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json aplati sans widget group: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - request-flow.json passe en layout free: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - relue apres ajout de request-flow.json: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Scripts remplaces par la CLI meta (yarn meta), repos.json source unique (claude-code/agent)
+- **Vérification** - skill relue et alignée sur le code (process:agent)
+- **Vérification** - skill relue et alignée sur le code (process:agent)
+- **Vérification** - skill relue et alignée sur le code (process:agent)
+- **Vérification** - skill relue et alignée sur le code (process:agent)
+- **Vérification** - skill relue et alignée sur le code (process:agent)
+- **Vérification** - skill relue et alignée sur le code (process:agent)
+- **Vérification** - skill relue et alignée sur le code (process:agent)
+- **Vérification** - skill relue et alignée sur le code (process:agent)
+- **Vérification** - skill relue et alignée sur le code (process:agent)
+- **Vérification** - skill relue et alignée sur le code (process:agent)
+- **Vérification** - skill relue et alignée sur le code (process:agent)
+- **Vérification** - skill relue et alignée sur le code (process:agent)
+- **Vérification** - skill relue et alignée sur le code (process:agent)
+
+## 2026-10-27
+
+- **Vérification** - Dependabot en une seule PR (process:agent)
+- **Vérification** - chemin templates et reapplication apres merge de main (process:agent)
+- **Vérification** - reapplication apres merge de main (process:agent)
+- **Vérification** - labels docker-e2e et docker-and-e2e (process:agent)
+- **Vérification** - post-processor-post: PostMediaModel ajoute au forFeature de DomainPostModule (piege relations par chaine) (claude-code/agent)
+- **Vérification** - Relu apres modification de api-gateway/src/modules/ws-proxy : la skill ne decrit pas ws-proxy (etape 7 = routes REST), aucun changement (claude-code/agent)
+
+## 2026-10-21
+
+- **Vérification** - update ranking-sealed-secret for prod ms-ranking (claude-code/agent)
+- **Vérification** - use fixed golden personas offset for user batch indexing (claude-code/agent)
+- **Vérification** - enrich seed with 500 events, 500 posts, 500 users and materials with quantities (claude-code/agent)
+- **Vérification** - use os.tmpdir for seed images cache (claude-code/agent)
+- **Vérification** - refactor system seed v2 in api-gateway into dedicated sub-services (claude-code/agent)
+
+## 2026-10-20
+
+- **Vérification** - Commit deploy@47e4a73 vérifié (claude-code/agent)
+- **Vérification** - Ajout de MS_POST_URL et ingress ms-post pour worker-ranking (claude-code/agent)
+
+## 2026-10-19
+
+- **Vérification** - Relu le commit cc6b759 (secrets scelles ms-ranking, deja commites a la main apres le wizard) et l'ajout de MS_RANKING_URL dans apps/base/api-gateway/deployment.yaml (81a2615) : conformes aux lecons deja consignees (claude-code/agent)
+- **Vérification** - Relu les secrets scelles ms-ranking produits par le wizard (ranking-sealed-secret.yaml, ms-ranking-password dans shared-infra/db-sealed-secret.yaml, ressource ajoutee a la kustomization de l'overlay) : conformes a la lecon deja consignee, aucun changement de skill (claude-code/agent)
+- **Vérification** - Relu apres le ticket 1.4 (manifests ms-ranking dans la PR deploy #25, wizard de scellement, bumps de sous-modules) ; lecons ajoutees pour deploy-gitops et sealed-secrets (claude-code/agent)
+- **Vérification** - Relu le commit bot a9d0ce0 d'outbox-runners (ci-tools, versions exactes des dependances dans les package.json et yarn.lock des runners) : aucun impact sur la skill (claude-code/agent)
+- **Vérification** - relue apres le rangement par role de fichier du ticket 4.2 : les skills ne citent aucun fichier deplace, regles inchangees; regle de fichier unique consignee dans scaffold-microservice (claude-code/agent)
+- **Leçon** - Un fichier a un seul role : la classe seule dans son fichier, le reste dans interfaces, types, constants, helpers (rule) (claude-code/agent)
+- **Vérification** - relue apres le ticket 4.1 : regles inchangees (derive = squelettes ranking et lockfiles), lecon ajoutee dans event-flow (claude-code/agent)
+- **Vérification** - snap-release normalise le dossier de coverage, aucune regle de scaffold changee (human:victor)
+- **Vérification** - ms-social AdminGetRecommendedEventIds ajoute, aucune regle changee (human:victor)
+- **Vérification** - paquet proto ranking ajoute, aucune regle changee (human:victor)
+- **Vérification** - ms-ranking: squelette NestJS copie de ms-storage, migrations communes (human:victor)
+- **Vérification** - port ranking, migration apres publication image (human:victor)
+
+## 2026-10-17
+
+- **Vérification** - Verifie: dependances et migrations de test alignees sur ms-event; aucune etape de scaffold modifiee (claude-code/agent)
+- **Vérification** - Verifie: migration cover_file_id copiee dans worker-event; aucune etape de scaffold modifiee (claude-code/agent)
+- **Vérification** - Verifie: ajout du processor ws-service user-impact-score-credited, du crediter outbox dans pp-user et bumps domain-event; aucune etape de scaffold modifiee (claude-code/agent)
+- **Vérification** - Verifie: ajout d'un evenement de notification (user.impact_score_credited) dans messaging et shared; aucune etape de scaffold modifiee (claude-code/agent)
+- **Vérification** - Verifie: ajout du processor event-finished-impact-score et de la migration impact_score_credits; aucune etape de scaffold modifiee (claude-code/agent)
+- **Vérification** - Verifie: seuls domain-event (emission event.finished avec awardedImpactScore, migration de test) et bumps de version ont change; aucune etape de scaffold modifiee (claude-code/agent)
+- **Vérification** - ticket 5.11: coverUrl/coverStatus et validation sur les evenements; relu (claude-code/agent)
+- **Vérification** - ticket 5.11: contrat EventDTO (coverUrl, CoverStatusWeb) et bump de versions; regles inchangees (claude-code/agent)
+- **Vérification** - test ms-event: assertion de valeur au lieu de toHaveProperty; regles inchangees (claude-code/agent)
+- **Vérification** - ticket 5.9: updateEvent cover via update_mask, jeton interne et statut de scan en nom d'enum dans ms-event; relu, aucune regle de la skill ne change (claude-code/agent)
+
+## 2026-10-16
+
+- **Vérification** - ms-post: mapScanStatus accepte les noms d'enum gRPC; lecon ajoutee (claude-code/agent)
+- **Vérification** - gateway: mapper de statut de media (noms d'enum), aucune regle de scaffold modifiee (claude-code/agent)
+- **Vérification** - ms-post: getPost et listPosts passent readerId (CurrentUser); aucune autre regle modifiee (claude-code/agent)
+- **Vérification** - ticket 5.7: gateway post media url, aucune regle de scaffold modifiee (claude-code/agent)
+- **Vérification** - contracts 4.7.0 (PostWeb media/mediaStatus) et bumps patch en cascade; aucune regle modifiee (claude-code/agent)
+- **Vérification** - contracts 4.6.0 et bumps patch propages aux dependants internes; aucune regle modifiee (claude-code/agent)
+- **Vérification** - api-gateway: avatarFileId relaye, avatarUrl via PublicFileUrlService, config storage.publicBaseUrl, domain-storage 0.12.0 (claude-code/agent)
+- **Vérification** - domain-storage 0.12.0: sous-chemin ./enums, catalogue mis a jour, storage-pipeline 0.3.4 (claude-code/agent)
+- **Vérification** - api-gateway: avatarFileId relaye dans UpdateUserRequestDTO, factory de test utilisateur, blocage domain-storage consigne; aucune regle du playbook modifiee (claude-code/agent)
+- **Vérification** - ms-post createPost: garde 409 sur titre duplique restaure (il etait actif via DATABASE_ERROR), lecon corrigee (claude-code/agent)
+- **Vérification** - ms-post createPost: garde mort retire, stack conservee dans le log, helpers de test renommes en post-command.*; aucune regle modifiee (claude-code/agent)
+- **Vérification** - ms-post createPost relu (token interne, media_status, storage-client 0.3.0); aucune regle modifiee (claude-code/agent)
+- **Vérification** - ms-user: relu storage.client.ts (supprime) et user.transformer.ts (avatarFileId), aucune regle modifiee (claude-code/agent)
+- **Vérification** - verify user avatar attachment controller tests with storage client (agent/antigravity)
+- **Vérification** - verification suppression legacy storage client et config storage-client dans ms-user (claude-code/agent)
+- **Vérification** - storage-client 0.3.0: relais des erreurs metier de ms-storage, isStorageUnavailable et StorageUnavailableError; ligne ajoutee au catalogue (claude-code/sonnet-5-5)
+- **Vérification** - contracts: le module storage est exporte a la racine (src/index.ts), bump 4.5.0 et patchs en cascade (claude-code/sonnet-5-5)
+- **Vérification** - relue: renommage de DTO storage sans impact sur les etapes du playbook (claude-code/sonnet-5-5)
+- **Vérification** - relue: etape 7 deja a jour (DTO implements les Request de contracts), module storage suit le meme schema (claude-code/sonnet-5-5)
+- **Vérification** - contracts: src/gateway est ecrit a la main (types Request/WebResponse partages gateway et front), ajout du module gateway/storage (claude-code/sonnet-5-5)
+- **Vérification** - ms-storage: implement GetFileMetadata and DeleteFile handlers (ticket 3.8) (human:victoragahi)
+
+## 2026-10-15
+
+- **Vérification** - ms-storage confirmUpload: pipeline SYNC et bascule ASYNC (claude-code/agent)
+- **Vérification** - Use RejectionReason.MALWARE enum in confirm-upload integration test (process:fix-rejection-reason)
+- **Vérification** - Implement gRPC ConfirmUpload handler and ASYNC pipeline in ms-storage (ticket 3.6) (claude-code/agent)
+- **Vérification** - Expose models and repositories from @volontariapp/domain-storage root entrypoint (human:victor)
+- **Vérification** - Export models and repositories from root of domain-storage (process:export-domain-storage-root)
+- **Vérification** - Implement ConfirmFileAttachment gRPC handler in ms-storage (ticket 3.5) (process:implement-confirm-file-attachment)
+- **Vérification** - service-ci starts database dependencies, runs migrations, and executes integration tests (process:ci-integration-tests)
+- **Vérification** - Migrate storage service and controller tests to jest.spyOn without unbound-method exception (process:spies-refactor)
+- **Vérification** - Cleaned test mock typing using createMock and excluded src/test from tsconfig.build.json (process:ms-storage-test-mock-fix)
+- **Vérification** - ms-storage test linting enabled and s3 provider cleaned (process:ms-storage-s3-refactor)
+- **Vérification** - Add test:integration script (claude-code/agent)
+- **Vérification** - Add ms-storage GenerateUploadUrl handler (claude-code/agent)
+- **Vérification** - Separate unit and integration Jest configs in storage-pipeline (process:agent)
+- **Vérification** - Separate Run Unit Tests and Run Integration Tests steps (process:agent)
+- **Vérification** - Storage pipeline package (process:agent)
+- **Vérification** - Verify CI test-build and domain-package-ci MinIO support (process:agent)
+- **Vérification** - Allow UUIDv5 in comment and post command/query DTOs (process:agent)
+- **Vérification** - Allow UUIDv5 in search events query DTO (process:agent)
+
+## 2026-10-14
+
+- **Vérification** - Vérification DTO event coverFileId (agent:antigravity)
+- **Vérification** - ms-post: make postIdNamespace strictly required (claude-code/agent)
+- **Vérification** - ms-post: clean spec typing with interfaces (claude-code/agent)
+- **Vérification** - ms-post: clean up controller spec linting (claude-code/agent)
+- **Vérification** - ms-post: integrate StorageClient and confirmPostAttachment (claude-code/agent)
+- **Vérification** - Add storage-client package (agent:antigravity)
+- **Vérification** - Configure outbox.logger to json in production (claude-code/agent)
+- **Vérification** - Add Logger.setDefaultConfig to microservices bootstrap (claude-code/agent)
+- **Vérification** - Update logger test digest (claude-code/agent)
+- **Vérification** - Bump logger to 0.4.0 in monorepo packages (claude-code/agent)
+- **Vérification** - Bump dependencies across all microservices and runners (claude-code/agent)
+
+## 2026-10-13
+
+- **Vérification** - Lockfile regenere: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Runners instrumentes (tracing.ts, monitoring, service.datadog.yaml): aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - enableShutdownHooks ajoute dans main.ts: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - DD_ENV ajoute au compose: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - monitoring 2.2.0: echantillonnage, environnement et arret propre documentes dans trace-async-flow (claude-code/agent)
+- **Vérification** - Correction: la copie de la migration commune dans worker-event et post-processor-event est necessaire (CI = base neuve reconstruite depuis leurs migrations) (claude-code/agent)
+- **Vérification** - Migration traceparent copiee dans post-processor-event: la skill db-migration la liste deja (claude-code/agent)
+- **Vérification** - Migration traceparent copiee dans worker-event: la skill db-migration la liste deja (claude-code/agent)
+- **Vérification** - Montee de post-processors/database dans les post-processors: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Montee de workers/database dans les worker-*: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Montee de database/outbox dans les runners: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Tache 2.11: restauration du contexte de trace (BaseWorker, SinglePostProcessor, BatchPostProcessor) via runInTraceContext / runBatchInTraceContext de database (claude-code/agent)
+- **Vérification** - Correction: seul ws-service a une base propre a migrer; post-processor-event et worker-event partagent ms_event avec ms-event (claude-code/agent)
+- **Vérification** - Migration commune a copier aussi dans ws-service, post-processor-event et worker-event (8 dossiers); gather: traceparent stocke puis rejoue via createFollowUp (claude-code/agent)
+- **Vérification** - GatherStateMetadata.traceparent devient requis (lignes anterieures sans le champ: normalizeTraceparent) (claude-code/agent)
+- **Vérification** - GatherStateMetadata.traceparent (jsonb, sans migration) rejoue sur l'evenement de completion du gather (claude-code/agent)
+- **Vérification** - Relu apres traceparent requis sur RedisEventMessage et createFollowUp: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Relu apres reformatage Prettier de jobs-outbox.pusher.ts (import sur plusieurs lignes): contenu de la skill inchange (claude-code/agent)
+- **Vérification** - Relu apres capture du traceparent et migration job_audit trigger (ms-user 6c360de): aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Migration commune 1792000000000 répliquée (claude-code/agent)
+- **Vérification** - BaseWorker fallback emitter (claude-code/agent)
+- **Vérification** - Fallback pour emitter dans recordAuditStart et correction des tests pour contrainte NOT NULL sur job_audit.emitter (claude-code/agent)
+- **Vérification** - Chargement dynamique des migrations dans le test data-source de workers (claude-code/agent)
+- **Vérification** - Relu apres realignement de workers/src/test/migrations sur les migrations communes (dont traceparent): aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Relu apres bump de version et changelogs (changeset version sur database, cascade domain-*, outbox, workers, post-processors): aucune regle ni commande de la skill ne change (claude-code/agent)
+- **Vérification** - Relu apres ajout de la migration commune AddTraceparent et de la colonne traceparent sur OutboxModel: aucune regle ni commande de la skill ne change (claude-code/agent)
+- **Vérification** - worker-event: resolution retiree, alignement par versions (domain-event 3.10.1); lecons corrigees (pas de resolutions) (claude-code/agent)
+- **Vérification** - worker-event: resolution database 3.4.32 (copies multiples); skill inchangee, piege consigne (claude-code/agent)
+- **Vérification** - worker-event: limite eslint default project relevee a 20; skill inchangee, piege consigne (claude-code/agent)
+- **Vérification** - worker-event: handler fallback delete avec acteur et refus des anciens jobs, test:unit ajoute, workers 1.3.37 (claude-code/agent)
+- **Vérification** - Bump messaging 2.24.0 et domain-event 3.10.0 dans worker-event: skill inchangee; piege de test worker-event consigne (claude-code/agent)
+- **Vérification** - withFallback ms-event: 403 hors fallback, extraPayload; deleteEvent passe l'acteur au service (claude-code/agent)
+- **Vérification** - Relu apres bump de versions (messaging 2.24.0 et dependants) par changeset : skill inchangee (claude-code/agent)
+- **Vérification** - Relu apres reformatage lint-staged de event.service.unit.spec.ts : la skill ne cite pas ce fichier de test, aucun changement (claude-code/agent)
+- **Vérification** - Relu apres EventService.delete(id, actorId, actorRole) obligatoires dans domain-event 3.10.0 : la skill ne cite pas ce comportement, aucun changement (claude-code/agent)
+
+## 2026-10-12
+
+- **Vérification** - Création du playbook de scaffolding d'un nouveau microservice (claude-code/agent)
+- **Création** - squelette OKF généré par evolve.py new (claude-code/agent)
+- **Leçon** - Création de la skill (decision) (claude-code/agent)

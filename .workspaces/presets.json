@@ -1,0 +1,271 @@
+{
+  "template": {
+    "settings": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+      "editor.formatOnPaste": false,
+      "editor.tabSize": 2,
+      "editor.insertSpaces": true,
+      "editor.detectIndentation": false,
+      "files.eol": "\n",
+      "files.trimTrailingWhitespace": true,
+      "files.insertFinalNewline": true,
+      "eslint.enable": true,
+      "eslint.useFlatConfig": true,
+      "search.exclude": {
+        "**/node_modules": true,
+        "**/dist": true,
+        "**/.yarn": true
+      }
+    },
+    "extensions": {
+      "recommendations": [
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "ms-vscode.vscode-typescript-next",
+        "firsttris.vscode-jest-runner",
+        "EditorConfig.EditorConfig",
+        "bufbuild.vscode-buf"
+      ]
+    }
+  },
+  "presets": [
+    {
+      "id": "01-Full-Galaxy",
+      "description": "Tout l ecosysteme",
+      "repos": null
+    },
+    {
+      "id": "02-Web-Flow",
+      "description": "Mobile + Gateway + Microservices",
+      "repos": [
+        "nativapp",
+        "api-gateway",
+        "ms-user",
+        "ms-post",
+        "ms-event",
+        "ms-social",
+        "ms-storage",
+        "ms-ranking"
+      ]
+    },
+    {
+      "id": "03-Backend-Heavy",
+      "description": "Gateway + MS + Outboxes + Protos",
+      "repos": [
+        "api-gateway",
+        "ms-user",
+        "ms-post",
+        "ms-event",
+        "ms-social",
+        "ms-storage",
+        "ms-ranking",
+        "outbox-runners",
+        "proto-registry"
+      ]
+    },
+    {
+      "id": "04-Lib-Architect",
+      "description": "NPM Packages + Outbox Runners + Protos",
+      "repos": [
+        "npm-packages",
+        "outbox-runners",
+        "proto-registry"
+      ]
+    },
+    {
+      "id": "05-MS-Squad",
+      "description": "Les microservices NestJS principaux",
+      "repos": [
+        "ms-user",
+        "ms-post",
+        "ms-event",
+        "ms-social"
+      ]
+    },
+    {
+      "id": "06-DevOps-Control",
+      "description": "CI Tools + Deploy + Meta",
+      "repos": [
+        ".",
+        "ci-tools",
+        "deploy"
+      ]
+    },
+    {
+      "id": "07-Auth-Identity",
+      "description": "MS User + API Gateway + NPM Packages",
+      "repos": [
+        "ms-user",
+        "api-gateway",
+        "npm-packages"
+      ]
+    },
+    {
+      "id": "08-Social-Network",
+      "description": "MS Social + Outbox + Proto",
+      "repos": [
+        "ms-social",
+        "outbox-runners",
+        "proto-registry"
+      ]
+    },
+    {
+      "id": "09-Content-Engine",
+      "description": "MS Post + Outbox + MS User",
+      "repos": [
+        "ms-post",
+        "outbox-runners",
+        "ms-user"
+      ]
+    },
+    {
+      "id": "10-Event-Manager",
+      "description": "MS Event + Outbox + MS User",
+      "repos": [
+        "ms-event",
+        "outbox-runners",
+        "ms-user"
+      ]
+    },
+    {
+      "id": "11-Data-Bridges",
+      "description": "NPM Packages + Outbox Runners",
+      "repos": [
+        "npm-packages",
+        "outbox-runners"
+      ]
+    },
+    {
+      "id": "12-API-Contract",
+      "description": "Proto Registry + API Gateway",
+      "repos": [
+        "proto-registry",
+        "api-gateway"
+      ]
+    },
+    {
+      "id": "13-Mobile-Design",
+      "description": "Nativapp + API Gateway",
+      "repos": [
+        "nativapp",
+        "api-gateway"
+      ]
+    },
+    {
+      "id": "14-Automation-Lab",
+      "description": "Meta + CI Tools",
+      "repos": [
+        ".",
+        "ci-tools"
+      ]
+    },
+    {
+      "id": "15-Emergency-Deploy",
+      "description": "Deploy + CI Tools + Meta",
+      "repos": [
+        "deploy",
+        "ci-tools",
+        "."
+      ]
+    },
+    {
+      "id": "16-MS-Gateway-Libs",
+      "description": "MS + API Gateway + NPM Packages",
+      "repos": [
+        "ms-user",
+        "ms-post",
+        "ms-event",
+        "ms-social",
+        "api-gateway",
+        "npm-packages"
+      ]
+    },
+    {
+      "id": "17-MS-Outbox-Libs",
+      "description": "MS + Outboxes + NPM Packages",
+      "repos": [
+        "ms-user",
+        "ms-post",
+        "ms-event",
+        "ms-social",
+        "outbox-runners",
+        "npm-packages"
+      ]
+    },
+    {
+      "id": "18-Global-Backend-Dev",
+      "description": "Moteur backend complet avec librairies",
+      "repos": [
+        "api-gateway",
+        "ws-service",
+        "ms-user",
+        "ms-post",
+        "ms-event",
+        "ms-social",
+        "ms-storage",
+        "ms-ranking",
+        "outbox-runners",
+        "workers-runners",
+        "post-processors-runner",
+        "npm-packages",
+        "proto-registry"
+      ]
+    },
+    {
+      "id": "19-User-Domain",
+      "description": "MS User + Gateway + NPM Packages",
+      "repos": [
+        "ms-user",
+        "api-gateway",
+        "npm-packages"
+      ]
+    },
+    {
+      "id": "20-Social-Domain",
+      "description": "MS Social + Gateway + NPM Packages + Proto",
+      "repos": [
+        "ms-social",
+        "api-gateway",
+        "npm-packages",
+        "proto-registry"
+      ]
+    },
+    {
+      "id": "21-Post-Domain",
+      "description": "MS Post + Gateway + NPM Packages",
+      "repos": [
+        "ms-post",
+        "api-gateway",
+        "npm-packages"
+      ]
+    },
+    {
+      "id": "22-Event-Domain",
+      "description": "MS Event + Gateway + NPM Packages",
+      "repos": [
+        "ms-event",
+        "api-gateway",
+        "npm-packages"
+      ]
+    },
+    {
+      "id": "23-Workers-Flow",
+      "description": "Workers Runners + Outbox Runners",
+      "repos": [
+        "workers-runners",
+        "outbox-runners"
+      ]
+    },
+    {
+      "id": "24-Ranking-Domain",
+      "description": "MS Ranking + Gateway + NPM Packages + Proto",
+      "repos": [
+        "ms-ranking",
+        "api-gateway",
+        "npm-packages",
+        "proto-registry"
+      ]
+    }
+  ]
+}

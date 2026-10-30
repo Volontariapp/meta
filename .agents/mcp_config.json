@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "mesh-mcp": {
+      "command": "mesh-mcp",
+      "args": ["run"],
+      "env": {}
+    }
+  }
+}

@@ -1,0 +1,77 @@
+# Historique
+
+## 2026-10-30
+
+- **Vérification** - Relu: seul changement non commite sur 1792200000000-AddScoringVersionToEvent.ts est une ligne vide finale, skill inchangee (claude-code/agent)
+- **Vérification** - enrich impact score crediter with dynamic scoring (claude-code/agent)
+- **Vérification** - Migration scoring_version dans worker-event (claude-code/agent)
+- **Vérification** - Version bump post-processors (claude-code/agent)
+- **Vérification** - Relu: le worker-ranking exclut desormais les posts deja likes ou commentes (isEligiblePost), au lieu de les retrograder; aucune mention dans les skills, rien a corriger (claude-code/claude-sonnet-5-5)
+- **Vérification** - Relu: feedMinItems passe de 20 a 100 dans worker-ranking default.config.json, aucune mention dans les skills, rien a corriger (claude-code/claude-sonnet-5-5)
+- **Vérification** - Relu: EventRankingClient.upcoming prend excludedIds, EventCandidateService les calcule avant l'appel; aucune mention dans les skills, rien a corriger (claude-code/claude-sonnet-5-5)
+- **Vérification** - Relu: feedMaxAgeDays passe de 7 a 60 dans worker-ranking default.config.json, aucune mention dans la skill, rien a corriger (claude-code/sonnet-5.5)
+- **Vérification** - Relu: feedMaxAgeDays passe de 7 a 60 dans worker-ranking default.config.json, aucune mention dans la skill, rien a corriger (agent:claude)
+
+## 2026-10-29
+
+- **Vérification** - Relu les bumps de version et changelogs regeneres par changeset apres fusion de main (database minor, outbox patch, dependants en patch) : aucune regle, chemin ou commande de la skill concernee. (claude-code/agent)
+- **Vérification** - Relu le diff de post-processors : bump 3.3.15 vers 3.3.16 et CHANGELOG (dependances), aucune regle de remediation DLQ/XCLAIM concernee. (claude-code/agent)
+
+## 2026-10-27
+
+- **Vérification** - post-processor-post: PostMediaModel ajoute au forFeature de DomainPostModule (piege relations par chaine) (claude-code/agent)
+
+## 2026-10-19
+
+- **Vérification** - relue apres le rangement par role de fichier du ticket 4.2 : les skills ne citent aucun fichier deplace, regles inchangees; regle de fichier unique consignee dans scaffold-microservice (claude-code/agent)
+- **Vérification** - relue apres le ticket 4.1 : regles inchangees (derive = squelettes ranking et lockfiles), lecon ajoutee dans event-flow (claude-code/agent)
+
+## 2026-10-17
+
+- **Vérification** - Verifie: migrations de test de post-processor-event et suppression du resolutions database de worker-event; aucune procedure DLQ/XCLAIM modifiee (claude-code/agent)
+- **Vérification** - Verifie: seule la migration de test de worker-event a change; procedures DLQ/XCLAIM inchangees (claude-code/agent)
+- **Vérification** - Verifie: nouveau stream user:impact_score_credited consomme par ws-service; procedures DLQ/XCLAIM inchangees (nom du DLQ par groupe non verifie) (claude-code/agent)
+- **Vérification** - Verifie: seul le bump de version de post-processors a change; procedures DLQ/XCLAIM inchangees (claude-code/agent)
+- **Vérification** - Verifie: nouveau consumer group <group>-impact-score sur event:finished; procedures DLQ/XCLAIM inchangees (nom du DLQ par groupe non verifie) (claude-code/agent)
+- **Vérification** - Verifie: seul le bump de version de post-processors a change; aucune procedure DLQ/XCLAIM modifiee (claude-code/agent)
+- **Vérification** - ticket 5.11: contrat EventDTO (coverUrl, CoverStatusWeb) et bump de versions; regles inchangees (claude-code/agent)
+
+## 2026-10-16
+
+- **Vérification** - bump patch de post-processors par changeset version (cascade contracts 4.7.0); aucune regle modifiee (claude-code/agent)
+- **Vérification** - bumps patch de messaging et outbox seulement (propagation du changeset contracts), procedure inchangee (claude-code/agent)
+- **Vérification** - contracts: le module storage est exporte a la racine (src/index.ts), bump 4.5.0 et patchs en cascade (claude-code/sonnet-5-5)
+- **Vérification** - relue: seul le bump de version de post-processors change, aucune regle impactee (claude-code/sonnet-5-5)
+
+## 2026-10-14
+
+- **Vérification** - Package version bumps (agent:antigravity)
+- **Vérification** - Bump post-processors for logger 0.4.0 (claude-code/agent)
+- **Vérification** - Verify post-processors runner and dlq remediation dependencies (claude-code/agent)
+
+## 2026-10-13
+
+- **Vérification** - Lockfile regenere: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Runners instrumentes (tracing.ts, monitoring, service.datadog.yaml): aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Migration traceparent copiee dans post-processor-event: la skill db-migration la liste deja (claude-code/agent)
+- **Vérification** - Migration traceparent copiee dans worker-event: la skill db-migration la liste deja (claude-code/agent)
+- **Vérification** - Montee de post-processors/database dans les post-processors: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Montee de workers/database dans les worker-*: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Tache 2.11: restauration du contexte de trace (BaseWorker, SinglePostProcessor, BatchPostProcessor) via runInTraceContext / runBatchInTraceContext de database (claude-code/agent)
+- **Vérification** - GatherStateMetadata.traceparent devient requis (lignes anterieures sans le champ: normalizeTraceparent) (claude-code/agent)
+- **Vérification** - Relu apres bump database 3.7.0 et cascade des dependants: aucune regle ne change (claude-code/agent)
+- **Vérification** - Relu apres traceparent requis sur RedisEventMessage et createFollowUp: aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Relu apres capture du traceparent et migration job_audit trigger (ms-user 6c360de): aucune regle de la skill ne change (claude-code/agent)
+- **Vérification** - Relu apres bump de version et changelogs (changeset version sur database, cascade domain-*, outbox, workers, post-processors): aucune regle ni commande de la skill ne change (claude-code/agent)
+- **Vérification** - worker-event: resolution retiree, alignement par versions (domain-event 3.10.1); lecons corrigees (pas de resolutions) (claude-code/agent)
+- **Vérification** - worker-event: resolution database 3.4.32 (copies multiples); skill inchangee, piege consigne (claude-code/agent)
+- **Vérification** - worker-event: limite eslint default project relevee a 20; skill inchangee, piege consigne (claude-code/agent)
+- **Vérification** - worker-event: handler fallback delete avec acteur et refus des anciens jobs, test:unit ajoute, workers 1.3.37 (claude-code/agent)
+- **Vérification** - Bump messaging 2.24.0 et domain-event 3.10.0 dans worker-event: skill inchangee; piege de test worker-event consigne (claude-code/agent)
+- **Vérification** - Relu apres bump de versions (messaging 2.24.0 et dependants) par changeset : skill inchangee (claude-code/agent)
+
+## 2026-10-12
+
+- **Vérification** - Création du playbook de remédiation asynchrone DLQ et Streams (claude-code/agent)
+- **Création** - squelette OKF généré par evolve.py new (claude-code/agent)
+- **Leçon** - Création de la skill (decision) (claude-code/agent)

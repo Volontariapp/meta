@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "mesh-mcp": {
+      "args": [],
+      "command": "mesh-mcp"
+    }
+  }
+}

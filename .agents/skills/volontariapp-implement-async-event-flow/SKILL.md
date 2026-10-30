@@ -1,0 +1,327 @@
+---
+name: volontariapp-implement-async-event-flow
+description: "Guide pas-à-pas pour concevoir et implémenter un flux asynchrone complet (messaging -> outbox -> post-processors -> ws-service -> client)."
+type: Agent Skill
+title: Implement Async Event Flow
+tags: [async, outbox, redis-streams, post-processors, websocket, saga]
+status: stable
+paths:
+  - "npm-packages/packages/messaging/src/events/**"
+  - "npm-packages/packages/messaging/src/websockets/**"
+  - "npm-packages/packages/outbox/src/**"
+  - "npm-packages/packages/post-processors/src/**"
+  - npm-packages/packages/shared/src/enums/streams.enum.ts
+  - "npm-packages/packages/domain-user/src/repositories/**"
+  - "ws-service/src/post-processors/**"
+  - ws-service/src/core/services/gather-state.service.ts
+  - "post-processors-runner/**"
+mesh_keys:
+  - post-processors-runner
+  - messaging
+  - post-processor
+  - postprocessor
+  - streams.
+  - saga
+  - _failed
+  - gather
+  - ws-service
+  - websocket
+generated:
+  by: claude-code/claude-opus-5-5
+  at: "2026-10-06T08:22:12Z"
+sources:
+  - id: messaging
+    resource: npm-packages/packages/messaging/src/events
+    title: "Contrats d'événements"
+  - id: gather
+    resource: ws-service/src/core/services/gather-state.service.ts
+    title: Scatter-Gather ws-service
+  - id: c3-async
+    resource: docs/architecture/C3-Async-Patterns-And-Flows.md
+    title: C3 Async Patterns and Flows
+  - id: streams
+    resource: npm-packages/packages/shared/src/enums/streams.enum.ts
+    title: Enum Streams
+  - id: gather
+    resource: ws-service/src/post-processors/base-gather.post-processor.ts
+    title: BaseGatherPostProcessor
+  - id: gather-state
+    resource: ws-service/src/core/services/gather-state.service.ts
+    title: GatherStateService (table gather_state)
+  - id: registry
+    resource: npm-packages/packages/messaging/src/sagas/gather-registry.ts
+    title: SAGA_GATHER_COMPLETION_MAPPING
+verified:
+  - by: claude-code/agent
+    at: "2026-10-29T12:15:54Z"
+    digest: 248b4b6d3728e2ba
+  - by: claude-code/agent
+    at: "2026-10-29T17:22:27Z"
+    digest: 3948a49d8aeac949
+  - by: claude-code/agent
+    at: "2026-10-30T10:54:43Z"
+    digest: 2bbc9146a97dd48b
+  - by: claude-code/agent
+    at: "2026-10-30T10:56:24Z"
+    digest: 750265fe9ab9040f
+  - by: claude-code/agent
+    at: "2026-10-30T11:45:18Z"
+    digest: 4cd316afb08e2d0e
+---
+
+# Guide : Implémenter un Flux Asynchrone End-to-End
+
+Dans Volontariapp, **aucun microservice n'écrit directement dans Redis**. Tout traitement asynchrone (1:N) passe par le **Transactional Outbox Pattern**, consommé par les **Post-Processors**, agrégé via **Scatter-Gather** dans `ws-service`, et notifié au client `nativapp` via WebSockets.
+
+---
+
+## Vue d'Ensemble du Pipeline
+
+```
+[1. Contrat SSOT]   npm-packages/packages/messaging (Enum, Interface, Registre)
+         ↓
+[2. Émetteur]       npm-packages/packages/domain-<d> (Transaction ACID + EventQueueEntity)
+         ↓
+[3. Démon Outbox]   outbox-<d> runner (Automatique : Postgres -> Redis Stream)
+         ↓
+[4. Consommateur]   post-processors-runner/post-processor-<d> (BatchPostProcessor)
+         ↓
+[5. Feedback Stream] post-processor pousse l'événement de feedback (ou compensation)
+         ↓
+[6. Scatter-Gather] ws-service (Agrège les feedbacks 2/2 -> Push WebSocket)
+         ↓
+[7. Frontend]       nativapp (Écoute Socket -> Invalidation TanStack Query)
+```
+
+---
+
+> [!TIP]
+> **Guides Approfondis (Deep-Dive) :**
+> Si vous êtes bloqué sur une étape précise ou avez besoin d'exemples de code exhaustifs, consultez les fiches dédiées dans `references/` :
+> - 01-messaging-contracts.md ([`references/01-messaging-contracts.md`](/volontariapp-implement-async-event-flow/references/01-messaging-contracts.md)) (Typage, Enums, Registres)
+> - 02-transactional-outbox.md ([`references/02-transactional-outbox.md`](/volontariapp-implement-async-event-flow/references/02-transactional-outbox.md)) (QueryRunner, ACID, Outbox)
+> - 03-post-processors.md ([`references/03-post-processors.md`](/volontariapp-implement-async-event-flow/references/03-post-processors.md)) (Batch/Single, Idempotence, Sagas)
+> - 04-scatter-gather-ws.md ([`references/04-scatter-gather-ws.md`](/volontariapp-implement-async-event-flow/references/04-scatter-gather-ws.md)) (GatherStateService, Redis WS, Socket.io)
+> - 05-nativapp-handling.md ([`references/05-nativapp-handling.md`](/volontariapp-implement-async-event-flow/references/05-nativapp-handling.md)) (HTTP 206 de fallback, listeners WebSocket, React Query)
+> - 06-saga-pattern-choreography.md ([`references/06-saga-pattern-choreography.md`](/volontariapp-implement-async-event-flow/references/06-saga-pattern-choreography.md)) (Chorégraphie de Sagas, Compensations & SagaStatus)
+
+---
+
+## Étape 1 : Définir les Contrats dans `npm-packages/packages/messaging` (SSOT)
+> 📖 *Détails complets :* 01-messaging-contracts.md ([`references/01-messaging-contracts.md`](/volontariapp-implement-async-event-flow/references/01-messaging-contracts.md))
+
+Tous les types d'événements et leurs structures de données **doivent** résider dans `messaging`.
+
+1. **Déclarer la constante d'événement** dans `packages/messaging/src/events/<domaine>/payloads.ts` :
+   ```typescript
+   export const EventEventMessagingType = {
+     EVENT_CREATED: 'event.created',
+     EVENT_CREATION_SUCCESSFULL: 'event.creation.successfull',
+     EVENT_CREATION_FAILED: 'event.creation.failed',
+   } as const;
+   ```
+
+2. **Définir l'interface du Payload** dans le même fichier :
+   ```typescript
+   export interface IEventCreatedPayload {
+     eventId: string;
+     localisationName: string;
+     organizerId: string;
+   }
+   ```
+
+3. **Enregistrer l'événement dans le registre global** (`packages/messaging/src/events/index.ts`) :
+   ```typescript
+   export interface EventRegistry {
+     [EventEventMessagingType.EVENT_CREATED]: IEventCreatedPayload;
+     // ...
+   }
+   ```
+
+4. **Si l'événement a un retour WebSocket**, l'ajouter dans `packages/messaging/src/websockets/` :
+   - Déclarer dans `<domaine>/index.ts` : `EventWebsocketMessagingType.EVENT_CREATED`.
+   - Enregistrer dans `WebsocketEventRegistry`.
+
+5. **Déclarer le stream Redis** dans `npm-packages/packages/shared/src/enums/streams.enum.ts` :
+   ```typescript
+   export enum EventStream {
+     EVENT_CREATED = 'event:created',
+   }
+   // Chaque enum de domaine est fusionné dans l'objet `Streams` en bas du fichier.
+   ```
+
+> [!CAUTION]
+> ### 🛑 POINT DE BLOCAGE CRITIQUE : LE STOP IMMÉDIAT
+> **Tu viens de modifier `npm-packages` (`messaging`, `shared`) ? TU DOIS T'ARRÊTER.**
+> 1. Valide la compilation locale dans `npm-packages` : `yarn build && yarn test`.
+> 2. Génère le changeset et le bump : `yarn changeset add` puis `yarn changeset version` (une seule fois par branche).
+> 3. **STOP TOTAL :** Interdiction formelle de passer à l'Étape 2 (`domain-*` si hors npm-packages, ou `ms-*`), l'Étape 3 (`post-processors-runner`), ou l'Étape 4 (`ws-service`) immédiatement !
+> 4. Passe la main au Lead Dev pour qu'il pousse sur une PR et que la CI publie la version snapshot `<version>-snap-<sha court>`, publiée sous le dist-tag `next` et listée en commentaire de la PR (ex: `@volontariapp/messaging@2.17.1-snap-a1b2c3d`).
+> 5. **Ce n'est qu'après publication par la CI** que tu pourras lancer `yarn up @volontariapp/messaging @volontariapp/shared` dans les microservices et continuer les étapes ci-dessous.
+
+---
+
+## Étape 2 : Émettre l'Événement en BDD (`domain-<domaine>` ou `ms-<domaine>`)
+> 📖 *Détails complets :* 02-transactional-outbox.md ([`references/02-transactional-outbox.md`](/volontariapp-implement-async-event-flow/references/02-transactional-outbox.md))
+
+L'émission se fait obligatoirement **au sein de la transaction SQL** de l'opération métier (garantie ACID).
+
+Dans le repository du domaine (`npm-packages/packages/domain-<domaine>/src/repositories/`) :
+
+```typescript
+import { EventQueueEntity, EventQueueModel } from '@volontariapp/database';
+import { EventQueueRepository } from '@volontariapp/outbox';
+import { EventEventMessagingType, IEventCreatedPayload } from '@volontariapp/messaging';
+import { Streams } from '@volontariapp/shared';
+
+async createWithEvent(data: Partial<EventEntity>): Promise<EventEntity> {
+  return this.executeInTransaction(async (queryRunner) => {
+    // 1. Sauvegarde métier dans PostgreSQL
+    const saved = await queryRunner.manager.save(EventModel, data);
+
+    // 2. Préparation du payload typé
+    const payload: IEventCreatedPayload = {
+      eventId: saved.id,
+      localisationName: saved.localisationName,
+      organizerId: saved.organizerId,
+    };
+
+    // 3. Création de l'entité Outbox
+    const eventQueueEntity = EventQueueEntity.createEvent<EventEventMessagingType.EVENT_CREATED>({
+      type: EventEventMessagingType.EVENT_CREATED,
+      emitter: 'ms-event',
+      emitterId: saved.organizerId,
+      payload,
+      targetServices: [Streams.EVENT_CREATED],
+    });
+
+    // 4. Écriture dans la table event_queue
+    const eventQueueRepo = new EventQueueRepository<EventEventMessagingType.EVENT_CREATED>(
+      queryRunner.manager.getRepository<EventQueueModel>(EventQueueModel),
+    );
+    await eventQueueRepo.create(eventQueueEntity);
+
+    return saved;
+  });
+}
+```
+
+> [!NOTE]
+> **Le Runner Outbox est 100% transparent :** `outbox-runners/outbox-<domaine>` surveille la table `event_queue` avec `SELECT ... FOR UPDATE SKIP LOCKED` et publie automatiquement dans le Redis Stream `Streams.EVENT_CREATED`. Aucun code n'est requis dans le runner !
+
+---
+
+## Étape 3 : Consommer l'Événement dans `post-processors-runner`
+> 📖 *Détails complets :* 03-post-processors.md ([`references/03-post-processors.md`](/volontariapp-implement-async-event-flow/references/03-post-processors.md))
+
+Chaque domaine impacté possède son propre post-processor dans `post-processors-runner/post-processor-<domaine>/src/post-processors/`.
+
+1. **Créer le Post-Processor (héritant de `BatchPostProcessor` ou `SinglePostProcessor`)** :
+   ```typescript
+   import { Injectable } from '@nestjs/common';
+   import { BatchPostProcessor, BatchEventItem, PostProcessorOptions } from '@volontariapp/post-processors';
+   import { EventEventMessagingType } from '@volontariapp/messaging';
+   import type { Redis } from 'ioredis';
+   import type { DataSource } from 'typeorm';
+
+   @Injectable()
+   export class EventCreatedPostProcessor extends BatchPostProcessor<EventEventMessagingType.EVENT_CREATED> {
+     constructor(private readonly db: DataSource, redisDriver: Redis, options: PostProcessorOptions) {
+       super(redisDriver, options);
+     }
+
+     protected override shouldProcess(eventType: string): boolean {
+       return eventType === EventEventMessagingType.EVENT_CREATED.toString();
+     }
+
+     protected async processEvents(events: BatchEventItem<EventEventMessagingType.EVENT_CREATED>[]): Promise<void> {
+       for (const { event, messageId } of events) {
+         try {
+           const { eventId, localisationName } = event.payload.after;
+           // Exécution du traitement lourd (ex: géocodage, mise à jour Neo4j)
+           await this.doAsyncWork(eventId, localisationName);
+
+           // Émission éventuelle du feedback de succès
+         } catch (error) {
+           this.logger.error(`Failed processing event`, { messageId, error });
+           // Émission du feedback d'échec pour compensation (Saga)
+         }
+       }
+     }
+   }
+   ```
+
+2. **Enregistrer le provider** dans `post-processors.module.ts`.
+
+### 3. Le Pattern Saga en Chorégraphie (Compensations & `SagaStatus`)
+> 📖 *Détails complets :* 06-saga-pattern-choreography.md ([`references/06-saga-pattern-choreography.md`](/volontariapp-implement-async-event-flow/references/06-saga-pattern-choreography.md))
+
+Toute mutation distribuée (touchant plusieurs bases ou services) suit la **triade d'événements** et met à jour l'enum `SagaStatus` (`PENDING` | `DONE` | `CANCEL`) :
+1. **Événement Initial (`*_CREATED`)** : Le microservice insère l'entité avec `saga_status = SagaStatus.PENDING`.
+2. **Succès (`*_CREATION_SUCCESSFULL`)** : Le post-processor de succès valide la saga et passe `saga_status = SagaStatus.DONE`.
+3. **Échec / Compensation (`*_CREATION_FAILED`)** : En cas d'erreur dans un post-processor :
+   - Le post-processor d'échec passe `saga_status = SagaStatus.CANCEL`.
+   - Les processeurs partenaires (ex: `post-processor-social`) écoutent cet échec pour effectuer un **rollback logique** (ex: suppression Cypher dans Neo4j).
+   - `ws-service` notifie le client mobile de l'échec.
+
+---
+
+## Étape 4 : Orchestration Scatter-Gather & Feedback WebSocket (`ws-service`)
+> 📖 *Détails complets :* 04-scatter-gather-ws.md ([`references/04-scatter-gather-ws.md`](/volontariapp-implement-async-event-flow/references/04-scatter-gather-ws.md))
+
+Lorsque plusieurs post-processors travaillent en parallèle (ex : `post-processor-event` géocode et `post-processor-social` crée le noeud Neo4j) :
+
+1. Chaque post-processor publie son résultat avec le même `correlationId` sur le stream de feedback du flux, par exemple `Streams.WS_EVENT_CREATED_FEEDBACK` (`ws:event-created-feedback`)[^streams].
+2. Dans `ws-service`, les post-processors héritent de `BaseGatherPostProcessor` (`src/post-processors/base-gather.post-processor.ts`)[^gather] :
+   - le post-processor **créateur** (`isCreator`) écoute l'événement déclencheur et appelle `gatherStateService.initializeGatherState(correlationId, triggerEvent, metadata)` ;
+   - les autres appellent `gatherStateService.updateEventState(correlationId, expectedKey, status, errorReason)` ;
+   - quand `result.isComplete`, `processGatherResult` notifie le client (`BaseWebSocketGatherPostProcessor` : `notificationService.notifyUser` / `broadcastExcept`).
+3. L'état d'agrégation est stocké dans la table PostgreSQL **`gather_state`** de `ws-service` (`trigger_event`, `gather_events_state` en jsonb)[^gather-state] ; la liste des retours attendus vient de la configuration `scatterGather.aggregations` de `ws-service`. (`docs/C3` parle d'une clé Redis `gather:<id>` à TTL 60 s : ce n'est plus le cas.)
+4. Le mapping saga vers stream et événement WebSocket final est dans `@volontariapp/messaging` : `SAGA_GATHER_COMPLETION_MAPPING` (`src/sagas/gather-registry.ts`)[^registry].
+
+---
+
+## Étape 5 : Réception dans le Frontend (`nativapp`)
+> 📖 *Détails complets :* 05-nativapp-handling.md ([`references/05-nativapp-handling.md`](/volontariapp-implement-async-event-flow/references/05-nativapp-handling.md))
+
+1. La requête HTTP répond 200/201 avec l'entité ; seul un fallback répond **206** (`FALLBACK_ACTIVATED`), ce qui déclenche `syncPendingBus.emit(true)` dans `apiFetch`.
+2. Le résultat final de la saga arrive par WebSocket : les listeners sont centralisés dans `nativapp/src/hooks/useNotificationHandlers.ts` :
+   ```typescript
+   socket.on(WebsocketMessagingType.EVENT_CREATED, handleEventCreated);
+   socket.on(WebsocketMessagingType.EVENT_CREATION_FAILED, handleEventFailed);
+   ```
+3. Le handler invalide les clés React Query concernées ; ne jamais mettre à jour l'état serveur hors React Query.
+
+---
+
+## Contexte de trace des événements
+
+`EventQueueEntity.createEvent` capture le contexte OpenTelemetry actif dans `traceparent` (`captureTraceparent()` de `@volontariapp/database`) ; `EventQueuePusher` l'écrit dans le champ `traceparent` du stream (vide si absent) et dans le JSON `event` (`RedisEventMessage.traceparent?`). `RedisEventMessage.traceparent` est un `string` requis (`''` = aucun contexte), mais les messages déjà dans un stream avant l'ajout du champ ne l'ont pas à l'exécution (le parsing est un `JSON.parse(...) as StreamEvent`).
+
+**Événement déclenché par un autre (post-processor, étape de saga)** : utiliser `EventQueueEntity.createFollowUp(event, { type, emitter, emitterId, payload, targetServices })`, qui recopie `traceId` et `correlationId` de l'événement consommé et tolère `''` et l'absence. Le `traceparent` suit `continueTraceparent` (correctif non publié au 2026-10-29, après `@volontariapp/database` 3.10.13) : le span actif s'il est dans la même trace que l'événement source (`SinglePostProcessor`, premier message d'un lot), sinon le `traceparent` de la source (les autres messages d'un `BatchPostProcessor`, dont le span de lot est enfant du premier message depuis `@volontariapp/database` 3.11.1). `EventQueuePusher` et `JobsOutboxPusher` appliquent la même règle avec le span `outbox` actif. Ne pas appeler `createEvent` en recopiant ces champs à la main, ni écrire une ligne `event_queue` en objet simple : le compilateur n'impose rien sur un `repo.save({...})` (TypeORM le type en `DeepPartial`). `createEvent` reste pour le premier événement d'une chaîne, où le contexte vient du span actif. `SinglePostProcessor` et `BatchPostProcessor` exécutent le handler dans un span enfant du `traceparent` du message (un span par message pour un lot, plus un span de lot actif pendant `processEvents`). Détails et NULL attendus : skill `volontariapp-trace-async-flow`.
+
+## Règles d'Or & Checklist Anti-Bugs
+
+- [ ] **Pas de `any` :** Tous les payloads héritent de `EventRegistry` ou `JobRegistry`.
+- [ ] **Jamais d'appel Redis direct depuis un MS :** Toujours passer par `EventQueueEntity` ou `JobsOutboxEntity`.
+- [ ] **Transaction ACID obligatoire :** L'écriture métier et l'insertion outbox doivent partager le même `queryRunner`.
+- [ ] **Gestion des Sagas :** Si un post-processor échoue dans un scatter-gather, émettre l'événement `*_FAILED` pour que les autres processeurs effectuent leur rollback logique.
+- [ ] **Toujours `getEventStreamName` dans les options de post-processor :** L'outbox pusher préfixe systématiquement les flux par `stream:`. Le provider d'options d'un post-processor DOIT obligatoirement faire `streamName: getEventStreamName(Streams.MON_STREAM)`.
+- [ ] **Fan-out vers plusieurs domaines :** `event-queue.pusher.ts` fait un `XADD` par stream de `targetServices`. Un événement lu par plusieurs services (ex: `user.deleted`) exige donc UN stream par consommateur (`Streams.USER_DELETED_POST`, `USER_DELETED_EVENT`, `USER_DELETED_STORAGE`, `SOCIAL_USER`, plus `USER_DELETED` pour `ws-service`). Les événements de complétion partagent le stream de feedback WS (`WS_USER_DELETED_FEEDBACK`), avec un consumer group distinct par classe de processor côté `ws-service`.
+- [ ] **Ne pas avaler les erreurs d'un post-processor de purge :** un `catch` qui logue sans relancer acquitte le message, donc ni retry (`RetryHelper`, 5 tentatives) ni DLQ, et le gather reste `PENDING` sans timeout. Relancer, et émettre `*_DELETION_FAILED` quand les retries sont épuisés. Les purges doivent être idempotentes ("déjà supprimé" = succès).
+- [ ] **Notification utilisateur en push direct (sans gather), modèle `user.badge_awarded` / `user.impact_score_credited` :** le gather ne sert qu'aux sagas où plusieurs services confirment pour un même `correlationId`. Une notification à un seul destinataire n'y touche pas : `gather-registry.ts` et `scatterGather.aggregations` restent inchangés. Sept sites dans `npm-packages` à calquer sur `USER_BADGE_AWARDED` (`grep -rn USER_BADGE_AWARDED packages --include='*.ts'`) : `shared/src/enums/streams.enum.ts`, `messaging/src/events/user/payloads.ts` (enum, interface), `messaging/src/events/index.ts` (import et `EventRegistry`), `messaging/src/websockets/users/{types,payload,mapping}.ts`, `messaging/src/websockets/index.ts` (import et registre). Test à calquer : `messaging/src/test/badge-awarded-messaging.unit.spec.ts`. Reconstruire dans l'ordre `shared` puis `messaging` avant de lancer les tests. Côté `ws-service`, un `BatchPostProcessor` qui appelle `NotificationService.notifyUser`, plus son provider d'options, une constante dans `options/constants.ts`, un export dans `options/index.ts` et l'enregistrement dans `post-processors.module.ts`.
+- [ ] **Champ requis ajouté à un payload d'événement :** les messages déjà présents dans le stream n'ont pas le champ (le parsing est un `JSON.parse(...) as StreamEvent`). Le post-processor doit le détecter, journaliser et ne rien créditer, jamais prendre `0` par défaut. Exemple : `IEventFinishedPayload.awardedImpactScore` (crédit de score par `ImpactScoreCreditModel`, dédup `(event_id, user_id)` dans la même transaction que l'incrément de `users.total_impact_score`).
+- [ ] **Crédit à `event.finished` hors du chemin badges :** `BadgeEvaluator.evaluateParticipantEventFinished` sort tôt quand le user possède déjà les 9 badges de participation. Un crédit placé dans cette méthode ne serait jamais appliqué à ces users.
+- [ ] **Deux processors sur le même stream dans un même runner :** chacun DOIT avoir son propre `groupName` (ex. `${groupName}-impact-score` pour `Streams.EVENT_FINISHED`, à côté des badges). Avec le même groupe, Redis se partage les messages entre eux, et la clé d'idempotence (`acquireIdempotencyLock(redis, groupName, id)`) est aussi par groupe.
+- [ ] **Nouveau modèle lu par un runner :** l'ajouter à la liste `entities` du `PostgresBridgeModule.register` de `post-processor-<d>/src/infrastructure/infrastructure.module.ts`. Les tests unitaires mockent le `DataSource` et ne voient pas « No metadata for X was found », qui n'apparaît qu'au premier traitement réel.
+- [ ] **Types de payload périmés après `yarn up messaging` :** `@volontariapp/post-processors`, `database` et `outbox` embarquent leur propre `messaging` tant qu'ils ne sont pas montés avec lui, et `BatchEventItem<K>` hérite du vieux registre. Monter les quatre ensemble (`yarn up @volontariapp/messaging@X @volontariapp/post-processors@Y @volontariapp/database@Z @volontariapp/outbox@W`, versions lues avec `npm view`), vérifier qu'il ne reste qu'une copie (`find node_modules -path '*@volontariapp/messaging/package.json'`), et lancer `tsc --noEmit --incremental false` : le cache incrémental garde l'ancienne erreur.
+- [ ] **`yarn up` échoue avec `YN0082 ... No candidates found` juste après une release :** un package publié (ex. `domain-event@3.12.1`, `post-processors@3.3.12`) dépend en version exacte d'un package interne qui n'est pas encore sur le registre (`outbox@0.10.14` est apparu avec du retard, comme `domain-event@3.12.0` la fois précédente), alors que la CI de `main` est verte. Avant de monter un consommateur, vérifier CHAQUE version attendue (`npm view @volontariapp/<pkg>@<version> version`), attendre, ne pas contourner avec un snapshot `next` ni une `resolutions`.
+- [ ] **Montée partielle = deux copies de `database` :** dans `ws-service`, `domain-event ^3.10.9` tirait `outbox 0.10.6` et un vieux `database` ; `tsc` signalait `Repository<EventQueueModel> is not assignable` (`gather-reaper.service.ts`) et 8 tests échouaient. Monter aussi les packages DÉCLARÉS qui embarquent `database`, `outbox` ou `messaging` (ici `domain-event`), puis `find node_modules -path '*@volontariapp/database/package.json'` : une seule copie. Un `resolutions` ancien (ex. `@volontariapp/database: 3.8.0` dans `worker-event`) annule la montée sans prévenir : le lire avant.
+- [ ] **Ligne outbox écrite depuis un post-processor (`createFollowUp`) :** `traceId`, `emitterId` et `correlation_id` sont des colonnes `uuid` de `event_queue` ; une valeur de test fictive (`'trace-verify'`) échoue avec `22P02` sur la vraie base. Dans une spec unitaire, `eventQueueRepo.save` est appelé avec un second argument `undefined` : `toHaveBeenCalledWith(expect.objectContaining({...}), undefined)`. L'écriture dans la même transaction que le crédit garantit que le push arrive après un score validé en base.
+- [ ] **Saut de version `domain-user` dans les mocks :** `createMockUserRepository` (`tests/mocks/user-deletion-success.mock.ts`) doit implémenter tout `IUserRepository`. Après un `yarn up @volontariapp/domain-user`, `tsc` signale la méthode manquante (ex. `updateAvatar`).
+- [ ] **Stream de complétion de gather :** Dans `SAGA_GATHER_COMPLETION_MAPPING` (`gather-registry.ts`), le champ `stream` DOIT être le stream de complétion (ex: `Streams.EVENT_SUCCESSFULLY_CREATED`), et JAMAIS le stream déclencheur (ex: `event:created`).
+
+[^streams]: Enum Streams
+[^gather]: BaseGatherPostProcessor
+[^gather-state]: GatherStateService (table gather_state)
+[^registry]: SAGA_GATHER_COMPLETION_MAPPING
