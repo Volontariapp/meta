@@ -2,6 +2,7 @@
 
 ## 2026-10-30
 
+- **Vérification** - Relu: EventRankingClient.upcoming prend excludedIds, EventCandidateService les calcule avant l'appel; aucune mention dans les skills, rien a corriger (claude-code/claude-sonnet-5-5)
 - **Vérification** - RankingJobWriter recopie traceparent du job source (workers-runners#45) : phrase ajoutee a la section Contexte de trace (claude-code/sonnet-5.5)
 
 ## 2026-10-28

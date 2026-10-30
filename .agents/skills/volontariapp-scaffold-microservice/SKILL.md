@@ -35,6 +35,9 @@ verified:
   - by: claude-code/sonnet-5.5
     at: "2026-10-30T08:36:21Z"
     digest: 741eb38c1f1fa00a
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-30T08:49:49Z"
+    digest: e9e2fab690f9575c
 sources:
   - id: doc-creation
     kind: local_file
