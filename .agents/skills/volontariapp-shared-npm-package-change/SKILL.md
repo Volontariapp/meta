@@ -35,9 +35,6 @@ sources:
     resource: ci-tools/.github/workflows/npm-packages-pipeline.yml
     title: Pipeline réutilisable npm-packages (ci-tools)
 verified:
-  - by: claude-code/agent
-    at: "2026-10-17T13:31:01Z"
-    digest: 4db132529a9fac13
   - by: claude-code/sonnet-5-5
     at: "2026-10-18T15:59:43Z"
     digest: 4db132529a9fac13
@@ -50,6 +47,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-29T15:10:19Z"
     digest: e6d0a65cd5662f83
+  - by: claude-code/agent
+    at: "2026-10-30T10:54:44Z"
+    digest: e8a28e1212698c50
 ---
 
 # Shared NPM Package Change & Règle d'Or du Stop Immédiat

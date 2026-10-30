@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-30
+
+- **Vérification** - Ajout contrats SetEventAttendance, GetEventAttendees et scoring_version (claude-code/agent)
+
 ## 2026-10-19
 
 - **Vérification** - domaine ranking; regle lint une reponse par RPC (human:victor)

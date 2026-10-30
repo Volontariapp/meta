@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-30
+
+- **Vérification** - Vérification changements npm-packages pour scoring (claude-code/agent)
+
 ## 2026-10-29
 
 - **Vérification** - Relu les bumps de version et changelogs regeneres par changeset apres fusion de main (database minor, outbox patch, dependants en patch) : aucune regle, chemin ou commande de la skill concernee. (claude-code/agent)

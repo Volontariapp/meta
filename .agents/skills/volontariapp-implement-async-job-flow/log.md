@@ -2,6 +2,9 @@
 
 ## 2026-10-30
 
+- **Vérification** - Relu: seul changement non commite sur 1792200000000-AddScoringVersionToEvent.ts est une ligne vide finale, skill inchangee (claude-code/agent)
+- **Vérification** - Migration scoring_version dans worker-event (claude-code/agent)
+- **Vérification** - Relu: le worker-ranking exclut desormais les posts deja likes ou commentes (isEligiblePost), au lieu de les retrograder; aucune mention dans les skills, rien a corriger (claude-code/claude-sonnet-5-5)
 - **Vérification** - Relu: EventRankingClient.upcoming prend excludedIds, EventCandidateService les calcule avant l'appel; aucune mention dans les skills, rien a corriger (claude-code/claude-sonnet-5-5)
 - **Vérification** - RankingJobWriter recopie traceparent du job source (workers-runners#45) : phrase ajoutee a la section Contexte de trace (claude-code/sonnet-5.5)
 

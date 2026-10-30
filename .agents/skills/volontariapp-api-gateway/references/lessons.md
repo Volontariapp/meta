@@ -42,6 +42,12 @@ sources:
 
 # Leçons
 
+## 2026-10-30 - DTO de reponse: implements du contrat obligatoire (check-arch)
+
+- **Type :** pitfall
+- **Leçon :** Le job CI Architecture Check (scripts/check-dto-architecture.ts) exige pour chaque DTO de reponse un import de @volontariapp/contracts et un 'implements X {'. Convertir Timestamp en Date en retirant implements fait echouer la CI et saute ci, ci-docker et e2e. Garder implements sur un type Omit du contrat et convertir dans un from() (modele: event.dto.ts, GrpcDateMapper.toDate).[^src-f8351f3e]
+- **Consigné par :** claude
+
 ## 2026-10-17 - Photo d'evenement: coverUrl calculee seulement si READY
 
 - **Type :** rule

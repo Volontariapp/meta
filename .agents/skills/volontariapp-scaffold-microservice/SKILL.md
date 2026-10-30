@@ -24,20 +24,20 @@ generated:
   at: "2026-10-12T12:18:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-29T12:15:55Z"
-    digest: 7deffcd624e148da
+    at: "2026-10-30T11:33:19Z"
+    digest: 7f99336e4153b785
   - by: claude-code/agent
-    at: "2026-10-29T15:10:19Z"
-    digest: 4f4b25b681e4385c
-  - by: claude-code/sonnet-5.5
-    at: "2026-10-30T08:36:21Z"
-    digest: 741eb38c1f1fa00a
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-30T08:49:49Z"
-    digest: e9e2fab690f9575c
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-30T08:56:23Z"
-    digest: da3f8e20aad926f6
+    at: "2026-10-30T11:45:19Z"
+    digest: 94520979f58493f1
+  - by: claude-code/agent
+    at: "2026-10-30T11:56:29Z"
+    digest: 6b1c743cb3f451fc
+  - by: claude-code/agent
+    at: "2026-10-30T12:24:35Z"
+    digest: c8a2114d0fd9e692
+  - by: claude-code/agent
+    at: "2026-10-30T12:29:16Z"
+    digest: 5eb9cf0a0248d275
 sources:
   - id: doc-creation
     kind: local_file

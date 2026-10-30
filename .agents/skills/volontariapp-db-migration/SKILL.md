@@ -18,20 +18,20 @@ generated:
   at: "2026-10-12T11:56:30Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-19T09:19:15Z"
-    digest: 4500b5b797e29edc
-  - by: claude-code/agent
-    at: "2026-10-19T10:15:04Z"
-    digest: d519f37d67d4f55c
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-28T20:25:05Z"
-    digest: 7aa8ef72e09461e5
-  - by: claude-code/agent
-    at: "2026-10-28T22:51:01Z"
-    digest: e6846197c94a5bd8
-  - by: claude-code/agent
     at: "2026-10-29T12:13:52Z"
     digest: 937bef2977a53292
+  - by: claude-code/agent
+    at: "2026-10-30T10:54:43Z"
+    digest: b66c8a698084a2e4
+  - by: claude-code/agent
+    at: "2026-10-30T11:19:37Z"
+    digest: 645b377048b9afbf
+  - by: claude-code/agent
+    at: "2026-10-30T11:30:59Z"
+    digest: 20ce5bb2eb406974
+  - by: claude-code/agent
+    at: "2026-10-30T12:24:33Z"
+    digest: a54b076ffe78093d
 sources:
   - id: sync-mig
     kind: local_file

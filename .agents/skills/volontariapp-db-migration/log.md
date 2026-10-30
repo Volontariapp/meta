@@ -1,5 +1,12 @@
 # Historique
 
+## 2026-10-30
+
+- **Vérification** - Relu: seul changement non commite sur 1792200000000-AddScoringVersionToEvent.ts est une ligne vide finale, skill inchangee (claude-code/agent)
+- **Vérification** - Migration scoring_version dans ms-event (claude-code/agent)
+- **Vérification** - Migration scoring fields impact_score_credits dans ms-user (claude-code/agent)
+- **Vérification** - Vérification trace context database (claude-code/agent)
+
 ## 2026-10-29
 
 - **Vérification** - Relu les changements de event-queue.entity.ts, capture-traceparent.ts et du spec : aucun impact sur migrations ni colonnes traceparent (varchar 55 inchange). sync-migrations.mjs relu : flags --dry-run, --pr, --packages presents comme documentes dans l'etape 4. (claude-code/agent)

@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-10-30
+
+- **Leçon** - DTO de reponse: implements du contrat obligatoire (check-arch) (pitfall) (claude)
+- **Vérification** - add attendance check-in and getEventAttendees routes to participation module (claude-code/agent)
+
 ## 2026-10-27
 
 - **Vérification** - WsProxyMiddleware: un token expire ou invalide (InternalServerError de JwtService) est converti en 401 au lieu d'un crash 500 (claude-code/agent)

@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-30
+
+- **Vérification** - Vérification ImpactScoreCreditModel (claude-code/agent)
+
 ## 2026-10-23
 
 - **Vérification** - targetServices de user.deleted: ajout de USER_DELETED_RANKING; impact_score_credits inchange (CASCADE) (claude-code/agent)

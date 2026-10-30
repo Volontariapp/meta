@@ -2,6 +2,21 @@
 
 ## 2026-10-30
 
+- **Vérification** - Relu: changement de test uniquement (Date au lieu de chaines ISO dans participation.query.controller.spec.ts), skill inchangee (claude-code/agent)
+- **Vérification** - Relu: seul changement non commite sur 1792200000000-AddScoringVersionToEvent.ts est une ligne vide finale, skill inchangee (claude-code/agent)
+- **Vérification** - add attendance check-in routes to api-gateway (claude-code/agent)
+- **Vérification** - enrich impact score crediter with dynamic scoring (claude-code/agent)
+- **Vérification** - Migration scoring_version dans worker-event (claude-code/agent)
+- **Vérification** - ScoringVersion dans ms-event (claude-code/agent)
+- **Vérification** - ScoringVersion dans ms-event (claude-code/agent)
+- **Vérification** - Handlers gRPC SetEventAttendance et GetEventAttendees dans ms-social (claude-code/agent)
+- **Vérification** - Handlers gRPC SetEventAttendance et GetEventAttendees dans ms-social (claude-code/agent)
+- **Vérification** - Migration et entité ImpactScoreCredits dans ms-user (claude-code/agent)
+- **Vérification** - Ajout migration test domain-event scoring_version (claude-code/agent)
+- **Vérification** - Changements staged dans npm-packages pour scoring (claude-code/agent)
+- **Vérification** - Vérification contrats proto et packages (claude-code/agent)
+- **Vérification** - Ajout contrats SetEventAttendance, GetEventAttendees et scoring_version (claude-code/agent)
+- **Vérification** - Relu: le worker-ranking exclut desormais les posts deja likes ou commentes (isEligiblePost), au lieu de les retrograder; aucune mention dans les skills, rien a corriger (claude-code/claude-sonnet-5-5)
 - **Vérification** - Relu: feedMinItems passe de 20 a 100 dans worker-ranking default.config.json, aucune mention dans les skills, rien a corriger (claude-code/claude-sonnet-5-5)
 - **Vérification** - Relu: EventRankingClient.upcoming prend excludedIds, EventCandidateService les calcule avant l'appel; aucune mention dans les skills, rien a corriger (claude-code/claude-sonnet-5-5)
 - **Vérification** - Relu: feedMaxAgeDays passe de 7 a 60 dans worker-ranking default.config.json, aucune mention dans la skill, rien a corriger (claude-code/sonnet-5.5)

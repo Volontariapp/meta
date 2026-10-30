@@ -2,6 +2,11 @@
 
 ## 2026-10-30
 
+- **Vérification** - Relu: seul changement non commite sur 1792200000000-AddScoringVersionToEvent.ts est une ligne vide finale, skill inchangee (claude-code/agent)
+- **Vérification** - enrich impact score crediter with dynamic scoring (claude-code/agent)
+- **Vérification** - Migration scoring_version dans worker-event (claude-code/agent)
+- **Vérification** - Version bump post-processors (claude-code/agent)
+- **Vérification** - Relu: le worker-ranking exclut desormais les posts deja likes ou commentes (isEligiblePost), au lieu de les retrograder; aucune mention dans les skills, rien a corriger (claude-code/claude-sonnet-5-5)
 - **Vérification** - Relu: feedMinItems passe de 20 a 100 dans worker-ranking default.config.json, aucune mention dans les skills, rien a corriger (claude-code/claude-sonnet-5-5)
 - **Vérification** - Relu: EventRankingClient.upcoming prend excludedIds, EventCandidateService les calcule avant l'appel; aucune mention dans les skills, rien a corriger (claude-code/claude-sonnet-5-5)
 - **Vérification** - Relu: feedMaxAgeDays passe de 7 a 60 dans worker-ranking default.config.json, aucune mention dans la skill, rien a corriger (claude-code/sonnet-5.5)

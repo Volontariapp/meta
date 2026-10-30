@@ -1,5 +1,15 @@
 # Historique
 
+## 2026-10-30
+
+- **Vérification** - Relu: changement de test uniquement (Date au lieu de chaines ISO dans participation.query.controller.spec.ts), skill inchangee (claude-code/agent)
+- **Vérification** - Relu: seul changement non commite sur 1792200000000-AddScoringVersionToEvent.ts est une ligne vide finale, skill inchangee (claude-code/agent)
+- **Vérification** - ScoringVersion dans ms-event transformer et DTO (claude-code/agent)
+- **Vérification** - ScoringVersion dans ms-event transformer et DTO (claude-code/agent)
+- **Vérification** - Handlers gRPC SetEventAttendance et GetEventAttendees dans ms-social (claude-code/agent)
+- **Vérification** - Handlers gRPC SetEventAttendance et GetEventAttendees dans ms-social (claude-code/agent)
+- **Vérification** - Migration et entité ImpactScoreCredits dans ms-user (claude-code/agent)
+
 ## 2026-10-28
 
 - **Vérification** - Scripts remplaces par la CLI meta (yarn meta), repos.json source unique (claude-code/agent)

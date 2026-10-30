@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-10-30
+
+- **Vérification** - enrich impact score crediter with dynamic scoring (claude-code/agent)
+- **Vérification** - Changements staged dans npm-packages pour scoring (claude-code/agent)
+- **Vérification** - Payloads IEventFinishedPayload et IUserImpactScoreCreditedPayload enrichis pour le scoring (claude-code/agent)
+
 ## 2026-10-29
 
 - **Vérification** - Relu run-in-trace-context.ts (npm-packages 9719a9d9) : le span batch est enfant du premier message (database 3.11.1) au lieu d'une racine ; textes sur les batchs et createFollowUp mis a jour, autres messages du lot restent freres. (claude-code/agent)
