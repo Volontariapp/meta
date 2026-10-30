@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-30
+
+- **Vérification** - Relu: feedMaxAgeDays passe de 7 a 60 dans worker-ranking default.config.json, aucune mention dans la skill, rien a corriger (agent:claude)
+
 ## 2026-10-29
 
 - **Vérification** - Relu les bumps de version et changelogs regeneres par changeset apres fusion de main (database minor, outbox patch, dependants en patch) : aucune regle, chemin ou commande de la skill concernee. (claude-code/agent)

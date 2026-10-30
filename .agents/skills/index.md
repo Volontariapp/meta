@@ -7,7 +7,7 @@ Le cycle de vie des skills est géré par [volontariapp-skill-evolution](/volont
 | Skill | Domaine | Dernière vérification |
 | :--- | :--- | :--- |
 | [volontariapp-api-gateway](/volontariapp-api-gateway/SKILL.md) | Exposer ou Modifier une Route REST Edge | 2026-10-27 |
-| [volontariapp-async-remediation](/volontariapp-async-remediation/SKILL.md) | Remédiation et Dépilement des Files Asynchrones (DLQ & Streams) | 2026-10-29 |
+| [volontariapp-async-remediation](/volontariapp-async-remediation/SKILL.md) | Remédiation et Dépilement des Files Asynchrones (DLQ & Streams) | 2026-10-30 |
 | [volontariapp-ci-tools](/volontariapp-ci-tools/SKILL.md) | CI partagée et infra locale (ci-tools) | 2026-10-28 |
 | [volontariapp-db-migration](/volontariapp-db-migration/SKILL.md) | Migrations PostgreSQL et Synchronisation Multi-Services | 2026-10-29 |
 | [volontariapp-deploy-gitops](/volontariapp-deploy-gitops/SKILL.md) | Déploiement GitOps (Cluster K3s & ArgoCD) | 2026-10-28 |
@@ -21,7 +21,7 @@ Le cycle de vie des skills est géré par [volontariapp-skill-evolution](/volont
 | [volontariapp-mesh-mcp-verification](/volontariapp-mesh-mcp-verification/SKILL.md) | Verification des anomalies mesh-mcp | 2026-10-12 |
 | [volontariapp-meta-scripts](/volontariapp-meta-scripts/SKILL.md) | Scripts et CLI du workspace meta | 2026-10-28 |
 | [volontariapp-proto-contract-evolution](/volontariapp-proto-contract-evolution/SKILL.md) | Proto Contract Evolution | 2026-10-19 |
-| [volontariapp-scaffold-microservice](/volontariapp-scaffold-microservice/SKILL.md) | Scaffolding d'un Nouveau Microservice gRPC et de ses Runners | 2026-10-29 |
+| [volontariapp-scaffold-microservice](/volontariapp-scaffold-microservice/SKILL.md) | Scaffolding d'un Nouveau Microservice gRPC et de ses Runners | 2026-10-30 |
 | [volontariapp-sealed-secrets](/volontariapp-sealed-secrets/SKILL.md) | Gestion des Secrets Scellés GitOps (kubeseal) | 2026-10-21 |
 | [volontariapp-shared-npm-package-change](/volontariapp-shared-npm-package-change/SKILL.md) | Shared NPM Package Change | 2026-10-29 |
 | [volontariapp-skill-evolution](/volontariapp-skill-evolution/SKILL.md) | Évolution des skills (auto-apprentissage) | 2026-10-28 |
