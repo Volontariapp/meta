@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-10-30
+
+- **Vérification** - RankingJobWriter recopie traceparent du job source (workers-runners#45) : phrase ajoutee a la section Contexte de trace (claude-code/sonnet-5.5)
+
 ## 2026-10-28
 
 - **Vérification** - worker-ranking: 3 workers par queue, producteurs ranking indirects (catalogue), drapeau Jev (claude-code/claude-sonnet-5-5)

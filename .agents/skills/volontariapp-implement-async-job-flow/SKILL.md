@@ -51,9 +51,6 @@ sources:
     title: job_catalogue.py
 verified:
   - by: claude-code/agent
-    at: "2026-10-14T12:48:39Z"
-    digest: 0b15a6bf770845f4
-  - by: claude-code/agent
     at: "2026-10-17T14:27:13Z"
     digest: 35777196cbfdbf3e
   - by: claude-code/agent
@@ -65,6 +62,9 @@ verified:
   - by: claude-code/claude-sonnet-5-5
     at: "2026-10-28T20:26:40Z"
     digest: 67707c26ad01327c
+  - by: claude-code/sonnet-5.5
+    at: "2026-10-30T08:36:22Z"
+    digest: c134c42eb83243ee
 ---
 
 # Guide : Implémenter un Job Asynchrone End-to-End
@@ -310,7 +310,7 @@ python3 .agents/skills/volontariapp-implement-async-job-flow/scripts/job_catalog
 
 ## Contexte de trace des jobs
 
-`JobsOutboxEntity.createJob` capture le contexte OpenTelemetry actif dans `traceparent` ; `JobsOutboxPusher` le place dans l'enveloppe BullMQ (`JobEnvelope.traceparent?`, absent sans span actif), en push unitaire et en bulk. Les handlers lisent `JobEnvelope`, pas la ligne outbox. `BaseWorker.process` exécute le job dans un span `job <type>` enfant de ce `traceparent` (`runInTraceContext`) : un handler n'a rien à faire pour s'y rattacher. Détails : skill `volontariapp-trace-async-flow`.
+`JobsOutboxEntity.createJob` capture le contexte OpenTelemetry actif dans `traceparent` ; `JobsOutboxPusher` le place dans l'enveloppe BullMQ (`JobEnvelope.traceparent?`, absent sans span actif), en push unitaire et en bulk. Les handlers lisent `JobEnvelope`, pas la ligne outbox. `BaseWorker.process` exécute le job dans un span `job <type>` enfant de ce `traceparent` (`runInTraceContext`) : un handler n'a rien à faire pour s'y rattacher. Un écrivain qui reconstruit lui-même la ligne outbox (`RankingJobWriter` dans `worker-ranking`) doit recopier `traceparent` du job source (`traceparent: job.traceparent`, workers-runners#45), sinon la trace est coupée au job suivant. Détails : skill `volontariapp-trace-async-flow`.
 
 ## Règles d'Or & Checklist Anti-Bugs
 

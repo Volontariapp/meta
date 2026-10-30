@@ -2,6 +2,7 @@
 
 ## 2026-10-30
 
+- **Vérification** - Relu: feedMaxAgeDays passe de 7 a 60 dans worker-ranking default.config.json, aucune mention dans la skill, rien a corriger (claude-code/sonnet-5.5)
 - **Vérification** - Relu: feedMaxAgeDays passe de 7 a 60 dans worker-ranking default.config.json, aucune mention dans la skill, rien a corriger (agent:claude)
 
 ## 2026-10-29

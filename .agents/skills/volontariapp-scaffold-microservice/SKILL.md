@@ -24,9 +24,6 @@ generated:
   at: "2026-10-12T12:18:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-28T23:37:27Z"
-    digest: 9d5e40436f38ccc1
-  - by: claude-code/agent
     at: "2026-10-29T12:13:53Z"
     digest: bc59914b493b3457
   - by: claude-code/agent
@@ -35,8 +32,8 @@ verified:
   - by: claude-code/agent
     at: "2026-10-29T15:10:19Z"
     digest: 4f4b25b681e4385c
-  - by: "agent:claude"
-    at: "2026-10-30T08:34:37Z"
+  - by: claude-code/sonnet-5.5
+    at: "2026-10-30T08:36:21Z"
     digest: 741eb38c1f1fa00a
 sources:
   - id: doc-creation
