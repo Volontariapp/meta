@@ -18,9 +18,6 @@ generated:
   at: "2026-10-12T11:58:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-29T12:13:52Z"
-    digest: 87674249a3a40cbb
-  - by: claude-code/agent
     at: "2026-10-29T15:10:20Z"
     digest: a48ce569428f51b5
   - by: claude-code/sonnet-5.5
@@ -32,6 +29,9 @@ verified:
   - by: claude-code/claude-sonnet-5-5
     at: "2026-10-30T08:56:23Z"
     digest: bcbb4376ba522fe9
+  - by: claude-code/claude-sonnet-5-5
+    at: "2026-10-30T09:05:05Z"
+    digest: d7725278d9738e50
 sources:
   - id: retry
     kind: local_file
