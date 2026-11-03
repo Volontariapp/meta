@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-03
+
+- **Vérification** - Scaffold: copier PaginationRequestDTO valide (ms-user ou ms-social) pour les requetes de liste, defaut page 1 limit 10 dans le controleur (claude-code/agent)
+
 ## 2026-10-30
 
 - **Vérification** - Relu: changement de test uniquement (Date au lieu de chaines ISO dans participation.query.controller.spec.ts), skill inchangee (claude-code/agent)

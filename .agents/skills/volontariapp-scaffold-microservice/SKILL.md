@@ -24,24 +24,6 @@ generated:
   at: "2026-10-12T12:18:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-29T15:10:19Z"
-    digest: 4f4b25b681e4385c
-  - by: claude-code/sonnet-5.5
-    at: "2026-10-30T08:36:21Z"
-    digest: 741eb38c1f1fa00a
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-30T08:49:49Z"
-    digest: e9e2fab690f9575c
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-30T08:56:23Z"
-    digest: da3f8e20aad926f6
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-30T09:05:05Z"
-    digest: 283c91550e5804d5
-  - by: claude-code/agent
-    at: "2026-10-30T11:33:19Z"
-    digest: 7f99336e4153b785
-  - by: claude-code/agent
     at: "2026-10-30T11:45:19Z"
     digest: 94520979f58493f1
   - by: claude-code/agent
@@ -53,6 +35,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-30T12:29:16Z"
     digest: 5eb9cf0a0248d275
+  - by: claude-code/agent
+    at: "2026-11-03T20:31:04Z"
+    digest: 12ce8c4542fefc25
 sources:
   - id: doc-creation
     kind: local_file
@@ -162,6 +147,7 @@ Une fois la PR Protobuf générée dans `npm-packages`[^doc-creation] :
 4. **Contrôleurs CQRS** :
    - Contrôleurs séparés pour les commandes (`BaseCommandController` avec `withFallback`) et les requêtes de lecture.
    - Mappers stricts sans conversion magique.
+   - Pagination : copier `src/common/dto/pagination.dto.ts` de `ms-user` ou `ms-social` (`PaginationRequestDTO` validé, `MAX_PAGINATION_LIMIT`) et l'utiliser dans toute requête de liste avec `@ValidateNested() @Type(...)` ; défaut page 1 / limit 10 dans le contrôleur. Voir l'étape 2 de la skill `volontariapp-grpc-microservice`.
 5. **Matrice de tests e2e** :
    - Créer `e2e-matrix.json` dans `ms-<domaine>` et ajouter le nouveau service aux fichiers `e2e-matrix.json` des services communicants et de l'API Gateway.
 

@@ -47,6 +47,8 @@ Agrégats `UserEntity` (email, pseudo, role, rna, bio, logoPath, totalImpactScor
 
 Contrôleurs `src/modules/user/controllers/command/{user,badge}.command.controller.ts` et `controllers/queries/`[^controllers] ; mutations sensibles protégées par `GrpcInternalGuard` posé par contrôleur et `@CurrentUser()`.
 
+Pagination et lectures par lot (depuis le lot pagination de novembre 2026) : les requêtes `ListUsers`, `ListBadges` et les quatre listes de profils (`GetMyFollowsProfiles`, `GetMyFollowersProfiles`, `GetEventParticipantsProfiles`, `GetPostLikersProfiles`) valident `pagination` avec `PaginationRequestDTO` (`src/common/dto/pagination.dto.ts`, plafond 1000). `ListUsers` sans pagination vaut page 1 / limit 10 et appelle `UserService.findPage(pagination, [UserStatus.PENDING_DELETION])` : les comptes en suppression sont exclus en SQL avant `LIMIT`, le total est exact. `GetUsersByIds` (100 ids maximum) et les listes de profils passent par `findActiveUsersInOrder` (`src/modules/user/helpers/find-active-users-in-order.ts`) : un `findByIds` par lot de 100, ordre des ids d'entrée conservé, ids inconnus, mal formés ou en `PENDING_DELETION` ignorés. Le `totalCount` des quatre listes de profils reste celui de ms-social et ne tient pas compte des profils retirés.
+
 Clients sortants (`SOCIAL_PACKAGE`) : `social-relationship.query-client.ts`, `social-interaction.query-client.ts`, `social-participation.query-client.ts`[^clients].
 
 [^controllers]: Contrôleurs command/queries

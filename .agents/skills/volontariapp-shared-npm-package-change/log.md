@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-11-03
+
+- **Leçon** - Monter outbox et messaging avec les paquets domain-* chez le consommateur (rule) (claude-code/agent)
+- **Leçon** - Lancer changeset version APRES le rebase sur origin/main (rule) (claude-code/agent)
+
 ## 2026-10-30
 
 - **Vérification** - Vérification changements npm-packages pour scoring (claude-code/agent)

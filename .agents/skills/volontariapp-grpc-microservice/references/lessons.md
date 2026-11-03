@@ -26,9 +26,18 @@ sources:
   - id: src-300927cf
     resource: ms-event/src/test/unit/controllers/event.command.controller.unit.spec.ts
     title: ms-event/src/test/unit/controllers/event.command.controller.unit.spec.ts
+  - id: src-06c83ce2
+    resource: ms-user/src/common/dto/pagination.dto.ts
+    title: ms-user/src/common/dto/pagination.dto.ts
 ---
 
 # Leçons
+
+## 2026-11-03 - Pagination : la leçon ListPosts sans tri ni plafond est périmée
+
+- **Type :** rule
+- **Leçon :** Depuis le lot pagination de novembre 2026, ListPosts et ListComments (domain-post 3.10.0) trient par createdAt DESC puis id DESC, la branche auteur=lecteur passe un ordre explicite, BaseRepository.paginate (database 3.12.0) borne page et limit et trie sur la cle primaire par defaut, et les DTO de pagination des quatre ms plafonnent limit a 1000 (la gateway ecrete a 100). Deux index existent (comments postId+createdAt, posts createdAt) mais sans EXPLAIN, et sans CONCURRENTLY. Regle: valider pagination avec PaginationRequestDTO, jamais @IsOptional seul; lectures par lot via findByIds par lots de 100 en conservant l ordre d entree.[^src-06c83ce2]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-17 - Tests d'entite: toHaveProperty echoue sur un champ de classe undefined
 
@@ -78,3 +87,4 @@ sources:
 [^src-c5886b21]: npm-packages/packages/domain-event/src/services/event.service.ts
 [^src-8fc3ad1d]: ms-event/src/modules/event/controllers/commands/base.command.controller.ts
 [^src-300927cf]: ms-event/src/test/unit/controllers/event.command.controller.unit.spec.ts
+[^src-06c83ce2]: ms-user/src/common/dto/pagination.dto.ts

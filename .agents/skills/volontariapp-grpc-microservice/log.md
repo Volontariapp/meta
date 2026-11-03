@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-11-03
+
+- **Vérification** - Pagination: motif PaginationRequestDTO valide (plafond 1000 cote ms, 100 gateway), defaut 1/10, listes d'ids plafonnees, lectures par lot findByIds par 100 avec ordre conserve, findPage; ms-user.md documente ListUsers, GetUsersByIds et les listes de profils (claude-code/agent)
+- **Leçon** - Pagination : la leçon ListPosts sans tri ni plafond est périmée (rule) (claude-code/agent)
+
 ## 2026-10-30
 
 - **Vérification** - Relu: changement de test uniquement (Date au lieu de chaines ISO dans participation.query.controller.spec.ts), skill inchangee (claude-code/agent)
