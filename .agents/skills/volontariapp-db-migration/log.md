@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-03
+
+- **Leçon** - CREATE INDEX CONCURRENTLY interdit avec les scripts migration:run actuels (rule) (claude-code/agent)
+
 ## 2026-10-30
 
 - **Vérification** - Relu: seul changement non commite sur 1792200000000-AddScoringVersionToEvent.ts est une ligne vide finale, skill inchangee (claude-code/agent)
