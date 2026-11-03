@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-03
+
+- **Leçon** - Label docker-and-e2e requis pour le CI Docker et e2e (pitfall) (claude-code/agent)
+
 ## 2026-10-28
 
 - **Vérification** - skill relue et alignée sur le code (process:agent)

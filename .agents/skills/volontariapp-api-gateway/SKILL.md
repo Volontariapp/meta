@@ -21,19 +21,19 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-21T07:52:31Z"
-    digest: 24a20193dd9fd8a9
-  - by: claude-code/agent
-    at: "2026-10-21T08:14:45Z"
-    digest: 1692df12d227d761
-  - by: claude-code/agent
-    at: "2026-10-21T08:20:12Z"
-    digest: 941c50145d24f9f9
-  - by: claude-code/agent
     at: "2026-10-27T22:34:16Z"
     digest: 271a1efbb7e79791
   - by: claude-code/agent
     at: "2026-10-30T11:56:28Z"
+    digest: be5ca2862e35d8ad
+  - by: claude-code/agent
+    at: "2026-11-03T20:40:12Z"
+    digest: be5ca2862e35d8ad
+  - by: claude-code/agent
+    at: "2026-11-03T20:40:26Z"
+    digest: be5ca2862e35d8ad
+  - by: claude-code/agent
+    at: "2026-11-03T20:40:37Z"
     digest: be5ca2862e35d8ad
 sources:
   - id: gw-claude
@@ -63,6 +63,12 @@ sources:
   - id: ws-proxy
     resource: api-gateway/src/modules/ws-proxy/ws-proxy.middleware.ts
     title: WsProxyMiddleware
+  - id: pagination
+    resource: api-gateway/src/common/dto/request/pagination.request.dto.ts
+    title: "Module de pagination commun (constantes, DTO, decorateurs, ecretage)"
+  - id: check-arch
+    resource: api-gateway/scripts/check-dto-architecture.ts
+    title: yarn check-arch (regles des DTO)
 ---
 
 # Playbook : Exposer ou Modifier une Route REST Edge (API Gateway)
@@ -218,6 +224,22 @@ Tout microservice en aval exige un `x-internal-token` signé pour autoriser la r
 
 ---
 
+## Pagination des routes de liste
+
+Toute route de liste utilise le module commun `src/common/pagination` : ne jamais redeclarer `page`, `limit` ni un plafond dans un DTO[^pagination].
+
+- **Constantes** : `DEFAULT_PAGE = 1` (base 1), `DEFAULT_LIMIT = 10`, `MAX_LIMIT = 100`, `LEGACY_MAX_LIMIT = 500`.
+- **DTO imbrique `pagination[page|limit]`** : `PaginationRequestDTO` (plafond 100), `LegacyPaginationRequestDTO` (plafond 500), ou `createPaginationRequestDTO(maxLimit)` pour un plafond propre. Le champ du DTO de requete se declare avec `@NestedPagination(LegacyPaginationRequestDTO)` ou son pendant standard.
+- **DTO de query plate `?page=&limit=`** : `FlatPaginationQueryDTO` (plafond 100) ou `createFlatPaginationQueryDTO(maxLimit)`.
+- **Decorateurs** : `@PaginationPage()` (entier >= 1, sinon 400) et `@PaginationLimit(maxLimit = MAX_LIMIT)`.
+- **Ecretage** : `clampPaginationLimit(limit, maxLimit)` ramene une limite trop grande au plafond (`Math.min`). Une limite superieure au plafond est ecretee, jamais rejetee ; une limite invalide (non entiere, < 1) reste un 400.
+- **Exception legacy (500)** : seulement `GET /api/v1/social/likes` (`GetMyLikesRequestDTO`) et `GET /api/v1/users` admin (`ListUsersRequestDTO`), car les anciens builds de nativapp appellent avec `limit=500`. Ne pas etendre cette exception a une autre route.
+- **Lecture par lot** : `POST /api/v1/social/likes-summary` (`GetPostsLikeSummaryRequestDTO`) prend 1 a 100 `postIds` uniques (`ArrayMinSize(1)`, `ArrayMaxSize(MAX_LIKE_SUMMARY_POST_IDS)`, `ArrayUnique`) et repond 200 : c'est une lecture exposee en POST pour eviter une URL de 100 identifiants. ms-social reste l'autorite sur le plafond.
+
+[^pagination]: Module de pagination commun (constantes, DTO, decorateurs, ecretage)
+
+---
+
 ## Checklist d'Assurance Qualité & Critères d'Arrêt
 
 Avant de déclarer la tâche terminée :
@@ -228,6 +250,7 @@ Avant de déclarer la tâche terminée :
 - [ ] Aucun `userId` n'est extrait du payload sur les routes « me ».
 - [ ] Les réponses asynchrones avec fallback documentent le statut HTTP 206 (`FALLBACK_ACTIVATED`).
 - [ ] `yarn test` passe avec succès sur `api-gateway`.
+- [ ] `yarn check-arch` passe (un fichier par DTO, requete avec `implements` + `@volontariapp/contracts` + `toCommand()`/`toQuery()`, DTO imbriques dans `dto/common/`)[^check-arch].
 - [ ] `yarn tsc` et `yarn lint` ne produisent aucune erreur.
 
 [^gw-claude]: Modules de api-gateway (carte : references/routes.md)
@@ -239,3 +262,4 @@ Avant de déclarer la tâche terminée :
 [^deploy-gw]: Déploiement api-gateway (NODE_ENV)
 [^errors-nest]: FALLBACK_ACTIVATED (PartialContentError 206)
 [^ws-proxy]: WsProxyMiddleware
+[^check-arch]: yarn check-arch (regles des DTO)

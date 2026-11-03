@@ -41,9 +41,18 @@ sources:
   - id: src-c6f47875
     resource: ms-user/package.json
     title: ms-user/package.json
+  - id: src-cd3f14ee
+    resource: npm-packages/packages/domain-user/src/repositories/postgres-user.repository.ts
+    title: npm-packages/packages/domain-user/src/repositories/postgres-user.repository.ts
 ---
 
 # Leçons
+
+## 2026-11-03 - Surcharge de toEntity sans toEntities
+
+- **Type :** pitfall
+- **Leçon :** BaseRepository.toEntities passe directement par le mapper (mapArray) et ne rappelle pas toEntity: un repository qui surcharge toEntity (ex. PostgresUserRepository, qui dechiffre l'email) renvoie des donnees brutes sur findAll, findPage, findByIds, findAllWithRelations, createMany et paginate. Toute surcharge de toEntity doit etre doublee d'une surcharge de toEntities qui mappe via this.toEntity, avec un test unitaire par lecture multiple. Correctif: domain-user 2.15.1 (PR #284).[^src-cd3f14ee]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-03 - Monter outbox et messaging avec les paquets domain-* chez le consommateur
 
@@ -176,3 +185,4 @@ sources:
 [^src-ae6d3d91]: ms-post/package.json
 [^src-f6aa5050]: ws-service/tsconfig.json
 [^src-c6f47875]: ms-user/package.json
+[^src-cd3f14ee]: npm-packages/packages/domain-user/src/repositories/postgres-user.repository.ts

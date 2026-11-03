@@ -1,5 +1,12 @@
 # Historique
 
+## 2026-11-03
+
+- **Vérification** - module de pagination commun (src/common/pagination), plafonds 100 et legacy 500, likes-summary, check-arch (claude-code/agent)
+- **Vérification** - module de pagination commun (src/common/pagination), plafonds 100 et legacy 500, likes-summary, check-arch (claude-code/agent)
+- **Vérification** - module de pagination commun, plafonds 100 et legacy 500, likes-summary, check-arch (claude-code/agent)
+- **Leçon** - yarn check-arch: regles des DTO de la gateway (rule) (claude-code/agent)
+
 ## 2026-10-30
 
 - **Leçon** - DTO de reponse: implements du contrat obligatoire (check-arch) (pitfall) (claude)

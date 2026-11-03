@@ -42,6 +42,12 @@ sources:
 
 # Leçons
 
+## 2026-11-03 - yarn check-arch: regles des DTO de la gateway
+
+- **Type :** rule
+- **Leçon :** scripts/check-dto-architecture.ts parcourt les dossiers dto/ (hors index.ts, hors tout chemin contenant /common/, hors modules/helper/). Chaque fichier doit finir par .request.dto.ts ou .response.dto.ts et exporter exactement une classe nommee d'apres le fichier (PascalCase + RequestDTO ou ResponseDTO). Une requete doit contenir implements, importer @volontariapp/contracts et exposer toCommand() ou toQuery(). Une reponse doit importer @volontariapp/contracts et avoir un implements. Les DTO imbriques supplementaires vont dans dto/common/, jamais en seconde classe d'un fichier .response.dto.ts.[^src-f8351f3e]
+- **Consigné par :** claude-code/agent
+
 ## 2026-10-30 - DTO de reponse: implements du contrat obligatoire (check-arch)
 
 - **Type :** pitfall

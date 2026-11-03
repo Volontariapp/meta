@@ -11,9 +11,18 @@ sources:
   - id: src-471bbb9a
     resource: ci-tools/.github/workflows/service-docker-build-push.yml
     title: ci-tools/.github/workflows/service-docker-build-push.yml
+  - id: src-cbb46bc1
+    resource: ci-tools/.github/workflows/e2e-orchestrator.yml
+    title: ci-tools/.github/workflows/e2e-orchestrator.yml
 ---
 
 # Leçons
+
+## 2026-11-03 - Label docker-and-e2e requis pour le CI Docker et e2e
+
+- **Type :** pitfall
+- **Leçon :** service-docker-build-push.yml et e2e-orchestrator.yml lisent le label docker-and-e2e (payload de la PR puis gh pr view en direct avec ORG_REPO_TOKEN, 10 essais espaces de 30 s). Sans lui, le job docker echoue avec une erreur; les repos declarent e2e avec needs: [ci-docker], donc le job e2e est saute et la PR n'est pas mergeable. Une PR sans le label ne valide donc jamais l'e2e avant merge: ajouter le label des l'ouverture de la PR, sinon les regressions e2e se decouvrent apres coup.[^src-cbb46bc1]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-06 - CI d'un service : label docker-and-e2e, et le merge sur main deploie
 
@@ -28,3 +37,4 @@ sources:
 - **Consigné par :** claude-code/claude-opus-5-5
 
 [^src-471bbb9a]: ci-tools/.github/workflows/service-docker-build-push.yml
+[^src-cbb46bc1]: ci-tools/.github/workflows/e2e-orchestrator.yml
