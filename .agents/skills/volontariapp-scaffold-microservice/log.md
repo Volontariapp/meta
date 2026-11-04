@@ -2,6 +2,7 @@
 
 ## 2026-11-04
 
+- **Vérification** - reviewed only api-gateway@8521e2f (fetchAllPages, covered by volontariapp-api-gateway); the other flagged files were not read (claude-code/agent)
 - **Vérification** - runners ci.yml: notify-ready job added (CI only, skill content unaffected) (claude-code/agent)
 - **Vérification** - runners: notify-ready job in outbox-runners, workers-runners and post-processors-runner ci.yml (explicit secrets) (claude-code/agent)
 
