@@ -2,7 +2,9 @@
 # PreToolUse (Write|Edit|MultiEdit|NotebookEdit) : règle du STOP d'AGENTS.md, section 1.
 # Une fois npm-packages/ ou proto-registry/ édité dans la session (marqueur posé par post-edit.sh),
 # toute édition d'un repo qui dépend de @volontariapp/* est refusée jusqu'à publication par la CI.
-# Déverrouillage, Lead Dev uniquement : ! .claude/hooks/stop-rule-guard.sh release
+# Déverrouillage : le Lead Dev (! .claude/hooks/stop-rule-guard.sh release), ou un orchestrateur
+# autonome mandaté par son prompt, aux trois conditions d'AGENTS.md section 1 (release CI réussie,
+# chaque version vérifiée avec npm view, levée rapportée).
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 STATE_DIR="$REPO_ROOT/.git/volontariapp-stop-guard"
 
@@ -57,6 +59,6 @@ esac
 
 REASON="RÈGLE DU STOP (AGENTS.md, section 1) : ${UPSTREAM} a été modifié dans cette session, ${REL} est un ${LOCKED}.
 Ne touche à aucun autre repo. Vérifie la compilation et les tests du package amont, crée le changeset (npm-packages) ou lance buf lint / buf breaking (proto-registry), puis rends la main au Lead Dev avec un résumé : il pousse la PR et attend la publication par la CI.
-Interdit : contourner ce verrou (sed, cat >, script) ou lancer stop-rule-guard.sh release toi-même."
+Interdit : contourner ce verrou (sed, cat >, script) ou lancer stop-rule-guard.sh release toi-même, sauf si ton prompt te mandate comme orchestrateur autonome et que les trois conditions d'AGENTS.md section 1 sont remplies (release CI réussie, chaque version vérifiée avec npm view, levée rapportée)."
 jq -n --arg reason "$REASON" '{hookSpecificOutput:{hookEventName:"PreToolUse", permissionDecision:"deny", permissionDecisionReason:$reason}}'
 exit 0

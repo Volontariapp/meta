@@ -2,6 +2,7 @@
 
 ## 2026-11-04
 
+- **Vérification** - AGENTS.md section 1 et stop-rule-guard.sh : exception pour un orchestrateur mandate ; la skill ne decrit pas la regle de levee, texte inchange (claude-code/agent)
 - **Vérification** - AGENTS.md: new row for volontariapp-pr-tools in the routing matrix and the regenerated skills index; rules unchanged (claude-code/agent)
 
 ## 2026-11-01
