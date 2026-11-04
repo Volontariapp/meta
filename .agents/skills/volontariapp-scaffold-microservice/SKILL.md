@@ -24,35 +24,20 @@ generated:
   at: "2026-10-12T12:18:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-29T15:10:19Z"
-    digest: 4f4b25b681e4385c
-  - by: claude-code/sonnet-5.5
-    at: "2026-10-30T08:36:21Z"
-    digest: 741eb38c1f1fa00a
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-30T08:49:49Z"
-    digest: e9e2fab690f9575c
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-30T08:56:23Z"
-    digest: da3f8e20aad926f6
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-30T09:05:05Z"
-    digest: 283c91550e5804d5
+    at: "2026-11-02T12:22:17Z"
+    digest: d33d234e3ae24fc3
   - by: claude-code/agent
-    at: "2026-10-30T11:33:19Z"
-    digest: 7f99336e4153b785
+    at: "2026-11-02T13:06:58Z"
+    digest: e437d2b06d39f7e5
+  - by: "process:claude-code"
+    at: "2026-11-03T14:03:08Z"
+    digest: 8873d768c89a88d8
   - by: claude-code/agent
-    at: "2026-10-30T11:45:19Z"
-    digest: 94520979f58493f1
+    at: "2026-11-04T13:10:18Z"
+    digest: 9030cdf0bbbfdebd
   - by: claude-code/agent
-    at: "2026-10-30T11:56:29Z"
-    digest: 6b1c743cb3f451fc
-  - by: claude-code/agent
-    at: "2026-10-30T12:24:35Z"
-    digest: c8a2114d0fd9e692
-  - by: claude-code/agent
-    at: "2026-10-30T12:29:16Z"
-    digest: 5eb9cf0a0248d275
+    at: "2026-11-04T13:14:01Z"
+    digest: fb6ac1e39d2dd346
 sources:
   - id: doc-creation
     kind: local_file
@@ -150,7 +135,7 @@ Une fois la PR Protobuf générée dans `npm-packages`[^doc-creation] :
 
 1. Créer le dépôt `ms-<domaine>` (prendre modèle sur `ms-social` ou `ms-user`)[^doc-creation] :
    - Initialiser les dépendances via `yarn up` sur les nouveaux paquets publiés.
-   - Copier `ci-tools/templates/dependabot/service.yml` dans `.github/dependabot.yml` (retirer le bloc `docker` sans Dockerfile). Le job `security` (Trivy) est déjà fourni par `service-ci.yml`, rien à ajouter dans le `ci.yml`.
+   - Copier `ci-tools/templates/dependabot/service.yml` dans `.github/dependabot.yml` (retirer le bloc `docker` sans Dockerfile). Le job `security` (Trivy) est déjà fourni par `service-ci.yml`, rien à ajouter dans le `ci.yml`. Ajouter en dernier job du `ci.yml` un `notify-ready` (`needs:` tous les autres jobs, `if: ${{ !failure() && !cancelled() && github.event_name == 'pull_request' }}`, `permissions` `issues: write` et `pull-requests: write`, `uses: Volontariapp/ci-tools/.github/workflows/pr-ready-notify.yml@main`, `with: channel: backend`, `secrets: inherit`) : détail dans `volontariapp-ci-tools`.
 2. **Bootstrap et Observabilité** :
    - `src/main.ts` : Démarrage hybride (serveur gRPC sur port 3000 + serveur HTTP Express pour la sonde `/health`).
    - `src/tracing.ts` : Initialisation du SDK OpenTelemetry (Datadog OTLP) avant l'instanciation de NestJS.
@@ -177,6 +162,7 @@ Une fois la PR Protobuf générée dans `npm-packages`[^doc-creation] :
    ```
 2. Le script génère `outbox-<domaine>/` surveillant les tables `jobs_outbox` et `event_queue` de la base du microservice.
 3. Vérifier les targets Redis Streams et BullMQ dans la configuration.
+4. Rien à ajouter côté CI pour un nouveau domaine : le `ci.yml` de `outbox-runners`, `workers-runners` et `post-processors-runner` porte déjà un job `notify-ready` (`needs: [ci]`, `ci` étant l'appel unique à `runner-pipeline.yml`). Ces `ci.yml` listent leurs secrets au lieu de `secrets: inherit` : `DISCORD_WEBHOOK_BACKEND`, `DISCORD_WEBHOOK_FRONTEND` et `ORG_REPO_TOKEN` y sont passés un par un.
 
 ---
 

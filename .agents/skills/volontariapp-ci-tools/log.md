@@ -1,5 +1,19 @@
 # Historique
 
+## 2026-11-03
+
+- **Vérification** - notify job timeout lowered from 5 to 3 minutes (process:claude-code)
+- **Vérification** - notify job timeout lowered from 5 to 3 minutes (agent:claude)
+
+## 2026-11-02
+
+- **Vérification** - pr-ready-notify: claim avant envoi, if/permissions de l'appelant, limites documentees (review #65) (claude-code/agent)
+- **Vérification** - pr-ready-notify.yml: notification Discord unique par PR prete (label discord-notified, needs: du ci.yml) (claude-code/agent)
+
+## 2026-11-01
+
+- **Vérification** - relue: render-dependabot.py (MONOREPO_HOLD, limite 3, motif directory) deja decrit, aucun changement (claude-code/agent)
+
 ## 2026-10-28
 
 - **Vérification** - skill relue et alignée sur le code (process:agent)
