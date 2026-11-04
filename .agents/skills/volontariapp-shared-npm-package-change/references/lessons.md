@@ -59,9 +59,18 @@ sources:
   - id: src-37dd6836
     resource: AGENTS.md
     title: AGENTS.md
+  - id: src-0d12895f
+    resource: "https://github.com/Volontariapp/ms-social/pull/65"
+    title: "https://github.com/Volontariapp/ms-social/pull/65"
 ---
 
 # Leçons
+
+## 2026-11-04 - Bumper un domain-* sans bumper la dependance directe a database duplique le package
+
+- **Type :** pitfall
+- **Leçon :** ms-social#64 a pris domain-social 0.17.1 (database 3.12.1, outbox 0.10.27) en gardant "@volontariapp/database": "^3.12.0" : Yarn a garde 3.12.0 a la racine et imbrique 3.12.1, deux copies chargees. Les notifications de like (post.liked, post.unliked) ne partaient plus et l'E2E de main est reste rouge jusqu'a ms-social#65 (^3.12.1, une seule copie). Apres un yarn up de domain-*, verifier qu'un seul 'resolution: "@volontariapp/database@npm:' reste dans yarn.lock, et ne jamais merger une PR dont l'E2E est rouge sur ces scenarios.[^src-0d12895f]
+- **Consigné par :** claude-code/claude-opus-5-5
 
 ## 2026-11-04 - Orchestrateur autonome mandate : levee du verrou STOP
 
@@ -236,3 +245,4 @@ sources:
 [^src-21073430]: npm-packages/packages/post-processors/src/test/core/helpers/integration/retry.helper.int.spec.ts
 [^src-767c2189]: .agents/skills/volontariapp-shared-npm-package-change/scripts/consumers.py
 [^src-37dd6836]: AGENTS.md
+[^src-0d12895f]: https://github.com/Volontariapp/ms-social/pull/65

@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-04
+
+- **Leçon** - G5 : les fichiers d'un compte supprime restent telechargeables (pitfall) (claude-code/claude-opus-5-5)
+
 ## 2026-10-28
 
 - **Vérification** - Statut mis a jour au 2026-10-28 (handlers ms-storage, routes gateway, pp-storage, deploy MinIO/ClamAV), limite FILE_SCAN_RESULT_TARGET_SERVICES revérifiée, chemins architecture/ (claude-code/claude-sonnet-5-5)

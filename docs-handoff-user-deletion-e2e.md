@@ -35,6 +35,19 @@ Les `it.todo` à remplacer : `api-gateway/e2e/scenarios/user-scenarios.e2e.spec.
 - **Absents de la stack et nécessaires** : post-processor-post, post-processor-event, post-processor-storage, post-processor-user, outbox-storage, outbox-ws, worker-storage. Le scan antivirus (clamd) et minio sont déjà dans le compose.
 - **Piège connu** : post-processor-event a été exclu au lot 2 parce que le géocodage est figé sur Paris en test. Il traite aussi `user.deleted` (`user_event.deleted`). Le réintégrer sans casser `event-search` : géocodage neutralisé en configuration de test, ou coordonnées toujours fournies par les scénarios. Choisir, documenter dans le README du catalogue.
 
+## État au 2026-11-04 au soir (première session de l'orchestrateur)
+
+Rapport : https://claude.ai/artifact/AoedfzS4DYxQnNMmuV4fE6. Étapes 1 à 3 faites, aucune PR mergée.
+
+- **Blocage** : `gh pr merge <n> --squash --admin --delete-branch` est refusé par le classifieur de permissions de Claude Code (« Merge Without Review ») malgré le mandat ci-dessous. Pour qu'un orchestrateur merge lui-même, ajouter une règle `Bash(gh pr merge:*)` dans les settings avant de le lancer ; sinon le Lead Dev merge.
+- **Ordre de merge** :
+  1. ms-social#65 : une seule copie de `@volontariapp/database` (3.12.1). Corrige G6 : depuis ms-social#64, l'E2E de `main` échoue sur les 3 scénarios de like. Tout vert.
+  2. post-processors-runner#64 : interrupteur `GEOCODING_ENABLED` (vrai par défaut). Son E2E n'a échoué que sur G6 : le relancer une fois l'image `latest` de ms-social publiée.
+  3. ci-tools#73 : les 7 runners de la saga dans le profil `e2e`, `GEOCODING_ENABLED=false`, `E2E_S3_ORIGIN`.
+  4. api-gateway#102 (brouillon) : le scénario. Son E2E est vert sur une matrice temporaire (ppr#64 et ms-social#65) et le sous-module ci-tools pointe sur la branche de #73. Avant de merger, remettre `e2e-matrix.json` sur `main`, pointer le sous-module sur `main` de ci-tools, relancer, puis sortir du brouillon.
+- **G5 à corriger ensuite** (npm-packages, donc en dernier) : `releaseForOwner` passe les fichiers en `ORPHANED`, mais la purge `storage.cleanup_files` (doc `docs/stockage-fichiers/07`, section 3) n'existe pas, et l'avatar reste lisible à son URL publique (`it.failing`). Correctif proposé : domain-storage écrit un job `storage.cleanup_files` dans la transaction de `releaseForOwner` et expose une purge par lots des `ORPHANED` (`FOR UPDATE SKIP LOCKED` : suppression des objets public et quarantaine, puis `DELETED`) ; worker-storage ajoute le handler ; post-processor-storage fait `yarn up` de domain-storage ; l'`it.failing` repasse en `it`.
+- **Scénario d'échec** : `it.todo`. Aucune route publique ne fait échouer une purge sans injecter de panne.
+
 ## Plan, dans cet ordre (une PR par repo, merge avant de passer à la suite)
 
 1. **Cartographier** (`analyze_impact` sur `user.deleted` et `USER_DELETION`, profondeur 3 ou plus ; skill `volontariapp-trace-async-flow`) : la liste exacte des processors de purge, leurs retours et les clés `expects` du gather dans `ws-service/config/default.config.json`. Écrire la table « domaine, processor, retour attendu, observable REST » en tête du scénario.

@@ -50,9 +50,18 @@ sources:
   - id: src-fbe43ef3
     resource: npm-packages/packages/post-processors/src/core/processors/base.post-processor.ts
     title: npm-packages/packages/post-processors/src/core/processors/base.post-processor.ts
+  - id: src-2957ab4a
+    resource: "https://github.com/Volontariapp/post-processors-runner/pull/64"
+    title: "https://github.com/Volontariapp/post-processors-runner/pull/64"
 ---
 
 # Leçons
+
+## 2026-11-04 - Un drapeau booleen de config lu depuis l'environnement
+
+- **Type :** pitfall
+- **Leçon :** @volontariapp/config charge avec enableImplicitConversion : la variable d'environnement "false" devient true. Lire un booleen avec @Transform(booleanFlag('cle')) + @IsBoolean() (config/helpers/boolean-flag.helpers.ts, copie de worker-ranking), comme GEOCODING_ENABLED dans post-processor-event.[^src-2957ab4a]
+- **Consigné par :** claude-code/claude-opus-5-5
 
 ## 2026-11-04 - Erreur d'infrastructure dans un post-processor : relancer, jamais avaler
 
@@ -176,3 +185,4 @@ sources:
 [^src-b66d36a3]: npm-packages/packages/domain-user/src/database/triggers/index.ts
 [^src-01a2dc3c]: https://github.com/Volontariapp/post-processors-runner/pull/63
 [^src-fbe43ef3]: npm-packages/packages/post-processors/src/core/processors/base.post-processor.ts
+[^src-2957ab4a]: https://github.com/Volontariapp/post-processors-runner/pull/64

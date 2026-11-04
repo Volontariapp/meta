@@ -29,9 +29,18 @@ sources:
   - id: src-b055c722
     resource: "https://www.githubstatus.com/"
     title: "https://www.githubstatus.com/"
+  - id: src-3eedff94
+    resource: "https://github.com/Volontariapp/ci-tools/pull/73"
+    title: "https://github.com/Volontariapp/ci-tools/pull/73"
 ---
 
 # Leçons
+
+## 2026-11-04 - Stack E2E de la saga de suppression de compte
+
+- **Type :** decision
+- **Leçon :** ci-tools#73 ajoute post-processor-post, -event, -storage, -user, outbox-storage, outbox-ws et worker-storage au profil e2e. post-processor-event tourne avec GEOCODING_ENABLED=false (post-processors-runner#64) : en NODE_ENV=test le geocodeur renvoie Paris et ecraserait les coordonnees des scenarios ; le gather EVENT_CREATION ne se termine donc jamais en E2E, et le reaper est coupe en NODE_ENV=test (ws-service gather-reaper.service.ts:43), donc outbox-ws n'injecte aucun creation_failed. api-gateway-e2e recoit E2E_S3_ORIGIN=http://minio:9000 : l'URL d'upload est signee pour localhost:9000, une politique POST ne signe pas l'hote, le test poste le meme formulaire a minio.[^src-3eedff94]
+- **Consigné par :** claude-code/claude-opus-5-5
 
 ## 2026-11-04 - Job E2E fige pendant un incident GitHub Actions
 
@@ -112,3 +121,4 @@ sources:
 [^src-5601ca7f]: ci-tools/docker-compose.yml
 [^src-f3a7c24a]: ci-tools/.github/workflows/pr-ready-notify.yml
 [^src-b055c722]: https://www.githubstatus.com/
+[^src-3eedff94]: https://github.com/Volontariapp/ci-tools/pull/73
