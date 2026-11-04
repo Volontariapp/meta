@@ -3,6 +3,7 @@
 ## 2026-11-04
 
 - **Vérification** - marked verified on user request without reviewing the domain-user pagination, scoring and trigger commits by others; content may be outdated (claude-code/agent)
+- **Vérification** - Verifie sur main : delete herite de BaseRepository (base.repository.ts:197) et cascade onDelete CASCADE d'impact_score_credits (impact-score-credit.model.ts:37) toujours vrais ; la skill ne cite ni les triggers user.created ni le dechiffrement des emails (3035ec27, 27c787ba, 88911b77, 4806cd5e) (claude-code/agent)
 
 ## 2026-10-30
 

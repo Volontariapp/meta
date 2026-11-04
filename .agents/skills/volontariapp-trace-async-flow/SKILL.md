@@ -44,20 +44,20 @@ sources:
     title: "Scénarios de panne, problèmes P2 et P4"
 verified:
   - by: claude-code/agent
-    at: "2026-10-13T20:48:38Z"
-    digest: 25d3961729597215
-  - by: claude-code/agent
-    at: "2026-10-14T11:23:40Z"
-    digest: 839b4282fe8b1b6d
-  - by: "human:victor"
-    at: "2026-10-19T08:21:45Z"
-    digest: df75accd654047e4
-  - by: claude-code/agent
     at: "2026-10-29T12:13:50Z"
     digest: d73e705316cfa40d
   - by: claude-code/agent
     at: "2026-10-29T17:22:26Z"
     digest: f39e9f067a5595fa
+  - by: claude-code/agent
+    at: "2026-11-04T18:28:32Z"
+    digest: 1384b4fa258ad16f
+  - by: claude-code/agent
+    at: "2026-11-04T20:07:52Z"
+    digest: de92aaea9328081b
+  - by: claude-code/agent
+    at: "2026-11-04T21:24:17Z"
+    digest: c5dec9dcd6763cd3
 ---
 
 # Trace Async Flow & Diagnostic Runtime

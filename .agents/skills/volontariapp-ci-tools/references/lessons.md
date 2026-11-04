@@ -26,9 +26,18 @@ sources:
   - id: src-f3a7c24a
     resource: ci-tools/.github/workflows/pr-ready-notify.yml
     title: ci-tools/.github/workflows/pr-ready-notify.yml
+  - id: src-b055c722
+    resource: "https://www.githubstatus.com/"
+    title: "https://www.githubstatus.com/"
 ---
 
 # Leçons
+
+## 2026-11-04 - Job E2E fige pendant un incident GitHub Actions
+
+- **Type :** pitfall
+- **Leçon :** Pendant un incident Actions (githubstatus.com), un job peut finir toutes ses etapes en succes et rester in_progress sans completed_at, et l'annulation est refusee. Lire les etapes avec gh api repos/<org>/<repo>/actions/jobs/<id> : si Run E2E Tests est en succes et Collect E2E Diagnostics saute, le resultat est fiable. Ne pas relancer en boucle pendant l'incident.[^src-b055c722]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-04 - post-processor-event hors de la stack E2E
 
@@ -102,3 +111,4 @@ sources:
 [^src-71dc1dab]: ci-tools/.github/workflows/sync-all.yml
 [^src-5601ca7f]: ci-tools/docker-compose.yml
 [^src-f3a7c24a]: ci-tools/.github/workflows/pr-ready-notify.yml
+[^src-b055c722]: https://www.githubstatus.com/

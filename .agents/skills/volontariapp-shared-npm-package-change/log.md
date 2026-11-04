@@ -2,6 +2,7 @@
 
 ## 2026-11-04
 
+- **Leçon** - consumers.py lit les checkouts locaux, pas origin/main (pitfall) (claude-code/agent)
 - **Vérification** - npm-packages ci.yml: notify-ready job and labeled-trigger consequences documented; the other flagged files are version and changelog bumps by others, not reviewed (claude-code/agent)
 
 ## 2026-11-02
@@ -12,6 +13,9 @@
 
 - **Vérification** - relu: aucun changement requis, nouvelle dependance workspace entre post-processors et errors, yarn.lock mis a jour par yarn install (claude-code/agent)
 - **Vérification** - relue: catalogue des packages realigne sur les package.json (18 versions perimees corrigees, verifie par script, 0 ecart restant); shared: ajout src/scoring (computeEventScoring); domain-social: ParticipationService.isEventCreator (claude-code/agent)
+- **Leçon** - Tests de delai : horloge manuelle, jamais de vraies attentes (rule) (claude-code/agent)
+- **Vérification** - 202162a3 : ligne Notification (job notify-ready, pr-ready-notify.yml, canal backend) ajoutee au tableau CI ; bumps de ec4945d3, cfcaf9bc et 9b6be88a conformes au flux changeset decrit (claude-code/agent)
+- **Leçon** - Tests unitaires de database bloques par le globalSetup (pitfall) (claude-code/agent)
 - **Leçon** - Changement npm-packages en dernier quand des agents travaillent sur les consommateurs (rule) (claude-code/agent)
 
 ## 2026-11-03

@@ -26,7 +26,7 @@ Le cycle de vie des skills est géré par [volontariapp-skill-evolution](/volont
 | [volontariapp-sealed-secrets](/volontariapp-sealed-secrets/SKILL.md) | Gestion des Secrets Scellés GitOps (kubeseal) | 2026-10-21 |
 | [volontariapp-shared-npm-package-change](/volontariapp-shared-npm-package-change/SKILL.md) | Shared NPM Package Change | 2026-11-04 |
 | [volontariapp-skill-evolution](/volontariapp-skill-evolution/SKILL.md) | Évolution des skills (auto-apprentissage) | 2026-11-04 |
-| [volontariapp-trace-async-flow](/volontariapp-trace-async-flow/SKILL.md) | Trace Async Flow | 2026-10-29 |
+| [volontariapp-trace-async-flow](/volontariapp-trace-async-flow/SKILL.md) | Trace Async Flow | 2026-11-04 |
 | [volontariapp-user-account-deletion](/volontariapp-user-account-deletion/SKILL.md) | User Account Deletion | 2026-11-04 |
 
 ## Skills du plugin matt-pocock

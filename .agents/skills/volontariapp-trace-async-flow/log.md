@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-11-04
+
+- **Vérification** - 0ad1031d : la reclamation ordonne par created_at puis id ; FOR UPDATE SKIP LOCKED et PROCESSING inchanges (claude-code/agent)
+- **Vérification** - commit 9b6be88a : tri des lots par created_at puis id ; FOR UPDATE SKIP LOCKED et PROCESSING inchanges, texte toujours exact (claude-code/agent)
+- **Vérification** - outbox.consumer.ts trie les lots par created_at puis id ; FOR UPDATE SKIP LOCKED et PROCESSING inchanges, texte de la skill toujours exact (claude-code/agent)
+
 ## 2026-10-29
 
 - **Vérification** - Relu run-in-trace-context.ts (npm-packages 9719a9d9) : le span batch est enfant du premier message (database 3.11.1) au lieu d'une racine ; textes sur les batchs et createFollowUp mis a jour, autres messages du lot restent freres. (claude-code/agent)

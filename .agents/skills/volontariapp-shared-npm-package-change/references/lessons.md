@@ -47,9 +47,36 @@ sources:
   - id: src-2a04dce2
     resource: npm-packages/package.json
     title: npm-packages/package.json
+  - id: src-2ab414d1
+    resource: npm-packages/packages/database/src/test/global-setup.ts
+    title: npm-packages/packages/database/src/test/global-setup.ts
+  - id: src-21073430
+    resource: npm-packages/packages/post-processors/src/test/core/helpers/integration/retry.helper.int.spec.ts
+    title: npm-packages/packages/post-processors/src/test/core/helpers/integration/retry.helper.int.spec.ts
+  - id: src-767c2189
+    resource: .agents/skills/volontariapp-shared-npm-package-change/scripts/consumers.py
+    title: .agents/skills/volontariapp-shared-npm-package-change/scripts/consumers.py
 ---
 
 # Leçons
+
+## 2026-11-04 - consumers.py lit les checkouts locaux, pas origin/main
+
+- **Type :** pitfall
+- **Leçon :** scripts/consumers.py (chemin relatif au dossier de la skill, pas a npm-packages) lit les package.json des repos clones sous meta tels quels : un checkout en retard ou sur une autre branche donne de fausses versions (le 2026-11-04 il affichait outbox-runners en 3.10.14 alors qu'origin/main declarait ^3.11.0 et resolvait 3.11.0). Avant un yarn up, lire la version resolue avec git -C <repo> show origin/main:<runner>/yarn.lock.[^src-767c2189]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-04 - Tests de delai : horloge manuelle, jamais de vraies attentes
+
+- **Type :** rule
+- **Leçon :** Un test qui attend avec setTimeout puis verifie qu'un delai n'est pas encore ecoule est instable en CI : un runner charge depasse la marge (retry.helper.int.spec.ts attendait 120 ms contre un delai de 200 ms, echec sur main run 41916499473). Quand le code lit Date.now() pour programmer et comparer, piloter le temps avec jest.spyOn(Date, 'now').mockImplementation(() => now) et restaurer dans afterEach.[^src-21073430]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-04 - Tests unitaires de database bloques par le globalSetup
+
+- **Type :** pitfall
+- **Leçon :** packages/database/src/test/global-setup.ts exige Postgres et Redis meme pour un test unitaire. Pour un test purement unitaire sans la stack : yarn test --globalSetup <fichier .mjs qui exporte une fonction vide> <spec>. Le hook ESLint post-edit signale aussi les erreurs deja presentes sur main dans le fichier edite : les corriger dans la meme PR.[^src-2ab414d1]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-04 - Changement npm-packages en dernier quand des agents travaillent sur les consommateurs
 
@@ -196,3 +223,6 @@ sources:
 [^src-c6f47875]: ms-user/package.json
 [^src-cd3f14ee]: npm-packages/packages/domain-user/src/repositories/postgres-user.repository.ts
 [^src-2a04dce2]: npm-packages/package.json
+[^src-2ab414d1]: npm-packages/packages/database/src/test/global-setup.ts
+[^src-21073430]: npm-packages/packages/post-processors/src/test/core/helpers/integration/retry.helper.int.spec.ts
+[^src-767c2189]: .agents/skills/volontariapp-shared-npm-package-change/scripts/consumers.py

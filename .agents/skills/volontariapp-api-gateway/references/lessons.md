@@ -41,9 +41,18 @@ sources:
   - id: src-d47502e1
     resource: api-gateway/package.json
     title: api-gateway/package.json
+  - id: src-553b66ac
+    resource: "https://github.com/Volontariapp/api-gateway/pull/101"
+    title: "https://github.com/Volontariapp/api-gateway/pull/101"
 ---
 
 # Leçons
+
+## 2026-11-04 - Filtres sociaux de recherche : excludedIds pour les exclusions
+
+- **Type :** rule
+- **Leçon :** Les ids de getRecommendedEventIds sont tries par eventId, pas par pertinence. Avec seulement des filtres exclude*, ne jamais envoyer le complement en ids (plafond ms-event MAX_SEARCH_IDS 1000) : envoyer la petite liste en excludedIds (EventSocialFilterService). Tester chaque drapeau avec === true, une chaine ?? ignore tout si le premier vaut false.[^src-553b66ac]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-04 - Ids recommandes : plafond 1000 de ms-event
 
@@ -164,3 +173,4 @@ sources:
 [^src-64ff0419]: api-gateway/src/modules/post/dto/common/post-media.dto.ts
 [^src-7d7d341e]: api-gateway/src/modules/event/dto/common/event.dto.ts
 [^src-d47502e1]: api-gateway/package.json
+[^src-553b66ac]: https://github.com/Volontariapp/api-gateway/pull/101

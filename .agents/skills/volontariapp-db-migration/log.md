@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-11-04
+
+- **Vérification** - 0ad1031d : ORDER BY created_at, id dans la reclamation outbox, factory de test ; rien dans la skill ne cite ces fichiers (claude-code/agent)
+- **Vérification** - Aucun passage ne cite base.repository, la pagination (3035ec27), outbox.consumer (9b6be88a) ni la migration scoring ms-user 1792300000000 ; methode expand/contract inchangee (claude-code/agent)
+
 ## 2026-11-03
 
 - **Leçon** - CREATE INDEX CONCURRENTLY interdit avec les scripts migration:run actuels (rule) (claude-code/agent)

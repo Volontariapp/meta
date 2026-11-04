@@ -19,6 +19,7 @@
 - **Vérification** - relue: render-dependabot.py (MONOREPO_HOLD, limite 3, motif directory) deja decrit, aucun changement (claude-code/agent)
 ## 2026-11-04
 
+- **Leçon** - Job E2E fige pendant un incident GitHub Actions (pitfall) (claude-code/agent)
 - **Leçon** - post-processor-event hors de la stack E2E (pitfall) (claude-code/agent)
 - **Leçon** - Matrice E2E : services dans e2e-services.txt, merger les repos avant ci-tools (rule) (claude-code/agent)
 - **Leçon** - pg_isready par TCP avec un healthcheck rapide (pitfall) (claude-code/agent)

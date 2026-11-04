@@ -12,6 +12,9 @@
 
 - **Vérification** - post-processors: les erreurs d'infrastructure ne comptent plus de tentative ni de DLQ, relecture planifiee de la PEL (readPending), piege du verrou d'idempotence perime (claude-code/agent)
 - **Vérification** - relue: a601b6b6 (scoring post-processor-user) et bumps de version post-processors sans effet sur les procedures DLQ/XCLAIM; aucun changement (claude-code/agent)
+- **Vérification** - b1dc7398 : seul le test d'integration de RetryHelper change (horloge manuelle) ; RetryHelper et la skill inchanges (claude-code/agent)
+- **Vérification** - Seul retry.helper.int.spec.ts change (horloge manuelle via jest.spyOn(Date.now) au lieu de vraies attentes) ; RetryHelper et le texte de la skill inchanges (claude-code/agent)
+- **Vérification** - ec4945d3 : les erreurs d'infrastructure ne vont plus en DLQ, message laisse pending et relu apres claimIntervalMs ; precision ajoutee a l'etape 1. Bump post-processors 3.4.9 sans effet sur la skill (claude-code/agent)
 
 ## 2026-10-30
 
