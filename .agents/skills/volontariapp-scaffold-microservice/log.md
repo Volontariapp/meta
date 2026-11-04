@@ -20,6 +20,9 @@
 
 - **Vérification** - relu: aucun changement requis, dependance @volontariapp/errors ajoutee a post-processors sans impact sur le scaffolding (claude-code/agent)
 - **Vérification** - relue: les 122 fichiers viennent des commits deja examines (api-gateway 2e26fd3/103f888, ms-event 08ab793, ms-social 9807d07/99f4856, ms-user b81b2d9, workers b4eb3bf, post-processors a601b6b6, npm-packages 3122e97); scripts cites existent, repos.json deja documente; aucune etape ne change (claude-code/agent)
+## 2026-11-03
+
+- **Vérification** - Scaffold: copier PaginationRequestDTO valide (ms-user ou ms-social) pour les requetes de liste, defaut page 1 limit 10 dans le controleur (claude-code/agent)
 
 ## 2026-10-30
 

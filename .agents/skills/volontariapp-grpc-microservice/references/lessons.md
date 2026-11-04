@@ -26,26 +26,17 @@ sources:
   - id: src-300927cf
     resource: ms-event/src/test/unit/controllers/event.command.controller.unit.spec.ts
     title: ms-event/src/test/unit/controllers/event.command.controller.unit.spec.ts
-  - id: src-2face9f8
-    resource: ms-social/src/modules/participation/policies/event-organizer.policy.ts
-    title: ms-social/src/modules/participation/policies/event-organizer.policy.ts
-  - id: src-e53e252d
-    resource: ms-event/src/modules/event/transformers/event.transformer.ts
-    title: ms-event/src/modules/event/transformers/event.transformer.ts
+  - id: src-06c83ce2
+    resource: ms-user/src/common/dto/pagination.dto.ts
+    title: ms-user/src/common/dto/pagination.dto.ts
 ---
 
 # Leçons
 
-## 2026-11-01 - ms-event: scoring_version nullable, valeur courante posee a la creation
+## 2026-11-03 - Pagination : la leçon ListPosts sans tri ni plafond est périmée
 
 - **Type :** rule
-- **Leçon :** events.scoring_version est une colonne integer NULL (migration 1792200000000). EventTransformer.toEntity pose CURRENT_SCORING_VERSION (event.constants.ts, valeur 1) a la creation ; les anciennes lignes restent NULL et toEventDTO n'expose scoringVersion que si la valeur n'est pas null (test null-safe avec != null, un test undefined-only laisserait fuiter NULL dans le DTO). Le consommateur post-processor-user choisit le calcul dynamique des que scoringVersion >= 1.[^src-e53e252d]
-- **Consigné par :** claude-code/agent
-
-## 2026-11-01 - ms-social setEventAttendance: reserve a l'organisateur ou a un admin
-
-- **Type :** rule
-- **Leçon :** Le handler gRPC setEventAttendance de ms-social (PARTICIPATION_COMMAND_SERVICE) appelle EventOrganizerPolicy.assertCanManageAttendance(user, eventId) avant d'ecrire : admin (UserRoles.ADMIN) ou createur de l'event (ParticipationService.isEventCreator, arete CREATED) sinon ForbiddenError ATTENDANCE_FORBIDDEN, et UnauthorizedError ATTENDANCE_UNAUTHENTICATED sans identite. Contraste avec les handlers Admin* qui ne verifient pas le role. Le handler est lie par le litteral 'setEventAttendance' car contracts-nest 3.4.2 n'a pas de constante dans PARTICIPATION_METHODS pour cette methode (commentaire dans le controleur) ; les tableaux checkedUserIds/uncheckedUserIds sont plafonnes (MAX_ATTENDANCE_BATCH_SIZE).[^src-2face9f8]
+- **Leçon :** Depuis le lot pagination de novembre 2026, ListPosts et ListComments (domain-post 3.10.0) trient par createdAt DESC puis id DESC, la branche auteur=lecteur passe un ordre explicite, BaseRepository.paginate (database 3.12.0) borne page et limit et trie sur la cle primaire par defaut, et les DTO de pagination des quatre ms plafonnent limit a 1000 (la gateway ecrete a 100). Deux index existent (comments postId+createdAt, posts createdAt) mais sans EXPLAIN, et sans CONCURRENTLY. Regle: valider pagination avec PaginationRequestDTO, jamais @IsOptional seul; lectures par lot via findByIds par lots de 100 en conservant l ordre d entree.[^src-06c83ce2]
 - **Consigné par :** claude-code/agent
 
 ## 2026-10-17 - Tests d'entite: toHaveProperty echoue sur un champ de classe undefined
@@ -96,5 +87,4 @@ sources:
 [^src-c5886b21]: npm-packages/packages/domain-event/src/services/event.service.ts
 [^src-8fc3ad1d]: ms-event/src/modules/event/controllers/commands/base.command.controller.ts
 [^src-300927cf]: ms-event/src/test/unit/controllers/event.command.controller.unit.spec.ts
-[^src-2face9f8]: ms-social/src/modules/participation/policies/event-organizer.policy.ts
-[^src-e53e252d]: ms-event/src/modules/event/transformers/event.transformer.ts
+[^src-06c83ce2]: ms-user/src/common/dto/pagination.dto.ts

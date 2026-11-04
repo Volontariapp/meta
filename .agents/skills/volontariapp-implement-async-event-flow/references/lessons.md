@@ -35,9 +35,42 @@ sources:
   - id: src-8f29c4a0
     resource: post-processors-runner/post-processor-storage/src/post-processors/user-deleted.post-processor.ts
     title: post-processors-runner/post-processor-storage/src/post-processors/user-deleted.post-processor.ts
+  - id: src-7746ea1d
+    resource: ws-service/config/default.config.json
+    title: ws-service/config/default.config.json
+  - id: src-b571b8b4
+    resource: ws-service/src/core/services/gather-state.service.ts
+    title: ws-service/src/core/services/gather-state.service.ts
+  - id: src-b66d36a3
+    resource: npm-packages/packages/domain-user/src/database/triggers/index.ts
+    title: npm-packages/packages/domain-user/src/database/triggers/index.ts
 ---
 
 # Leçons
+
+## 2026-11-04 - Saga event.deleted : un seul feedback attendu, cle EVENT_SOCIAL_DELETED
+
+- **Type :** rule
+- **Leçon :** event.deleted (domain-event postgres-event.repository.ts, target event:deleted) n'est consomme que par post-processor-social et ws-service (gather creator). ws-service attend une seule cle EVENT_SOCIAL_DELETED (event_social.deleted / event_social.deletion_failed sur WS_EVENT_DELETED_FEEDBACK), alignee par ws-service#50 et post-processors-runner#59 ; avant, les cles attendues (social_event.deleted_success, post_event.deleted_success) n'etaient emises par personne et le reaper fermait la saga en event.deletion_failed apres 60 s. Un post-processor ne doit pas avaler l'erreur d'insertion du feedback (sinon la saga expire en FAILED alors que l'effet est fait) : rethrow comme UserDeletedPostProcessor. Decision Lead Dev (2026-11-04) : les posts d'un event supprime sont detaches (eventId vide), via une methode domain-post et un feedback post a ajouter ensuite a expects.[^src-7746ea1d]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-04 - Reaper du gather desactive en E2E
+
+- **Type :** pitfall
+- **Leçon :** Dans la stack E2E, ws-service tourne avec NODE_ENV=test, ce qui desactive le gather reaper : quand un runner qui doit renvoyer un feedback manque, le client ne recoit rien du tout (pas de *_failed). Un test WebSocket qui expire signifie donc souvent un runner absent de la stack ou une cle de feedback mal alignee (bug G1 : ws-service attend social_event.deleted_success, post-processor-social emet event_social.deleted).[^src-7746ea1d]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-03 - Trigger domain-user : index.ts fait foi, pas le .sql
+
+- **Type :** pitfall
+- **Leçon :** Dans npm-packages/packages/domain-user/src/database/triggers/, la migration ms-user execute USERS_TRIGGER de index.ts (payload enveloppe dans after). users.trigger.sql est desynchronise (sans after). Modifier index.ts et aligner le .sql ; les post-processors lisent event.payload.after.[^src-b66d36a3]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-03 - Le gather ws-service exige l'evenement declencheur sur son propre stream
+
+- **Type :** pitfall
+- **Leçon :** ws-service n'ouvre un gather que sur le stream de l'evenement declencheur (ex. Streams.USER_CREATED = user:created). Un feedback qui arrive sans gather ouvert est ignore (gather-state.service.ts : No active gather state, isComplete false) et aucune notification WebSocket ne part. L'emetteur doit donc cibler a la fois le stream du domaine et celui de l'evenement, comme user.deleted ([user:deleted, social:user, ...]). user.created ne ciblait que social:user : notification jamais recue, prouve en E2E local (echec sans le trigger corrige, succes avec).[^src-b571b8b4]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-19 - Un nouveau domaine consommateur de user.deleted a besoin de son stream, et ses demandes de calcul s'ecrivent en transaction
 
@@ -120,3 +153,6 @@ sources:
 [^src-4f6a6ae1]: workers-runners/worker-event/package.json
 [^src-3e2c0d08]: ws-service/src/core/services/gather-reaper.service.ts
 [^src-8f29c4a0]: post-processors-runner/post-processor-storage/src/post-processors/user-deleted.post-processor.ts
+[^src-7746ea1d]: ws-service/config/default.config.json
+[^src-b571b8b4]: ws-service/src/core/services/gather-state.service.ts
+[^src-b66d36a3]: npm-packages/packages/domain-user/src/database/triggers/index.ts

@@ -12,6 +12,13 @@
 
 - **Vérification** - relu: aucun changement requis, nouvelle dependance workspace entre post-processors et errors, yarn.lock mis a jour par yarn install (claude-code/agent)
 - **Vérification** - relue: catalogue des packages realigne sur les package.json (18 versions perimees corrigees, verifie par script, 0 ecart restant); shared: ajout src/scoring (computeEventScoring); domain-social: ParticipationService.isEventCreator (claude-code/agent)
+- **Leçon** - Changement npm-packages en dernier quand des agents travaillent sur les consommateurs (rule) (claude-code/agent)
+
+## 2026-11-03
+
+- **Leçon** - Surcharge de toEntity sans toEntities (pitfall) (claude-code/agent)
+- **Leçon** - Monter outbox et messaging avec les paquets domain-* chez le consommateur (rule) (claude-code/agent)
+- **Leçon** - Lancer changeset version APRES le rebase sur origin/main (rule) (claude-code/agent)
 
 ## 2026-10-30
 

@@ -24,20 +24,20 @@ generated:
   at: "2026-10-12T12:18:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-11-02T12:22:17Z"
-    digest: d33d234e3ae24fc3
+    at: "2026-10-30T11:45:19Z"
+    digest: 94520979f58493f1
   - by: claude-code/agent
-    at: "2026-11-02T13:06:58Z"
-    digest: e437d2b06d39f7e5
-  - by: "process:claude-code"
-    at: "2026-11-03T14:03:08Z"
-    digest: 8873d768c89a88d8
+    at: "2026-10-30T11:56:29Z"
+    digest: 6b1c743cb3f451fc
   - by: claude-code/agent
-    at: "2026-11-04T13:10:18Z"
-    digest: 9030cdf0bbbfdebd
+    at: "2026-10-30T12:24:35Z"
+    digest: c8a2114d0fd9e692
   - by: claude-code/agent
-    at: "2026-11-04T13:14:01Z"
-    digest: fb6ac1e39d2dd346
+    at: "2026-10-30T12:29:16Z"
+    digest: 5eb9cf0a0248d275
+  - by: claude-code/agent
+    at: "2026-11-03T20:31:04Z"
+    digest: 12ce8c4542fefc25
 sources:
   - id: doc-creation
     kind: local_file
@@ -147,6 +147,7 @@ Une fois la PR Protobuf générée dans `npm-packages`[^doc-creation] :
 4. **Contrôleurs CQRS** :
    - Contrôleurs séparés pour les commandes (`BaseCommandController` avec `withFallback`) et les requêtes de lecture.
    - Mappers stricts sans conversion magique.
+   - Pagination : copier `src/common/dto/pagination.dto.ts` de `ms-user` ou `ms-social` (`PaginationRequestDTO` validé, `MAX_PAGINATION_LIMIT`) et l'utiliser dans toute requête de liste avec `@ValidateNested() @Type(...)` ; défaut page 1 / limit 10 dans le contrôleur. Voir l'étape 2 de la skill `volontariapp-grpc-microservice`.
 5. **Matrice de tests e2e** :
    - Créer `e2e-matrix.json` dans `ms-<domaine>` et ajouter le nouveau service aux fichiers `e2e-matrix.json` des services communicants et de l'API Gateway.
 

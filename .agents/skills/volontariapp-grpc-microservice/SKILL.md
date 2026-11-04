@@ -25,6 +25,9 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
+    at: "2026-10-30T11:31:00Z"
+    digest: 4de3ef6543d7469f
+  - by: claude-code/agent
     at: "2026-10-30T11:31:42Z"
     digest: 035a8c5d9af1ed4e
   - by: claude-code/agent
@@ -34,11 +37,8 @@ verified:
     at: "2026-10-30T12:29:16Z"
     digest: 37f4a83af8a6d3d1
   - by: claude-code/agent
-    at: "2026-11-01T16:31:21Z"
-    digest: 49cbd96f6143a71b
-  - by: claude-code/agent
-    at: "2026-11-04T13:17:02Z"
-    digest: cbd206e445fcb2bf
+    at: "2026-11-03T20:31:03Z"
+    digest: 79cb461c249d3c2e
 sources:
   - id: agent-md
     resource: AGENT.md
@@ -124,6 +124,8 @@ export class CreateEventCommandDTO implements CreateEventCommand {
 
 - **Règles de validation automatique** : `GrpcValidationPipe` est configuré en `APP_PIPE` global avec `enumMaps`[^app-event][^validation]. Il convertit les chaînes vides en `undefined`, les entiers Int64 en `number`, et les noms d'enums sous forme de string en valeurs numériques conformes Protobuf.
 - **Défense en profondeur** : Utiliser l'assertion d'assignation définie `!` pour les champs obligatoires du contrat (aucun `any`).
+- **Pagination des requêtes de liste** : ne jamais déclarer `pagination` avec le seul `@IsOptional()` (aucune valeur n'est alors validée). Motif commun : `@IsOptional() @ValidateNested() @Type(() => PaginationRequestDTO) pagination: PaginationRequestDTO | undefined;`, avec `PaginationRequestDTO` dans `src/common/dto/pagination.dto.ts` (`page` : `@IsInt @Min(1)`, `limit` : `@IsInt @Min(1) @Max(MAX_PAGINATION_LIMIT)`). Le plafond est 1000 côté ms tant que la gateway appelle encore avec `limit: 1000` (la gateway écrête à 100). Pagination absente : défaut page 1 / limit 10 dans le contrôleur (`DEFAULT_PAGE`, `DEFAULT_LIMIT`), jamais une lecture de toute la table. Listes d'ids en entrée : `@IsArray @ArrayMaxSize(100)` (1000 pour `ids`/`excludedIds` de `SearchEvents`, que la gateway remplit avec les événements recommandés).
+- **Lectures par lot** : pas de `Promise.all(ids.map(findById))`. Utiliser le `findByIds` du domaine (une requête, 100 ids maximum, tronqué en silence au-delà donc découper par lots de 100) puis remettre le résultat dans l'ordre des ids d'entrée, car cet ordre vient de ms-social pour les listes de profils et d'événements. Exemples : `ms-user/src/modules/user/helpers/find-active-users-in-order.ts`, `ms-event/src/modules/event/utils/events-by-ids.util.ts`. Côté domaine, filtrer en SQL avant `limit`/`offset` (`UserService.findPage`) et toujours trier avec un départage par `id` (offset instable sinon).
 
 ---
 

@@ -11,9 +11,69 @@ sources:
   - id: src-471bbb9a
     resource: ci-tools/.github/workflows/service-docker-build-push.yml
     title: ci-tools/.github/workflows/service-docker-build-push.yml
+  - id: src-cbb46bc1
+    resource: ci-tools/.github/workflows/e2e-orchestrator.yml
+    title: ci-tools/.github/workflows/e2e-orchestrator.yml
+  - id: src-44d20cb6
+    resource: ci-tools/.github/workflows/runner-pipeline.yml
+    title: ci-tools/.github/workflows/runner-pipeline.yml
+  - id: src-71dc1dab
+    resource: ci-tools/.github/workflows/sync-all.yml
+    title: ci-tools/.github/workflows/sync-all.yml
+  - id: src-5601ca7f
+    resource: ci-tools/docker-compose.yml
+    title: ci-tools/docker-compose.yml
 ---
 
 # Leçons
+
+## 2026-11-04 - post-processor-event hors de la stack E2E
+
+- **Type :** pitfall
+- **Leçon :** En NODE_ENV=test, la strategie OpenStreetMap de post-processor-event renvoie des coordonnees fixes (Paris) et ecraserait la localisation de chaque event, ce qui casse event-search : il n'est volontairement pas dans le profil e2e (ci-tools#72). Consequence : le gather event.created de ws-service attend GEOCODED_SUCCESS que rien n'emet et expire. Les runners du lot 2 dans la stack : outbox-event, outbox-post, outbox-ranking, post-processor-ranking, worker-ranking, ms-ranking (+ migration).[^src-5601ca7f]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-04 - Matrice E2E : services dans e2e-services.txt, merger les repos avant ci-tools
+
+- **Type :** rule
+- **Leçon :** La liste des services E2E vit dans ci-tools/scripts/e2e-services.txt (lue par e2e-matrix-parsing.sh et validate-matrix-main.sh) ; une cle absente de e2e-matrix.json vaut main avec un warning. runner-pipeline.yml lance validate-e2e-matrix sur chaque evenement, y compris push sur main : quand un repo doit recevoir un nouveau e2e-matrix.json, merger sa PR AVANT la PR ci-tools, sinon le bump sync-all fait echouer son main. Les runners construisent toutes leurs images taguees par branche sur PR labellisee docker-and-e2e (input extra-tag de docker-build-push).[^src-44d20cb6]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-04 - pg_isready par TCP avec un healthcheck rapide
+
+- **Type :** pitfall
+- **Leçon :** Avec start_interval 1s, pg_isready sans -h (socket unix) repond pret pendant l'init de l'image postgres (serveur temporaire socket-only, puis redemarrage) : les migrations partent trop tot et echouent en ECONNREFUSED, ce qui a casse l'E2E des 7 repos (ci-tools#68, corrige par #70). Toujours pg_isready -h 127.0.0.1 dans le compose.[^src-5601ca7f]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-03 - PR empilee fermee au merge de sa base
+
+- **Type :** pitfall
+- **Leçon :** Une PR dont la base est une autre branche de PR est fermee automatiquement quand cette base est mergee avec --delete-branch (ci-tools#67 fermee au merge de #66). Avant de merger la base, rebaser la PR empilee (git rebase --onto origin/main <ancien sha de base>) et changer sa base vers main, ou ouvrir une nouvelle PR (ci-tools#68).[^src-71dc1dab]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-03 - Runners async dans l'E2E et creation manuelle de noeuds
+
+- **Type :** rule
+- **Leçon :** Avec outbox-user et post-processor-social dans le profil e2e (ci-tools#66), un test ne doit plus creer a la main le noeud social d'un user inscrit via POST /users : la creation manuelle fait la course avec le post-processor et renvoie 409 quand il gagne. Utiliser waitForSocialUserNode (api-gateway e2e/helpers/social-node.helper.ts). Les runners exigent un /health (outbox-runners#41) et ne vont que dans le profil e2e, jamais dans le profil par defaut.[^src-5601ca7f]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-03 - Projet compose local partage avec le dev
+
+- **Type :** pitfall
+- **Leçon :** Sans -p, docker compose -f ci-tools/docker-compose.yml prend le projet ci-tools : celui des volumes de dev locaux (ci-tools_postgres_*_data). Un replay local de l'E2E y applique les migrations des images latest et un down -v effacerait les donnees de dev. Rejouer l'E2E avec COMPOSE_PROJECT_NAME=volontariapp-e2e-local. Sur Mac arm64 les images GHCR n'existent qu'en amd64 : docker pull --platform linux/amd64, sans DOCKER_DEFAULT_PLATFORM au up (il refuse les images construites localement en arm64).[^src-5601ca7f]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-03 - E2E compose lu depuis le sous-module de l'appelant
+
+- **Type :** pitfall
+- **Leçon :** e2e-orchestrator.yml vient de ci-tools@main, mais il lance docker compose -f ci-tools/docker-compose.yml depuis le sous-module ci-tools du repo appelant (checkout submodules: recursive). Un changement du compose n'atteint un repo qu'au bump de son pointeur (sync-all). Pour tester un compose non merge dans la CI d'une PR, pointer le sous-module de la PR sur le commit de la branche ci-tools, puis le re-pointer sur main apres merge (api-gateway#91).[^src-cbb46bc1]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-03 - Label docker-and-e2e requis pour le CI Docker et e2e
+
+- **Type :** pitfall
+- **Leçon :** service-docker-build-push.yml et e2e-orchestrator.yml lisent le label docker-and-e2e (payload de la PR puis gh pr view en direct avec ORG_REPO_TOKEN, 10 essais espaces de 30 s). Sans lui, le job docker echoue avec une erreur; les repos declarent e2e avec needs: [ci-docker], donc le job e2e est saute et la PR n'est pas mergeable. Une PR sans le label ne valide donc jamais l'e2e avant merge: ajouter le label des l'ouverture de la PR, sinon les regressions e2e se decouvrent apres coup.[^src-cbb46bc1]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-06 - CI d'un service : label docker-and-e2e, et le merge sur main deploie
 
@@ -28,3 +88,7 @@ sources:
 - **Consigné par :** claude-code/claude-opus-5-5
 
 [^src-471bbb9a]: ci-tools/.github/workflows/service-docker-build-push.yml
+[^src-cbb46bc1]: ci-tools/.github/workflows/e2e-orchestrator.yml
+[^src-44d20cb6]: ci-tools/.github/workflows/runner-pipeline.yml
+[^src-71dc1dab]: ci-tools/.github/workflows/sync-all.yml
+[^src-5601ca7f]: ci-tools/docker-compose.yml

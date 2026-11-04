@@ -2,12 +2,15 @@
 
 ## 2026-11-04
 
-- **Vérification** - marked verified on user request without reviewing the pagination diffs (api-gateway/ms-event/ms-post); content may be outdated (claude-code/agent)
+- **Leçon** - Ids recommandes : plafond 1000 de ms-event (pitfall) (claude-code/agent)
 
-## 2026-11-01
+## 2026-11-03
 
-- **Vérification** - relue: 2e26fd3 routes attendance/attendees, plafond 500 et mappers from() ajoutes en lecon; 103f888 seed (services/DTO seulement), risque SystemSeedController sans admin:true toujours exact (claude-code/agent)
-- **Leçon** - Routes de presence: POST events/:eventId/attendance et GET events/:eventId/attendees, tableaux bornes a 500 (rule) (claude-code/agent)
+- **Leçon** - E2E isoles pour Jest en parallele (rule) (claude-code/agent)
+- **Vérification** - module de pagination commun (src/common/pagination), plafonds 100 et legacy 500, likes-summary, check-arch (claude-code/agent)
+- **Vérification** - module de pagination commun (src/common/pagination), plafonds 100 et legacy 500, likes-summary, check-arch (claude-code/agent)
+- **Vérification** - module de pagination commun, plafonds 100 et legacy 500, likes-summary, check-arch (claude-code/agent)
+- **Leçon** - yarn check-arch: regles des DTO de la gateway (rule) (claude-code/agent)
 
 ## 2026-10-30
 

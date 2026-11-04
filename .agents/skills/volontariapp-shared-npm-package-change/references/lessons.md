@@ -38,9 +38,42 @@ sources:
   - id: src-f6aa5050
     resource: ws-service/tsconfig.json
     title: ws-service/tsconfig.json
+  - id: src-c6f47875
+    resource: ms-user/package.json
+    title: ms-user/package.json
+  - id: src-cd3f14ee
+    resource: npm-packages/packages/domain-user/src/repositories/postgres-user.repository.ts
+    title: npm-packages/packages/domain-user/src/repositories/postgres-user.repository.ts
+  - id: src-2a04dce2
+    resource: npm-packages/package.json
+    title: npm-packages/package.json
 ---
 
 # Leçons
+
+## 2026-11-04 - Changement npm-packages en dernier quand des agents travaillent sur les consommateurs
+
+- **Type :** rule
+- **Leçon :** Le hook stop-rule-guard verrouille tous les repos consommateurs pour toute la session (sous-agents compris) des qu'un fichier npm-packages est edite. Avec plusieurs agents en parallele sur api-gateway, ci-tools ou les ms-*, faire la modification npm-packages en dernier, une fois leurs branches poussees, puis s'arreter et laisser le Lead Dev lancer le release apres publication.[^src-2a04dce2]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-03 - Surcharge de toEntity sans toEntities
+
+- **Type :** pitfall
+- **Leçon :** BaseRepository.toEntities passe directement par le mapper (mapArray) et ne rappelle pas toEntity: un repository qui surcharge toEntity (ex. PostgresUserRepository, qui dechiffre l'email) renvoie des donnees brutes sur findAll, findPage, findByIds, findAllWithRelations, createMany et paginate. Toute surcharge de toEntity doit etre doublee d'une surcharge de toEntities qui mappe via this.toEntity, avec un test unitaire par lecture multiple. Correctif: domain-user 2.15.1 (PR #284).[^src-cd3f14ee]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-03 - Monter outbox et messaging avec les paquets domain-* chez le consommateur
+
+- **Type :** rule
+- **Leçon :** Apres un bump de domain-user (ou d un autre domain-* qui depend de outbox et de messaging), un microservice qui garde outbox et messaging sur d anciennes plages garde en node_modules une seconde copie incompatible de database et des types messaging: tsc echoue (JobPayload, JobsOutboxEntity et JobsOutboxRepository non assignables a BaseRepository) et le build de la CI casse. Constate sur ms-user avec outbox 0.10.22 et messaging 2.30.0; remede verifie: yarn up sur outbox et messaging aux versions de la cascade (0.10.26 et 2.30.2) en plus du paquet de domaine, puis tsc a 0 erreur. Le symptome depend du depot: ms-event, avec les memes bumps de domaine, n a pas de copie en double. Verification: find node_modules -path '*/node_modules/@volontariapp/*/node_modules/@volontariapp/*/package.json' doit ne rien renvoyer (attention: pas de limite de profondeur, un find limite a -maxdepth 6 rate ces copies).[^src-c6f47875]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-03 - Lancer changeset version APRES le rebase sur origin/main
+
+- **Type :** rule
+- **Leçon :** Quand la PR bot de synchronisation des contrats (proto-registry vers npm-packages) est mergee, elle monte les versions de contracts, contracts-nest et de tous les paquets dependants (database, domain-*, messaging, outbox, workers...). Une branche qui a deja lance changeset version sur l ancien main entre en conflit sur package.json et CHANGELOG.md. Marche a suivre validee: finir et commiter le code seul, git fetch puis rebase origin/main (en cas de conflit sur package.json, CHANGELOG.md ou yarn.lock prendre origin/main, ne jamais resoudre a la main), yarn install, build et tests, et seulement ensuite changeset add puis changeset version une fois, pour que les versions partent de celles deja sur main. Le script test de database lance aussi les tests d integration (Postgres, Redis requis): utiliser jest.config.unit.js en local sans base.[^src-9f856e83]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-19 - Erreurs tsc fantomes apres un yarn up : supprimer le cache incremental
 
@@ -160,3 +193,6 @@ sources:
 [^src-ca59d5f3]: npm-packages/packages/domain-post/src/repositories/postgres-post.repository.ts
 [^src-ae6d3d91]: ms-post/package.json
 [^src-f6aa5050]: ws-service/tsconfig.json
+[^src-c6f47875]: ms-user/package.json
+[^src-cd3f14ee]: npm-packages/packages/domain-user/src/repositories/postgres-user.repository.ts
+[^src-2a04dce2]: npm-packages/package.json

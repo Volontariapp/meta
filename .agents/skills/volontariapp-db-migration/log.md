@@ -1,12 +1,8 @@
 # Historique
 
-## 2026-11-04
+## 2026-11-03
 
-- **Vérification** - marked verified on user request without reviewing the pagination diffs (api-gateway/ms-event/ms-post); content may be outdated (claude-code/agent)
-
-## 2026-11-01
-
-- **Vérification** - relue: CLI sync-migrations.mjs conforme (--dry-run, --packages, --pr); ajout --pr exige npm-packages propre et exclut --dry-run; piege md5 des copies worker-event reformatees (1781400000000, mêmes requetes); migrations scoring ajoutives nullables (claude-code/agent)
+- **Leçon** - CREATE INDEX CONCURRENTLY interdit avec les scripts migration:run actuels (rule) (claude-code/agent)
 
 ## 2026-10-30
 

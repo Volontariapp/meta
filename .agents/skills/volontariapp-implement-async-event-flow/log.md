@@ -2,12 +2,14 @@
 
 ## 2026-11-04
 
-- **Vérification** - runners ci.yml: notify-ready job added (CI only, skill content unaffected) (claude-code/agent)
+- **Leçon** - Saga event.deleted : un seul feedback attendu, cle EVENT_SOCIAL_DELETED (rule) (claude-code/agent)
+- **Leçon** - Reaper du gather desactive en E2E (pitfall) (claude-code/agent)
+- **Consigné par :** claude-code/agent
 
-## 2026-11-01
+## 2026-11-03
 
-- **Vérification** - relu: aucun changement requis, la regle sur les catch qui avalent les erreurs reste valable (erreurs metier), les erreurs d'infrastructure sont traitees dans BasePostProcessor (claude-code/agent)
-- **Vérification** - relue: a601b6b6 credit d'impact a deux chemins (scoringVersion>=1 calcule via computeEventScoring sur check-ins, sinon awardedImpactScore); ajout dans la checklist champ requis (claude-code/agent)
+- **Leçon** - Trigger domain-user : index.ts fait foi, pas le .sql (pitfall) (claude-code/agent)
+- **Leçon** - Le gather ws-service exige l'evenement declencheur sur son propre stream (pitfall) (claude-code/agent)
 
 ## 2026-10-30
 

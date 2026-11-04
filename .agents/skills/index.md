@@ -6,14 +6,14 @@ Le cycle de vie des skills est géré par [volontariapp-skill-evolution](/volont
 
 | Skill | Domaine | Dernière vérification |
 | :--- | :--- | :--- |
-| [volontariapp-api-gateway](/volontariapp-api-gateway/SKILL.md) | Exposer ou Modifier une Route REST Edge | 2026-11-04 |
+| [volontariapp-api-gateway](/volontariapp-api-gateway/SKILL.md) | Exposer ou Modifier une Route REST Edge | 2026-11-03 |
 | [volontariapp-async-remediation](/volontariapp-async-remediation/SKILL.md) | Remédiation et Dépilement des Files Asynchrones (DLQ & Streams) | 2026-11-04 |
 | [volontariapp-ci-tools](/volontariapp-ci-tools/SKILL.md) | CI partagée et infra locale (ci-tools) | 2026-11-03 |
 | [volontariapp-db-migration](/volontariapp-db-migration/SKILL.md) | Migrations PostgreSQL et Synchronisation Multi-Services | 2026-11-04 |
 | [volontariapp-deploy-gitops](/volontariapp-deploy-gitops/SKILL.md) | Déploiement GitOps (Cluster K3s & ArgoCD) | 2026-11-01 |
 | [volontariapp-docx-reports](/volontariapp-docx-reports/SKILL.md) | Modification et relecture de documents Word DOCX | 2026-10-28 |
 | [volontariapp-file-storage-flow](/volontariapp-file-storage-flow/SKILL.md) | File Storage Flow | 2026-10-28 |
-| [volontariapp-grpc-microservice](/volontariapp-grpc-microservice/SKILL.md) | Implémenter ou Modifier un RPC gRPC | 2026-11-04 |
+| [volontariapp-grpc-microservice](/volontariapp-grpc-microservice/SKILL.md) | Implémenter ou Modifier un RPC gRPC | 2026-11-03 |
 | [volontariapp-implement-async-event-flow](/volontariapp-implement-async-event-flow/SKILL.md) | Implement Async Event Flow | 2026-11-04 |
 | [volontariapp-implement-async-job-flow](/volontariapp-implement-async-job-flow/SKILL.md) | Implement Async Job Flow | 2026-11-01 |
 | [volontariapp-logger](/volontariapp-logger/SKILL.md) | Logger partagé : masquage et corrélation de traces | 2026-10-29 |
@@ -22,7 +22,7 @@ Le cycle de vie des skills est géré par [volontariapp-skill-evolution](/volont
 | [volontariapp-meta-scripts](/volontariapp-meta-scripts/SKILL.md) | Scripts et CLI du workspace meta | 2026-10-28 |
 | [volontariapp-pr-tools](/volontariapp-pr-tools/SKILL.md) | Labels et relance de CI sur les PRs (pr-label.sh, pr-retrigger.sh) | 2026-11-04 |
 | [volontariapp-proto-contract-evolution](/volontariapp-proto-contract-evolution/SKILL.md) | Proto Contract Evolution | 2026-10-30 |
-| [volontariapp-scaffold-microservice](/volontariapp-scaffold-microservice/SKILL.md) | Scaffolding d'un Nouveau Microservice gRPC et de ses Runners | 2026-11-04 |
+| [volontariapp-scaffold-microservice](/volontariapp-scaffold-microservice/SKILL.md) | Scaffolding d'un Nouveau Microservice gRPC et de ses Runners | 2026-11-03 |
 | [volontariapp-sealed-secrets](/volontariapp-sealed-secrets/SKILL.md) | Gestion des Secrets Scellés GitOps (kubeseal) | 2026-10-21 |
 | [volontariapp-shared-npm-package-change](/volontariapp-shared-npm-package-change/SKILL.md) | Shared NPM Package Change | 2026-11-04 |
 | [volontariapp-skill-evolution](/volontariapp-skill-evolution/SKILL.md) | Évolution des skills (auto-apprentissage) | 2026-11-04 |

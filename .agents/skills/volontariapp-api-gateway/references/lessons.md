@@ -38,17 +38,29 @@ sources:
   - id: src-7d7d341e
     resource: api-gateway/src/modules/event/dto/common/event.dto.ts
     title: api-gateway/src/modules/event/dto/common/event.dto.ts
-  - id: src-195e7388
-    resource: api-gateway/src/modules/social/dto/request/set-event-attendance.request.dto.ts
-    title: api-gateway/src/modules/social/dto/request/set-event-attendance.request.dto.ts
+  - id: src-d47502e1
+    resource: api-gateway/package.json
+    title: api-gateway/package.json
 ---
 
 # Leçons
 
-## 2026-11-01 - Routes de presence: POST events/:eventId/attendance et GET events/:eventId/attendees, tableaux bornes a 500
+## 2026-11-04 - Ids recommandes : plafond 1000 de ms-event
+
+- **Type :** pitfall
+- **Leçon :** La gateway (fetchAllPages) peut lire jusqu'a 10 000 ids d'events recommandes par ms-social et les transmet a ms-event, qui plafonne ids a 1000 (MAX_SEARCH_IDS) et valide chaque id comme UUID : au-dela de 1000 events recommandes, toute recherche avec filtre social repond 400. listEvents ecarte deja les ids non UUID (api-gateway#100). Decision a prendre : tronquer ou pousser le filtre dans ms-event.[^src-d47502e1]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-03 - E2E isoles pour Jest en parallele
 
 - **Type :** rule
-- **Leçon :** Le module participation expose POST events/:eventId/attendance (201, ActionSuccessResponseDTO) et GET events/:eventId/attendees. Les tableaux d'identifiants du body de presence sont plafonnes a 500 (MAX_ATTENDANCE_BATCH_SIZE, @ArrayMaxSize) : une route qui accepte un tableau fourni par le client doit en borner la taille. EventAttendeeDTO.from et GetEventAttendeesResponseDTO.from convertissent Timestamp en Date via GrpcDateMapper.toDate en gardant implements Omit du contrat (modele de la lecon check-arch).[^src-195e7388]
+- **Leçon :** La suite e2e d'api-gateway tourne avec --maxWorkers=4 (test:e2e:serial pour --runInBand) sur une stack partagee : une assertion ne porte que sur les donnees creees par le test (ids, searchTerm unique par test, zone geographique aleatoire par suite via createSuiteGeo dans e2e/event/event-search.helper.ts), jamais sur un total global ni sur des coordonnees fixes. Les totaux globaux cassaient des que d'autres suites ecrivaient en meme temps (event-search test 29 : 34 au lieu de 30).[^src-d47502e1]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-03 - yarn check-arch: regles des DTO de la gateway
+
+- **Type :** rule
+- **Leçon :** scripts/check-dto-architecture.ts parcourt les dossiers dto/ (hors index.ts, hors tout chemin contenant /common/, hors modules/helper/). Chaque fichier doit finir par .request.dto.ts ou .response.dto.ts et exporter exactement une classe nommee d'apres le fichier (PascalCase + RequestDTO ou ResponseDTO). Une requete doit contenir implements, importer @volontariapp/contracts et exposer toCommand() ou toQuery(). Une reponse doit importer @volontariapp/contracts et avoir un implements. Les DTO imbriques supplementaires vont dans dto/common/, jamais en seconde classe d'un fichier .response.dto.ts.[^src-f8351f3e]
 - **Consigné par :** claude-code/agent
 
 ## 2026-10-30 - DTO de reponse: implements du contrat obligatoire (check-arch)
@@ -151,4 +163,4 @@ sources:
 [^src-873fb5db]: api-gateway/src/modules/post/dto/common/post.dto.ts
 [^src-64ff0419]: api-gateway/src/modules/post/dto/common/post-media.dto.ts
 [^src-7d7d341e]: api-gateway/src/modules/event/dto/common/event.dto.ts
-[^src-195e7388]: api-gateway/src/modules/social/dto/request/set-event-attendance.request.dto.ts
+[^src-d47502e1]: api-gateway/package.json
