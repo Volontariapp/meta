@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-11-03
+
+- **Leçon** - Trigger domain-user : index.ts fait foi, pas le .sql (pitfall) (claude-code/agent)
+- **Leçon** - Le gather ws-service exige l'evenement declencheur sur son propre stream (pitfall) (claude-code/agent)
+
 ## 2026-10-30
 
 - **Vérification** - enrich impact score crediter with dynamic scoring (claude-code/agent)

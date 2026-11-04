@@ -35,9 +35,27 @@ sources:
   - id: src-8f29c4a0
     resource: post-processors-runner/post-processor-storage/src/post-processors/user-deleted.post-processor.ts
     title: post-processors-runner/post-processor-storage/src/post-processors/user-deleted.post-processor.ts
+  - id: src-b571b8b4
+    resource: ws-service/src/core/services/gather-state.service.ts
+    title: ws-service/src/core/services/gather-state.service.ts
+  - id: src-b66d36a3
+    resource: npm-packages/packages/domain-user/src/database/triggers/index.ts
+    title: npm-packages/packages/domain-user/src/database/triggers/index.ts
 ---
 
 # Leçons
+
+## 2026-11-03 - Trigger domain-user : index.ts fait foi, pas le .sql
+
+- **Type :** pitfall
+- **Leçon :** Dans npm-packages/packages/domain-user/src/database/triggers/, la migration ms-user execute USERS_TRIGGER de index.ts (payload enveloppe dans after). users.trigger.sql est desynchronise (sans after). Modifier index.ts et aligner le .sql ; les post-processors lisent event.payload.after.[^src-b66d36a3]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-03 - Le gather ws-service exige l'evenement declencheur sur son propre stream
+
+- **Type :** pitfall
+- **Leçon :** ws-service n'ouvre un gather que sur le stream de l'evenement declencheur (ex. Streams.USER_CREATED = user:created). Un feedback qui arrive sans gather ouvert est ignore (gather-state.service.ts : No active gather state, isComplete false) et aucune notification WebSocket ne part. L'emetteur doit donc cibler a la fois le stream du domaine et celui de l'evenement, comme user.deleted ([user:deleted, social:user, ...]). user.created ne ciblait que social:user : notification jamais recue, prouve en E2E local (echec sans le trigger corrige, succes avec).[^src-b571b8b4]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-19 - Un nouveau domaine consommateur de user.deleted a besoin de son stream, et ses demandes de calcul s'ecrivent en transaction
 
@@ -120,3 +138,5 @@ sources:
 [^src-4f6a6ae1]: workers-runners/worker-event/package.json
 [^src-3e2c0d08]: ws-service/src/core/services/gather-reaper.service.ts
 [^src-8f29c4a0]: post-processors-runner/post-processor-storage/src/post-processors/user-deleted.post-processor.ts
+[^src-b571b8b4]: ws-service/src/core/services/gather-state.service.ts
+[^src-b66d36a3]: npm-packages/packages/domain-user/src/database/triggers/index.ts

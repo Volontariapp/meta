@@ -38,9 +38,18 @@ sources:
   - id: src-7d7d341e
     resource: api-gateway/src/modules/event/dto/common/event.dto.ts
     title: api-gateway/src/modules/event/dto/common/event.dto.ts
+  - id: src-d47502e1
+    resource: api-gateway/package.json
+    title: api-gateway/package.json
 ---
 
 # Leçons
+
+## 2026-11-03 - E2E isoles pour Jest en parallele
+
+- **Type :** rule
+- **Leçon :** La suite e2e d'api-gateway tourne avec --maxWorkers=4 (test:e2e:serial pour --runInBand) sur une stack partagee : une assertion ne porte que sur les donnees creees par le test (ids, searchTerm unique par test, zone geographique aleatoire par suite via createSuiteGeo dans e2e/event/event-search.helper.ts), jamais sur un total global ni sur des coordonnees fixes. Les totaux globaux cassaient des que d'autres suites ecrivaient en meme temps (event-search test 29 : 34 au lieu de 30).[^src-d47502e1]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-03 - yarn check-arch: regles des DTO de la gateway
 
@@ -148,3 +157,4 @@ sources:
 [^src-873fb5db]: api-gateway/src/modules/post/dto/common/post.dto.ts
 [^src-64ff0419]: api-gateway/src/modules/post/dto/common/post-media.dto.ts
 [^src-7d7d341e]: api-gateway/src/modules/event/dto/common/event.dto.ts
+[^src-d47502e1]: api-gateway/package.json
