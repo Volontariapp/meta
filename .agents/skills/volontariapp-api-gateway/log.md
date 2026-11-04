@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-04
+
+- **Leçon** - Ids recommandes : plafond 1000 de ms-event (pitfall) (claude-code/agent)
+
 ## 2026-11-03
 
 - **Leçon** - E2E isoles pour Jest en parallele (rule) (claude-code/agent)

@@ -45,6 +45,12 @@ sources:
 
 # Leçons
 
+## 2026-11-04 - Ids recommandes : plafond 1000 de ms-event
+
+- **Type :** pitfall
+- **Leçon :** La gateway (fetchAllPages) peut lire jusqu'a 10 000 ids d'events recommandes par ms-social et les transmet a ms-event, qui plafonne ids a 1000 (MAX_SEARCH_IDS) et valide chaque id comme UUID : au-dela de 1000 events recommandes, toute recherche avec filtre social repond 400. listEvents ecarte deja les ids non UUID (api-gateway#100). Decision a prendre : tronquer ou pousser le filtre dans ms-event.[^src-d47502e1]
+- **Consigné par :** claude-code/agent
+
 ## 2026-11-03 - E2E isoles pour Jest en parallele
 
 - **Type :** rule

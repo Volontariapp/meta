@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-11-04
+
+- **Leçon** - Saga event.deleted : un seul feedback attendu, cle EVENT_SOCIAL_DELETED (rule) (claude-code/agent)
+- **Leçon** - Reaper du gather desactive en E2E (pitfall) (claude-code/agent)
+- **Consigné par :** claude-code/agent
+
 ## 2026-11-03
 
 - **Leçon** - Trigger domain-user : index.ts fait foi, pas le .sql (pitfall) (claude-code/agent)

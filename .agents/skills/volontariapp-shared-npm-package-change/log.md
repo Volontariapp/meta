@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-04
+
+- **Leçon** - Changement npm-packages en dernier quand des agents travaillent sur les consommateurs (rule) (claude-code/agent)
+
 ## 2026-11-03
 
 - **Leçon** - Surcharge de toEntity sans toEntities (pitfall) (claude-code/agent)
