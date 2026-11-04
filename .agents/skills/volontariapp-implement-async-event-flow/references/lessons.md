@@ -44,9 +44,27 @@ sources:
   - id: src-b66d36a3
     resource: npm-packages/packages/domain-user/src/database/triggers/index.ts
     title: npm-packages/packages/domain-user/src/database/triggers/index.ts
+  - id: src-01a2dc3c
+    resource: "https://github.com/Volontariapp/post-processors-runner/pull/63"
+    title: "https://github.com/Volontariapp/post-processors-runner/pull/63"
+  - id: src-fbe43ef3
+    resource: npm-packages/packages/post-processors/src/core/processors/base.post-processor.ts
+    title: npm-packages/packages/post-processors/src/core/processors/base.post-processor.ts
 ---
 
 # Leçons
+
+## 2026-11-04 - Erreur d'infrastructure dans un post-processor : relancer, jamais avaler
+
+- **Type :** rule
+- **Leçon :** Depuis npm-packages@ec4945d3, BatchPostProcessor et SinglePostProcessor reconnaissent une erreur d'infrastructure (isInfrastructureError de @volontariapp/errors : base ou Redis injoignable, timeout) : pas d'ACK, pas de tentative comptee, pas de DLQ, le message reste pending et est relu apres claimIntervalMs. Un processor doit donc relancer ces erreurs ; un catch qui les avale acquitte le message et le perd.[^src-fbe43ef3]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-04 - Creation et suppression d'une meme entite se croisent dans un post-processor
+
+- **Type :** pitfall
+- **Leçon :** Les groupes de consommateurs Created/Deleted d'un post-processor tournent en parallele (meme stream pour les users, deux streams pour posts et events) : une suppression peut etre appliquee avant la creation, qui recree un noeud orphelin (G3, G4). Remede de post-processor-social (tombstone.ts) : la suppression pose un marqueur Redis avant d'effacer, la creation verifie apres avoir cree et efface a nouveau. Toujours envoyer la confirmation de creation meme dans ce cas, sinon le gather ws-service reste PENDING et le reaper envoie un faux creation_failed.[^src-01a2dc3c]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-04 - Saga event.deleted : un seul feedback attendu, cle EVENT_SOCIAL_DELETED
 
@@ -156,3 +174,5 @@ sources:
 [^src-7746ea1d]: ws-service/config/default.config.json
 [^src-b571b8b4]: ws-service/src/core/services/gather-state.service.ts
 [^src-b66d36a3]: npm-packages/packages/domain-user/src/database/triggers/index.ts
+[^src-01a2dc3c]: https://github.com/Volontariapp/post-processors-runner/pull/63
+[^src-fbe43ef3]: npm-packages/packages/post-processors/src/core/processors/base.post-processor.ts

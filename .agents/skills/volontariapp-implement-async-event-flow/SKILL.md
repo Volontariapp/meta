@@ -67,6 +67,14 @@ verified:
   - by: claude-code/agent
     at: "2026-11-04T13:14:01Z"
     digest: 864e7be1b3e04ae6
+    at: "2026-11-04T21:25:05Z"
+    digest: 5c089446c1791e43
+  - by: claude-code/agent
+    at: "2026-11-04T21:34:47Z"
+    digest: 9c0f458ef95f3441
+  - by: claude-code/agent
+    at: "2026-11-04T21:36:01Z"
+    digest: cf5b1e66e231ffa7
 ---
 
 # Guide : Implémenter un Flux Asynchrone End-to-End

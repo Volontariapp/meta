@@ -2,6 +2,11 @@
 
 ## 2026-11-04
 
+- **Vérification** - b1dc7398 : seul le test d'integration de RetryHelper change (horloge manuelle) ; RetryHelper et la skill inchanges (claude-code/agent)
+- **Vérification** - Seul retry.helper.int.spec.ts change (horloge manuelle via jest.spyOn(Date.now) au lieu de vraies attentes) ; RetryHelper et le texte de la skill inchanges (claude-code/agent)
+- **Vérification** - ec4945d3 (erreurs d'infrastructure laissees pending, lecon ajoutee) ; 4806cd5e et 3035ec27 : requestDeletionWithUserDeleted et finalizeDeletion toujours presents (postgres-user.repository.ts:150, :191), lecon src-cd3f14ee exacte (claude-code/agent)
+- **Leçon** - Erreur d'infrastructure dans un post-processor : relancer, jamais avaler (rule) (claude-code/agent)
+- **Leçon** - Creation et suppression d'une meme entite se croisent dans un post-processor (pitfall) (claude-code/agent)
 - **Leçon** - Saga event.deleted : un seul feedback attendu, cle EVENT_SOCIAL_DELETED (rule) (claude-code/agent)
 - **Leçon** - Reaper du gather desactive en E2E (pitfall) (claude-code/agent)
 - **Consigné par :** claude-code/agent
