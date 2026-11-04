@@ -2,6 +2,7 @@
 
 ## 2026-11-04
 
+- **Leçon** - Saga event.deleted : un seul feedback attendu, cle EVENT_SOCIAL_DELETED (rule) (claude-code/agent)
 - **Leçon** - Reaper du gather desactive en E2E (pitfall) (claude-code/agent)
 - **Consigné par :** claude-code/agent
 

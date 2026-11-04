@@ -48,6 +48,12 @@ sources:
 
 # Leçons
 
+## 2026-11-04 - Saga event.deleted : un seul feedback attendu, cle EVENT_SOCIAL_DELETED
+
+- **Type :** rule
+- **Leçon :** event.deleted (domain-event postgres-event.repository.ts, target event:deleted) n'est consomme que par post-processor-social et ws-service (gather creator). ws-service attend une seule cle EVENT_SOCIAL_DELETED (event_social.deleted / event_social.deletion_failed sur WS_EVENT_DELETED_FEEDBACK), alignee par ws-service#50 et post-processors-runner#59 ; avant, les cles attendues (social_event.deleted_success, post_event.deleted_success) n'etaient emises par personne et le reaper fermait la saga en event.deletion_failed apres 60 s. Un post-processor ne doit pas avaler l'erreur d'insertion du feedback (sinon la saga expire en FAILED alors que l'effet est fait) : rethrow comme UserDeletedPostProcessor. Decision Lead Dev (2026-11-04) : les posts d'un event supprime sont detaches (eventId vide), via une methode domain-post et un feedback post a ajouter ensuite a expects.[^src-7746ea1d]
+- **Consigné par :** claude-code/agent
+
 ## 2026-11-04 - Reaper du gather desactive en E2E
 
 - **Type :** pitfall
