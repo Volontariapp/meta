@@ -2,6 +2,7 @@
 
 ## 2026-11-04
 
+- **Leçon** - Orchestrateur autonome mandate : levee du verrou STOP (decision) (claude-code/agent)
 - **Leçon** - consumers.py lit les checkouts locaux, pas origin/main (pitfall) (claude-code/agent)
 - **Vérification** - npm-packages ci.yml: notify-ready job and labeled-trigger consequences documented; the other flagged files are version and changelog bumps by others, not reviewed (claude-code/agent)
 

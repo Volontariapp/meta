@@ -20,7 +20,7 @@ Reprendre depuis une session neuve ouverte dans `meta`. Lire ce fichier, puis le
 
 ## Reste a faire
 1. Avis du Lead Dev : pour exclure les events des utilisateurs bloques, la gateway appelle `adminGetUserEvent` de ms-social au nom d'un utilisateur normal (ms-social n'a pas de garde de role). Garder, ou ajouter une RPC dediee (changement proto).
-2. Lot 3 : saga de suppression de compte complete (post-processor-user, -storage, outbox-ws, outbox-storage, worker-storage a ajouter), DLQ, idempotence.
+2. Lot 3 : saga de suppression de compte complete, confiee a un orchestrateur autonome. Mandat et plan : `docs-handoff-user-deletion-e2e.md` ; prompt de lancement : `docs-prompt-user-deletion-e2e.md`. DLQ et idempotence ensuite.
 3. Ticket G2 : pas de feedback `event.geocoding_failed` (le gather EVENT_CREATION attend le reaper).
 
 ## Regles de travail apprises

@@ -43,9 +43,6 @@ sources:
     title: check_symbols.py
 verified:
   - by: claude-code/agent
-    at: "2026-10-19T10:15:06Z"
-    digest: 814126809e621f8a
-  - by: claude-code/agent
     at: "2026-10-28T22:51:03Z"
     digest: c741a7ca5ed9331c
   - by: claude-code/agent
@@ -57,6 +54,9 @@ verified:
   - by: claude-code/agent
     at: "2026-11-04T13:24:51Z"
     digest: f6c03fb6c17b6e02
+  - by: claude-code/agent
+    at: "2026-11-04T22:09:02Z"
+    digest: d562d99348936cd0
 ---
 
 # Évolution des skills (auto-apprentissage)

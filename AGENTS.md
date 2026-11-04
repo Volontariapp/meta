@@ -36,7 +36,14 @@ Dès que tu as fini d'éditer un fichier `.proto` dans `proto-registry` :
 
 Le hook `PreToolUse` `.claude/hooks/stop-rule-guard.sh` applique cette règle mécaniquement : dès qu'un fichier de `npm-packages/` ou de `proto-registry/` est édité dans une session, toute édition d'un repo qui dépend de `@volontariapp/*` (`ms-*`, `api-gateway`, `ws-service`, `nativapp`, runners) est refusée pour le reste de la session. Après une modification de `proto-registry`, les packages générés `npm-packages/packages/contracts*` sont aussi verrouillés.
 
-Le déverrouillage revient **au Lead Dev uniquement**, une fois la version publiée par la CI : `! .claude/hooks/stop-rule-guard.sh release`. **INTERDICTION FORMELLE** pour l'agent de lancer cette commande ou de contourner le hook (édition via `sed`, `cat >`, script...).
+Le déverrouillage revient **au Lead Dev**, une fois la version publiée par la CI : `! .claude/hooks/stop-rule-guard.sh release`. **INTERDICTION FORMELLE** pour l'agent de lancer cette commande ou de contourner le hook (édition via `sed`, `cat >`, script...).
+
+**Seule exception : l'orchestrateur autonome mandaté.** Un agent lancé avec un prompt du Lead Dev qui lui confie explicitement ce mandat (ex. `docs-handoff-user-deletion-e2e.md`) peut lancer `.claude/hooks/stop-rule-guard.sh release` lui-même, à trois conditions cumulées :
+1. la PR `npm-packages` est mergée sur `main` et le job `Definitive Release` de la CI de `main` a réussi ;
+2. `npm view @volontariapp/<package>@<version> version --prefer-online` répond pour **chaque** package bumpé (la propagation sur le registre prend quelques minutes : attendre, ne jamais supposer) ;
+3. l'agent rapporte la levée du verrou, avec les versions vérifiées, dans son rapport d'étape.
+
+Le reste de la règle ne change pas : rien chez les consommateurs avant ces trois conditions, aucun cast ni `any` de contournement. Un agent sans ce mandat écrit dans son prompt reste soumis à l'interdiction ci-dessus.
 
 ---
 

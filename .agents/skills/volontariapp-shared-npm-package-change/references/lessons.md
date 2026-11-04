@@ -56,9 +56,18 @@ sources:
   - id: src-767c2189
     resource: .agents/skills/volontariapp-shared-npm-package-change/scripts/consumers.py
     title: .agents/skills/volontariapp-shared-npm-package-change/scripts/consumers.py
+  - id: src-37dd6836
+    resource: AGENTS.md
+    title: AGENTS.md
 ---
 
 # Leçons
+
+## 2026-11-04 - Orchestrateur autonome mandate : levee du verrou STOP
+
+- **Type :** decision
+- **Leçon :** Decision du Lead Dev (2026-11-04) : un orchestrateur dont le prompt confie explicitement ce mandat peut lancer .claude/hooks/stop-rule-guard.sh release apres trois conditions (release CI de main reussie, chaque version bumpee visible avec npm view --prefer-online, levee rapportee). Sans ce mandat ecrit, la levee reste au Lead Dev.[^src-37dd6836]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-04 - consumers.py lit les checkouts locaux, pas origin/main
 
@@ -226,3 +235,4 @@ sources:
 [^src-2ab414d1]: npm-packages/packages/database/src/test/global-setup.ts
 [^src-21073430]: npm-packages/packages/post-processors/src/test/core/helpers/integration/retry.helper.int.spec.ts
 [^src-767c2189]: .agents/skills/volontariapp-shared-npm-package-change/scripts/consumers.py
+[^src-37dd6836]: AGENTS.md
