@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-04
+
+- **Leçon** - Juger un test de notification Dependabot avec l'historique des labels et l'acteur du run (rule) (claude-code/agent)
+
 ## 2026-11-03
 
 - **Vérification** - notify job timeout lowered from 5 to 3 minutes (process:claude-code)
