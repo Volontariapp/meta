@@ -50,15 +50,6 @@ sources:
     resource: .agents/skills/volontariapp-implement-async-job-flow/scripts/job_catalogue.py
     title: job_catalogue.py
 verified:
-  - by: claude-code/agent
-    at: "2026-10-19T16:33:36Z"
-    digest: 066cb00aae837d44
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-28T20:26:40Z"
-    digest: 67707c26ad01327c
-  - by: claude-code/sonnet-5.5
-    at: "2026-10-30T08:36:22Z"
-    digest: c134c42eb83243ee
   - by: claude-code/claude-sonnet-5-5
     at: "2026-10-30T08:49:49Z"
     digest: 3580697c6bd9af36
@@ -71,6 +62,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-30T12:24:35Z"
     digest: dc8bb6efca7844fe
+  - by: claude-code/agent
+    at: "2026-11-01T16:23:07Z"
+    digest: f6acbaac1164ff2e
 ---
 
 # Guide : Implémenter un Job Asynchrone End-to-End

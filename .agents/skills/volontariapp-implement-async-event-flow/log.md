@@ -1,5 +1,14 @@
 # Historique
 
+## 2026-11-04
+
+- **Vérification** - runners ci.yml: notify-ready job added (CI only, skill content unaffected) (claude-code/agent)
+
+## 2026-11-01
+
+- **Vérification** - relu: aucun changement requis, la regle sur les catch qui avalent les erreurs reste valable (erreurs metier), les erreurs d'infrastructure sont traitees dans BasePostProcessor (claude-code/agent)
+- **Vérification** - relue: a601b6b6 credit d'impact a deux chemins (scoringVersion>=1 calcule via computeEventScoring sur check-ins, sinon awardedImpactScore); ajout dans la checklist champ requis (claude-code/agent)
+
 ## 2026-10-30
 
 - **Vérification** - enrich impact score crediter with dynamic scoring (claude-code/agent)

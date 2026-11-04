@@ -1,5 +1,15 @@
 # Historique
 
+## 2026-11-04
+
+- **Vérification** - marked verified on user request without reviewing the pagination diffs (api-gateway/ms-event/ms-post); content may be outdated (claude-code/agent)
+
+## 2026-11-01
+
+- **Vérification** - relue: ms-event scoring_version (nullable, CURRENT_SCORING_VERSION a la creation), ms-social setEventAttendance reserve organisateur/admin via EventOrganizerPolicy (isEventCreator), ms-user colonnes d'audit; 2 lecons ajoutees, champ scoringVersion ajoute a ms-event.md (claude-code/agent)
+- **Leçon** - ms-event: scoring_version nullable, valeur courante posee a la creation (rule) (claude-code/agent)
+- **Leçon** - ms-social setEventAttendance: reserve a l'organisateur ou a un admin (rule) (claude-code/agent)
+
 ## 2026-10-30
 
 - **Vérification** - Relu: changement de test uniquement (Date au lieu de chaines ISO dans participation.query.controller.spec.ts), skill inchangee (claude-code/agent)

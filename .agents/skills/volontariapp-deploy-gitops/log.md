@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-01
+
+- **Vérification** - relue: 29 fichiers = bumps d'image sha-* des deployment.yaml (verifie api-gateway, ms-event), dashboard async-flows.json remplace par request-flow.json deja decrit; aucune regle ne change (claude-code/agent)
+
 ## 2026-10-28
 
 - **Leçon** - Import JSON de dashboard Datadog : erreurs rencontrees (pitfall) (claude-code/agent)

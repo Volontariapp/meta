@@ -19,9 +19,6 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-28T23:01:18Z"
-    digest: a8830b3fdcb7df35
-  - by: claude-code/agent
     at: "2026-10-28T23:02:21Z"
     digest: 70d0f4988d1778d5
   - by: claude-code/agent
@@ -33,6 +30,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-28T23:37:26Z"
     digest: a2a21b3fd446e19d
+  - by: claude-code/agent
+    at: "2026-11-01T16:31:56Z"
+    digest: f9376622b891cce2
 sources:
   - id: c4
     resource: docs/architecture/C4-Deployment-And-Infrastructure.md

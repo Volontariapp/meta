@@ -1,5 +1,14 @@
 # Historique
 
+## 2026-11-04
+
+- **Vérification** - marked verified on user request without reviewing the pagination diffs (api-gateway/ms-event/ms-post); content may be outdated (claude-code/agent)
+
+## 2026-11-01
+
+- **Vérification** - relue: 2e26fd3 routes attendance/attendees, plafond 500 et mappers from() ajoutes en lecon; 103f888 seed (services/DTO seulement), risque SystemSeedController sans admin:true toujours exact (claude-code/agent)
+- **Leçon** - Routes de presence: POST events/:eventId/attendance et GET events/:eventId/attendees, tableaux bornes a 500 (rule) (claude-code/agent)
+
 ## 2026-10-30
 
 - **Leçon** - DTO de reponse: implements du contrat obligatoire (check-arch) (pitfall) (claude)

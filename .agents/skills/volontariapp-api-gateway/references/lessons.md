@@ -38,9 +38,18 @@ sources:
   - id: src-7d7d341e
     resource: api-gateway/src/modules/event/dto/common/event.dto.ts
     title: api-gateway/src/modules/event/dto/common/event.dto.ts
+  - id: src-195e7388
+    resource: api-gateway/src/modules/social/dto/request/set-event-attendance.request.dto.ts
+    title: api-gateway/src/modules/social/dto/request/set-event-attendance.request.dto.ts
 ---
 
 # Leçons
+
+## 2026-11-01 - Routes de presence: POST events/:eventId/attendance et GET events/:eventId/attendees, tableaux bornes a 500
+
+- **Type :** rule
+- **Leçon :** Le module participation expose POST events/:eventId/attendance (201, ActionSuccessResponseDTO) et GET events/:eventId/attendees. Les tableaux d'identifiants du body de presence sont plafonnes a 500 (MAX_ATTENDANCE_BATCH_SIZE, @ArrayMaxSize) : une route qui accepte un tableau fourni par le client doit en borner la taille. EventAttendeeDTO.from et GetEventAttendeesResponseDTO.from convertissent Timestamp en Date via GrpcDateMapper.toDate en gardant implements Omit du contrat (modele de la lecon check-arch).[^src-195e7388]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-30 - DTO de reponse: implements du contrat obligatoire (check-arch)
 
@@ -142,3 +151,4 @@ sources:
 [^src-873fb5db]: api-gateway/src/modules/post/dto/common/post.dto.ts
 [^src-64ff0419]: api-gateway/src/modules/post/dto/common/post-media.dto.ts
 [^src-7d7d341e]: api-gateway/src/modules/event/dto/common/event.dto.ts
+[^src-195e7388]: api-gateway/src/modules/social/dto/request/set-event-attendance.request.dto.ts

@@ -1,5 +1,13 @@
 # Historique
 
+## 2026-11-04
+
+- **Vérification** - AGENTS.md: new row for volontariapp-pr-tools in the routing matrix and the regenerated skills index; rules unchanged (claude-code/agent)
+
+## 2026-11-01
+
+- **Vérification** - lecon Notion: source docs/.env (secret non versionne) retiree des sources OKF, ajout de la mise a jour 2026-11-01 (MCP notion_plic accede a la base Backlogs) (claude-code/agent)
+
 ## 2026-10-28
 
 - **Vérification** - init_repos.sh remplace par yarn meta setup (setup.mjs), AGENTS.md regenere par index (claude-code/agent)

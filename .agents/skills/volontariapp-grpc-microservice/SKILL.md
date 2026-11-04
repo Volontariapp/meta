@@ -25,12 +25,6 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-30T11:28:31Z"
-    digest: d8f38244c495b238
-  - by: claude-code/agent
-    at: "2026-10-30T11:31:00Z"
-    digest: 4de3ef6543d7469f
-  - by: claude-code/agent
     at: "2026-10-30T11:31:42Z"
     digest: 035a8c5d9af1ed4e
   - by: claude-code/agent
@@ -39,6 +33,12 @@ verified:
   - by: claude-code/agent
     at: "2026-10-30T12:29:16Z"
     digest: 37f4a83af8a6d3d1
+  - by: claude-code/agent
+    at: "2026-11-01T16:31:21Z"
+    digest: 49cbd96f6143a71b
+  - by: claude-code/agent
+    at: "2026-11-04T13:17:02Z"
+    digest: cbd206e445fcb2bf
 sources:
   - id: agent-md
     resource: AGENT.md

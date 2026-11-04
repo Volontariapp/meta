@@ -18,32 +18,20 @@ generated:
   at: "2026-10-12T11:58:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-29T15:10:20Z"
-    digest: a48ce569428f51b5
-  - by: claude-code/sonnet-5.5
-    at: "2026-10-30T08:36:21Z"
-    digest: ab5f803f4e15b1ad
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-30T08:49:49Z"
-    digest: cdefb32e63963c1a
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-30T08:56:23Z"
-    digest: bcbb4376ba522fe9
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-30T09:05:05Z"
-    digest: d7725278d9738e50
-  - by: claude-code/agent
-    at: "2026-10-30T10:54:42Z"
-    digest: 18aa12e2884a8ba0
-  - by: claude-code/agent
-    at: "2026-10-30T11:33:18Z"
-    digest: a96a16259ef115c2
-  - by: claude-code/agent
-    at: "2026-10-30T11:45:17Z"
-    digest: 77b78196de8404c6
-  - by: claude-code/agent
     at: "2026-10-30T12:24:32Z"
     digest: cee46f42725628b3
+  - by: claude-code/agent
+    at: "2026-11-01T16:28:55Z"
+    digest: 93274f1684f9b2ad
+  - by: claude-code/agent
+    at: "2026-11-01T20:03:30Z"
+    digest: d1374a6b7b6e1f38
+  - by: claude-code/agent
+    at: "2026-11-02T11:07:23Z"
+    digest: 54e6f97c332dc5e4
+  - by: claude-code/agent
+    at: "2026-11-04T13:14:00Z"
+    digest: 8d03a6e0a8ee948a
 sources:
   - id: retry
     kind: local_file
@@ -87,6 +75,8 @@ Utiliser ce playbook pour intervenir en production ou en environnement de test e
 
 Lorsqu'un post-processor échoue après `maxRetries` (par défaut 5 tentatives), `RetryHelper` bascule le message dans `<stream>-dlq`[^retry].
 
+Seules les erreurs métier suivent ce chemin. Une erreur d'infrastructure (connexion base ou Redis refusée ou perdue, timeout, détectée par `isInfrastructureError` de `@volontariapp/errors`) ne compte aucune tentative et n'envoie rien en DLQ : le message reste dans la PEL et le consumer le relit `claimIntervalMs` plus tard (un message absent de la DLQ pendant une panne de base est donc normal). Chaque occurrence est loguée en `warn` (`Infrastructure error, message kept pending`) avec le stream et l'id du message. Le circuit breaker, lui, compte toujours l'échec.
+
 1. Se connecter à l'instance Redis :
    ```bash
    redis-cli
@@ -107,6 +97,8 @@ Lorsqu'un post-processor échoue après `maxRetries` (par défaut 5 tentatives),
 ### Étape 2 : Déblocage des messages orphelins (Pending Entries List)
 
 Si un worker ou post-processor a crashé pendant le traitement, le message reste bloqué dans la Pending Entries List (PEL) sans être ni acquitté ni retenté.
+
+Le claim (`claimPendingMessages`) ignore les messages du même consumer : un message resté en PEL chez un consumer vivant n'est relu que lorsque `readPending` repasse à `true` (démarrage, claim, file de retry, ou relecture planifiée après une erreur d'infrastructure). Piège connu : le verrou d'idempotence d'un message (`SET NX`, TTL `idempotencyTtlSeconds`, 24 h) non libéré parce que Redis était indisponible fait traiter la relecture comme « déjà traité » : le message est alors acquitté sans effet. Dans ce cas, supprimer la clé de verrou (`RedisStreamHelper.getIdempotencyKey`) avant de redémarrer le pod, car le démarrage relit la PEL.
 
 1. Vérifier les messages en souffrance pour le groupe consommateur :
    ```text

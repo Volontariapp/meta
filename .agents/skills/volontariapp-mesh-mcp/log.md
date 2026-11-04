@@ -1,5 +1,14 @@
 # Historique
 
+## 2026-11-04
+
+- **Vérification** - .agents/mesh-mcp.toml: 3 recommendation lines added for volontariapp-pr-tools by evolve.py new; roots, doctor and graph patterns described by the skill are unchanged (claude-code/agent)
+
+## 2026-11-01
+
+- **Vérification** - relue: sources causalmesh clonees (crates/mesh-server/src/tools presents), binaire mis a jour en 7.1.11, lecon version/config ajoutee (claude-code/agent)
+- **Leçon** - Binaire mesh-mcp trop ancien pour la config: Connection closed au demarrage (pitfall) (claude-code/agent)
+
 ## 2026-10-28
 
 - **Vérification** - mesh-mcp.toml regenere par evolve.py index : ajout de la table de la skill volontariapp-meta-scripts, aucun changement de configuration mesh-mcp (claude-code/agent)

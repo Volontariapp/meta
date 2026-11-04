@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-01
+
+- **Vérification** - relue: migrations worker-event (1781400000000, 1792200000000) copiees depuis ms-event, la skill ne les cite pas; la regle de copie des migrations est dans db-migration, aucun changement (claude-code/agent)
+
 ## 2026-10-30
 
 - **Vérification** - Relu: seul changement non commite sur 1792200000000-AddScoringVersionToEvent.ts est une ligne vide finale, skill inchangee (claude-code/agent)
