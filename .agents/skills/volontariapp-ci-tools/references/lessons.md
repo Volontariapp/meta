@@ -14,12 +14,27 @@ sources:
   - id: src-cbb46bc1
     resource: ci-tools/.github/workflows/e2e-orchestrator.yml
     title: ci-tools/.github/workflows/e2e-orchestrator.yml
+  - id: src-71dc1dab
+    resource: ci-tools/.github/workflows/sync-all.yml
+    title: ci-tools/.github/workflows/sync-all.yml
   - id: src-5601ca7f
     resource: ci-tools/docker-compose.yml
     title: ci-tools/docker-compose.yml
 ---
 
 # Leçons
+
+## 2026-11-04 - pg_isready par TCP avec un healthcheck rapide
+
+- **Type :** pitfall
+- **Leçon :** Avec start_interval 1s, pg_isready sans -h (socket unix) repond pret pendant l'init de l'image postgres (serveur temporaire socket-only, puis redemarrage) : les migrations partent trop tot et echouent en ECONNREFUSED, ce qui a casse l'E2E des 7 repos (ci-tools#68, corrige par #70). Toujours pg_isready -h 127.0.0.1 dans le compose.[^src-5601ca7f]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-03 - PR empilee fermee au merge de sa base
+
+- **Type :** pitfall
+- **Leçon :** Une PR dont la base est une autre branche de PR est fermee automatiquement quand cette base est mergee avec --delete-branch (ci-tools#67 fermee au merge de #66). Avant de merger la base, rebaser la PR empilee (git rebase --onto origin/main <ancien sha de base>) et changer sa base vers main, ou ouvrir une nouvelle PR (ci-tools#68).[^src-71dc1dab]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-03 - Runners async dans l'E2E et creation manuelle de noeuds
 
@@ -59,4 +74,5 @@ sources:
 
 [^src-471bbb9a]: ci-tools/.github/workflows/service-docker-build-push.yml
 [^src-cbb46bc1]: ci-tools/.github/workflows/e2e-orchestrator.yml
+[^src-71dc1dab]: ci-tools/.github/workflows/sync-all.yml
 [^src-5601ca7f]: ci-tools/docker-compose.yml

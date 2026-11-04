@@ -1,7 +1,12 @@
 # Historique
 
+## 2026-11-04
+
+- **Leçon** - pg_isready par TCP avec un healthcheck rapide (pitfall) (claude-code/agent)
+
 ## 2026-11-03
 
+- **Leçon** - PR empilee fermee au merge de sa base (pitfall) (claude-code/agent)
 - **Leçon** - Runners async dans l'E2E et creation manuelle de noeuds (rule) (claude-code/agent)
 - **Leçon** - Projet compose local partage avec le dev (pitfall) (claude-code/agent)
 - **Leçon** - E2E compose lu depuis le sous-module de l'appelant (pitfall) (claude-code/agent)

@@ -2,6 +2,7 @@
 
 ## 2026-11-03
 
+- **Leçon** - E2E isoles pour Jest en parallele (rule) (claude-code/agent)
 - **Vérification** - module de pagination commun (src/common/pagination), plafonds 100 et legacy 500, likes-summary, check-arch (claude-code/agent)
 - **Vérification** - module de pagination commun (src/common/pagination), plafonds 100 et legacy 500, likes-summary, check-arch (claude-code/agent)
 - **Vérification** - module de pagination commun, plafonds 100 et legacy 500, likes-summary, check-arch (claude-code/agent)
