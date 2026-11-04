@@ -1,5 +1,18 @@
 # Historique
 
+## 2026-11-04
+
+- **Vérification** - runners ci.yml: notify-ready job added (CI only, skill content unaffected) (claude-code/agent)
+
+## 2026-11-02
+
+- **Vérification** - relu: seul le bump 3.4.6 et le CHANGELOG ont change depuis la derniere verification, aucune regle DLQ/XCLAIM concernee (claude-code/agent)
+
+## 2026-11-01
+
+- **Vérification** - post-processors: les erreurs d'infrastructure ne comptent plus de tentative ni de DLQ, relecture planifiee de la PEL (readPending), piege du verrou d'idempotence perime (claude-code/agent)
+- **Vérification** - relue: a601b6b6 (scoring post-processor-user) et bumps de version post-processors sans effet sur les procedures DLQ/XCLAIM; aucun changement (claude-code/agent)
+
 ## 2026-10-30
 
 - **Vérification** - Relu: seul changement non commite sur 1792200000000-AddScoringVersionToEvent.ts est une ligne vide finale, skill inchangee (claude-code/agent)

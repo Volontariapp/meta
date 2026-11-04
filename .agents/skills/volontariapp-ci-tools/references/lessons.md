@@ -23,6 +23,9 @@ sources:
   - id: src-5601ca7f
     resource: ci-tools/docker-compose.yml
     title: ci-tools/docker-compose.yml
+  - id: src-f3a7c24a
+    resource: ci-tools/.github/workflows/pr-ready-notify.yml
+    title: ci-tools/.github/workflows/pr-ready-notify.yml
 ---
 
 # Leçons
@@ -75,6 +78,12 @@ sources:
 - **Leçon :** service-docker-build-push.yml et e2e-orchestrator.yml lisent le label docker-and-e2e (payload de la PR puis gh pr view en direct avec ORG_REPO_TOKEN, 10 essais espaces de 30 s). Sans lui, le job docker echoue avec une erreur; les repos declarent e2e avec needs: [ci-docker], donc le job e2e est saute et la PR n'est pas mergeable. Une PR sans le label ne valide donc jamais l'e2e avant merge: ajouter le label des l'ouverture de la PR, sinon les regressions e2e se decouvrent apres coup.[^src-cbb46bc1]
 - **Consigné par :** claude-code/agent
 
+## 2026-11-04 - Juger un test de notification Dependabot avec l'historique des labels et l'acteur du run
+
+- **Type :** rule
+- **Leçon :** Sur npm-packages#280, le message est parti sans label notify-discord : le job détecte l'auteur de la PR (dependabot[bot]) et pose lui-même discord-notified. Preuve : gh api repos/<repo>/issues/<n>/events (labeled par github-actions[bot], aucun notify-discord) et gh api repos/<repo>/actions/runs/<id> (actor). Un run dont l'acteur est un humain (push de merge dans la branche Dependabot) valide la détection par auteur, mais pas les restrictions Dependabot (jeton en lecture seule, secrets Dependabot), qui ne s'appliquent peut-être que si l'acteur est dependabot[bot] (non vérifié dans la doc GitHub). Ne pas conclure qu'un test est invalide ou valide avant d'avoir lu les événements de labels et l'acteur du run.[^src-f3a7c24a]
+- **Consigné par :** claude-code/agent
+
 ## 2026-10-06 - CI d'un service : label docker-and-e2e, et le merge sur main deploie
 
 - **Type :** rule
@@ -92,3 +101,4 @@ sources:
 [^src-44d20cb6]: ci-tools/.github/workflows/runner-pipeline.yml
 [^src-71dc1dab]: ci-tools/.github/workflows/sync-all.yml
 [^src-5601ca7f]: ci-tools/docker-compose.yml
+[^src-f3a7c24a]: ci-tools/.github/workflows/pr-ready-notify.yml

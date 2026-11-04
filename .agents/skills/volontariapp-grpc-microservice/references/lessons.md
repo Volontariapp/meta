@@ -29,9 +29,27 @@ sources:
   - id: src-06c83ce2
     resource: ms-user/src/common/dto/pagination.dto.ts
     title: ms-user/src/common/dto/pagination.dto.ts
+  - id: src-80c5990f
+    resource: ms-post/src/modules/post/dto/common/pagination.dto.ts
+    title: ms-post/src/modules/post/dto/common/pagination.dto.ts
+  - id: src-89ada337
+    resource: ms-social/src/providers/database/neo4j-schema.initializer.ts
+    title: ms-social/src/providers/database/neo4j-schema.initializer.ts
 ---
 
 # Leçons
+
+## 2026-11-04 - ms-social crée des contraintes d'unicité Neo4j au démarrage
+
+- **Type :** decision
+- **Leçon :** Le commit ms-social@0ea68bf (#60) ajoute neo4j-schema.initializer.ts, branché dans database.module.ts : au démarrage il crée des contraintes d'unicité sur les ids des noeuds sociaux, et journalise un avertissement quand elles sont ignorées faute de connexion Neo4j (d'après le message du commit ; code non relu ce jour). Inférence, non vérifiée : un nouveau domaine Neo4j voudra probablement la même initialisation.[^src-89ada337]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-04 - Le plafond MAX_PAGINATION_LIMIT n'est plus 1000 partout
+
+- **Type :** pitfall
+- **Leçon :** Relevé le 2026-11-04 : ms-post (#69) et ms-event (#83) ont abaissé MAX_PAGINATION_LIMIT de 1000 à 100 ; ms-user et ms-social sont encore à 1000 ; ms-ranking et ms-storage non trouvés avec ce motif. La leçon du 2026-11-03 qui dit 'quatre ms plafonnent à 1000' est donc périmée pour ms-post et ms-event. Lire la constante du service avant de s'appuyer sur une valeur.[^src-80c5990f]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-03 - Pagination : la leçon ListPosts sans tri ni plafond est périmée
 
@@ -88,3 +106,5 @@ sources:
 [^src-8fc3ad1d]: ms-event/src/modules/event/controllers/commands/base.command.controller.ts
 [^src-300927cf]: ms-event/src/test/unit/controllers/event.command.controller.unit.spec.ts
 [^src-06c83ce2]: ms-user/src/common/dto/pagination.dto.ts
+[^src-80c5990f]: ms-post/src/modules/post/dto/common/pagination.dto.ts
+[^src-89ada337]: ms-social/src/providers/database/neo4j-schema.initializer.ts

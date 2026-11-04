@@ -25,9 +25,6 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-30T11:31:00Z"
-    digest: 4de3ef6543d7469f
-  - by: claude-code/agent
     at: "2026-10-30T11:31:42Z"
     digest: 035a8c5d9af1ed4e
   - by: claude-code/agent
@@ -39,6 +36,9 @@ verified:
   - by: claude-code/agent
     at: "2026-11-03T20:31:03Z"
     digest: 79cb461c249d3c2e
+  - by: claude-code/agent
+    at: "2026-11-04T17:53:23Z"
+    digest: a4e563bea3a17189
 sources:
   - id: agent-md
     resource: AGENT.md
@@ -124,7 +124,7 @@ export class CreateEventCommandDTO implements CreateEventCommand {
 
 - **Règles de validation automatique** : `GrpcValidationPipe` est configuré en `APP_PIPE` global avec `enumMaps`[^app-event][^validation]. Il convertit les chaînes vides en `undefined`, les entiers Int64 en `number`, et les noms d'enums sous forme de string en valeurs numériques conformes Protobuf.
 - **Défense en profondeur** : Utiliser l'assertion d'assignation définie `!` pour les champs obligatoires du contrat (aucun `any`).
-- **Pagination des requêtes de liste** : ne jamais déclarer `pagination` avec le seul `@IsOptional()` (aucune valeur n'est alors validée). Motif commun : `@IsOptional() @ValidateNested() @Type(() => PaginationRequestDTO) pagination: PaginationRequestDTO | undefined;`, avec `PaginationRequestDTO` dans `src/common/dto/pagination.dto.ts` (`page` : `@IsInt @Min(1)`, `limit` : `@IsInt @Min(1) @Max(MAX_PAGINATION_LIMIT)`). Le plafond est 1000 côté ms tant que la gateway appelle encore avec `limit: 1000` (la gateway écrête à 100). Pagination absente : défaut page 1 / limit 10 dans le contrôleur (`DEFAULT_PAGE`, `DEFAULT_LIMIT`), jamais une lecture de toute la table. Listes d'ids en entrée : `@IsArray @ArrayMaxSize(100)` (1000 pour `ids`/`excludedIds` de `SearchEvents`, que la gateway remplit avec les événements recommandés).
+- **Pagination des requêtes de liste** : ne jamais déclarer `pagination` avec le seul `@IsOptional()` (aucune valeur n'est alors validée). Motif commun : `@IsOptional() @ValidateNested() @Type(() => PaginationRequestDTO) pagination: PaginationRequestDTO | undefined;`, avec `PaginationRequestDTO` dans `src/common/dto/pagination.dto.ts` (`page` : `@IsInt @Min(1)`, `limit` : `@IsInt @Min(1) @Max(MAX_PAGINATION_LIMIT)`). Le plafond `MAX_PAGINATION_LIMIT` dépend du service (relevé le 2026-11-04) : 100 dans `ms-post` (#69) et `ms-event` (#83), qui l'ont abaissé de 1000 à 100, et 1000 dans `ms-user` et `ms-social` (la gateway écrête à 100 sur ses routes, et lit les ensembles d'ids par pages de 100 avec `fetchAllPages` depuis api-gateway#90, au lieu d'un appel `limit: 1000`). Ne pas supposer 1000 : lire la constante du service. Pagination absente : défaut page 1 / limit 10 dans le contrôleur (`DEFAULT_PAGE`, `DEFAULT_LIMIT`), jamais une lecture de toute la table. Listes d'ids en entrée : `@IsArray @ArrayMaxSize(100)` (1000 pour `ids`/`excludedIds` de `SearchEvents`, que la gateway remplit avec les événements recommandés).
 - **Lectures par lot** : pas de `Promise.all(ids.map(findById))`. Utiliser le `findByIds` du domaine (une requête, 100 ids maximum, tronqué en silence au-delà donc découper par lots de 100) puis remettre le résultat dans l'ordre des ids d'entrée, car cet ordre vient de ms-social pour les listes de profils et d'événements. Exemples : `ms-user/src/modules/user/helpers/find-active-users-in-order.ts`, `ms-event/src/modules/event/utils/events-by-ids.util.ts`. Côté domaine, filtrer en SQL avant `limit`/`offset` (`UserService.findPage`) et toujours trier avec un départage par `id` (offset instable sinon).
 
 ---

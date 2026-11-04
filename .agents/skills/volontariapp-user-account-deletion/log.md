@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-04
+
+- **Vérification** - marked verified on user request without reviewing the domain-user pagination, scoring and trigger commits by others; content may be outdated (claude-code/agent)
+
 ## 2026-10-30
 
 - **Vérification** - Vérification ImpactScoreCreditModel (claude-code/agent)

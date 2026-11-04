@@ -21,9 +21,6 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-27T22:34:16Z"
-    digest: 271a1efbb7e79791
-  - by: claude-code/agent
     at: "2026-10-30T11:56:28Z"
     digest: be5ca2862e35d8ad
   - by: claude-code/agent
@@ -35,6 +32,9 @@ verified:
   - by: claude-code/agent
     at: "2026-11-03T20:40:37Z"
     digest: be5ca2862e35d8ad
+  - by: claude-code/agent
+    at: "2026-11-04T17:55:25Z"
+    digest: 36e80228c7f25540
 sources:
   - id: gw-claude
     resource: api-gateway/src/modules
@@ -235,6 +235,7 @@ Toute route de liste utilise le module commun `src/common/pagination` : ne jamai
 - **Ecretage** : `clampPaginationLimit(limit, maxLimit)` ramene une limite trop grande au plafond (`Math.min`). Une limite superieure au plafond est ecretee, jamais rejetee ; une limite invalide (non entiere, < 1) reste un 400.
 - **Exception legacy (500)** : seulement `GET /api/v1/social/likes` (`GetMyLikesRequestDTO`) et `GET /api/v1/users` admin (`ListUsersRequestDTO`), car les anciens builds de nativapp appellent avec `limit=500`. Ne pas etendre cette exception a une autre route.
 - **Lecture par lot** : `POST /api/v1/social/likes-summary` (`GetPostsLikeSummaryRequestDTO`) prend 1 a 100 `postIds` uniques (`ArrayMinSize(1)`, `ArrayMaxSize(MAX_LIKE_SUMMARY_POST_IDS)`, `ArrayUnique`) et repond 200 : c'est une lecture exposee en POST pour eviter une URL de 100 identifiants. ms-social reste l'autorite sur le plafond.
+- **Lire tout un ensemble d'ids chez un ms (appel interne, pas une route)** : `fetchAllPages(fetchPage)` de `src/common/pagination` (api-gateway#90), jamais un seul appel avec `limit: 1000`. Il lit par pages de `INTERNAL_PAGE_SIZE` (= `MAX_LIMIT`, 100) et s'arrete sur page vide, page courte, `totalPages` atteint ou `INTERNAL_MAX_PAGES` (100 pages, soit 10 000 ids au plus : les ids deja lus sont alors renvoyes sans erreur). Une erreur de `fetchPage` est propagee telle quelle. Utilise pour les ids d'evenements recommandes par ms-social et pour les ensembles de blocage du ranking.
 
 [^pagination]: Module de pagination commun (constantes, DTO, decorateurs, ecretage)
 

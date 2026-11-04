@@ -29,7 +29,7 @@ sources:
 
 Events (sorties bénévoles), Tags, Requirements, entièrement dans `@volontariapp/domain-event` (entités, services, repositories Postgres, géocodage)[^services] :
 
-- `EventEntity` : name, description, startAt/endAt, location géocodée, type (`SOCIAL`, `ECOLOGY`), state (`DRAFT`, `PUBLISHED`, `IN_PROGRESS`, `FINISHED`, `CANCELLED`), `saga_status`, awardedImpactScore, maxParticipants/currentParticipants, organizerId, tags, requirements.
+- `EventEntity` : name, description, startAt/endAt, location géocodée, type (`SOCIAL`, `ECOLOGY`), state (`DRAFT`, `PUBLISHED`, `IN_PROGRESS`, `FINISHED`, `CANCELLED`), `saga_status`, awardedImpactScore, `scoringVersion` (nullable, 1 à la création, voir leçons), maxParticipants/currentParticipants, organizerId, tags, requirements.
 - `RequirementEntity` : name, quantity/currentQuantity, isSystem, createdBy/updatedBy. `TagEntity` : slug, name, balise, updatedBy.
 
 `ms-event` ne fournit que contrôleurs gRPC, DTO, transformers, migrations et intégration outbox.

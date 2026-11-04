@@ -18,12 +18,6 @@ generated:
   at: "2026-10-12T11:56:30Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-29T12:13:52Z"
-    digest: 937bef2977a53292
-  - by: claude-code/agent
-    at: "2026-10-30T10:54:43Z"
-    digest: b66c8a698084a2e4
-  - by: claude-code/agent
     at: "2026-10-30T11:19:37Z"
     digest: 645b377048b9afbf
   - by: claude-code/agent
@@ -32,6 +26,12 @@ verified:
   - by: claude-code/agent
     at: "2026-10-30T12:24:33Z"
     digest: a54b076ffe78093d
+  - by: claude-code/agent
+    at: "2026-11-01T16:23:06Z"
+    digest: 20ce5bb2eb406974
+  - by: claude-code/agent
+    at: "2026-11-04T13:17:01Z"
+    digest: d556f3184aec16ba
 sources:
   - id: sync-mig
     kind: local_file
@@ -81,7 +81,7 @@ Utiliser ce playbook pour toute évolution de schéma relationnel PostgreSQL dan
 Identifier le répertoire cible dans le microservice :
 - **Migration Commune** (`ms-*/src/migrations/common/`) :
   - Concerne l'Outbox transactionnelle (`jobs_outbox`, `event_queue`, `job_audit`)[^data-source] ou un trigger SQL de dispatch.
-  - Doit être créée dans un microservice de référence (ex. `ms-user`), puis **copiée à l'identique** (même nom, même contenu, vérifier le md5) dans `src/migrations/common/` de chaque service qui a **sa propre base** : `ms-user`, `ms-social`, `ms-post`, `ms-event`, `ms-storage`, `ms-ranking` **et `ws-service`** (base `ms_ws`, oublié lors de la tâche 2.9 : une colonne ajoutée à `OutboxModel` fait échouer ses écritures tant que la migration manque). `post-processors-runner/post-processor-event` et `workers-runners/worker-event` gardent aussi une copie et utilisent en production la base `ms_event` de `ms-event` (migration déjà appliquée), **mais leur CI reconstruit une base neuve depuis leurs propres migrations** (`global-setup` de `worker-event` : drop du schéma puis `runMigrations`) : sans la copie, `column EventQueueModel.traceparent does not exist` (constaté sur workers-runners#16). Copier aussi la nouvelle migration commune dans ces deux dossiers. Pour reproduire la CI en local sans toucher à sa base : `DB_NAME=<base jetable> yarn test:integration`. `yarn meta sync-migrations` ne fait PAS cette propagation inter-services[^sync-mig]. Pour repérer les copies : chercher le nom d'une migration commune existante (`1781000000000-AddCorrelationIdToEventQueue.ts`) sur tout le workspace, hors `deploy/`. Ces trois dossiers ont dérivé (migrations plus anciennes que celles de `ms-*`) : ne copier que la nouvelle migration.
+  - Doit être créée dans un microservice de référence (ex. `ms-user`), puis **copiée à l'identique** (même nom, même contenu, vérifier le md5) dans `src/migrations/common/` de chaque service qui a **sa propre base** : `ms-user`, `ms-social`, `ms-post`, `ms-event`, `ms-storage`, `ms-ranking` **et `ws-service`** (base `ms_ws`, oublié lors de la tâche 2.9 : une colonne ajoutée à `OutboxModel` fait échouer ses écritures tant que la migration manque). `post-processors-runner/post-processor-event` et `workers-runners/worker-event` gardent aussi une copie et utilisent en production la base `ms_event` de `ms-event` (migration déjà appliquée), **mais leur CI reconstruit une base neuve depuis leurs propres migrations** (`global-setup` de `worker-event` : drop du schéma puis `runMigrations`) : sans la copie, `column EventQueueModel.traceparent does not exist` (constaté sur workers-runners#16). Copier aussi la nouvelle migration commune dans ces deux dossiers. Pour reproduire la CI en local sans toucher à sa base : `DB_NAME=<base jetable> yarn test:integration`. `yarn meta sync-migrations` ne fait PAS cette propagation inter-services[^sync-mig]. Pour repérer les copies : chercher le nom d'une migration commune existante (`1781000000000-AddCorrelationIdToEventQueue.ts`) sur tout le workspace, hors `deploy/`. Ces trois dossiers ont dérivé (migrations plus anciennes que celles de `ms-*`) : ne copier que la nouvelle migration. Le md5 peut différer sans que le SQL change : la copie de `1781400000000-AddFinishedAndCancelledToEventStateEnum.ts` dans `worker-event` (`workers-runners#50`, dont le message de commit annonce « byte-identically ») a un md5 différent de celle de `ms-event` parce que ses lignes sont recoupées, alors que les requêtes `up`/`down` sont les mêmes (cause probable : le formatage du repo cible, non vérifiée). Si le md5 diffère, comparer les requêtes avec `diff` plutôt que conclure à une dérive. `1792200000000-AddScoringVersionToEvent.ts` est, lui, identique au md5.
 - **Migration Domaine** (`ms-*/src/migrations/domain/`) :
   - Concerne les tables propres au métier (ex. `users`, `badges` dans `ms-user` ; `posts` dans `ms-post`).
   - Reste cantonnée au répertoire `domain/` du microservice concerné.
@@ -155,7 +155,7 @@ Pour toute modification dans `src/migrations/` (commune ou domaine pour les test
    yarn meta sync-migrations --dry-run                    # Prévisualiser (+ ajouté, ~ modifié, - supprimé), sans rien écrire
    yarn meta sync-migrations                              # Tout synchroniser
    yarn meta sync-migrations --packages storage,user      # Microservices précis (avec ou sans préfixe ms-)
-   yarn meta sync-migrations --pr                         # Branche, changeset, build, test, PR dans npm-packages, puis arrêt (règle STOP)
+   yarn meta sync-migrations --pr                         # Branche, changeset, build, test, PR dans npm-packages, puis arrêt (règle STOP) ; refuse si npm-packages a des modifications locales, et incompatible avec --dry-run
    ```
 2. Microservices gérés : tous les `ms-*` de `repos.json` avec `migrations: true` et un package `domain-*` présent (`user`, `social`, `post`, `event`, `storage`, `ranking`). Pour `ranking` (état vérifié le 2026-10-28 avant la CLI) : son dossier `domain-ranking/src/test/migrations/domain/` contient pour l'instant la migration `CreateRankingTables` écrite à la main, copiée à l'identique dans `ms-ranking/src/migrations/domain/` (vérifié le 2026-10-28 : fichiers identiques, 10 tables `ranking_*` : `ranking_score`, `ranking_post_score`, `ranking_run`, `ranking_request`, `ranking_like_log`, `ranking_event_feedback`, `ranking_event_wish`, `ranking_event_mention`, `ranking_user_location`, `ranking_rate_bucket`). Les 16 migrations communes de `ms-ranking` sont identiques à celles de `ms-user`.
 3. La commande synchronise par un miroir équivalent à `rsync -ac --delete` (comparaison par contenu) les fichiers vers `npm-packages/packages/domain-<service>/src/test/migrations` (copie `ms-*` vers `domain-*`, jamais entre services) afin de garantir que les tests du domaine s'exécutent sur un schéma strictement identique.

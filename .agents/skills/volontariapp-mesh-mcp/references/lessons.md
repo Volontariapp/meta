@@ -15,6 +15,12 @@ sources:
 
 # Leçons
 
+## 2026-11-01 - Binaire mesh-mcp trop ancien pour la config: Connection closed au demarrage
+
+- **Type :** pitfall
+- **Leçon :** Si le serveur MCP mesh-mcp echoue avec CONNECTION_CLOSED, lancer 'mesh-mcp -c <meta>/.agents/mesh-mcp.toml doctor' avant de soupconner .mcp.json (qui lance simplement 'mesh-mcp', conforme au guide). Constate le 2026-11-01 : le binaire 7.0.19 rejetait 'confidence = "exact"' (champ optionnel des patterns de topic, ligne 207, 12 occurrences) avec 'unknown field confidence' et ne demarrait pas ; apres mise a jour en 7.1.11 (install.sh du repo VictorAgahi/causalmesh, release latest), doctor repond 'No errors, no warnings' (4774 fichiers scannes, 16 racines). La version exacte qui introduit le champ n'est pas verifiee. Ne pas retirer les champs du fichier partage : mettre le binaire a jour. Le repo causalmesh est sur le compte VictorAgahi (pas dans l'organisation Volontariapp) et se clone a cote de meta pour la source citee par cette skill.[^src-ee621be8]
+- **Consigné par :** claude-code/agent
+
 ## 2026-10-12 - Les routes HTTP ne sont pas interrogeables par chemin
 
 - **Type :** pitfall

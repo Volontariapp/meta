@@ -2,6 +2,16 @@
 
 ## 2026-11-04
 
+- **Vérification** - npm-packages ci.yml: notify-ready job and labeled-trigger consequences documented; the other flagged files are version and changelog bumps by others, not reviewed (claude-code/agent)
+
+## 2026-11-02
+
+- **Vérification** - catalogue: errors 0.7.0 (+isInfrastructureError), post-processors 3.4.6; bump en cascade relu (claude-code/agent)
+
+## 2026-11-01
+
+- **Vérification** - relu: aucun changement requis, nouvelle dependance workspace entre post-processors et errors, yarn.lock mis a jour par yarn install (claude-code/agent)
+- **Vérification** - relue: catalogue des packages realigne sur les package.json (18 versions perimees corrigees, verifie par script, 0 ecart restant); shared: ajout src/scoring (computeEventScoring); domain-social: ParticipationService.isEventCreator (claude-code/agent)
 - **Leçon** - Changement npm-packages en dernier quand des agents travaillent sur les consommateurs (rule) (claude-code/agent)
 
 ## 2026-11-03

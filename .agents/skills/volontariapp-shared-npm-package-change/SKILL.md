@@ -35,21 +35,21 @@ sources:
     resource: ci-tools/.github/workflows/npm-packages-pipeline.yml
     title: Pipeline réutilisable npm-packages (ci-tools)
 verified:
-  - by: claude-code/sonnet-5-5
-    at: "2026-10-18T15:59:43Z"
-    digest: 4db132529a9fac13
-  - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-28T20:27:13Z"
-    digest: 3d560bd6306ddd7c
-  - by: claude-code/agent
-    at: "2026-10-29T12:13:53Z"
-    digest: a43927821e5f0079
-  - by: claude-code/agent
-    at: "2026-10-29T15:10:19Z"
-    digest: e6d0a65cd5662f83
   - by: claude-code/agent
     at: "2026-10-30T10:54:44Z"
     digest: e8a28e1212698c50
+  - by: claude-code/agent
+    at: "2026-11-01T16:33:22Z"
+    digest: 5331fc189826176f
+  - by: claude-code/agent
+    at: "2026-11-01T20:03:31Z"
+    digest: 7ce1c85a68a336b1
+  - by: claude-code/agent
+    at: "2026-11-02T11:07:22Z"
+    digest: a449048c4609013e
+  - by: claude-code/agent
+    at: "2026-11-04T15:17:07Z"
+    digest: 9d675e6e735a8f49
 ---
 
 # Shared NPM Package Change & Règle d'Or du Stop Immédiat
@@ -127,8 +127,10 @@ flowchart TD
 | Snapshot | PR uniquement | Publie `<version>-snap-<sha court>` sous le dist-tag `next`, et liste les versions en commentaire de la PR[^snap] |
 | Release | push sur `main` | Publie la version **déjà écrite** dans `package.json` (ignorée si elle existe déjà sur le registre), puis met à jour le sous-module `npm-packages` du repo `deploy` |
 | Secours | `workflow_dispatch` | `job-emergency-release.yml` (option `dry_run`) |
+| Notification | PR uniquement | Job `notify-ready` du `ci.yml` (`needs: [run-pipeline]`) : un seul message Discord (canal backend) quand la PR est prête, pour une PR Dependabot ou une PR portant le label `notify-discord`. Détail et limites dans `volontariapp-ci-tools` |
 
 Conséquences pratiques :
+- Le déclencheur `pull_request` de ce `ci.yml` inclut `labeled` : poser un label (même `notify-discord`) relance tout le pipeline, snapshot compris. C'est pourquoi `notify-ready` ne reçoit pas `ORG_REPO_TOKEN` : un label posé avec un jeton personnel relancerait un run de plus à chaque notification. Conséquence non vérifiée sur une vraie PR Dependabot : le `GITHUB_TOKEN` y est en lecture seule, le job `notify-ready` échouerait au lieu de notifier.
 - Le bump se fait dans la PR : `yarn changeset add` puis `yarn changeset version`, **une seule fois par branche** (deux `version` sur la même branche font sauter une version, 3.1 vers 3.3).
 - La version à mettre dans un consommateur pendant la PR est celle du commentaire de la CI, par exemple `yarn up @volontariapp/messaging@2.17.1-snap-a1b2c3d`. Elle change à chaque push sur la PR.
 - Modifier `shared` reconstruit aussi tout ce qui en dépend dans le monorepo : le build de la PR est le premier test d'impact.

@@ -1,5 +1,9 @@
 # Historique des skills
 
+## 2026-11-04
+
+- **Nouvelle skill** - [volontariapp-pr-tools](/volontariapp-pr-tools/SKILL.md) - Labels et relance de CI sur les PRs (pr-label.sh, pr-retrigger.sh) (claude-code/agent)
+
 ## 2026-10-28
 
 - **Nouvelle skill** - [volontariapp-meta-scripts](/volontariapp-meta-scripts/SKILL.md) - Scripts et CLI du workspace meta (claude-code/agent)

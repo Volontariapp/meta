@@ -24,9 +24,6 @@ generated:
   at: "2026-10-12T12:18:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-30T11:45:19Z"
-    digest: 94520979f58493f1
-  - by: claude-code/agent
     at: "2026-10-30T11:56:29Z"
     digest: 6b1c743cb3f451fc
   - by: claude-code/agent
@@ -38,6 +35,9 @@ verified:
   - by: claude-code/agent
     at: "2026-11-03T20:31:04Z"
     digest: 12ce8c4542fefc25
+  - by: claude-code/agent
+    at: "2026-11-04T17:55:26Z"
+    digest: e6d3d8b867be57d6
 sources:
   - id: doc-creation
     kind: local_file
@@ -135,7 +135,7 @@ Une fois la PR Protobuf générée dans `npm-packages`[^doc-creation] :
 
 1. Créer le dépôt `ms-<domaine>` (prendre modèle sur `ms-social` ou `ms-user`)[^doc-creation] :
    - Initialiser les dépendances via `yarn up` sur les nouveaux paquets publiés.
-   - Copier `ci-tools/templates/dependabot/service.yml` dans `.github/dependabot.yml` (retirer le bloc `docker` sans Dockerfile). Le job `security` (Trivy) est déjà fourni par `service-ci.yml`, rien à ajouter dans le `ci.yml`.
+   - Copier `ci-tools/templates/dependabot/service.yml` dans `.github/dependabot.yml` (retirer le bloc `docker` sans Dockerfile). Le job `security` (Trivy) est déjà fourni par `service-ci.yml`, rien à ajouter dans le `ci.yml`. Ajouter en dernier job du `ci.yml` un `notify-ready` (`needs:` tous les autres jobs, `if: ${{ !failure() && !cancelled() && github.event_name == 'pull_request' }}`, `permissions` `issues: write` et `pull-requests: write`, `uses: Volontariapp/ci-tools/.github/workflows/pr-ready-notify.yml@main`, `with: channel: backend`, `secrets: inherit`) : détail dans `volontariapp-ci-tools`.
 2. **Bootstrap et Observabilité** :
    - `src/main.ts` : Démarrage hybride (serveur gRPC sur port 3000 + serveur HTTP Express pour la sonde `/health`).
    - `src/tracing.ts` : Initialisation du SDK OpenTelemetry (Datadog OTLP) avant l'instanciation de NestJS.
@@ -163,6 +163,7 @@ Une fois la PR Protobuf générée dans `npm-packages`[^doc-creation] :
    ```
 2. Le script génère `outbox-<domaine>/` surveillant les tables `jobs_outbox` et `event_queue` de la base du microservice.
 3. Vérifier les targets Redis Streams et BullMQ dans la configuration.
+4. Rien à ajouter côté CI pour un nouveau domaine : le `ci.yml` de `outbox-runners`, `workers-runners` et `post-processors-runner` porte déjà un job `notify-ready` (`needs: [ci]`, `ci` étant l'appel unique à `runner-pipeline.yml`). Ces `ci.yml` listent leurs secrets au lieu de `secrets: inherit` : `DISCORD_WEBHOOK_BACKEND`, `DISCORD_WEBHOOK_FRONTEND` et `ORG_REPO_TOKEN` y sont passés un par un.
 
 ---
 

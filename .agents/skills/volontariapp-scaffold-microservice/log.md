@@ -1,5 +1,26 @@
 # Historique
 
+## 2026-11-04
+
+- **Vérification** - reviewed only api-gateway@8521e2f (fetchAllPages, covered by volontariapp-api-gateway); the other flagged files were not read (claude-code/agent)
+- **Vérification** - runners ci.yml: notify-ready job added (CI only, skill content unaffected) (claude-code/agent)
+- **Vérification** - runners: notify-ready job in outbox-runners, workers-runners and post-processors-runner ci.yml (explicit secrets) (claude-code/agent)
+
+## 2026-11-03
+
+- **Vérification** - notify job timeout lowered from 5 to 3 minutes (process:claude-code)
+- **Vérification** - notify job timeout lowered from 5 to 3 minutes (agent:claude)
+
+## 2026-11-02
+
+- **Vérification** - notify-ready: if et permissions de l'appelant (review ci-tools#65) (claude-code/agent)
+- **Vérification** - etape 3: job notify-ready (pr-ready-notify.yml) a ajouter au ci.yml d'un nouveau ms (claude-code/agent)
+- **Vérification** - relu: bumps de version en cascade et CHANGELOG uniquement, aucune etape de scaffold concernee (claude-code/agent)
+
+## 2026-11-01
+
+- **Vérification** - relu: aucun changement requis, dependance @volontariapp/errors ajoutee a post-processors sans impact sur le scaffolding (claude-code/agent)
+- **Vérification** - relue: les 122 fichiers viennent des commits deja examines (api-gateway 2e26fd3/103f888, ms-event 08ab793, ms-social 9807d07/99f4856, ms-user b81b2d9, workers b4eb3bf, post-processors a601b6b6, npm-packages 3122e97); scripts cites existent, repos.json deja documente; aucune etape ne change (claude-code/agent)
 ## 2026-11-03
 
 - **Vérification** - Scaffold: copier PaginationRequestDTO valide (ms-user ou ms-social) pour les requetes de liste, defaut page 1 limit 10 dans le controleur (claude-code/agent)

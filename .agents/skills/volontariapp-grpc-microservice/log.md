@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-11-04
+
+- **Vérification** - pagination ceilings per service (ms-post and ms-event at 100, ms-user and ms-social at 1000) corrected in SKILL.md; ms-social Neo4j unique constraints recorded from the commit message, code not read (claude-code/agent)
+- **Leçon** - ms-social crée des contraintes d'unicité Neo4j au démarrage (decision) (claude-code/agent)
+- **Leçon** - Le plafond MAX_PAGINATION_LIMIT n'est plus 1000 partout (pitfall) (claude-code/agent)
+
 ## 2026-11-03
 
 - **Vérification** - Pagination: motif PaginationRequestDTO valide (plafond 1000 cote ms, 100 gateway), defaut 1/10, listes d'ids plafonnees, lectures par lot findByIds par 100 avec ordre conserve, findPage; ms-user.md documente ListUsers, GetUsersByIds et les listes de profils (claude-code/agent)
