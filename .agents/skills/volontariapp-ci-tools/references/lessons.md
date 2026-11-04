@@ -27,6 +27,12 @@ sources:
 
 # Leçons
 
+## 2026-11-04 - post-processor-event hors de la stack E2E
+
+- **Type :** pitfall
+- **Leçon :** En NODE_ENV=test, la strategie OpenStreetMap de post-processor-event renvoie des coordonnees fixes (Paris) et ecraserait la localisation de chaque event, ce qui casse event-search : il n'est volontairement pas dans le profil e2e (ci-tools#72). Consequence : le gather event.created de ws-service attend GEOCODED_SUCCESS que rien n'emet et expire. Les runners du lot 2 dans la stack : outbox-event, outbox-post, outbox-ranking, post-processor-ranking, worker-ranking, ms-ranking (+ migration).[^src-5601ca7f]
+- **Consigné par :** claude-code/agent
+
 ## 2026-11-04 - Matrice E2E : services dans e2e-services.txt, merger les repos avant ci-tools
 
 - **Type :** rule
