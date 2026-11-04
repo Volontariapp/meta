@@ -14,9 +14,30 @@ sources:
   - id: src-cbb46bc1
     resource: ci-tools/.github/workflows/e2e-orchestrator.yml
     title: ci-tools/.github/workflows/e2e-orchestrator.yml
+  - id: src-5601ca7f
+    resource: ci-tools/docker-compose.yml
+    title: ci-tools/docker-compose.yml
 ---
 
 # Leçons
+
+## 2026-11-03 - Runners async dans l'E2E et creation manuelle de noeuds
+
+- **Type :** rule
+- **Leçon :** Avec outbox-user et post-processor-social dans le profil e2e (ci-tools#66), un test ne doit plus creer a la main le noeud social d'un user inscrit via POST /users : la creation manuelle fait la course avec le post-processor et renvoie 409 quand il gagne. Utiliser waitForSocialUserNode (api-gateway e2e/helpers/social-node.helper.ts). Les runners exigent un /health (outbox-runners#41) et ne vont que dans le profil e2e, jamais dans le profil par defaut.[^src-5601ca7f]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-03 - Projet compose local partage avec le dev
+
+- **Type :** pitfall
+- **Leçon :** Sans -p, docker compose -f ci-tools/docker-compose.yml prend le projet ci-tools : celui des volumes de dev locaux (ci-tools_postgres_*_data). Un replay local de l'E2E y applique les migrations des images latest et un down -v effacerait les donnees de dev. Rejouer l'E2E avec COMPOSE_PROJECT_NAME=volontariapp-e2e-local. Sur Mac arm64 les images GHCR n'existent qu'en amd64 : docker pull --platform linux/amd64, sans DOCKER_DEFAULT_PLATFORM au up (il refuse les images construites localement en arm64).[^src-5601ca7f]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-03 - E2E compose lu depuis le sous-module de l'appelant
+
+- **Type :** pitfall
+- **Leçon :** e2e-orchestrator.yml vient de ci-tools@main, mais il lance docker compose -f ci-tools/docker-compose.yml depuis le sous-module ci-tools du repo appelant (checkout submodules: recursive). Un changement du compose n'atteint un repo qu'au bump de son pointeur (sync-all). Pour tester un compose non merge dans la CI d'une PR, pointer le sous-module de la PR sur le commit de la branche ci-tools, puis le re-pointer sur main apres merge (api-gateway#91).[^src-cbb46bc1]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-03 - Label docker-and-e2e requis pour le CI Docker et e2e
 
@@ -38,3 +59,4 @@ sources:
 
 [^src-471bbb9a]: ci-tools/.github/workflows/service-docker-build-push.yml
 [^src-cbb46bc1]: ci-tools/.github/workflows/e2e-orchestrator.yml
+[^src-5601ca7f]: ci-tools/docker-compose.yml

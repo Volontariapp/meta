@@ -2,6 +2,9 @@
 
 ## 2026-11-03
 
+- **Leçon** - Runners async dans l'E2E et creation manuelle de noeuds (rule) (claude-code/agent)
+- **Leçon** - Projet compose local partage avec le dev (pitfall) (claude-code/agent)
+- **Leçon** - E2E compose lu depuis le sous-module de l'appelant (pitfall) (claude-code/agent)
 - **Leçon** - Label docker-and-e2e requis pour le CI Docker et e2e (pitfall) (claude-code/agent)
 
 ## 2026-10-28
