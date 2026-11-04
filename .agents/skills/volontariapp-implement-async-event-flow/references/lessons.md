@@ -35,6 +35,9 @@ sources:
   - id: src-8f29c4a0
     resource: post-processors-runner/post-processor-storage/src/post-processors/user-deleted.post-processor.ts
     title: post-processors-runner/post-processor-storage/src/post-processors/user-deleted.post-processor.ts
+  - id: src-7746ea1d
+    resource: ws-service/config/default.config.json
+    title: ws-service/config/default.config.json
   - id: src-b571b8b4
     resource: ws-service/src/core/services/gather-state.service.ts
     title: ws-service/src/core/services/gather-state.service.ts
@@ -44,6 +47,12 @@ sources:
 ---
 
 # Leçons
+
+## 2026-11-04 - Reaper du gather desactive en E2E
+
+- **Type :** pitfall
+- **Leçon :** Dans la stack E2E, ws-service tourne avec NODE_ENV=test, ce qui desactive le gather reaper : quand un runner qui doit renvoyer un feedback manque, le client ne recoit rien du tout (pas de *_failed). Un test WebSocket qui expire signifie donc souvent un runner absent de la stack ou une cle de feedback mal alignee (bug G1 : ws-service attend social_event.deleted_success, post-processor-social emet event_social.deleted).[^src-7746ea1d]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-03 - Trigger domain-user : index.ts fait foi, pas le .sql
 
@@ -138,5 +147,6 @@ sources:
 [^src-4f6a6ae1]: workers-runners/worker-event/package.json
 [^src-3e2c0d08]: ws-service/src/core/services/gather-reaper.service.ts
 [^src-8f29c4a0]: post-processors-runner/post-processor-storage/src/post-processors/user-deleted.post-processor.ts
+[^src-7746ea1d]: ws-service/config/default.config.json
 [^src-b571b8b4]: ws-service/src/core/services/gather-state.service.ts
 [^src-b66d36a3]: npm-packages/packages/domain-user/src/database/triggers/index.ts

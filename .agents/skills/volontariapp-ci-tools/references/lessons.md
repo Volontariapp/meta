@@ -14,6 +14,9 @@ sources:
   - id: src-cbb46bc1
     resource: ci-tools/.github/workflows/e2e-orchestrator.yml
     title: ci-tools/.github/workflows/e2e-orchestrator.yml
+  - id: src-44d20cb6
+    resource: ci-tools/.github/workflows/runner-pipeline.yml
+    title: ci-tools/.github/workflows/runner-pipeline.yml
   - id: src-71dc1dab
     resource: ci-tools/.github/workflows/sync-all.yml
     title: ci-tools/.github/workflows/sync-all.yml
@@ -23,6 +26,12 @@ sources:
 ---
 
 # Leçons
+
+## 2026-11-04 - Matrice E2E : services dans e2e-services.txt, merger les repos avant ci-tools
+
+- **Type :** rule
+- **Leçon :** La liste des services E2E vit dans ci-tools/scripts/e2e-services.txt (lue par e2e-matrix-parsing.sh et validate-matrix-main.sh) ; une cle absente de e2e-matrix.json vaut main avec un warning. runner-pipeline.yml lance validate-e2e-matrix sur chaque evenement, y compris push sur main : quand un repo doit recevoir un nouveau e2e-matrix.json, merger sa PR AVANT la PR ci-tools, sinon le bump sync-all fait echouer son main. Les runners construisent toutes leurs images taguees par branche sur PR labellisee docker-and-e2e (input extra-tag de docker-build-push).[^src-44d20cb6]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-04 - pg_isready par TCP avec un healthcheck rapide
 
@@ -74,5 +83,6 @@ sources:
 
 [^src-471bbb9a]: ci-tools/.github/workflows/service-docker-build-push.yml
 [^src-cbb46bc1]: ci-tools/.github/workflows/e2e-orchestrator.yml
+[^src-44d20cb6]: ci-tools/.github/workflows/runner-pipeline.yml
 [^src-71dc1dab]: ci-tools/.github/workflows/sync-all.yml
 [^src-5601ca7f]: ci-tools/docker-compose.yml

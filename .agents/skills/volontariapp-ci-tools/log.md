@@ -2,6 +2,7 @@
 
 ## 2026-11-04
 
+- **Leçon** - Matrice E2E : services dans e2e-services.txt, merger les repos avant ci-tools (rule) (claude-code/agent)
 - **Leçon** - pg_isready par TCP avec un healthcheck rapide (pitfall) (claude-code/agent)
 
 ## 2026-11-03

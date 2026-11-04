@@ -44,9 +44,18 @@ sources:
   - id: src-cd3f14ee
     resource: npm-packages/packages/domain-user/src/repositories/postgres-user.repository.ts
     title: npm-packages/packages/domain-user/src/repositories/postgres-user.repository.ts
+  - id: src-2a04dce2
+    resource: npm-packages/package.json
+    title: npm-packages/package.json
 ---
 
 # Leçons
+
+## 2026-11-04 - Changement npm-packages en dernier quand des agents travaillent sur les consommateurs
+
+- **Type :** rule
+- **Leçon :** Le hook stop-rule-guard verrouille tous les repos consommateurs pour toute la session (sous-agents compris) des qu'un fichier npm-packages est edite. Avec plusieurs agents en parallele sur api-gateway, ci-tools ou les ms-*, faire la modification npm-packages en dernier, une fois leurs branches poussees, puis s'arreter et laisser le Lead Dev lancer le release apres publication.[^src-2a04dce2]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-03 - Surcharge de toEntity sans toEntities
 
@@ -186,3 +195,4 @@ sources:
 [^src-f6aa5050]: ws-service/tsconfig.json
 [^src-c6f47875]: ms-user/package.json
 [^src-cd3f14ee]: npm-packages/packages/domain-user/src/repositories/postgres-user.repository.ts
+[^src-2a04dce2]: npm-packages/package.json
