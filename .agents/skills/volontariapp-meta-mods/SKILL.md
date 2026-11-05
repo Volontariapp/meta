@@ -21,6 +21,9 @@ verified:
   - by: claude-code/agent
     at: "2026-11-05T13:16:27Z"
     digest: bf19a8706dceebc2
+  - by: claude-code/agent
+    at: "2026-11-05T14:46:09Z"
+    digest: b6c286aaab95b8d4
 sources: []
 ---
 
@@ -67,6 +70,8 @@ tsc -p <tsconfig>                   # include : types claude-code.d.ts du skill 
 ```
 
 Le typage demande le `claude-code.d.ts` que la skill `plugin-authoring` écrit au chargement (son chemin est donné par cette skill) : il n'est pas dans le repo.
+
+Quand un mod est chargé depuis son dossier (`claude --plugin-dir`, ou installation lue depuis le clone), le moteur écrit lui-même `<mod>/tsconfig.json` (`extends ./.claude-plugin/types/tsconfig.json`) et pose les types dans `<mod>/.claude-plugin/types/`, dossier ignoré par git. Le `tsconfig.json` est commité (inférence : il a été écrit au chargement des mods depuis le clone ; non revérifié sur une version plus récente de Claude Code) ; ensuite `tsc -p .claude/mods/<mod>` type le mod sans configuration.
 
 ## Références
 
