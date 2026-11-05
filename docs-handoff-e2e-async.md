@@ -1,4 +1,4 @@
-# Handoff : E2E asynchrone (mis a jour le 2026-11-04 au soir)
+# Handoff : E2E asynchrone (mis a jour le 2026-11-05)
 
 Reprendre depuis une session neuve ouverte dans `meta`. Lire ce fichier, puis les lecons des skills `volontariapp-ci-tools`, `volontariapp-api-gateway`, `volontariapp-implement-async-event-flow`, `volontariapp-shared-npm-package-change` (references/lessons.md). Rapport de la session du 2026-11-04 : https://claude.ai/artifact/83zK8KsaAg9WzAvSg9PYgu
 
@@ -16,19 +16,16 @@ Reprendre depuis une session neuve ouverte dans `meta`. Lire ce fichier, puis le
 ## Merge le 2026-11-04 au soir
 - outbox-runners#45 (database 3.12.1, outbox 0.10.27) et ms-social#64 (domain-social 0.17.1). ms-social#64 a ete mergee avec un E2E rouge : voir G6 ci-dessous.
 
-## Lot 3 : saga de suppression de compte (orchestrateur, session du 2026-11-04 au soir)
-Rapport : https://claude.ai/artifact/AoedfzS4DYxQnNMmuV4fE6. Etat detaille et ordre de merge : `docs-handoff-user-deletion-e2e.md`, section "Etat au 2026-11-04 au soir".
-- api-gateway#102 : scenario `e2e/scenarios/user-deletion-scenarios.e2e.spec.ts`, un test par domaine, E2E vert (215 passes, aucun saute) sur une matrice temporaire.
-- ci-tools#73 : les 7 runners de la saga dans le profil e2e. post-processors-runner#64 : `GEOCODING_ENABLED`.
-- G6 : `main` rouge depuis ms-social#64 (notifications de like), corrige par ms-social#65 (une seule copie de database).
-- G5 : fichiers d'un compte supprime toujours telechargeables (purge `storage.cleanup_files` absente), `it.failing`.
-- Aucune PR mergee : `gh pr merge --admin` refuse par le classifieur de permissions ("Merge Without Review") malgre le mandat.
+## Lot 3 : saga de suppression de compte (termine le 2026-11-05)
+Rapport : https://claude.ai/artifact/AoedfzS4DYxQnNMmuV4fE6. Detail : `docs-handoff-user-deletion-e2e.md`.
+- Scenario `e2e/scenarios/user-deletion-scenarios.e2e.spec.ts` (api-gateway#102, #103) : un user riche supprime, un test par domaine, vert sur `main`.
+- Stack : ci-tools#73 (7 runners de la saga), post-processors-runner#64 (`GEOCODING_ENABLED`).
+- G5, fichiers d'un compte supprime purges : npm-packages#290 (domain-storage 0.13.0), post-processors-runner#65 et #66, workers-runners#55 (`CleanupFilesHandler`).
+- G6, deux copies de database dans ms-social (likes casses) : ms-social#65.
+- G8, mise a jour perdue du gather (deux acquittements simultanes) : ws-service#52.
 
 ## Reste a faire
-1. Merger lot 3 dans l'ordre du handoff de suppression, puis corriger G5 (npm-packages, puis workers-runners et post-processors-runner).
-2. Avis du Lead Dev : pour exclure les events des utilisateurs bloques, la gateway appelle `adminGetUserEvent` de ms-social au nom d'un utilisateur normal (ms-social n'a pas de garde de role). Garder, ou ajouter une RPC dediee (changement proto).
-3. Ticket G2 : pas de feedback `event.geocoding_failed` (le gather EVENT_CREATION attend le reaper).
-4. DLQ et idempotence de la saga de suppression : le scenario d'echec (`user.deletion_failed`) reste un `it.todo`, aucune route publique ne fait echouer une purge.
+Lot 4, confie a un orchestrateur : `docs-handoff-async-robustness.md`, prompt de lancement `docs-prompt-async-robustness.md`. G9 (fichiers d'un post ou d'un event supprime, d'un avatar remplace, non purges), purge periodique, G7 (avatar 503 au premier appel), notifications de posts intermittentes, G2, hook du STOP sous `.worktrees/`, scenario d'echec de la suppression. Decision du Lead Dev en attente : `adminGetUserEvent` appele au nom d'un utilisateur normal.
 
 ## Regles de travail apprises
 - Merger les PR des repos avant la PR ci-tools qui en depend ; une PR ci-tools qui ajoute des runners est suivie tout de suite de la PR api-gateway qui retire les creations manuelles concurrentes.
