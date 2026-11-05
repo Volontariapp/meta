@@ -34,7 +34,7 @@ Dès que tu as fini d'éditer un fichier `.proto` dans `proto-registry` :
 
 ### Garde-fou automatique (Claude Code)
 
-Le hook `PreToolUse` `.claude/hooks/stop-rule-guard.sh` applique cette règle mécaniquement : dès qu'un fichier de `npm-packages/` ou de `proto-registry/` est édité dans une session, toute édition d'un repo qui dépend de `@volontariapp/*` (`ms-*`, `api-gateway`, `ws-service`, `nativapp`, runners) est refusée pour le reste de la session. Après une modification de `proto-registry`, les packages générés `npm-packages/packages/contracts*` sont aussi verrouillés.
+Le hook `PreToolUse` `.claude/hooks/stop-rule-guard.sh` applique cette règle mécaniquement : dès qu'un fichier de `npm-packages/` ou de `proto-registry/` est édité dans une session, toute édition d'un repo qui dépend de `@volontariapp/*` (`ms-*`, `api-gateway`, `ws-service`, `nativapp`, runners) est refusée pour le reste de la session. Après une modification de `proto-registry`, les packages générés `npm-packages/packages/contracts*` sont aussi verrouillés. Le repo d'un fichier se lit sur son remote `origin` : une édition dans un worktree (`.worktrees/<nom>/`) pose et subit le verrou comme dans le checkout du repo. Tests : `.claude/hooks/tests/stop-rule-guard.test.sh`.
 
 Le déverrouillage revient **au Lead Dev**, une fois la version publiée par la CI : `! .claude/hooks/stop-rule-guard.sh release`. **INTERDICTION FORMELLE** pour l'agent de lancer cette commande ou de contourner le hook (édition via `sed`, `cat >`, script...).
 
