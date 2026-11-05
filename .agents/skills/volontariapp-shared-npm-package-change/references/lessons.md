@@ -62,9 +62,24 @@ sources:
   - id: src-0d12895f
     resource: "https://github.com/Volontariapp/ms-social/pull/65"
     title: "https://github.com/Volontariapp/ms-social/pull/65"
+  - id: src-bbec3532
+    resource: .claude/hooks/post-edit.sh
+    title: .claude/hooks/post-edit.sh
 ---
 
 # Leçons
+
+## 2026-11-05 - Le garde-fou du STOP ignore les worktrees sous .worktrees/
+
+- **Type :** pitfall
+- **Leçon :** post-edit.sh (ligne 22) et stop-rule-guard.sh (lignes 23-46) ne posent le marqueur que si le premier dossier du chemin edite est npm-packages ou proto-registry. Une edition dans meta/.worktrees/<nom>/packages/... n'est pas vue : le 2026-11-04, domain-storage a ete modifie dans .worktrees/npm-storage-purge sans qu'aucun verrou ne soit pose. La regle du STOP reste due par l'agent lui-meme (rien chez les consommateurs avant la publication verifiee) ; corriger le hook pour reconnaitre les worktrees (resoudre le repo via git rev-parse --show-toplevel ou git worktree list).[^src-bbec3532]
+- **Consigné par :** claude-code/claude-opus-5-5
+
+## 2026-11-05 - Le mandat d'orchestrateur ne suffit pas au classifieur de permissions
+
+- **Type :** rule
+- **Leçon :** Le 2026-11-05, malgre le mandat ecrit (AGENTS.md section 1, docs-handoff-user-deletion-e2e.md) et les trois conditions remplies (release CI reussie, npm view ok pour domain-storage 0.13.0 et storage-pipeline 0.3.23), le classifieur du mode auto de Claude Code a refuse .claude/hooks/stop-rule-guard.sh release (Security Weaken), comme il avait refuse gh pr merge --admin (Merge Without Review). Un refus du classifieur ne se contourne pas : demander au Lead Dev de lancer '! .claude/hooks/stop-rule-guard.sh release', ou qu'il ajoute les regles de permission Bash correspondantes avant de lancer un orchestrateur.[^src-37dd6836]
+- **Consigné par :** claude-code/claude-opus-5-5
 
 ## 2026-11-04 - Bumper un domain-* sans bumper la dependance directe a database duplique le package
 
@@ -246,3 +261,4 @@ sources:
 [^src-767c2189]: .agents/skills/volontariapp-shared-npm-package-change/scripts/consumers.py
 [^src-37dd6836]: AGENTS.md
 [^src-0d12895f]: https://github.com/Volontariapp/ms-social/pull/65
+[^src-bbec3532]: .claude/hooks/post-edit.sh

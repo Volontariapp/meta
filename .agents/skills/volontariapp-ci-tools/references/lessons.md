@@ -32,9 +32,27 @@ sources:
   - id: src-3eedff94
     resource: "https://github.com/Volontariapp/ci-tools/pull/73"
     title: "https://github.com/Volontariapp/ci-tools/pull/73"
+  - id: src-58fb5d2c
+    resource: "https://github.com/Volontariapp/post-processors-runner/pull/66"
+    title: "https://github.com/Volontariapp/post-processors-runner/pull/66"
+  - id: src-1b8aa8aa
+    resource: "https://github.com/Volontariapp/api-gateway/pull/102"
+    title: "https://github.com/Volontariapp/api-gateway/pull/102"
 ---
 
 # Leçons
+
+## 2026-11-05 - Relancer un E2E de main qui a tire une image avant sa publication
+
+- **Type :** pitfall
+- **Leçon :** Le 2026-11-05, les E2E de ms-user, ms-post, ms-storage, ms-ranking et api-gateway, declenches par la synchro ci-tools a 09:49, ont tire les images a 09:51 alors que post-processor-event:latest (GEOCODING_ENABLED) n'a ete pousse qu'a 09:52:17 : event-search a echoue (geocodage Paris). Comparer l'heure de 'Docker Compose Pull' du run avec la fin de 'Build & Push Docker Image' du runner avant de chercher un bug ; une relance suffit.[^src-1b8aa8aa]
+- **Consigné par :** claude-code/claude-opus-5-5
+
+## 2026-11-05 - L'E2E d'une PR de runner ne joue que les scenarios du main d'api-gateway
+
+- **Type :** pitfall
+- **Leçon :** post-processors-runner#65 (domain-storage 0.13.0) etait vert alors qu'il cassait post-processor-storage (JobsOutboxModel absent des entites TypeORM : releaseForOwner annule, USER_STORAGE_DELETED jamais envoye). Le scenario de suppression qui l'aurait revele n'etait pas encore sur main (api-gateway#102). Quand un changement de runner sert un scenario pas encore merge, le valider sur la PR du scenario avec la matrice pointee sur la branche du runner (api-gateway#103), avant de merger le runner. Corrige par post-processors-runner#66.[^src-58fb5d2c]
+- **Consigné par :** claude-code/claude-opus-5-5
 
 ## 2026-11-04 - Stack E2E de la saga de suppression de compte
 
@@ -122,3 +140,5 @@ sources:
 [^src-f3a7c24a]: ci-tools/.github/workflows/pr-ready-notify.yml
 [^src-b055c722]: https://www.githubstatus.com/
 [^src-3eedff94]: https://github.com/Volontariapp/ci-tools/pull/73
+[^src-58fb5d2c]: https://github.com/Volontariapp/post-processors-runner/pull/66
+[^src-1b8aa8aa]: https://github.com/Volontariapp/api-gateway/pull/102

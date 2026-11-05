@@ -36,6 +36,12 @@ sources:
 
 # Leçons
 
+## 2026-11-05 - G7 : ConfirmFileAttachment de l'avatar en 503 au premier appel
+
+- **Type :** pitfall
+- **Leçon :** E2E d'api-gateway#102 (run 42009171163, 1 run sur 3) : PATCH /users/me avec avatarFileId repond 503, ms-user logue 'ConfirmFileAttachment timed out after 2000ms' et ms-storage ne recoit jamais la requete (aucun log GrpcInternalGuard). Hypothese non verifiee : premier appel ms-user vers ms-storage, etablissement du canal gRPC du client @volontariapp/storage-client (deadline 2000 ms, ms-user src/modules/user/storage-client-config.module.ts:16) plus long que la deadline. Correctif propose : ouvrir le canal au demarrage du module (waitForReady), changement npm.[^src-1b8aa8aa]
+- **Consigné par :** claude-code/claude-opus-5-5
+
 ## 2026-11-04 - G5 : les fichiers d'un compte supprime restent telechargeables
 
 - **Type :** pitfall
