@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-11-05
+
+- **Leçon** - Avant de declarer une route gateway inutilisee, chercher aussi dans api-gateway/e2e (pitfall) (claude-code/claude-opus-5-5)
+- **Leçon** - Exclure les evenements d'utilisateurs : filtre excludedOrganizerIds de ms-event, jamais une RPC admin par utilisateur (decision) (claude-code/claude-opus-5-5)
+
 ## 2026-11-04
 
 - **Vérification** - reviewed api-gateway@8521e2f (#90): fetchAllPages rule added to the pagination section; the 3 other flagged files not individually read (claude-code/agent)

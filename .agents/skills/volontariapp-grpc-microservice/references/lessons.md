@@ -35,9 +35,18 @@ sources:
   - id: src-89ada337
     resource: ms-social/src/providers/database/neo4j-schema.initializer.ts
     title: ms-social/src/providers/database/neo4j-schema.initializer.ts
+  - id: src-01460755
+    resource: "https://github.com/Volontariapp/ms-event/pull/89"
+    title: "https://github.com/Volontariapp/ms-event/pull/89"
 ---
 
 # Leçons
+
+## 2026-11-05 - Le build Docker compile les tests : verifier avec tsc -p tsconfig.json, pas seulement yarn build
+
+- **Type :** pitfall
+- **Leçon :** yarn build (nest build, tsconfig.build.json) exclut les specs, mais le build Docker de ms-event les compile : un mock sans types (jest.fn<() => ...>) lu par mock.calls[0] a casse ci-docker (TS2493) alors que build, lint et tests passaient en local. Lancer npx tsc --noEmit -p tsconfig.json avant de pousser, et typer les mocks avec la signature reelle (jest.Mock<(params: SearchAdvancedVO) => Promise<...>>) ou asserter avec toHaveBeenCalledWith.[^src-01460755]
+- **Consigné par :** claude-code/claude-opus-5-5
 
 ## 2026-11-04 - ms-social crée des contraintes d'unicité Neo4j au démarrage
 
@@ -108,3 +117,4 @@ sources:
 [^src-06c83ce2]: ms-user/src/common/dto/pagination.dto.ts
 [^src-80c5990f]: ms-post/src/modules/post/dto/common/pagination.dto.ts
 [^src-89ada337]: ms-social/src/providers/database/neo4j-schema.initializer.ts
+[^src-01460755]: https://github.com/Volontariapp/ms-event/pull/89

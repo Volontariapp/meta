@@ -35,8 +35,14 @@ Rapport : https://claude.ai/artifact/HTt9CDVD8NxSiustW5x8VF. Mandat : `docs-hand
 - Scenario `user.deletion_failed` : reste `it.todo`, aucun moyen non fragile de faire echouer une purge.
 - Dependances realignees au passage : une seule copie de chaque `@volontariapp/*` dans ms-storage (errors 0.6.5 et 0.7.0 coexistaient) et ms-event (database, messaging).
 
+## Lot 5 : AdminGetUserEvent hors du chemin utilisateur (termine le 2026-11-05)
+- Probleme : la gateway (`excludeBlockedUsers` de la recherche d'evenements) et worker-ranking (evenements crees par l'utilisateur) appelaient `AdminGetUserEvent` de ms-social, une RPC admin, au nom d'un utilisateur normal et une fois par utilisateur masque.
+- Correctif : `SearchEventsQuery.excluded_organizer_ids = 13` (proto-registry#39, contracts 4.8.5 par npm-packages#294), filtre `organizerId NOT IN` dans domain-event 3.15.0 (npm-packages#295) et ms-event#89. La gateway envoie les utilisateurs masques (les deux sens du blocage) en un appel (api-gateway#106), worker-ranking s'exclut lui-meme (workers-runners#57).
+- Filet de securite pose avant la bascule : api-gateway#105 (les evenements des scenarios de recherche sont crees par leur organisateur, sens inverse du blocage teste).
+- Decision : `AdminGetUserEvent` est conservee, reservee a l'admin et aux E2E (proto-registry#40 retire le `deprecated`, contracts regeneres par npm-packages#296). Les helpers E2E lisent les liens CREATED du graphe par la route admin `/social/users/:userId/events/created` : la retirer a casse 15 tests. Le retrait du handler ms-social (commit local non pousse, branche `refactor/remove-admin-get-user-event`) et nativapp#102 sont abandonnes.
+
 ## Reste a faire
-Lot 5 : supprimer `adminGetUserEvent` (decision du Lead Dev du 2026-11-05). Ses trois appelants (gateway : filtre « utilisateurs bloques » de la recherche d'evenements et route admin `/social/users/:userId/events/created` ; worker-ranking : exclusion des evenements crees par l'utilisateur) passent par un nouveau champ `excluded_organizer_ids` de `SearchEventsQuery` filtre par ms-event, puis la RPC est retiree en trois phases (`reserved`).
+Rien d'ouvert sur les lots 1 a 5. Pistes : doublon de `@volontariapp/contracts` dans api-gateway (via domain-storage 0.12.13, deja sur `main`), et `excludeCreatedByMe` de la recherche qui pourrait passer par `excludedOrganizerIds` (un appel ms-social de moins).
 
 ## Regles de travail apprises
 - Merger les PR des repos avant la PR ci-tools qui en depend ; une PR ci-tools qui ajoute des runners est suivie tout de suite de la PR api-gateway qui retire les creations manuelles concurrentes.
