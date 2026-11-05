@@ -63,3 +63,6 @@ graphify-out/
 /causalmesh
 
 __pycache__/
+
+# Git worktrees of the sub-repos (agents work there, never committed)
+.worktrees/
