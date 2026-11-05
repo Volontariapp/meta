@@ -37,7 +37,7 @@ Copilot n'est pas branché : `meta/.github` est le repo de profil de l'organisat
 
 | Événement | Script | Rôle |
 | :--- | :--- | :--- |
-| `PreToolUse` `Write\|Edit\|MultiEdit\|NotebookEdit` | `.claude/hooks/stop-rule-guard.sh` | Règle du STOP : refuse l'édition d'un consommateur de `@volontariapp/*` après une édition de `npm-packages/` ou `proto-registry/` dans la même session. |
+| `PreToolUse` `Write\|Edit\|MultiEdit\|NotebookEdit` | `.claude/hooks/stop-rule-guard.sh` | Règle du STOP : refuse l'édition d'un consommateur de `@volontariapp/*` après une édition de `npm-packages/` ou `proto-registry/` dans la même session. Le repo d'un fichier est lu sur son remote `origin` (`lib/resolve-repo.sh`), donc un worktree sous `.worktrees/` compte comme son repo ; tests : `.claude/hooks/tests/stop-rule-guard.test.sh`. |
 | `SessionStart`, `UserPromptSubmit` | `.claude/hooks/mesh-first-reminder.sh <événement>` | Injecte en `additionalContext` le rappel « mesh-mcp d'abord » : commande `ToolSearch` pour charger les schémas, choix de l'outil, version condensée des règles de raisonnement d'`AGENTS.md` (section 2 quinquies : absence, producteur dynamique, FAIT/INFÉRENCE) et piège `cd` surchargé par `z` (utiliser des chemins absolus). |
 | `PreToolUse` `Grep\|Bash` | `.claude/hooks/search-via-mesh.py` | Recherche transverse (racine de `meta`) : redirige vers les outils `mesh-mcp`. Une recherche ciblée sur un sous-repo passe, comme un `grep`/`rg` qui filtre un pipe (`... \| rg X`, il lit stdin). |
 | `PostToolUse` `Write\|Edit\|MultiEdit` | `.claude/hooks/post-edit.sh` | Pose le marqueur amont du STOP, lance ESLint sur le seul fichier modifié dans son repo, liste les skills qui le décrivent. |

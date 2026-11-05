@@ -2,7 +2,10 @@
 # PostToolUse (Write|Edit|MultiEdit) : marqueur amont de la règle du STOP, ESLint sur le seul fichier
 # modifié (dans son repo), et skills qui décrivent ce fichier.
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-STATE_DIR="$REPO_ROOT/.git/volontariapp-stop-guard"
+# Shared by every checkout and worktree of meta (.git is a file inside a worktree).
+STATE_DIR="$(git -C "$REPO_ROOT" rev-parse --path-format=absolute --git-common-dir)/volontariapp-stop-guard"
+# shellcheck source=lib/resolve-repo.sh
+. "$REPO_ROOT/.claude/hooks/lib/resolve-repo.sh"
 
 INPUT=$(cat)
 SESSION=$(printf '%s' "$INPUT" | jq -r '.session_id // empty')
@@ -14,7 +17,9 @@ case "$FILE" in
   *) exit 0 ;;
 esac
 REL="${FILE#"$REPO_ROOT"/}"
-TOP="${REL%%/*}"
+# Real repository of the file, so that .worktrees/<name>/ maps to npm-packages or proto-registry.
+resolve_repo "$FILE" "$REPO_ROOT"
+TOP="$REPO_NAME"
 CONTEXT=""
 
 # 1. Upstream marker read by stop-rule-guard.sh.
