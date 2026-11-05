@@ -1,0 +1,6 @@
+{
+  "name": "meta-repos",
+  "version": "0.1.0",
+  "description": "Panneau /repos : branche, modifications, worktrees, PR ouvertes, CI et mergeabilité de chaque repo cloné sous meta.",
+  "author": { "name": "Volontariapp" }
+}

@@ -1,4 +1,18 @@
 {
+  "extraKnownMarketplaces": {
+    "volontariapp-meta": {
+      "source": {
+        "source": "github",
+        "repo": "Volontariapp/meta"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "meta-stop-lock@volontariapp-meta": true,
+    "meta-guards@volontariapp-meta": true,
+    "meta-repos@volontariapp-meta": true,
+    "meta-skills@volontariapp-meta": true
+  },
   "hooks": {
     "SessionStart": [
       {

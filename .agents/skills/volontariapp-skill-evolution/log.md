@@ -2,6 +2,8 @@
 
 ## 2026-11-05
 
+- **Vérification** - Mods Claude Code documentes dans multi-agent-layout.md ; settings.json declare le marketplace volontariapp-meta et les quatre plugins (claude-code/agent)
+- **Vérification** - Relecture de c5520b4 (resolve-repo, worktrees, stop-rule-guard) : skill deja a jour dans le meme commit, aucun changement (claude-code/agent)
 - **Vérification** - skill relue et alignée sur le code (claude-code/agent)
 
 ## 2026-11-04

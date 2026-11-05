@@ -17,8 +17,9 @@ Le cycle de vie des skills est géré par [volontariapp-skill-evolution](/volont
 | [volontariapp-implement-async-event-flow](/volontariapp-implement-async-event-flow/SKILL.md) | Implement Async Event Flow | 2026-11-04 |
 | [volontariapp-implement-async-job-flow](/volontariapp-implement-async-job-flow/SKILL.md) | Implement Async Job Flow | 2026-11-01 |
 | [volontariapp-logger](/volontariapp-logger/SKILL.md) | Logger partagé : masquage et corrélation de traces | 2026-10-29 |
-| [volontariapp-mesh-mcp](/volontariapp-mesh-mcp/SKILL.md) | mesh-mcp | 2026-11-04 |
+| [volontariapp-mesh-mcp](/volontariapp-mesh-mcp/SKILL.md) | mesh-mcp | 2026-11-05 |
 | [volontariapp-mesh-mcp-verification](/volontariapp-mesh-mcp-verification/SKILL.md) | Verification des anomalies mesh-mcp | 2026-10-12 |
+| [volontariapp-meta-mods](/volontariapp-meta-mods/SKILL.md) | Mods Claude Code de meta | 2026-11-05 |
 | [volontariapp-meta-scripts](/volontariapp-meta-scripts/SKILL.md) | Scripts et CLI du workspace meta | 2026-10-28 |
 | [volontariapp-pr-tools](/volontariapp-pr-tools/SKILL.md) | Labels et relance de CI sur les PRs (pr-label.sh, pr-retrigger.sh) | 2026-11-04 |
 | [volontariapp-proto-contract-evolution](/volontariapp-proto-contract-evolution/SKILL.md) | Proto Contract Evolution | 2026-10-30 |

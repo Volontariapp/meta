@@ -1,0 +1,6 @@
+{
+  "name": "meta-skills",
+  "version": "0.1.0",
+  "description": "Indicateur de dérive des skills (evolve.py) au-dessus du prompt et commande /skill-search pour retrouver la bonne skill parmi celles du projet.",
+  "author": { "name": "Volontariapp" }
+}
