@@ -43,9 +43,6 @@ sources:
     title: check_symbols.py
 verified:
   - by: claude-code/agent
-    at: "2026-11-04T13:24:51Z"
-    digest: f6c03fb6c17b6e02
-  - by: claude-code/agent
     at: "2026-11-04T22:09:02Z"
     digest: d562d99348936cd0
   - by: claude-code/agent
@@ -56,6 +53,9 @@ verified:
     digest: 170e0c52cec533aa
   - by: claude-code/agent
     at: "2026-11-05T13:16:28Z"
+    digest: c9e38910e9a284ec
+  - by: claude-code/agent
+    at: "2026-11-05T14:52:23Z"
     digest: c9e38910e9a284ec
 ---
 

@@ -1002,6 +1002,28 @@ def cmd_check_staged(args: argparse.Namespace) -> int:
     return 0 if getattr(args, "warn", False) else 1
 
 
+HOOK_MODES = ("block", "quiet", "off")
+
+
+def hook_mode() -> str:
+    """SKILL_HOOK_MODE: block (default, plan that blocks the stop), quiet (one line, never blocks), off."""
+    mode = os.environ.get("SKILL_HOOK_MODE", "block").strip().lower()
+    return mode if mode in HOOK_MODES else "block"
+
+
+def summarize_status(statuses: list[SkillStatus], uncovered: list[str]) -> str:
+    parts = []
+    stale = sum(1 for s in statuses if s.stale)
+    invalid = sum(1 for s in statuses if s.problems)
+    if stale:
+        parts.append(f"{stale} skill(s) à relire")
+    if invalid:
+        parts.append(f"{invalid} non conforme(s)")
+    if uncovered:
+        parts.append(f"{len(uncovered)} fichier(s) sans skill")
+    return f"Skills : {', '.join(parts)} (python3 {SELF} plan)" if parts else ""
+
+
 def cmd_hook(args: argparse.Namespace) -> int:
     try:
         payload = json.loads(sys.stdin.read() or "{}")
@@ -1009,7 +1031,22 @@ def cmd_hook(args: argparse.Namespace) -> int:
         payload = {}
     if payload.get("stop_hook_active"):
         return 0
+    mode = hook_mode()
+    if mode == "off":
+        return 0
     statuses, uncovered = compute_status()
+    if mode == "quiet":
+        summary = summarize_status(statuses, uncovered)
+        if not summary:
+            return 0
+        fingerprint = hashlib.sha1(summary.encode()).hexdigest()
+        state = load_state()
+        if state.get("last_summary") == fingerprint:
+            return 0
+        state["last_summary"] = fingerprint
+        save_state(state)
+        print(json.dumps({"systemMessage": summary}, ensure_ascii=False))
+        return 0
     prompt = last_user_prompt(payload.get("transcript_path"))
     correction = prompt if prompt and CORRECTION_MARKERS.search(prompt) else ""
     plan = render_plan(statuses, uncovered, correction)
