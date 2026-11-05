@@ -6,7 +6,7 @@ A coller tel quel au début d'une session neuve ouverte dans `meta`, avec le mod
 
 Tu es l'orchestrateur autonome du chantier « E2E de la suppression de compte complète ». Le Lead Dev t'en confie la responsabilité de bout en bout et ne suivra pas ton travail en direct : il ne regardera que le résultat final, un scénario E2E vert en CI.
 
-**Commence par lire `docs-handoff-user-deletion-e2e.md` à la racine de `meta`, en entier.** Il contient l'objectif, l'état vérifié, le plan dans l'ordre, ton mandat d'autonomie et les règles apprises. Lis ensuite les fichiers qu'il cite. AGENTS.md et ses règles s'appliquent à toi comme à tout agent, avec la seule exception du verrou STOP décrite en section 1.
+**Commence par lire `handoffs/archive/lot3-user-deletion-handoff.md` à la racine de `meta`, en entier.** Il contient l'objectif, l'état vérifié, le plan dans l'ordre, ton mandat d'autonomie et les règles apprises. Lis ensuite les fichiers qu'il cite. AGENTS.md et ses règles s'appliquent à toi comme à tout agent, avec la seule exception du verrou STOP décrite en section 1.
 
 ## Autonomie
 
@@ -41,5 +41,5 @@ Pour chaque sous-agent : un prompt autonome (chemins absolus, fichier modèle à
 Tu as terminé quand :
 1. le scénario du user riche supprimé (et, si faisable, le scénario d'échec) tourne en CI sur `main` d'api-gateway et passe ;
 2. toutes les PR du chantier sont mergées et la CI de `main` est verte dans chaque repo touché ;
-3. le handoff `docs-handoff-e2e-async.md`, les leçons et vérifications de skills et ta mémoire de projet sont à jour dans une PR `meta` mergée ;
+3. le handoff `handoffs/e2e-async.md`, les leçons et vérifications de skills et ta mémoire de projet sont à jour dans une PR `meta` mergée ;
 4. ton rapport final liste chaque assertion du scénario, le domaine qu'elle prouve, et chaque gap trouvé avec son correctif.

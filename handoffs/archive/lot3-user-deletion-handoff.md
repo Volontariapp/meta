@@ -1,6 +1,6 @@
 # Handoff : E2E de la suppression de compte complète (rédigé le 2026-11-04)
 
-Mandat du Lead Dev pour un orchestrateur autonome. Lire ce fichier en entier, puis `docs-handoff-e2e-async.md` (état du chantier E2E asynchrone) et les leçons des skills `volontariapp-implement-async-event-flow`, `volontariapp-user-account-deletion`, `volontariapp-ci-tools`, `volontariapp-api-gateway`, `volontariapp-shared-npm-package-change` (`references/lessons.md`).
+Mandat du Lead Dev pour un orchestrateur autonome. Lire ce fichier en entier, puis `handoffs/e2e-async.md` (état du chantier E2E asynchrone) et les leçons des skills `volontariapp-implement-async-event-flow`, `volontariapp-user-account-deletion`, `volontariapp-ci-tools`, `volontariapp-api-gateway`, `volontariapp-shared-npm-package-change` (`references/lessons.md`).
 
 ## Objectif (le seul résultat que le Lead Dev regardera)
 
@@ -69,7 +69,7 @@ Rapport : https://claude.ai/artifact/AoedfzS4DYxQnNMmuV4fE6. Étapes 1 à 3 fait
 3. **api-gateway** : écrire le scénario riche et le scénario d'échec. Toute création de nœud social manuelle concurrente du pipeline est interdite (cause du 409 du lot 2) : le graphe vient des runners. Pointer le sous-module ci-tools de la PR sur la branche ci-tools tant qu'elle n'est pas mergée, puis sur main (arbres identiques).
 4. **Chaque trou révélé par le scénario** est un bug de code : `it.failing` avec un identifiant de gap (G5, G6...) dans le README du catalogue, puis correctif dans le repo concerné, puis retour à `it`. Ne jamais adapter le test pour qu'il passe.
 5. **npm-packages en dernier si un package doit changer** (STOP, AGENTS.md section 1) : build, tests, `yarn changeset add` et `yarn changeset version` une seule fois par branche, PR, merge, release CI, vérification `npm view ... --prefer-online` de chaque version, levée du verrou (mandat ci-dessous), puis `yarn up` chez les consommateurs.
-6. **Fin** : CI de `main` verte partout, handoff `docs-handoff-e2e-async.md` mis à jour, leçons et vérifications de skills (`evolve.py plan`, `learn`, `sync`), mémoire de projet, PR `meta`.
+6. **Fin** : CI de `main` verte partout, handoff `handoffs/e2e-async.md` mis à jour, leçons et vérifications de skills (`evolve.py plan`, `learn`, `sync`), mémoire de projet, PR `meta`.
 
 ## Mandat d'autonomie
 

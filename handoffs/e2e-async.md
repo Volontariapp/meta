@@ -17,7 +17,7 @@ Reprendre depuis une session neuve ouverte dans `meta`. Lire ce fichier, puis le
 - outbox-runners#45 (database 3.12.1, outbox 0.10.27) et ms-social#64 (domain-social 0.17.1). ms-social#64 a ete mergee avec un E2E rouge : voir G6 ci-dessous.
 
 ## Lot 3 : saga de suppression de compte (termine le 2026-11-05)
-Rapport : https://claude.ai/artifact/AoedfzS4DYxQnNMmuV4fE6. Detail : `docs-handoff-user-deletion-e2e.md`.
+Rapport : https://claude.ai/artifact/AoedfzS4DYxQnNMmuV4fE6. Detail : `handoffs/archive/lot3-user-deletion-handoff.md`.
 - Scenario `e2e/scenarios/user-deletion-scenarios.e2e.spec.ts` (api-gateway#102, #103) : un user riche supprime, un test par domaine, vert sur `main`.
 - Stack : ci-tools#73 (7 runners de la saga), post-processors-runner#64 (`GEOCODING_ENABLED`).
 - G5, fichiers d'un compte supprime purges : npm-packages#290 (domain-storage 0.13.0), post-processors-runner#65 et #66, workers-runners#55 (`CleanupFilesHandler`).
@@ -25,7 +25,7 @@ Rapport : https://claude.ai/artifact/AoedfzS4DYxQnNMmuV4fE6. Detail : `docs-hand
 - G8, mise a jour perdue du gather (deux acquittements simultanes) : ws-service#52.
 
 ## Lot 4 : fiabilite du stockage et des sagas (termine le 2026-11-05)
-Rapport : https://claude.ai/artifact/HTt9CDVD8NxSiustW5x8VF. Mandat : `docs-handoff-async-robustness.md`, etat de reprise : `docs-state-async-robustness.md`.
+Rapport : https://claude.ai/artifact/HTt9CDVD8NxSiustW5x8VF. Mandat : `handoffs/archive/lot4-robustness-handoff.md`, etat de reprise : `handoffs/archive/lot4-robustness-state.md`.
 - Hook du STOP sous `.worktrees/` : meta#47 (le repo d'un fichier est lu sur son remote `origin`).
 - G2, feedback `event.geocoding_failed` : post-processors-runner#67, ws-service#53. Preuve par tests unitaires (geocodage desactive en E2E).
 - G9, fichiers d'un post ou d'un event supprime, d'un avatar ou d'une cover remplace, non purges : npm-packages#291 (domain-storage 0.14.0 : `releaseForEntity` et `releaseFile` ecrivent `storage.cleanup_files` dans leur transaction), post-processors-runner#68, scenario `storage-release-scenarios.e2e.spec.ts` (api-gateway#104) vert sur `main`.
