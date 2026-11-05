@@ -53,9 +53,18 @@ sources:
   - id: src-2957ab4a
     resource: "https://github.com/Volontariapp/post-processors-runner/pull/64"
     title: "https://github.com/Volontariapp/post-processors-runner/pull/64"
+  - id: src-191c6e6a
+    resource: "https://github.com/Volontariapp/ws-service/pull/52"
+    title: "https://github.com/Volontariapp/ws-service/pull/52"
 ---
 
 # Leçons
+
+## 2026-11-05 - Une mise a jour de gather doit etre atomique (G8)
+
+- **Type :** rule
+- **Leçon :** Les acquittements d'un meme gather sont consommes par des post-processors distincts, donc en parallele. GatherStateService.updateEventState faisait lecture puis reecriture du JSON gather_events_state entier : deux acquittements a 1 ms d'ecart (user_ranking.deleted, user_storage.deleted) se sont ecrases, USER_RANKING_DELETED est reste PENDING et la suppression de compte n'a jamais abouti. Toute ecriture d'etat partage par plusieurs consommateurs se fait en une instruction conditionnelle (UPDATE ... jsonb_set ... RETURNING) et la decision (completude) se prend sur l'etat renvoye. Corrige par ws-service#52.[^src-191c6e6a]
+- **Consigné par :** claude-code/claude-opus-5-5
 
 ## 2026-11-04 - Un drapeau booleen de config lu depuis l'environnement
 
@@ -186,3 +195,4 @@ sources:
 [^src-01a2dc3c]: https://github.com/Volontariapp/post-processors-runner/pull/63
 [^src-fbe43ef3]: npm-packages/packages/post-processors/src/core/processors/base.post-processor.ts
 [^src-2957ab4a]: https://github.com/Volontariapp/post-processors-runner/pull/64
+[^src-191c6e6a]: https://github.com/Volontariapp/ws-service/pull/52

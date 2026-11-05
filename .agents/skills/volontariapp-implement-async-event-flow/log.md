@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-05
+
+- **Leçon** - Une mise a jour de gather doit etre atomique (G8) (rule) (claude-code/claude-opus-5-5)
+
 ## 2026-11-04
 
 - **Leçon** - Un drapeau booleen de config lu depuis l'environnement (pitfall) (claude-code/claude-opus-5-5)
