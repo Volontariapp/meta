@@ -2,6 +2,7 @@
 
 ## 2026-11-04
 
+- **Leçon** - Stack E2E de la saga de suppression de compte (decision) (claude-code/claude-opus-5-5)
 - **Leçon** - Juger un test de notification Dependabot avec l'historique des labels et l'acteur du run (rule) (claude-code/agent)
 
 ## 2026-11-03

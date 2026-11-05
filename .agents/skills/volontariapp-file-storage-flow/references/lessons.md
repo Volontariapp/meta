@@ -29,9 +29,18 @@ sources:
   - id: src-aa248434
     resource: ms-event/src/modules/event/controllers/commands/event.command.controller.ts
     title: ms-event/src/modules/event/controllers/commands/event.command.controller.ts
+  - id: src-1b8aa8aa
+    resource: "https://github.com/Volontariapp/api-gateway/pull/102"
+    title: "https://github.com/Volontariapp/api-gateway/pull/102"
 ---
 
 # Leçons
+
+## 2026-11-04 - G5 : les fichiers d'un compte supprime restent telechargeables
+
+- **Type :** pitfall
+- **Leçon :** user.deleted ne fait que releaseForOwner (status ORPHANED). La purge storage.cleanup_files (docs/stockage-fichiers/07, section 3) n'est pas implementee : worker-storage n'a que scan-file.handler.ts, le type de job existe dans messaging (ICleanupFilesPayload vide). L'avatar repond 200 a son URL publique apres la saga ; prouve par l'it.failing G5 de api-gateway e2e/scenarios/user-deletion-scenarios.e2e.spec.ts.[^src-1b8aa8aa]
+- **Consigné par :** claude-code/claude-opus-5-5
 
 ## 2026-10-17 - ms-event: jeton interne et statut de scan en nom d'enum
 
@@ -100,3 +109,4 @@ sources:
 [^src-02475a1a]: ms-post/src/modules/post/controllers/post.query.controller.ts
 [^src-64ff0419]: api-gateway/src/modules/post/dto/common/post-media.dto.ts
 [^src-aa248434]: ms-event/src/modules/event/controllers/commands/event.command.controller.ts
+[^src-1b8aa8aa]: https://github.com/Volontariapp/api-gateway/pull/102

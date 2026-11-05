@@ -2,6 +2,7 @@
 
 ## 2026-11-04
 
+- **Leçon** - Un drapeau booleen de config lu depuis l'environnement (pitfall) (claude-code/claude-opus-5-5)
 - **Vérification** - b1dc7398 : seul le test d'integration de RetryHelper change (horloge manuelle) ; RetryHelper et la skill inchanges (claude-code/agent)
 - **Vérification** - Seul retry.helper.int.spec.ts change (horloge manuelle via jest.spyOn(Date.now) au lieu de vraies attentes) ; RetryHelper et le texte de la skill inchanges (claude-code/agent)
 - **Vérification** - ec4945d3 (erreurs d'infrastructure laissees pending, lecon ajoutee) ; 4806cd5e et 3035ec27 : requestDeletionWithUserDeleted et finalizeDeletion toujours presents (postgres-user.repository.ts:150, :191), lecon src-cd3f14ee exacte (claude-code/agent)
