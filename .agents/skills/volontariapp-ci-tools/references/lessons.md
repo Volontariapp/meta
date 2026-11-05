@@ -38,9 +38,18 @@ sources:
   - id: src-1b8aa8aa
     resource: "https://github.com/Volontariapp/api-gateway/pull/102"
     title: "https://github.com/Volontariapp/api-gateway/pull/102"
+  - id: src-191c6e6a
+    resource: "https://github.com/Volontariapp/ws-service/pull/52"
+    title: "https://github.com/Volontariapp/ws-service/pull/52"
 ---
 
 # Leçons
+
+## 2026-11-05 - La CI de ws-service ne lance pas d'E2E
+
+- **Type :** pitfall
+- **Leçon :** Le 2026-11-05, ws-service#52 (G8) avait seulement Build & Test, Trivy, Validate Versions et ci-docker : aucun job E2E, contrairement aux ms-* et aux runners. L'image de branche est quand meme publiee sur GHCR (tag = nom de branche, '/' remplace par '-'). Pour valider un changement de ws-service de bout en bout, pointer e2e-matrix.json d'une PR api-gateway sur la branche ws-service (validate-matrix echoue tant que la matrice n'est pas revenue sur main).[^src-191c6e6a]
+- **Consigné par :** claude-code/claude-opus-5-5
 
 ## 2026-11-05 - Relancer un E2E de main qui a tire une image avant sa publication
 
@@ -142,3 +151,4 @@ sources:
 [^src-3eedff94]: https://github.com/Volontariapp/ci-tools/pull/73
 [^src-58fb5d2c]: https://github.com/Volontariapp/post-processors-runner/pull/66
 [^src-1b8aa8aa]: https://github.com/Volontariapp/api-gateway/pull/102
+[^src-191c6e6a]: https://github.com/Volontariapp/ws-service/pull/52
