@@ -38,7 +38,7 @@ Le hook `PreToolUse` `.claude/hooks/stop-rule-guard.sh` applique cette règle m�
 
 Le déverrouillage revient **au Lead Dev**, une fois la version publiée par la CI : `! .claude/hooks/stop-rule-guard.sh release`. **INTERDICTION FORMELLE** pour l'agent de lancer cette commande ou de contourner le hook (édition via `sed`, `cat >`, script...).
 
-**Seule exception : l'orchestrateur autonome mandaté.** Un agent lancé avec un prompt du Lead Dev qui lui confie explicitement ce mandat (ex. `docs-handoff-user-deletion-e2e.md`) peut lancer `.claude/hooks/stop-rule-guard.sh release` lui-même, à trois conditions cumulées :
+**Seule exception : l'orchestrateur autonome mandaté.** Un agent lancé avec un prompt du Lead Dev qui lui confie explicitement ce mandat (ex. `handoffs/archive/lot3-user-deletion-handoff.md`) peut lancer `.claude/hooks/stop-rule-guard.sh release` lui-même, à trois conditions cumulées :
 1. la PR `npm-packages` est mergée sur `main` et le job `Definitive Release` de la CI de `main` a réussi ;
 2. `npm view @volontariapp/<package>@<version> version --prefer-online` répond pour **chaque** package bumpé (la propagation sur le registre prend quelques minutes : attendre, ne jamais supposer) ;
 3. l'agent rapporte la levée du verrou, avec les versions vérifiées, dans son rapport d'étape.

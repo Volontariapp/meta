@@ -1,6 +1,6 @@
 # Lot 4 : état de reprise (2026-11-05, session mise en pause)
 
-À lire après `docs-prompt-async-robustness.md` et `docs-handoff-async-robustness.md`. Fichier non versionné, à intégrer dans la PR meta de fin de lot.
+À lire après `handoffs/archive/lot4-robustness-prompt.md` et `handoffs/archive/lot4-robustness-handoff.md`. Fichier non versionné, à intégrer dans la PR meta de fin de lot.
 
 Rapport : https://claude.ai/artifact/HTt9CDVD8NxSiustW5x8VF (republier le même artefact par `url`).
 
@@ -26,7 +26,7 @@ Rapport : https://claude.ai/artifact/HTt9CDVD8NxSiustW5x8VF (republier le même 
 4. Après publication et levée du verrou par le Lead Dev : `yarn up` domain-storage dans post-processor-storage (seul appelant de releaseForEntity/releaseFile, vérifié par grep exact sur origin/main de post-processors-runner, ms-storage, workers-runners) ; une seule copie de database dans yarn.lock. Commande ms-storage `src/commands/request-file-purge.ts` (DataSource de `src/config/data-source.ts`, env DB seul) avec domain-storage à jour. `yarn up` storage-client dans ms-user, ms-post, ms-event.
 5. api-gateway#104 : passer l'`it.failing` en `it`, matrice sur la branche post-processors-runner, puis retour sur `main` après merge.
 6. Notifications de posts : relancer l'E2E de main d'api-gateway (run 42030386199, une relance est partie avant la pause) et analyser un échec avec `e2e-diagnostics`. Script : `rerun-e2e.sh` (à réécrire, il était dans le scratchpad de la session).
-7. Fin de lot : `docs-handoff-e2e-async.md`, `evolve.py plan/learn/sync`, mémoire projet, PR meta.
+7. Fin de lot : `handoffs/e2e-async.md`, `evolve.py plan/learn/sync`, mémoire projet, PR meta.
 
 ## Diagnostic G7 (faits du run 42009171163)
 - ms-user démarre à 10:20:55, ms-storage écoute à 10:21:11. L'appel `ConfirmFileAttachment` part à 10:21:32.397, timeout à 10:21:34.421 ; ms-storage n'a rien reçu (inactif de 32,3 s à 41,9 s). Premier appel du canal de ms-user, boucle d'événements libre (le timer a tiré à 2,02 s).
@@ -40,7 +40,7 @@ Rapport : https://claude.ai/artifact/HTt9CDVD8NxSiustW5x8VF (republier le même 
 - `adminGetUserEvent` : décision du Lead Dev, non tranchée.
 
 ## Clôture (2026-11-05, ~17:45 UTC)
-Lot terminé : détail et preuves dans la section « Lot 4 » de `docs-handoff-e2e-async.md` et dans le rapport.
+Lot terminé : détail et preuves dans la section « Lot 4 » de `handoffs/e2e-async.md` et dans le rapport.
 - npm-packages#291 (domain-storage 0.14.0, storage-client 0.3.10), post-processors-runner#68, ms-storage#47 et #49, ms-user#86, ms-post#73, ms-event#87, api-gateway#104, ci-tools#74, deploy#38 : mergées.
 - G7 : cause réelle = DNS de compose au démarrage, corrigée par ci-tools#74. L'hypothèse « connexion du canal » ci-dessus était fausse.
 - Les étapes « Reste à faire » ci-dessus sont toutes faites.

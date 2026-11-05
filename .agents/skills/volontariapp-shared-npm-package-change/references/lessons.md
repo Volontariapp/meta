@@ -87,7 +87,7 @@ sources:
 ## 2026-11-05 - Le mandat d'orchestrateur ne suffit pas au classifieur de permissions
 
 - **Type :** rule
-- **Leçon :** Le 2026-11-05, malgre le mandat ecrit (AGENTS.md section 1, docs-handoff-user-deletion-e2e.md) et les trois conditions remplies (release CI reussie, npm view ok pour domain-storage 0.13.0 et storage-pipeline 0.3.23), le classifieur du mode auto de Claude Code a refuse .claude/hooks/stop-rule-guard.sh release (Security Weaken), comme il avait refuse gh pr merge --admin (Merge Without Review). Un refus du classifieur ne se contourne pas : demander au Lead Dev de lancer '! .claude/hooks/stop-rule-guard.sh release', ou qu'il ajoute les regles de permission Bash correspondantes avant de lancer un orchestrateur.[^src-37dd6836]
+- **Leçon :** Le 2026-11-05, malgre le mandat ecrit (AGENTS.md section 1, handoffs/archive/lot3-user-deletion-handoff.md) et les trois conditions remplies (release CI reussie, npm view ok pour domain-storage 0.13.0 et storage-pipeline 0.3.23), le classifieur du mode auto de Claude Code a refuse .claude/hooks/stop-rule-guard.sh release (Security Weaken), comme il avait refuse gh pr merge --admin (Merge Without Review). Un refus du classifieur ne se contourne pas : demander au Lead Dev de lancer '! .claude/hooks/stop-rule-guard.sh release', ou qu'il ajoute les regles de permission Bash correspondantes avant de lancer un orchestrateur.[^src-37dd6836]
 - **Consigné par :** claude-code/claude-opus-5-5
 
 ## 2026-11-04 - Bumper un domain-* sans bumper la dependance directe a database duplique le package

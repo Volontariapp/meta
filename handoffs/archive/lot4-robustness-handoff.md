@@ -1,12 +1,12 @@
 # Handoff : lot 4, fiabilité du stockage et des sagas (rédigé le 2026-11-05)
 
-Mandat du Lead Dev pour un orchestrateur. Lire ce fichier en entier, puis `docs-handoff-e2e-async.md` (historique des lots 1 à 3) et les leçons (`references/lessons.md`) des skills `volontariapp-ci-tools`, `volontariapp-file-storage-flow`, `volontariapp-implement-async-event-flow`, `volontariapp-shared-npm-package-change`, `volontariapp-user-account-deletion`.
+Mandat du Lead Dev pour un orchestrateur. Lire ce fichier en entier, puis `handoffs/e2e-async.md` (historique des lots 1 à 3) et les leçons (`references/lessons.md`) des skills `volontariapp-ci-tools`, `volontariapp-file-storage-flow`, `volontariapp-implement-async-event-flow`, `volontariapp-shared-npm-package-change`, `volontariapp-user-account-deletion`.
 
 ## Point de départ (vérifié le 2026-11-05 sur origin/main)
 
 Lot 3 terminé : le scénario `api-gateway/e2e/scenarios/user-deletion-scenarios.e2e.spec.ts` (un user riche supprimé, un test par domaine) passe en CI sur `main`, purge des fichiers comprise. CI de `main` verte dans tous les repos.
 
-Gaps fermés au lot 3 : G5 (purge des fichiers d'un compte supprimé : npm-packages#290, post-processors-runner#65 et #66, workers-runners#55), G6 (deux copies de `@volontariapp/database` dans ms-social : ms-social#65), G8 (mise à jour perdue du gather dans ws-service : ws-service#52). Détail : `docs-handoff-user-deletion-e2e.md`.
+Gaps fermés au lot 3 : G5 (purge des fichiers d'un compte supprimé : npm-packages#290, post-processors-runner#65 et #66, workers-runners#55), G6 (deux copies de `@volontariapp/database` dans ms-social : ms-social#65), G8 (mise à jour perdue du gather dans ws-service : ws-service#52). Détail : `handoffs/archive/lot3-user-deletion-handoff.md`.
 
 ## Objectif du lot 4
 
@@ -48,4 +48,4 @@ Si le Lead Dev a ajouté des règles de permission entre-temps, l'orchestrateur 
 
 ## Fin du lot
 
-Le lot est fini quand chaque point 1 à 5 et 7 est mergé avec son scénario (ou sa preuve) vert sur `main`, que la CI de `main` est verte partout, et que `docs-handoff-e2e-async.md`, les leçons de skills (`evolve.py plan`, `learn`, `sync`) et la mémoire de projet sont à jour dans une PR `meta`.
+Le lot est fini quand chaque point 1 à 5 et 7 est mergé avec son scénario (ou sa preuve) vert sur `main`, que la CI de `main` est verte partout, et que `handoffs/e2e-async.md`, les leçons de skills (`evolve.py plan`, `learn`, `sync`) et la mémoire de projet sont à jour dans une PR `meta`.
