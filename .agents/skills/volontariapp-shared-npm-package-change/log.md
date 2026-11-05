@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-11-05
+
+- **Leçon** - Le garde-fou du STOP ignore les worktrees sous .worktrees/ (pitfall) (claude-code/claude-opus-5-5)
+- **Leçon** - Le mandat d'orchestrateur ne suffit pas au classifieur de permissions (rule) (claude-code/claude-opus-5-5)
+
 ## 2026-11-04
 
 - **Leçon** - Bumper un domain-* sans bumper la dependance directe a database duplique le package (pitfall) (claude-code/claude-opus-5-5)

@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-11-05
+
+- **Leçon** - La CI de ws-service ne lance pas d'E2E (pitfall) (claude-code/claude-opus-5-5)
+- **Leçon** - Relancer un E2E de main qui a tire une image avant sa publication (pitfall) (claude-code/claude-opus-5-5)
+- **Leçon** - L'E2E d'une PR de runner ne joue que les scenarios du main d'api-gateway (pitfall) (claude-code/claude-opus-5-5)
+
 ## 2026-11-04
 
 - **Leçon** - Stack E2E de la saga de suppression de compte (decision) (claude-code/claude-opus-5-5)

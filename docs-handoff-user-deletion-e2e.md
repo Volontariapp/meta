@@ -35,6 +35,20 @@ Les `it.todo` à remplacer : `api-gateway/e2e/scenarios/user-scenarios.e2e.spec.
 - **Absents de la stack et nécessaires** : post-processor-post, post-processor-event, post-processor-storage, post-processor-user, outbox-storage, outbox-ws, worker-storage. Le scan antivirus (clamd) et minio sont déjà dans le compose.
 - **Piège connu** : post-processor-event a été exclu au lot 2 parce que le géocodage est figé sur Paris en test. Il traite aussi `user.deleted` (`user_event.deleted`). Le réintégrer sans casser `event-search` : géocodage neutralisé en configuration de test, ou coordonnées toujours fournies par les scénarios. Choisir, documenter dans le README du catalogue.
 
+## État au 2026-11-05 (fin de la première session de l'orchestrateur)
+
+Mergé par le Lead Dev : ms-social#65, post-processors-runner#64 et #65, ci-tools#73, npm-packages#290 (domain-storage 0.13.0, storage-pipeline 0.3.23, publiés et vérifiés avec `npm view`), workers-runners#55, api-gateway#102 (le scénario), meta#44. CI de `main` verte partout après relance des E2E partis avant la publication de l'image de post-processor-event.
+
+Reste à merger, dans cet ordre :
+1. **post-processors-runner#66** : `JobsOutboxModel` enregistré dans post-processor-storage. Régression de #65 : sans l'entité, `releaseForOwner` (qui écrit maintenant le job de purge) échouait et le gather USER_DELETION n'aboutissait plus. Son E2E n'échoue que sur l'ancien `it.failing` G5, qui passe désormais (preuve du correctif).
+2. **api-gateway#103** : G5 devient un `it` (avatar non téléchargeable, fichiers `DELETED`). E2E vert sur une matrice temporaire (ppr#66) : la remettre sur `main` après la publication de l'image de #66, relancer, merger.
+
+Ensuite :
+- **G7** (ticket à part) : `PATCH /users/me` avec avatar en 503 au premier appel ms-user vers ms-storage (`ConfirmFileAttachment timed out after 2000ms`, la requête n'atteint pas ms-storage), 1 run E2E sur 3. Correctif proposé : ouvrir le canal gRPC de `@volontariapp/storage-client` au démarrage (changement npm).
+- Déclencheur périodique de la purge (CronJob, doc 07 section 3) : non fait.
+- Scénario d'échec (`user.deletion_failed`) : `it.todo`.
+- Hook du STOP : ne voit pas les éditions faites sous `.worktrees/` (leçon dans `volontariapp-shared-npm-package-change`).
+
 ## État au 2026-11-04 au soir (première session de l'orchestrateur)
 
 Rapport : https://claude.ai/artifact/AoedfzS4DYxQnNMmuV4fE6. Étapes 1 à 3 faites, aucune PR mergée.

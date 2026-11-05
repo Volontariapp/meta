@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-05
+
+- **Leçon** - G7 : ConfirmFileAttachment de l'avatar en 503 au premier appel (pitfall) (claude-code/claude-opus-5-5)
+
 ## 2026-11-04
 
 - **Leçon** - G5 : les fichiers d'un compte supprime restent telechargeables (pitfall) (claude-code/claude-opus-5-5)
