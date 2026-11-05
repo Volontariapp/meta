@@ -44,9 +44,24 @@ sources:
   - id: src-553b66ac
     resource: "https://github.com/Volontariapp/api-gateway/pull/101"
     title: "https://github.com/Volontariapp/api-gateway/pull/101"
+  - id: src-82045402
+    resource: "https://github.com/Volontariapp/api-gateway/pull/106"
+    title: "https://github.com/Volontariapp/api-gateway/pull/106"
 ---
 
 # Leçons
+
+## 2026-11-05 - Avant de declarer une route gateway inutilisee, chercher aussi dans api-gateway/e2e
+
+- **Type :** pitfall
+- **Leçon :** La route admin /social/users/:userId/events/created semblait morte (aucun ecran nativapp), mais les helpers E2E s'en servent pour lire les liens CREATED du graphe (waitForSocialIdsToContain, 4 suites) : son retrait a casse 15 tests E2E. Une absence se verifie sur toutes les racines, tests E2E compris (grep exact dans api-gateway/e2e, e2e/helpers), pas seulement chez les clients applicatifs.[^src-82045402]
+- **Consigné par :** claude-code/claude-opus-5-5
+
+## 2026-11-05 - Exclure les evenements d'utilisateurs : filtre excludedOrganizerIds de ms-event, jamais une RPC admin par utilisateur
+
+- **Type :** decision
+- **Leçon :** Depuis le lot 5 (2026-11-05), excludeBlockedUsers envoie les utilisateurs masques (les deux sens du blocage, HiddenUsersService) dans SearchEventsQuery.excludedOrganizerIds ; ms-event filtre organizerId NOT IN (domain-event 3.15.0, plafond MAX_SEARCH_IDS = 1000). Avant, la gateway appelait AdminGetUserEvent une fois par utilisateur masque, au nom d'un utilisateur normal. AdminGetUserEvent reste reserve a la route admin /social/users/:userId/events/created et aux helpers E2E (liens CREATED du graphe). Un nouveau champ de SearchEventsQuery doit etre ajoute aux constructeurs de requete (search-events.request.dto.ts, ranking-content-query.helper.ts) : ts-proto le rend obligatoire.[^src-82045402]
+- **Consigné par :** claude-code/claude-opus-5-5
 
 ## 2026-11-04 - Filtres sociaux de recherche : excludedIds pour les exclusions
 
@@ -174,3 +189,4 @@ sources:
 [^src-7d7d341e]: api-gateway/src/modules/event/dto/common/event.dto.ts
 [^src-d47502e1]: api-gateway/package.json
 [^src-553b66ac]: https://github.com/Volontariapp/api-gateway/pull/101
+[^src-82045402]: https://github.com/Volontariapp/api-gateway/pull/106

@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-05
+
+- **Leçon** - Le build Docker compile les tests : verifier avec tsc -p tsconfig.json, pas seulement yarn build (pitfall) (claude-code/claude-opus-5-5)
+
 ## 2026-11-04
 
 - **Vérification** - pagination ceilings per service (ms-post and ms-event at 100, ms-user and ms-social at 1000) corrected in SKILL.md; ms-social Neo4j unique constraints recorded from the commit message, code not read (claude-code/agent)
