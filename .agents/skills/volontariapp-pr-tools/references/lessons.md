@@ -7,13 +7,24 @@ status: stable
 generated:
   by: claude-code/agent
   at: "2026-11-04T13:23:49Z"
-sources: []
+sources:
+  - id: src-b4ad13c6
+    resource: "https://github.com/Volontariapp/ci-tools/pull/74"
+    title: "https://github.com/Volontariapp/ci-tools/pull/74"
 ---
 
 # Leçons
+
+## 2026-11-05 - Branches protégées : ms-user, ms-post, api-gateway, ci-tools et deploy exigent une approbation
+
+- **Type :** pitfall
+- **Leçon :** gh pr merge renvoie BLOCKED (REVIEW_REQUIRED) sur ms-user, ms-post, api-gateway, ci-tools et deploy, même CI verte ; ms-event, ms-storage, post-processors-runner et npm-packages n'en demandent pas (constaté le 2026-11-05). Ne pas contourner avec --admin : poser notify-discord (puis relancer le job notify-ready si la CI est finie) ; ci-tools et deploy n'ont pas de job notify-ready, prévenir le Lead Dev directement. gh pr merge --auto échoue (erreur GraphQL) avec le gh de la machine.[^src-b4ad13c6]
+- **Consigné par :** claude-code/claude-opus-5-5
 
 ## 2026-11-04 - Création de la skill
 
 - **Type :** decision
 - **Leçon :** Skill créée pour couvrir : scripts/pr-label.sh, scripts/pr-retrigger.sh.
 - **Consigné par :** claude-code/agent
+
+[^src-b4ad13c6]: https://github.com/Volontariapp/ci-tools/pull/74

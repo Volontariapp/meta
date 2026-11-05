@@ -31,6 +31,9 @@ verified:
   - by: "process:claude-code"
     at: "2026-11-03T14:03:07Z"
     digest: d17365b608116a1c
+  - by: claude-code/agent
+    at: "2026-11-05T17:34:09Z"
+    digest: da39a3ee5e6b4b0d
 sources:
   - id: workflows
     resource: ci-tools/.github/workflows
