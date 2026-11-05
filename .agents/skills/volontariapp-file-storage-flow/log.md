@@ -2,6 +2,8 @@
 
 ## 2026-11-05
 
+- **Vérification** - Lot 4: purge on every release (G9), requestPurge + CronJob, status updated (claude-code/agent)
+- **Leçon** - Toute libération de fichier écrit le job de purge dans sa transaction (rule) (claude-code/claude-opus-5-5)
 - **Leçon** - G7 : ConfirmFileAttachment de l'avatar en 503 au premier appel (pitfall) (claude-code/claude-opus-5-5)
 
 ## 2026-11-04

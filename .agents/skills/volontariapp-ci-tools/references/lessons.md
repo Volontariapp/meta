@@ -41,9 +41,27 @@ sources:
   - id: src-191c6e6a
     resource: "https://github.com/Volontariapp/ws-service/pull/52"
     title: "https://github.com/Volontariapp/ws-service/pull/52"
+  - id: src-b4ad13c6
+    resource: "https://github.com/Volontariapp/ci-tools/pull/74"
+    title: "https://github.com/Volontariapp/ci-tools/pull/74"
+  - id: src-1eaef6a8
+    resource: "https://github.com/Volontariapp/api-gateway/pull/104"
+    title: "https://github.com/Volontariapp/api-gateway/pull/104"
 ---
 
 # Leçons
+
+## 2026-11-05 - Tester un changement de ci-tools avant son merge : pointer le sous-module d'une PR sur la branche
+
+- **Type :** command
+- **Leçon :** L'E2E lit ci-tools/docker-compose.yml depuis le sous-module ci-tools du repo appelant (checkout submodules: recursive), pas depuis ci-tools main. Pour valider une PR ci-tools : dans une PR api-gateway, git -C ci-tools checkout <sha de la branche>, commit, push ; l'E2E joue alors la branche. Après le merge (squash : nouveau sha), sync-all.yml met à jour le sous-module de tous les repos sur main ; remettre ensuite le sous-module de la PR sur ce sha (merge de origin/main, conflit de sous-module résolu par checkout du sha de main).[^src-1eaef6a8]
+- **Consigné par :** claude-code/claude-opus-5-5
+
+## 2026-11-05 - Un client gRPC ouvert au démarrage exige que le conteneur cible existe déjà
+
+- **Type :** pitfall
+- **Leçon :** Dans compose, un nom de service ne résout dans le DNS de Docker qu'une fois son conteneur créé. ms-user, ms-post et ms-event ouvrent leur canal storage-client au démarrage (storage-client 0.3.10) alors que ms-storage démarre en dernier (il attend clamd et minio) : 'Name resolution failed for target dns:ms-storage:5006', canal en TRANSIENT_FAILURE, ConfirmFileAttachment en 503 à chaque run (G7). Correctif : depends_on ms-storage service_healthy pour chaque client. Tout nouveau client gRPC vers un service qui démarre tard suit la même règle. Kubernetes n'est pas concerné, le nom du Service résout toujours.[^src-b4ad13c6]
+- **Consigné par :** claude-code/claude-opus-5-5
 
 ## 2026-11-05 - La CI de ws-service ne lance pas d'E2E
 
@@ -152,3 +170,5 @@ sources:
 [^src-58fb5d2c]: https://github.com/Volontariapp/post-processors-runner/pull/66
 [^src-1b8aa8aa]: https://github.com/Volontariapp/api-gateway/pull/102
 [^src-191c6e6a]: https://github.com/Volontariapp/ws-service/pull/52
+[^src-b4ad13c6]: https://github.com/Volontariapp/ci-tools/pull/74
+[^src-1eaef6a8]: https://github.com/Volontariapp/api-gateway/pull/104

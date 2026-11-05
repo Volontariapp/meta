@@ -2,6 +2,7 @@
 
 ## 2026-11-05
 
+- **Leçon** - Après un yarn up, chercher tout paquet @volontariapp en double, pas seulement database (pitfall) (claude-code/claude-opus-5-5)
 - **Leçon** - Le garde-fou du STOP ignore les worktrees sous .worktrees/ (pitfall) (claude-code/claude-opus-5-5)
 - **Leçon** - Le mandat d'orchestrateur ne suffit pas au classifieur de permissions (rule) (claude-code/claude-opus-5-5)
 

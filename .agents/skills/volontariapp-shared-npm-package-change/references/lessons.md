@@ -65,9 +65,18 @@ sources:
   - id: src-bbec3532
     resource: .claude/hooks/post-edit.sh
     title: .claude/hooks/post-edit.sh
+  - id: src-884f50ed
+    resource: "https://github.com/Volontariapp/ms-storage/pull/47"
+    title: "https://github.com/Volontariapp/ms-storage/pull/47"
 ---
 
 # Leçons
+
+## 2026-11-05 - Après un yarn up, chercher tout paquet @volontariapp en double, pas seulement database
+
+- **Type :** pitfall
+- **Leçon :** domain-storage 0.14.0 a fait entrer errors 0.7.0 dans ms-storage, qui avait errors 0.6.5 par auth, bridge-nest, errors-nest et health-check (deux copies : risque d'instanceof raté entre l'erreur levée et le filtre Nest). Vérification : grep -E '^"@volontariapp/[a-z-]+@' yarn.lock | sed -E 's/^"(@volontariapp\/[a-z-]+)@.*/\1/' | sort | uniq -d doit être vide. Correctif : monter les dépendances directes aux versions qui épinglent la même copie (npm view <pkg>@latest dependencies), ou épingler la version exacte que tire le domain-* (^x.y.z peut résoudre une version plus récente qui tire une autre copie).[^src-884f50ed]
+- **Consigné par :** claude-code/claude-opus-5-5
 
 ## 2026-11-05 - Le garde-fou du STOP ignore les worktrees sous .worktrees/
 
@@ -262,3 +271,4 @@ sources:
 [^src-37dd6836]: AGENTS.md
 [^src-0d12895f]: https://github.com/Volontariapp/ms-social/pull/65
 [^src-bbec3532]: .claude/hooks/post-edit.sh
+[^src-884f50ed]: https://github.com/Volontariapp/ms-storage/pull/47

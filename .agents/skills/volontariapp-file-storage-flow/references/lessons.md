@@ -32,9 +32,18 @@ sources:
   - id: src-1b8aa8aa
     resource: "https://github.com/Volontariapp/api-gateway/pull/102"
     title: "https://github.com/Volontariapp/api-gateway/pull/102"
+  - id: src-ab2e2231
+    resource: "https://github.com/Volontariapp/npm-packages/pull/291"
+    title: "https://github.com/Volontariapp/npm-packages/pull/291"
 ---
 
 # Leçons
+
+## 2026-11-05 - Toute libération de fichier écrit le job de purge dans sa transaction
+
+- **Type :** rule
+- **Leçon :** Depuis domain-storage 0.14.0, releaseForOwner, releaseForEntity (emitter : l'entité) et releaseFile (emitter : le fichier) écrivent storage.cleanup_files dans la même transaction dès qu'au moins un fichier passe ORPHANED (G9 : sans job, les fichiers d'un post supprimé ou d'un avatar remplacé restaient téléchargeables). Filet de sécurité : requestPurge(emitterId), appelée par la commande ms-storage dist/commands/request-file-purge.js, lancée toutes les 15 minutes par le CronJob ms-storage-purge (deploy, apps/base/ms-storage/cronjob-purge.yaml). Un nouvel appelant qui libère des fichiers doit déclarer JobsOutboxModel dans ses entités.[^src-ab2e2231]
+- **Consigné par :** claude-code/claude-opus-5-5
 
 ## 2026-11-05 - G7 : ConfirmFileAttachment de l'avatar en 503 au premier appel
 
@@ -116,3 +125,4 @@ sources:
 [^src-64ff0419]: api-gateway/src/modules/post/dto/common/post-media.dto.ts
 [^src-aa248434]: ms-event/src/modules/event/controllers/commands/event.command.controller.ts
 [^src-1b8aa8aa]: https://github.com/Volontariapp/api-gateway/pull/102
+[^src-ab2e2231]: https://github.com/Volontariapp/npm-packages/pull/291
