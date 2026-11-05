@@ -1,0 +1,6 @@
+{
+  "name": "meta-stop-lock",
+  "version": "0.1.0",
+  "description": "Affiche dans la status line le verrou de la règle du STOP (npm-packages, proto-registry) posé par les hooks de meta.",
+  "author": { "name": "Volontariapp" }
+}

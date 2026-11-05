@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-05
+
+- **Vérification** - mesh-mcp.toml : cles de routage de la nouvelle skill volontariapp-meta-mods ajoutees par evolve.py, aucune regle ni outil modifie (claude-code/agent)
+
 ## 2026-11-04
 
 - **Vérification** - .agents/mesh-mcp.toml: 3 recommendation lines added for volontariapp-pr-tools by evolve.py new; roots, doctor and graph patterns described by the skill are unchanged (claude-code/agent)

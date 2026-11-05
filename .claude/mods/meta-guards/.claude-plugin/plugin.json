@@ -1,0 +1,6 @@
+{
+  "name": "meta-guards",
+  "version": "0.1.0",
+  "description": "Refuse l'ajout d'emoji et de tirets cadratins (politique de CLAUDE.md) dans les fichiers écrits, les commits et les PR.",
+  "author": { "name": "Volontariapp" }
+}

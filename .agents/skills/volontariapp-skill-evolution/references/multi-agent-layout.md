@@ -46,6 +46,8 @@ Copilot n'est pas branché : `meta/.github` est le repo de profil de l'organisat
 
 Les autres agents n'ont pas ces garde-fous : ils lancent `evolve.py plan` eux-mêmes et appliquent la règle du STOP et le routage `mesh-mcp` à la lecture d'`AGENTS.md`.
 
+Les mods Claude Code (`.claude/mods/`, catalogue `.claude-plugin/marketplace.json`, activés par `extraKnownMarketplaces` et `enabledPlugins` dans `.claude/settings.json`[^settings]) complètent ces hooks côté interface : statut du verrou STOP (lecture seule du marqueur), refus d'emoji et de tirets cadratins, panneau `/repos`, indicateur de dérive des skills et `/skill-search`. Ils ne remplacent aucun hook shell. Voir la skill `volontariapp-meta-mods`.
+
 # Règles
 
 - **Une seule source** : toute instruction commune va dans `AGENTS.md` ; les fichiers propres à un agent ne contiennent que ce qui ne vaut que pour lui (hooks, syntaxe d'import).

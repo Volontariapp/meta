@@ -1,0 +1,27 @@
+{
+  "name": "volontariapp-meta",
+  "owner": { "name": "Volontariapp" },
+  "description": "Mods Claude Code du workspace meta (statut du verrou STOP, garde-fous de style, panneau des repos, skills).",
+  "plugins": [
+    {
+      "name": "meta-stop-lock",
+      "source": "./.claude/mods/meta-stop-lock",
+      "description": "Affiche dans la status line le verrou de la règle du STOP (npm-packages, proto-registry)."
+    },
+    {
+      "name": "meta-guards",
+      "source": "./.claude/mods/meta-guards",
+      "description": "Refuse l'ajout d'emoji et de tirets cadratins dans les fichiers, commits et PR."
+    },
+    {
+      "name": "meta-repos",
+      "source": "./.claude/mods/meta-repos",
+      "description": "Panneau /repos : branches, worktrees, PR ouvertes, CI et mergeabilité de chaque repo."
+    },
+    {
+      "name": "meta-skills",
+      "source": "./.claude/mods/meta-skills",
+      "description": "Indicateur de dérive des skills et commande /skill-search."
+    }
+  ]
+}
