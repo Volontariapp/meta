@@ -47,9 +47,36 @@ sources:
   - id: src-1eaef6a8
     resource: "https://github.com/Volontariapp/api-gateway/pull/104"
     title: "https://github.com/Volontariapp/api-gateway/pull/104"
+  - id: src-e177b427
+    resource: "https://github.com/Volontariapp/api-gateway/pull/107"
+    title: "https://github.com/Volontariapp/api-gateway/pull/107"
 ---
 
 # Leçons
+
+## 2026-11-06 - Assertion « n'est pas compté » dans un E2E: utiliser un utilisateur-barrière
+
+- **Type :** rule
+- **Leçon :** Les flux sont lus dans l'ordre par un seul consommateur. Pour prouver qu'une action n'a pas été comptée sans pause fixe, un second utilisateur effectue la même action ensuite et on attend que son propre compteur bouge: tout ce qui précède dans le flux est alors traité. Voir e2e/scenarios/badge-scenarios.e2e.spec.ts.[^src-e177b427]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-06 - Pile E2E: le saga de création d'événement ne se termine pas (géocodage coupé)
+
+- **Type :** pitfall
+- **Leçon :** post-processor-event tourne avec GEOCODING_ENABLED=false pour ne pas déplacer les événements des scénarios. Il acquitte event.created sans émettre EVENT_GEOCODED, donc la collecte EVENT_CREATION ne se clôt pas et event.creation_successfull n'est pas émis dans cette pile (aucune trace dans les logs de la CI du 2026-11-06). Les badges et notifications qui en dépendent (EVENT_HOST_COUNT_1) ne sont pas testables: it.todo.[^src-5601ca7f]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-06 - Diagnostiquer une CI E2E en échec sans la relancer
+
+- **Type :** command
+- **Leçon :** Consigne du Lead Dev: ne jamais lancer les E2E en local. Récupérer les logs du job (gh run view), puis l'artefact e2e-diagnostics (gh run download <run> -n e2e-diagnostics): logs de chaque conteneur, tables event_queue, longueurs des streams Redis. L'étape de collecte ne s'exécute qu'en cas d'échec.[^src-cbb46bc1]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-06 - Le job qui lance les E2E s'appelle e2e / Run End-to-End Tests
+
+- **Type :** pitfall
+- **Leçon :** ci-docker / docker ne fait que construire l'image (moins d'une minute). Surveiller ce job pour savoir si les E2E sont terminés, et lire ses logs avec gh run view <run> --job <id> --log. Sans le label docker-and-e2e le job échoue à l'étape de contrôle du label.[^src-cbb46bc1]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-05 - Tester un changement de ci-tools avant son merge : pointer le sous-module d'une PR sur la branche
 
@@ -172,3 +199,4 @@ sources:
 [^src-191c6e6a]: https://github.com/Volontariapp/ws-service/pull/52
 [^src-b4ad13c6]: https://github.com/Volontariapp/ci-tools/pull/74
 [^src-1eaef6a8]: https://github.com/Volontariapp/api-gateway/pull/104
+[^src-e177b427]: https://github.com/Volontariapp/api-gateway/pull/107

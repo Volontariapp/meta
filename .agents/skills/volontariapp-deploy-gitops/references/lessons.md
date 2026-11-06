@@ -26,9 +26,30 @@ sources:
   - id: src-0dbb6fe8
     resource: deploy/infrastructure/monitoring/dashboards/request-flow.json
     title: deploy/infrastructure/monitoring/dashboards/request-flow.json
+  - id: src-cd027dc7
+    resource: deploy/apps/base/ms-user/deployment-post-processor.yaml
+    title: deploy/apps/base/ms-user/deployment-post-processor.yaml
 ---
 
 # Leçons
+
+## 2026-11-06 - Nouvelle dépendance gRPC d'un runner: variable d'environnement dans deploy avant le code
+
+- **Type :** rule
+- **Leçon :** pp-user appelle ms-post: MS_POST_URL=ms-post:80 est ajouté au déploiement (valeur du ranking). Sans elle le défaut localhost:3000 ferait échouer chaque évaluation. La politique réseau de sortie des runners vers ms-post existait déjà: la vérifier avant d'écrire une règle. Une variable inutilisée est inoffensive, la fusionner avant le code.[^src-cd027dc7]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-06 - Inspecter un nœud sans SSH
+
+- **Type :** command
+- **Leçon :** kubectl debug node/<n> -it --image=busybox puis chroot /host pour df -hT et df -i; kubectl get --raw /api/v1/nodes/<n>/proxy/stats/summary donne octets et inodes libres de fs et imageFs. Supprimer le pod node-debugger ensuite. Un pod en ImagePullBackOff avec no space left on device oriente d'abord vers df -i.[^src-cd027dc7]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-06 - Nœud k3s en ENOSPC avec 61 % d'octets: les inodes étaient à 100 %
+
+- **Type :** pitfall
+- **Leçon :** Sur ext4 le nombre d'inodes est fixé au formatage (environ 1 pour 16 Ko). Les images Node avec node_modules extraites par containerd en consomment des dizaines de milliers chacune, et chaque merge ajoute un tag par service. Le nettoyage d'images de kubelet raisonne en octets, donc rien ne partait et DiskPressure restait False. Remède: k3s crictl --timeout 600s rmi --prune (images inutilisées seulement) a libéré environ 10,8 millions d'inodes et 80 Go. Les bases de données du nœud partagent ces inodes.[^src-cd027dc7]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-28 - Import JSON de dashboard Datadog : erreurs rencontrees
 
@@ -84,3 +105,4 @@ sources:
 [^src-44389df8]: deploy/apps/base/ms-user/deployment.yaml
 [^src-86e8c1ef]: deploy/apps/overlays/prod/shared-infra/kustomization.yaml
 [^src-0dbb6fe8]: deploy/infrastructure/monitoring/dashboards/request-flow.json
+[^src-cd027dc7]: deploy/apps/base/ms-user/deployment-post-processor.yaml

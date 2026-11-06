@@ -25,9 +25,6 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-30T11:31:42Z"
-    digest: 035a8c5d9af1ed4e
-  - by: claude-code/agent
     at: "2026-10-30T12:24:34Z"
     digest: 1926dce27f39e092
   - by: claude-code/agent
@@ -39,6 +36,9 @@ verified:
   - by: claude-code/agent
     at: "2026-11-04T17:53:23Z"
     digest: a4e563bea3a17189
+  - by: claude-code/agent
+    at: "2026-11-06T14:04:01Z"
+    digest: 90966abbcd8b04bd
 sources:
   - id: agent-md
     resource: AGENT.md
@@ -139,6 +139,7 @@ Les microservices `ms-*` n'ont **aucune logique métier propre** :
    - Appliquer le playbook [`volontariapp-shared-npm-package-change`](/volontariapp-shared-npm-package-change/SKILL.md) avec bump changeset et publication snapshot.
    - Lancer `yarn up @volontariapp/domain-<domaine>` dans le microservice consommateur.
 3. Injecter le service de domaine comme provider dans `<Domaine>Module`.
+4. **Cas d'une lecture qui agrège plusieurs tables avec un catalogue partagé** (progression des badges) : un service local au microservice, `src/modules/<domaine>/services/<nom>.service.ts`, qui injecte les repositories TypeORM par `@InjectRepository` (le `DatabaseModule` les expose en global) et délègue le calcul à une fonction pure de `@volontariapp/shared`. Précédent : `BadgeProgressService` de `ms-user` (`computeBadgeProgress`). Les mocks des repositories vont dans un fichier `*.mock.ts` séparé.
 
 ---
 
@@ -193,6 +194,10 @@ export class EventCommandController extends BaseCommandController {
 - **Gestion `withFallback`** : Héritée de `BaseCommandController`[^base-cmd], cette méthode ne déclenche aucun job en cas d'erreur client (400, 404, 409, et aussi 403 dans `ms-event` ; vérifier les autres `ms-*` avant de supposer le même comportement). Sur panne système ou dépendance injoignable, elle insère un job dans `jobs_outbox` et renvoie la réponse typée `FALLBACK_ACTIVATED` (traduite en HTTP 206 par l'API Gateway).
 
 ---
+
+**Pièges du contrôleur de lecture :**
+- **Constante de méthode manquante.** `BADGE_QUERY_METHODS`, `USER_QUERY_METHODS`... dans `contracts-nest/src/<d>/grpc-helpers.ts` sont écrites à la main : un nouveau RPC n'y figure pas automatiquement. Utiliser le littéral du `.proto` : `@GrpcMethod(BADGE_SERVICE_NAME, 'GetMyBadgeProgress')` (même approche que `'GetUsersByIds'`), ou ajouter la constante dans `npm-packages` si plusieurs consommateurs la veulent.
+- **Route « me ».** Aucun identifiant dans le message : `@UseGuards(GrpcInternalGuard)` et `@CurrentUser() user: AuthUser`, comme `getUser`. Un `userId` fourni par le client ne doit jamais être lu.
 
 ## Étape 5 : Mappers & DTOs de Réponse
 

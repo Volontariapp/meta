@@ -18,25 +18,20 @@ generated:
   at: "2026-10-12T11:56:30Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-30T11:19:37Z"
-    digest: 645b377048b9afbf
-  - by: claude-code/agent
-    at: "2026-10-30T11:30:59Z"
-    digest: 20ce5bb2eb406974
-  - by: claude-code/agent
     at: "2026-10-30T12:24:33Z"
     digest: a54b076ffe78093d
   - by: claude-code/agent
     at: "2026-11-01T16:23:06Z"
     digest: 20ce5bb2eb406974
   - by: claude-code/agent
-    at: "2026-11-04T13:17:01Z"
-    digest: d556f3184aec16ba
     at: "2026-11-04T20:26:40Z"
     digest: d213010b5b6fbe64
   - by: claude-code/agent
     at: "2026-11-04T21:24:16Z"
     digest: de82376096d2ce17
+  - by: claude-code/agent
+    at: "2026-11-06T14:04:00Z"
+    digest: a6bfa42cee9dd9ef
 sources:
   - id: sync-mig
     kind: local_file
@@ -168,6 +163,8 @@ Pour toute modification dans `src/migrations/` (commune ou domaine pour les test
 5. **Copie `workers`** : `npm-packages/packages/workers/src/test/migrations/` contient aussi les migrations communes (outbox, `job_audit`, triggers), hors de `yarn meta sync-migrations`. Y ajouter toute nouvelle migration commune, sinon les tests de `workers` tournent sur un schéma obsolète (la PR traceparent l'a réalignée le 2026-10-13).
 6. **STOP rule** : `domain-*/src/test/migrations` et `database` sont sous `npm-packages`. Faire d'abord toutes les éditions `ms-*`, puis `npm-packages` en dernier : le hook `stop-rule-guard.sh` refuse les éditions `ms-*` après la première édition `npm-packages`.
 
+7. **Quand `npm-packages` est déjà modifié (le modèle et la migration vont ensemble).** Le hook refuse alors l'édition de `ms-*`. Écrire la migration **d'abord** dans `npm-packages/packages/domain-<d>/src/test/migrations/domain/`, dans la PR `npm-packages`, puis, une fois les packages publiés et le verrou levé, la **copier à l'identique** dans `ms-*/src/migrations/domain/` (comparer le `md5`). Ne pas lancer `yarn meta sync-migrations` pour cela : il synchronise tout le dossier et le piège de dérive du point 4 s'applique. Exemple : `AddBadgePointsAndProgressDedup1793970000000` (`npm-packages#299`, puis `ms-user#88`). Ajouter aussi les nouvelles entités à `entities` de `data-source.ts` et du `database.module.ts` du microservice.
+
 ---
 
 ### Étape 5 : Exécution et validation locale
@@ -193,6 +190,18 @@ Pour toute modification dans `src/migrations/` (commune ou domaine pour les test
    ```bash
    yarn test
    ```
+
+**Valider sur une base jetable plutôt que sur le volume du compose.** `docker compose up postgres-user` réutilise le volume persistant `postgres_user_data`, et le `data-source` de test de `domain-*` fait un `dropDatabase()`. Pour le cycle `run`, `revert`, `run` (et pour les tests d'intégration `yarn test:integration` de `domain-<d>`), lancer un Postgres sans volume sur le port 5432, après avoir vérifié qu'il est libre :
+
+```bash
+lsof -nP -iTCP:5432 -sTCP:LISTEN   # doit ne rien afficher
+docker run --rm -d --name pg-migration-check -p 5432:5432 \
+  -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=ms_user postgres:16-alpine
+# ... migration:run, migration:revert, migration:run ...
+docker stop pg-migration-check
+```
+
+Contrôler aussi les données posées par la migration (`UPDATE` de remplissage) en insérant une ligne de test avant le second `run`.
 
 ---
 

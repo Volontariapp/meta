@@ -24,6 +24,7 @@ Préfixe global `api/v1`[^modules].
 | :--- | :--- | :--- |
 | `POST/PATCH/DELETE /users`, `GET /users/me`, `GET /users/:userId/public` | `ms-user` | `src/modules/user`, `BaseUserGrpcController` vers `UserServiceClient` |
 | `GET /badges*` | `ms-user` | `BaseBadgeGrpcController` |
+| `GET /users/me/badges/progress` (progression vers chaque badge, `BadgeProgressQueryController`, `BaseBadgeGrpcController` vers `BadgeServiceClient.getMyBadgeProgress`) | `ms-user` | `src/modules/user/controllers/queries/badge/badge-progress.query-controller.ts` |
 | `POST /users/login`, `/users/refresh` (`@Public`) | `ms-user` | `user-auth.controller.ts` |
 | `/posts`, `/posts/:postId/comments` | `ms-post` | `src/modules/post`, `BasePostGrpcController` vers `PostServiceClient` |
 | `/events`, `/events/:id/requirements`, `/tags` | `ms-event` | `src/modules/event` |

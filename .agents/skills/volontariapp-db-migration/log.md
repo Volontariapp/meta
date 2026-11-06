@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-11-06
+
+- **Vérification** - Migration AddBadgePointsAndProgressDedup (domain-user puis copie byte-identique dans ms-user): ordre sous la regle du STOP, validation sur Postgres jetable, entites a declarer. (claude-code/agent)
+- **Leçon** - Migration écrite dans domain-<d> d'abord quand npm-packages est déjà modifié (rule) (claude-code/agent)
+
 ## 2026-11-04
 
 - **Vérification** - 0ad1031d : ORDER BY created_at, id dans la reclamation outbox, factory de test ; rien dans la skill ne cite ces fichiers (claude-code/agent)

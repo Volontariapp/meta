@@ -4,6 +4,10 @@
 
 - **Leçon** - ranking.ready est partage par les deux listes : le type de liste est ajoute dans originalPayload (rule) (claude-code/claude-sonnet-5-5)
 - **Leçon** - Un 206 FALLBACK_ACTIVATED ne doit pas allumer un indicateur que seul un evenement WebSocket eteint (pitfall) (claude-code/claude-sonnet-5-5)
+- **Leçon** - Une fonctionnalité qui crédite des points se déploie derrière un flag éteint (rule) (claude-code/agent)
+- **Leçon** - Résoudre une donnée manquante dans le post-processor plutôt qu'enrichir l'événement (decision) (claude-code/agent)
+- **Leçon** - Écrire le cache Redis après le commit, jamais dans la transaction (pitfall) (claude-code/agent)
+- **Leçon** - Compteur de progression: une ligne de dédup par objet compté (rule) (claude-code/agent)
 
 ## 2026-11-05
 

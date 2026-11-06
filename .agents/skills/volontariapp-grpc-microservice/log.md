@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-06
+
+- **Vérification** - ms-user GetMyBadgeProgress: BadgeProgressService (repositories injectes + fonction pure de shared), constante de methode absente de grpc-helpers (litteral), route me sans userId. (claude-code/agent)
+
 ## 2026-11-05
 
 - **Leçon** - Le build Docker compile les tests : verifier avec tsc -p tsconfig.json, pas seulement yarn build (pitfall) (claude-code/claude-opus-5-5)
