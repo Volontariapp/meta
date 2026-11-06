@@ -72,6 +72,24 @@ sources:
 
 # Leçons
 
+## 2026-11-06 - Lever le verrou: npm view sur chaque package bumpé du commit de merge
+
+- **Type :** rule
+- **Leçon :** Les bumps patch en cascade des packages dépendants se publient quelques minutes après le package principal (domain-ranking et domain-social ont répondu les derniers). Lister les package.json modifiés par le commit de merge et vérifier npm view @volontariapp/<p>@<v> pour chacun avant stop-rule-guard.sh release, et vérifier aussi que Definitive Release est vert.[^src-37dd6836]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-06 - Deux copies de @volontariapp/database dans un consommateur
+
+- **Type :** pitfall
+- **Leçon :** Monter database sans monter outbox laisse outbox sur sa propre copie imbriquée: erreur TS2345 JobsOutboxRepository contre BaseRepository. Monter ensemble tous les packages bumpés par la même release (database, outbox, auth, domain-*, messaging, shared, contracts).[^src-c6f47875]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-06 - Miroir Yarn en retard sur un package fraîchement publié
+
+- **Type :** pitfall
+- **Leçon :** yarn up peut répondre 404 sur registry.yarnpkg.com alors que npm view répond. Pour la commande seulement: YARN_NPM_REGISTRY_SERVER=https://registry.npmjs.org yarn up ... (le lockfile garde ses résolutions npm:).[^src-c6f47875]
+- **Consigné par :** claude-code/agent
+
 ## 2026-11-05 - Après un yarn up, chercher tout paquet @volontariapp en double, pas seulement database
 
 - **Type :** pitfall

@@ -62,6 +62,15 @@ sources:
   - id: src-ce24b10c
     resource: ws-service/src/post-processors/jobs/job-outbox-success.post-processor.ts
     title: ws-service/src/post-processors/jobs/job-outbox-success.post-processor.ts
+  - id: src-7386448c
+    resource: post-processors-runner/post-processor-user/src/core/services/badge-evaluator.service.ts
+    title: post-processors-runner/post-processor-user/src/core/services/badge-evaluator.service.ts
+  - id: src-6047c95e
+    resource: post-processors-runner/post-processor-user/src/core/clients/post-author.resolver.ts
+    title: post-processors-runner/post-processor-user/src/core/clients/post-author.resolver.ts
+  - id: src-faf8fc8a
+    resource: post-processors-runner/post-processor-user/src/config/custom-config.ts
+    title: post-processors-runner/post-processor-user/src/config/custom-config.ts
 ---
 
 # Leçons
@@ -77,6 +86,29 @@ sources:
 - **Type :** pitfall
 - **Leçon :** Cote nativapp, apiFetch allumait l'indicateur global Synchronisation en cours sur tout 206, et seuls les evenements *.fallback.* le coupaient. Une lecture de ranking en 206 (compte neuf, liste pas encore calculee) le laissait allume pour toujours, et un ranking.ready perdu (socket pas encore connecte) laissait l'app sur la liste de repli. Regle : le client gere un 206 de lecture dans la requete elle-meme (option signalSyncPending false, polling avec backoff tant que isFallback), le WebSocket n'est qu'un accelerateur, et tout indicateur piloté par evenement a un delai maximum.[^src-b324b54c]
 - **Consigné par :** claude-code/claude-sonnet-5-5
+## 2026-11-06 - Une fonctionnalité qui crédite des points se déploie derrière un flag éteint
+
+- **Type :** rule
+- **Leçon :** BADGE_POINTS_ENABLED vaut false par défaut. Ordre de mise en production: migration du ms, déploiement du post-processor flag éteint, dry-run puis rattrapage des compteurs, contrôle de quelques comptes, puis activation dans deploy. Le rattrapage n'attribue aucun badge et ne crédite aucun point (pas de rétroactivité).[^src-faf8fc8a]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-06 - Résoudre une donnée manquante dans le post-processor plutôt qu'enrichir l'événement
+
+- **Type :** decision
+- **Leçon :** post.liked ne porte pas l'auteur du post et likePost vit dans npm-packages (domain-social): l'enrichir imposait un nouveau tour de la règle du STOP. Le post-processor appelle PostService.GetPost avec le token interne et cache l'auteur dans Redis (immuable). NOT_FOUND ne compte pas le like; toute autre erreur est relancée pour que le message du flux soit rejoué, rien n'est perdu ni compté à tort.[^src-6047c95e]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-06 - Écrire le cache Redis après le commit, jamais dans la transaction
+
+- **Type :** pitfall
+- **Leçon :** badges:owned:<user> était écrit dans le callback de transaction: après un rollback le cache disait possédé et le badge n'était jamais attribué. Tout cache qui sert à court-circuiter un traitement s'écrit après le commit, par une méthode appelée sur le résultat de db.transaction.[^src-7386448c]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-06 - Compteur de progression: une ligne de dédup par objet compté
+
+- **Type :** rule
+- **Leçon :** Un compteur alimenté par un événement non idempotent (like, souhait) s'incrémente seulement si l'insertion dans badge_progress_dedup (user_id, metric, ref_id) est nouvelle, dans la même transaction que l'attribution. Un like, unlike, like ne recompte pas; le compteur ne décrémente jamais. Le rattrapage des utilisateurs existants remplit les mêmes lignes, ce qui le rend idempotent.[^src-7386448c]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-05 - Une mise a jour de gather doit etre atomique (G8)
 
@@ -216,3 +248,6 @@ sources:
 [^src-191c6e6a]: https://github.com/Volontariapp/ws-service/pull/52
 [^src-b324b54c]: nativapp/src/hooks/useNotificationHandlers.ts
 [^src-ce24b10c]: ws-service/src/post-processors/jobs/job-outbox-success.post-processor.ts
+[^src-7386448c]: post-processors-runner/post-processor-user/src/core/services/badge-evaluator.service.ts
+[^src-6047c95e]: post-processors-runner/post-processor-user/src/core/clients/post-author.resolver.ts
+[^src-faf8fc8a]: post-processors-runner/post-processor-user/src/config/custom-config.ts

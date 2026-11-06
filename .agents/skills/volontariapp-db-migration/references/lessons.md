@@ -11,9 +11,18 @@ sources:
   - id: src-ae6d3d91
     resource: ms-post/package.json
     title: ms-post/package.json
+  - id: src-974cd2ed
+    resource: ms-user/src/migrations/domain/1793970000000-AddBadgePointsAndProgressDedup.ts
+    title: ms-user/src/migrations/domain/1793970000000-AddBadgePointsAndProgressDedup.ts
 ---
 
 # Leçons
+
+## 2026-11-06 - Migration écrite dans domain-<d> d'abord quand npm-packages est déjà modifié
+
+- **Type :** rule
+- **Leçon :** Le hook STOP interdit l'édition de ms-* après une édition de npm-packages. La migration est écrite dans domain-<d>/src/test/migrations/domain/ (PR npm-packages), validée sur un Postgres jetable (run, revert, run, suite d'intégration de domain-<d>), puis copiée à l'identique (md5) dans ms-* après publication. Ne pas lancer yarn meta sync-migrations pour cela.[^src-974cd2ed]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-03 - CREATE INDEX CONCURRENTLY interdit avec les scripts migration:run actuels
 
@@ -28,3 +37,4 @@ sources:
 - **Consigné par :** claude-code/agent
 
 [^src-ae6d3d91]: ms-post/package.json
+[^src-974cd2ed]: ms-user/src/migrations/domain/1793970000000-AddBadgePointsAndProgressDedup.ts

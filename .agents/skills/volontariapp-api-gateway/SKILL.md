@@ -90,6 +90,10 @@ Ce playbook doit être exécuté dès qu'une tâche nécessite :
 
 ---
 
+## Étape 0 : Le type Web du contrat doit exister (sinon, `npm-packages` d'abord)
+
+`yarn check-arch` impose qu'un DTO de **réponse** implémente une interface « Web » de `@volontariapp/contracts` : même forme que le message gRPC, mais avec des `Date` à la place des `Timestamp`. Ces interfaces sont **écrites à la main** dans `npm-packages/packages/contracts/src/gateway/<domaine>/response/*.ts` (seuls les messages gRPC sont générés). Si le type Web n'existe pas, il faut une PR `npm-packages` (ajout seul, changeset minor), sa publication, puis le déverrouillage (règle du STOP) avant d'écrire le DTO. Modèle : `BadgeProgressWeb extends Omit<BadgeProgress, 'awardedAt'> { awardedAt?: Date }` et `GetMyBadgeProgressWebResponse` (`npm-packages#300`).
+
 ## Étape 1 : Spécification du DTO Swagger & Validation
 
 Emplacement : `src/modules/<domaine>/dto/request/<nom>.request.dto.ts`.
@@ -178,6 +182,8 @@ export class PostCommandController extends BasePostGrpcController {
 - **Ressources scopées par utilisateur** : Utiliser `IsCurrentUserOrAdminGuard` pour les routes ciblant `:userId`.
 
 ---
+
+**Conflit de routes.** Un chemin sous un préfixe qui porte déjà un `GET :id` (`badges/:id`, `users/:id`) peut être capturé par lui. Le placer dans un contrôleur dédié monté sur un préfixe sans ambiguïté (`@Controller('users/me/badges')` pour `GET /users/me/badges/progress`) et écrire un test d'intégration de routage (`Test.createTestingModule` avec les contrôleurs voisins, dans l'ordre du module) qui vérifie que la route atteint le bon contrôleur.
 
 ## Étape 3 : Câblage du Client gRPC
 

@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-11-06
+
+- **Leçon** - Nouvelle dépendance gRPC d'un runner: variable d'environnement dans deploy avant le code (rule) (claude-code/agent)
+- **Leçon** - Inspecter un nœud sans SSH (command) (claude-code/agent)
+- **Leçon** - Nœud k3s en ENOSPC avec 61 % d'octets: les inodes étaient à 100 % (pitfall) (claude-code/agent)
+
 ## 2026-11-01
 
 - **Vérification** - relue: 29 fichiers = bumps d'image sha-* des deployment.yaml (verifie api-gateway, ms-event), dashboard async-flows.json remplace par request-flow.json deja decrit; aucune regle ne change (claude-code/agent)

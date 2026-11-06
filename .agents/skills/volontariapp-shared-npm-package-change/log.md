@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-11-06
+
+- **Leçon** - Lever le verrou: npm view sur chaque package bumpé du commit de merge (rule) (claude-code/agent)
+- **Leçon** - Deux copies de @volontariapp/database dans un consommateur (pitfall) (claude-code/agent)
+- **Leçon** - Miroir Yarn en retard sur un package fraîchement publié (pitfall) (claude-code/agent)
+
 ## 2026-11-05
 
 - **Leçon** - Après un yarn up, chercher tout paquet @volontariapp en double, pas seulement database (pitfall) (claude-code/claude-opus-5-5)

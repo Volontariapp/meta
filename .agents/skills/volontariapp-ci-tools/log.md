@@ -1,5 +1,12 @@
 # Historique
 
+## 2026-11-06
+
+- **Leçon** - Assertion « n'est pas compté » dans un E2E: utiliser un utilisateur-barrière (rule) (claude-code/agent)
+- **Leçon** - Pile E2E: le saga de création d'événement ne se termine pas (géocodage coupé) (pitfall) (claude-code/agent)
+- **Leçon** - Diagnostiquer une CI E2E en échec sans la relancer (command) (claude-code/agent)
+- **Leçon** - Le job qui lance les E2E s'appelle e2e / Run End-to-End Tests (pitfall) (claude-code/agent)
+
 ## 2026-11-05
 
 - **Vérification** - Lot 4: G7, storage clients wait for ms-storage in compose (ci-tools#74); test ci-tools via a PR submodule (claude-code/agent)
