@@ -56,9 +56,27 @@ sources:
   - id: src-191c6e6a
     resource: "https://github.com/Volontariapp/ws-service/pull/52"
     title: "https://github.com/Volontariapp/ws-service/pull/52"
+  - id: src-b324b54c
+    resource: nativapp/src/hooks/useNotificationHandlers.ts
+    title: nativapp/src/hooks/useNotificationHandlers.ts
+  - id: src-ce24b10c
+    resource: ws-service/src/post-processors/jobs/job-outbox-success.post-processor.ts
+    title: ws-service/src/post-processors/jobs/job-outbox-success.post-processor.ts
 ---
 
 # Leçons
+
+## 2026-11-06 - ranking.ready est partage par les deux listes : le type de liste est ajoute dans originalPayload
+
+- **Type :** rule
+- **Leçon :** COMPUTE_USER_RANKING et COMPUTE_USER_FEED se mappent sur la meme notification ranking.ready (mapping par type de job), donc le client ne savait pas quelle liste etait prete. ws-service emet { isEmitter: true, ...originalPayload } : tout champ ajoute a originalPayload par JobOutboxSuccessPostProcessor (npm-packages) arrive au client sans changement de ws-service. Le champ listKind (EVENT ou POST) est optionnel : absent veut dire emetteur ancien, rafraichir les deux listes.[^src-ce24b10c]
+- **Consigné par :** claude-code/claude-sonnet-5-5
+
+## 2026-11-06 - Un 206 FALLBACK_ACTIVATED ne doit pas allumer un indicateur que seul un evenement WebSocket eteint
+
+- **Type :** pitfall
+- **Leçon :** Cote nativapp, apiFetch allumait l'indicateur global Synchronisation en cours sur tout 206, et seuls les evenements *.fallback.* le coupaient. Une lecture de ranking en 206 (compte neuf, liste pas encore calculee) le laissait allume pour toujours, et un ranking.ready perdu (socket pas encore connecte) laissait l'app sur la liste de repli. Regle : le client gere un 206 de lecture dans la requete elle-meme (option signalSyncPending false, polling avec backoff tant que isFallback), le WebSocket n'est qu'un accelerateur, et tout indicateur piloté par evenement a un delai maximum.[^src-b324b54c]
+- **Consigné par :** claude-code/claude-sonnet-5-5
 
 ## 2026-11-05 - Une mise a jour de gather doit etre atomique (G8)
 
@@ -196,3 +214,5 @@ sources:
 [^src-fbe43ef3]: npm-packages/packages/post-processors/src/core/processors/base.post-processor.ts
 [^src-2957ab4a]: https://github.com/Volontariapp/post-processors-runner/pull/64
 [^src-191c6e6a]: https://github.com/Volontariapp/ws-service/pull/52
+[^src-b324b54c]: nativapp/src/hooks/useNotificationHandlers.ts
+[^src-ce24b10c]: ws-service/src/post-processors/jobs/job-outbox-success.post-processor.ts

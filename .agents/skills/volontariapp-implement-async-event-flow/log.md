@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-11-06
+
+- **Leçon** - ranking.ready est partage par les deux listes : le type de liste est ajoute dans originalPayload (rule) (claude-code/claude-sonnet-5-5)
+- **Leçon** - Un 206 FALLBACK_ACTIVATED ne doit pas allumer un indicateur que seul un evenement WebSocket eteint (pitfall) (claude-code/claude-sonnet-5-5)
+
 ## 2026-11-05
 
 - **Leçon** - Une mise a jour de gather doit etre atomique (G8) (rule) (claude-code/claude-opus-5-5)
