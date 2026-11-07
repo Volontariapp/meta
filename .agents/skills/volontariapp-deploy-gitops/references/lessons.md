@@ -29,9 +29,18 @@ sources:
   - id: src-cd027dc7
     resource: deploy/apps/base/ms-user/deployment-post-processor.yaml
     title: deploy/apps/base/ms-user/deployment-post-processor.yaml
+  - id: src-d378d88d
+    resource: deploy/apps/base/traffic-simulator/deployment.yaml
+    title: deploy/apps/base/traffic-simulator/deployment.yaml
 ---
 
 # Leçons
+
+## 2026-11-07 - traffic-simulator : tout se regle par variables d'environnement, deploy APRES l'image
+
+- **Type :** rule
+- **Leçon :** Le deployment traffic-simulator (deploy/apps/base/traffic-simulator/deployment.yaml) est entierement pilote par env : TARGET_ACTORS (300), POST_LIKES_MIN/MAX, POST_COMMENTS_MIN/MAX, POST_SCAN_INTERVAL_MS, et la fenetre de sommeil SLEEP_ENABLED/SLEEP_START_HOUR/SLEEP_END_HOUR/SLEEP_TIMEZONE/SLEEP_DRAIN_SEC (minuit-8h Europe/Paris). La nuit le pod reste en vie mais n'appelle plus l'API : pas de scale a 0 car ArgoCD selfHeal remettrait replicas=1. Merger la PR deploy des variables APRES le merge du repo traffic-simulator et le bump d'image par la CI, sinon une ancienne image avec TARGET_ACTORS=300 cree 180 comptes aux anciens pseudos.[^src-d378d88d]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-06 - Nouvelle dépendance gRPC d'un runner: variable d'environnement dans deploy avant le code
 
@@ -106,3 +115,4 @@ sources:
 [^src-86e8c1ef]: deploy/apps/overlays/prod/shared-infra/kustomization.yaml
 [^src-0dbb6fe8]: deploy/infrastructure/monitoring/dashboards/request-flow.json
 [^src-cd027dc7]: deploy/apps/base/ms-user/deployment-post-processor.yaml
+[^src-d378d88d]: deploy/apps/base/traffic-simulator/deployment.yaml

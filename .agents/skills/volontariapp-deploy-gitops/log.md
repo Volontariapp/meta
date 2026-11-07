@@ -2,6 +2,8 @@
 
 ## 2026-11-07
 
+- **Vérification** - Ajout de la lecon traffic-simulator (env, fenetre de sommeil, ordre de merge) (claude-code/agent)
+- **Leçon** - traffic-simulator : tout se regle par variables d'environnement, deploy APRES l'image (rule) (claude-code/agent)
 - **Vérification** - quota prod limits.cpu 56 (claude-code/agent)
 - **Vérification** - quota prod limits.memory 28Gi (claude-code/agent)
 - **Vérification** - limits CPU x4, quota limits.cpu 40 (claude-code/agent)
