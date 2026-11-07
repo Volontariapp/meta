@@ -19,9 +19,6 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-28T23:37:26Z"
-    digest: a2a21b3fd446e19d
-  - by: claude-code/agent
     at: "2026-11-01T16:31:56Z"
     digest: f9376622b891cce2
   - by: claude-code/agent
@@ -33,6 +30,9 @@ verified:
   - by: claude-code/agent
     at: "2026-11-07T14:45:05Z"
     digest: 840bbb064bf2226e
+  - by: claude-code/agent
+    at: "2026-11-07T15:27:45Z"
+    digest: f00ff3a6c5d9d71c
 sources:
   - id: c4
     resource: docs/architecture/C4-Deployment-And-Infrastructure.md
@@ -135,6 +135,12 @@ Pour éviter les crash-loops au démarrage du pod, injecter l'initContainer stan
   - Workers Node.js : Request 96Mi, Limit 192Mi (ne jamais fixer 96Mi de limit : risque d'OOMKill avéré).
 - **Broker d'Outbox (`REDIS_HOST`)** :
   - Tout `deployment-outbox.yaml` doit pointer vers `redis-master` (broker global du mesh). Ne jamais brancher une outbox sur un Redis local isolé.
+
+### 4. Haute disponibilité et autoscaling (modèle : `api-gateway`) :
+- Le load balancer est Traefik (Ingress vers le Service ClusterIP, répartition sur les endpoints des pods prêts) : aucun LB à ajouter.
+- `deploy/apps/base/api-gateway/` : pas de champ `replicas` dans le Deployment (l'HPA le pilote, sinon ArgoCD se bat avec lui), `hpa.yaml` (min 3, max 6, CPU 70 %, mémoire 80 %, scale-down stabilisé 300 s), `pdb.yaml` (`minAvailable: 2`), `readinessProbe`, `preStop: sleep 10`, `maxUnavailable: 0` et `topologySpreadConstraints` par nœud.
+- Le `ResourceQuota` de `prod` (requests CPU 6, limits CPU 10) plafonne `maxReplicas` : recalculer avant d'augmenter.
+- L'HPA exige metrics-server (livré par défaut avec K3s) et des `requests` sur chaque conteneur.
 
 ---
 
