@@ -19,9 +19,6 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-11-01T16:31:56Z"
-    digest: f9376622b891cce2
-  - by: claude-code/agent
     at: "2026-11-07T14:21:18Z"
     digest: df0c119d58209b78
   - by: claude-code/agent
@@ -33,6 +30,9 @@ verified:
   - by: claude-code/agent
     at: "2026-11-07T15:27:45Z"
     digest: f00ff3a6c5d9d71c
+  - by: claude-code/agent
+    at: "2026-11-07T15:32:13Z"
+    digest: 9bae38756510c312
 sources:
   - id: c4
     resource: docs/architecture/C4-Deployment-And-Infrastructure.md
@@ -138,7 +138,7 @@ Pour éviter les crash-loops au démarrage du pod, injecter l'initContainer stan
 
 ### 4. Haute disponibilité et autoscaling (modèle : `api-gateway`) :
 - Le load balancer est Traefik (Ingress vers le Service ClusterIP, répartition sur les endpoints des pods prêts) : aucun LB à ajouter.
-- `deploy/apps/base/api-gateway/` : pas de champ `replicas` dans le Deployment (l'HPA le pilote, sinon ArgoCD se bat avec lui), `hpa.yaml` (min 3, max 6, CPU 70 %, mémoire 80 %, scale-down stabilisé 300 s), `pdb.yaml` (`minAvailable: 2`), `readinessProbe`, `preStop: sleep 10`, `maxUnavailable: 0` et `topologySpreadConstraints` par nœud.
+- `deploy/apps/base/api-gateway/` : pas de champ `replicas` dans le Deployment (l'HPA le pilote, sinon ArgoCD se bat avec lui), `hpa.yaml` (min 3, max 6, CPU 70 % seul, scale-down stabilisé 300 s ; pas de métrique mémoire : elle se mesure contre la request et dépasse toujours 80 % sur un pod Node, d'où un scale-up parasite jusqu'au quota), `pdb.yaml` (`minAvailable: 2`), `readinessProbe`, `preStop: sleep 10`, `maxUnavailable: 0` et `topologySpreadConstraints` par nœud.
 - Le `ResourceQuota` de `prod` (requests CPU 6, limits CPU 10) plafonne `maxReplicas` : recalculer avant d'augmenter.
 - L'HPA exige metrics-server (livré par défaut avec K3s) et des `requests` sur chaque conteneur.
 
