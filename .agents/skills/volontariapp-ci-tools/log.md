@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-11-07
+
+- **Vérification** - quota prod limits.cpu 56 (claude-code/agent)
+- **Vérification** - quota prod limits.memory 28Gi (claude-code/agent)
+- **Vérification** - limits CPU x4, quota limits.cpu 40 (claude-code/agent)
+
 ## 2026-11-06
 
 - **Leçon** - Assertion « n'est pas compté » dans un E2E: utiliser un utilisateur-barrière (rule) (claude-code/agent)

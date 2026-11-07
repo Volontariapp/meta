@@ -19,21 +19,21 @@ generated:
   by: claude-code/claude-opus-5-5
   at: "2026-10-06T09:12:34Z"
 verified:
-  - by: claude-code/agent
-    at: "2026-11-01T16:23:06Z"
-    digest: 4ddb86dffde6d1e9
-  - by: claude-code/agent
-    at: "2026-11-02T12:20:48Z"
-    digest: f9cb38dcab835223
-  - by: claude-code/agent
-    at: "2026-11-02T13:06:56Z"
-    digest: c4f5e8db2542a34a
   - by: "process:claude-code"
     at: "2026-11-03T14:03:07Z"
     digest: d17365b608116a1c
   - by: claude-code/agent
     at: "2026-11-05T17:34:09Z"
     digest: da39a3ee5e6b4b0d
+  - by: claude-code/agent
+    at: "2026-11-07T15:34:34Z"
+    digest: 2757689e145423c0
+  - by: claude-code/agent
+    at: "2026-11-07T15:49:21Z"
+    digest: 2757689e145423c0
+  - by: claude-code/agent
+    at: "2026-11-07T15:55:38Z"
+    digest: 2757689e145423c0
 sources:
   - id: workflows
     resource: ci-tools/.github/workflows
