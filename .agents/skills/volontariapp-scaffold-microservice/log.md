@@ -2,6 +2,7 @@
 
 ## 2026-11-07
 
+- **Vérification** - quota prod limits.memory 28Gi (claude-code/agent)
 - **Vérification** - limits CPU x4, quota limits.cpu 40 (claude-code/agent)
 - **Vérification** - relu: HPA hors perimetre, aucun changement (claude-code/agent)
 - **Vérification** - relu: aucun changement requis, replicas/HPA hors perimetre (claude-code/agent)

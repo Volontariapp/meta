@@ -20,9 +20,6 @@ generated:
   at: "2026-10-06T09:12:34Z"
 verified:
   - by: claude-code/agent
-    at: "2026-11-02T12:20:48Z"
-    digest: f9cb38dcab835223
-  - by: claude-code/agent
     at: "2026-11-02T13:06:56Z"
     digest: c4f5e8db2542a34a
   - by: "process:claude-code"
@@ -33,6 +30,9 @@ verified:
     digest: da39a3ee5e6b4b0d
   - by: claude-code/agent
     at: "2026-11-07T15:34:34Z"
+    digest: 2757689e145423c0
+  - by: claude-code/agent
+    at: "2026-11-07T15:49:21Z"
     digest: 2757689e145423c0
 sources:
   - id: workflows
