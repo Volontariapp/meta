@@ -2,6 +2,8 @@
 
 ## 2026-11-07
 
+- **Leçon** - yarn up d'un consommateur: seuls les packages directs, et la cle resolutions (pitfall) (claude-code/agent)
+- **Leçon** - Push direct depuis un service Neo4j: outbox best effort, emitterId = acteur (pitfall) (claude-code/agent)
 - **Leçon** - Module ws-service : structure AGENT.md et classes SOLID (rule) (Victor)
 
 ## 2026-11-06

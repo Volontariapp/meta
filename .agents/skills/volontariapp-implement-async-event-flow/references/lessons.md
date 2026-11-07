@@ -74,9 +74,27 @@ sources:
   - id: src-fe4a226a
     resource: AGENT.md
     title: AGENT.md
+  - id: src-4ee0f4b9
+    resource: npm-packages/packages/domain-social/src/services/participation.service.ts
+    title: npm-packages/packages/domain-social/src/services/participation.service.ts
+  - id: src-61545c8a
+    resource: ws-service/package.json
+    title: ws-service/package.json
 ---
 
 # Leçons
+
+## 2026-11-07 - yarn up d'un consommateur: seuls les packages directs, et la cle resolutions
+
+- **Type :** pitfall
+- **Leçon :** Dans ws-service, la cle resolutions de package.json fixait @volontariapp/messaging a ^2.33.0: yarn up messaging@2.34.0 laissait l'ancienne version sans erreur; relever aussi la resolution puis yarn install. yarn up refuse un package transitif (outbox n'est pas une dependance directe de ws-service: 'doesn't match any packages referenced by any workspace'): ne monter que les dependances declarees (database, post-processors, domain-event, auth) et verifier ensuite avec find node_modules -path '*@volontariapp/shared/package.json' qu'une seule copie reste. tsc le signale sinon par 'Streams is not assignable to Streams'.[^src-61545c8a]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-07 - Push direct depuis un service Neo4j: outbox best effort, emitterId = acteur
+
+- **Type :** pitfall
+- **Leçon :** ms-social ecrit dans Neo4j, sans transaction SQL: l'evenement outbox est pousse apres l'ecriture, en best effort (log d'un warning si le push echoue, l'ecriture reste acquise), comme wishEvent. L'emitterId est une colonne uuid de event_queue: une operation sans acteur dans sa signature (setEventAttendance) doit recevoir l'utilisateur authentifie depuis le controleur (@CurrentUser), sans quoi l'emitter est inventé. Cote ws-service, le push a un seul destinataire n'utilise pas le gather: un BatchPostProcessor qui boucle sur les utilisateurs et appelle notifyUser, comme user.badge_awarded. Cas de reference: event_social.attendance_set (pointage organisateur vers event.attendance_updated).[^src-4ee0f4b9]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-07 - Module ws-service : structure AGENT.md et classes SOLID
 
@@ -261,3 +279,5 @@ sources:
 [^src-6047c95e]: post-processors-runner/post-processor-user/src/core/clients/post-author.resolver.ts
 [^src-faf8fc8a]: post-processors-runner/post-processor-user/src/config/custom-config.ts
 [^src-fe4a226a]: AGENT.md
+[^src-4ee0f4b9]: npm-packages/packages/domain-social/src/services/participation.service.ts
+[^src-61545c8a]: ws-service/package.json
