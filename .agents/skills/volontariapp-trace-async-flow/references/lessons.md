@@ -11,9 +11,18 @@ sources:
   - id: src-6dd92801
     resource: post-processors-runner/post-processor-user/src/post-processors/options/event-creation-successfull-badge-options.ts
     title: post-processors-runner/post-processor-user/src/post-processors/options/event-creation-successfull-badge-options.ts
+  - id: src-d5381e8a
+    resource: post-processors-runner/post-processor-social/src/post-processors/events/event-created.post-processor.ts
+    title: post-processors-runner/post-processor-social/src/post-processors/events/event-created.post-processor.ts
 ---
 
 # Leçons
+
+## 2026-11-07 - EventCreatedPostProcessor (social) avale les erreurs Neo4j puis acquitte
+
+- **Type :** pitfall
+- **Leçon :** Dans post-processor-social, createEventsBatch est dans un try/catch qui journalise 'Error processing EVENT_CREATED batch in Neo4j' puis continue : le feedback WS est emis et le message acquitte, donc un deadlock Neo4j (ForsetiClient ... NODE_RELATIONSHIP_GROUP_DELETE) perd definitivement le noeud SocialEvent et le lien CREATED, sans rejeu. Symptome: evenement present en Postgres et sur l'app, absent du graphe social. Cause racine corrigee cote domain-social: Neo4jBaseRepository.write() utilise session.executeWrite (retry des erreurs transitoires) au lieu de session.run. Le catch du post-processor reste a durcir (relancer pour laisser le message en attente).[^src-d5381e8a]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-07 - Diagnostic flux : inspecter le stream écouté par le post-processor et l'instance Redis
 
@@ -22,3 +31,4 @@ sources:
 - **Consigné par :** claude-code/agent
 
 [^src-6dd92801]: post-processors-runner/post-processor-user/src/post-processors/options/event-creation-successfull-badge-options.ts
+[^src-d5381e8a]: post-processors-runner/post-processor-social/src/post-processors/events/event-created.post-processor.ts

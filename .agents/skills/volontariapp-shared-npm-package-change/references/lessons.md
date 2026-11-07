@@ -68,9 +68,18 @@ sources:
   - id: src-884f50ed
     resource: "https://github.com/Volontariapp/ms-storage/pull/47"
     title: "https://github.com/Volontariapp/ms-storage/pull/47"
+  - id: src-8f1c315c
+    resource: npm-packages/packages/domain-social/package.json
+    title: npm-packages/packages/domain-social/package.json
 ---
 
 # Leçons
+
+## 2026-11-07 - Build et lint local d'un domain-*: reconstruire shared puis messaging, eslint depuis la racine
+
+- **Type :** pitfall
+- **Leçon :** yarn build dans domain-social echoue (EVENT_SOCIAL_ATTENDANCE_SET introuvable) tant que les dist amont sont perimes : reconstruire dans l'ordre yarn --cwd packages/shared build puis packages/messaging build puis le package. yarn lint dans le workspace repond command not found: eslint ; lancer npm-packages/node_modules/.bin/eslint depuis packages/<pkg>. Les ~34 erreurs no-unnecessary-type-assertion sur src/services sont un artefact de dist perimes et existent aussi sur main propre (verifie avec git stash) : ne linter que les fichiers touches, la CI tranche.[^src-8f1c315c]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-07 - Une seule copie de @volontariapp/database apres un bump de domain-*
 
@@ -302,3 +311,4 @@ sources:
 [^src-0d12895f]: https://github.com/Volontariapp/ms-social/pull/65
 [^src-bbec3532]: .claude/hooks/post-edit.sh
 [^src-884f50ed]: https://github.com/Volontariapp/ms-storage/pull/47
+[^src-8f1c315c]: npm-packages/packages/domain-social/package.json

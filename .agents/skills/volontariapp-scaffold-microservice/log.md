@@ -2,6 +2,7 @@
 
 ## 2026-11-07
 
+- **Vérification** - Relu : domain-social, ecritures Neo4j en transaction geree, aucune etape du scaffold ne change (claude-code/agent)
 - **Vérification** - Relu : la modification du deployment traffic-simulator (variables d'environnement uniquement) ne change aucune etape du scaffold (claude-code/agent)
 - **Vérification** - quota prod limits.cpu 56 (claude-code/agent)
 - **Vérification** - quota prod limits.memory 28Gi (claude-code/agent)

@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-11-07
+
+- **Vérification** - Lecons Neo4j executeWrite et build local ordonne; regles du STOP inchangees (claude-code/agent)
+- **Leçon** - EventCreatedPostProcessor (social) avale les erreurs Neo4j puis acquitte (pitfall) (claude-code/agent)
+
 ## 2026-11-04
 
 - **Vérification** - 0ad1031d : la reclamation ordonne par created_at puis id ; FOR UPDATE SKIP LOCKED et PROCESSING inchanges (claude-code/agent)

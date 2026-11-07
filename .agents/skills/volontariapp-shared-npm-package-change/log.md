@@ -2,6 +2,8 @@
 
 ## 2026-11-07
 
+- **Vérification** - Lecons Neo4j executeWrite et build local ordonne; regles du STOP inchangees (claude-code/agent)
+- **Leçon** - Build et lint local d'un domain-*: reconstruire shared puis messaging, eslint depuis la racine (pitfall) (claude-code/agent)
 - **Leçon** - Une seule copie de @volontariapp/database apres un bump de domain-* (pitfall) (Claude)
 - **Leçon** - Un sous-agent partage le verrou STOP de sa session (pitfall) (Claude)
 
