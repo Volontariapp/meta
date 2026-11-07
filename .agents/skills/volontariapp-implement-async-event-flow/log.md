@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-07
+
+- **Leçon** - Module ws-service : structure AGENT.md et classes SOLID (rule) (Victor)
+
 ## 2026-11-06
 
 - **Leçon** - ranking.ready est partage par les deux listes : le type de liste est ajoute dans originalPayload (rule) (claude-code/claude-sonnet-5-5)

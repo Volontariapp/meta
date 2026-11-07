@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-07
+
+- **Leçon** - PR automatique et PR manuelle sur contracts (decision) (Claude)
+
 ## 2026-10-30
 
 - **Vérification** - Ajout contrats SetEventAttendance, GetEventAttendees et scoring_version (claude-code/agent)

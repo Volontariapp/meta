@@ -79,6 +79,10 @@
     {
       "name": "nativapp",
       "path": "../nativapp"
+    },
+    {
+      "name": "traffic-simulator",
+      "path": "../traffic-simulator"
     }
   ],
   "settings": {

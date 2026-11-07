@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-11-07
+
+- **Vérification** - Fix port et URL api-gateway pour traffic-simulator (claude-code/agent)
+- **Vérification** - Ajout de l'application ArgoCD prod-traffic-simulator et son overlay (claude-code/agent)
+- **Vérification** - Ajout du sous-module traffic-simulator et de sa NetworkPolicy (claude-code/agent)
+
 ## 2026-11-06
 
 - **Leçon** - Nouvelle dépendance gRPC d'un runner: variable d'environnement dans deploy avant le code (rule) (claude-code/agent)

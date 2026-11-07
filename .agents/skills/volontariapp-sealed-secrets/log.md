@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-07
+
+- **Vérification** - Ajout overlay prod traffic-simulator (claude-code/agent)
+
 ## 2026-10-21
 
 - **Vérification** - reseal ranking-secrets with full valid TYPESAFE_API_KEY (claude-code/agent)

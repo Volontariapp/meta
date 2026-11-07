@@ -24,28 +24,20 @@ generated:
   at: "2026-10-12T12:18:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-30T11:56:29Z"
-    digest: 6b1c743cb3f451fc
-  - by: claude-code/agent
-    at: "2026-10-30T12:24:35Z"
-    digest: c8a2114d0fd9e692
-  - by: claude-code/agent
-    at: "2026-10-30T12:29:16Z"
-    digest: 5eb9cf0a0248d275
-  - by: claude-code/agent
-    at: "2026-11-03T20:31:04Z"
-    digest: 12ce8c4542fefc25
-  - by: claude-code/agent
-    at: "2026-11-04T17:55:26Z"
-    digest: e6d3d8b867be57d6
-    at: "2026-11-04T21:25:07Z"
-    digest: 999d930897d7866a
-  - by: claude-code/agent
     at: "2026-11-04T21:34:47Z"
     digest: 461fe6204c3bacd5
   - by: claude-code/agent
     at: "2026-11-04T21:36:02Z"
     digest: 824d0b72f8321d67
+  - by: claude-code/agent
+    at: "2026-11-07T14:21:19Z"
+    digest: 2761313b80524fe9
+  - by: claude-code/agent
+    at: "2026-11-07T14:28:09Z"
+    digest: 1670cbe5ef3fa331
+  - by: claude-code/agent
+    at: "2026-11-07T14:45:15Z"
+    digest: 749f05a8fe9bb68a
 sources:
   - id: doc-creation
     kind: local_file

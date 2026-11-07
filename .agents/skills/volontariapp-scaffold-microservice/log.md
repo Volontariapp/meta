@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-11-07
+
+- **Vérification** - Fix port et URL api-gateway pour traffic-simulator (claude-code/agent)
+- **Vérification** - Ajout application ArgoCD traffic-simulator (claude-code/agent)
+- **Vérification** - Ajout du sous-module traffic-simulator dans deploy (claude-code/agent)
+
 ## 2026-11-04
 
 - **Vérification** - reviewed only api-gateway@8521e2f (fetchAllPages, covered by volontariapp-api-gateway); the other flagged files were not read (claude-code/agent)

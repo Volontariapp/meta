@@ -107,6 +107,12 @@
       "role": "mobile",
       "description": "Application React Native (Expo)",
       "install": true
+    },
+    {
+      "name": "traffic-simulator",
+      "role": "tooling",
+      "description": "Simulateur de trafic et d'activité en temps réel (Paris 20 arrondissements & posts)",
+      "install": true
     }
   ],
   "units": [

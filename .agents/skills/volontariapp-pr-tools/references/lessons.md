@@ -11,9 +11,24 @@ sources:
   - id: src-b4ad13c6
     resource: "https://github.com/Volontariapp/ci-tools/pull/74"
     title: "https://github.com/Volontariapp/ci-tools/pull/74"
+  - id: src-8cc65ece
+    resource: scripts/pr-label.sh
+    title: scripts/pr-label.sh
 ---
 
 # Leçons
+
+## 2026-11-07 - CI complete des depots back : label puis rerun
+
+- **Type :** command
+- **Leçon :** La CI complete (docker et E2E) des depots back exige le label docker-and-e2e. Poser le label ne relance pas la CI : gh run rerun <id> --failed.[^src-8cc65ece]
+- **Consigné par :** Claude
+
+## 2026-11-07 - PR empilee fermee a la fusion de sa parente
+
+- **Type :** pitfall
+- **Leçon :** Une PR empilee est fermee definitivement si sa branche de base est supprimee a la fusion de la PR parente (--delete-branch). La rebaser sur main avant cette fusion : gh pr edit --base main.[^src-8cc65ece]
+- **Consigné par :** Claude
 
 ## 2026-11-05 - Branches protégées : ms-user, ms-post, api-gateway, ci-tools et deploy exigent une approbation
 
@@ -28,3 +43,4 @@ sources:
 - **Consigné par :** claude-code/agent
 
 [^src-b4ad13c6]: https://github.com/Volontariapp/ci-tools/pull/74
+[^src-8cc65ece]: scripts/pr-label.sh
