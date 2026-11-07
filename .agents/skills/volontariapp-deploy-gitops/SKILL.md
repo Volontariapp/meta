@@ -19,9 +19,6 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-11-07T14:45:05Z"
-    digest: 840bbb064bf2226e
-  - by: claude-code/agent
     at: "2026-11-07T15:27:45Z"
     digest: f00ff3a6c5d9d71c
   - by: claude-code/agent
@@ -33,6 +30,9 @@ verified:
   - by: claude-code/agent
     at: "2026-11-07T15:49:18Z"
     digest: 588cb1216d7d8ddb
+  - by: claude-code/agent
+    at: "2026-11-07T15:55:35Z"
+    digest: f42f7925a6ae2c42
 sources:
   - id: c4
     resource: docs/architecture/C4-Deployment-And-Infrastructure.md
@@ -133,7 +133,7 @@ Pour éviter les crash-loops au démarrage du pod, injecter l'initContainer stan
   - Microservices `ms-*` : Requests 100m / 128Mi, Limits 500m / 256Mi.
   - Runners outbox / post-processors : Requests 50m / 64Mi, Limits 200m / 128Mi.
   - Workers Node.js : Request 96Mi, Limit 192Mi (ne jamais fixer 96Mi de limit : risque d'OOMKill avéré).
-- **Limits CPU x4 (2026-11-07)** : toutes les `limits.cpu` (apps, runners, bases Postgres, Redis, Neo4j) ont été multipliées par 4 ; les `requests` sont inchangées car le cluster n'a qu'un nœud de 8 CPU (requests à 44 %). Les valeurs ci-dessus pour les limits CPU sont donc à lire x4. Le quota `prod` passe à `limits.cpu: 40` et `limits.memory: 28Gi` (à 18Gi, un redémarrage du nœud bloquait la création de `redis-master` : les anciens pods `Unknown` comptent dans le quota, `kubectl describe statefulset` montre alors `exceeded quota`) ; il faut le recalculer à chaque ajout de composant ou de `maxReplicas`. Monter les requests suppose d'abord d'ajouter un nœud worker K3s.
+- **Limits CPU x4 (2026-11-07)** : toutes les `limits.cpu` (apps, runners, bases Postgres, Redis, Neo4j) ont été multipliées par 4 ; les `requests` sont inchangées car le cluster n'a qu'un nœud de 8 CPU (requests à 44 %). Les valeurs ci-dessus pour les limits CPU sont donc à lire x4. Le quota `prod` passe à `limits.cpu: 56` (l'api-gateway à 6 pods en prend 12 à elle seule) et `limits.memory: 28Gi` (à 18Gi, un redémarrage du nœud bloquait la création de `redis-master` : les anciens pods `Unknown` comptent dans le quota, `kubectl describe statefulset` montre alors `exceeded quota`) ; il faut le recalculer à chaque ajout de composant ou de `maxReplicas`. Monter les requests suppose d'abord d'ajouter un nœud worker K3s.
 - **Broker d'Outbox (`REDIS_HOST`)** :
   - Tout `deployment-outbox.yaml` doit pointer vers `redis-master` (broker global du mesh). Ne jamais brancher une outbox sur un Redis local isolé.
 
