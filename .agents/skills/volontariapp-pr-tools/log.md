@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-11-07
+
+- **Leçon** - CI complete des depots back : label puis rerun (command) (Claude)
+- **Leçon** - PR empilee fermee a la fusion de sa parente (pitfall) (Claude)
+
 ## 2026-11-05
 
 - **Leçon** - Branches protégées : ms-user, ms-post, api-gateway, ci-tools et deploy exigent une approbation (pitfall) (claude-code/claude-opus-5-5)

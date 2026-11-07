@@ -11,9 +11,18 @@ sources:
   - id: src-69763d1f
     resource: ci-tools/.github/workflows/proto-sync.yml
     title: ci-tools/.github/workflows/proto-sync.yml
+  - id: src-46c005bd
+    resource: "https://github.com/Volontariapp/docs/blob/main/live-events/04-contrats-et-backend.md"
+    title: "https://github.com/Volontariapp/docs/blob/main/live-events/04-contrats-et-backend.md"
 ---
 
 # Leçons
+
+## 2026-11-07 - PR automatique et PR manuelle sur contracts
+
+- **Type :** decision
+- **Leçon :** La PR automatique de proto-registry fait un bump patch de contracts et contracts-nest et de leurs dependants. Une PR manuelle qui touche aussi contracts se code en parallele : changeset add tot, changeset version seulement apres rebase sur la PR automatique fusionnee.[^src-46c005bd]
+- **Consigné par :** Claude
 
 ## 2026-10-06 - proto-sync ne regenere que le dernier commit d'un push
 
@@ -22,3 +31,4 @@ sources:
 - **Consigné par :** claude-code/agent
 
 [^src-69763d1f]: ci-tools/.github/workflows/proto-sync.yml
+[^src-46c005bd]: https://github.com/Volontariapp/docs/blob/main/live-events/04-contrats-et-backend.md

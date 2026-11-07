@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-11-07
+
+- **Leçon** - Une seule copie de @volontariapp/database apres un bump de domain-* (pitfall) (Claude)
+- **Leçon** - Un sous-agent partage le verrou STOP de sa session (pitfall) (Claude)
+
 ## 2026-11-06
 
 - **Leçon** - Lever le verrou: npm view sur chaque package bumpé du commit de merge (rule) (claude-code/agent)

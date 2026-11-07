@@ -72,6 +72,18 @@ sources:
 
 # Leçons
 
+## 2026-11-07 - Une seule copie de @volontariapp/database apres un bump de domain-*
+
+- **Type :** pitfall
+- **Leçon :** Apres un bump de @volontariapp/domain-* chez un consommateur, verifier qu'il n'y a qu'une copie de @volontariapp/database dans yarn.lock. Sinon TypeORM echoue (No metadata for EventQueueModel, No mapping registered from JobsOutboxEntity) et toute ecriture renvoie 500. Aligner database, shared et outbox sur les versions du domaine. L'artefact CI e2e-diagnostics contient les journaux des services.[^src-37dd6836]
+- **Consigné par :** Claude
+
+## 2026-11-07 - Un sous-agent partage le verrou STOP de sa session
+
+- **Type :** pitfall
+- **Leçon :** Un sous-agent Claude Code partage le session_id de sa session, donc son verrou STOP : les lots qui modifient npm-packages ou proto-registry tournent dans un processus claude -p separe. La commande release leve les verrous de toutes les sessions.[^src-19653288]
+- **Consigné par :** Claude
+
 ## 2026-11-06 - Lever le verrou: npm view sur chaque package bumpé du commit de merge
 
 - **Type :** rule

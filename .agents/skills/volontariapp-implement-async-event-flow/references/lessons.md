@@ -71,9 +71,18 @@ sources:
   - id: src-faf8fc8a
     resource: post-processors-runner/post-processor-user/src/config/custom-config.ts
     title: post-processors-runner/post-processor-user/src/config/custom-config.ts
+  - id: src-fe4a226a
+    resource: AGENT.md
+    title: AGENT.md
 ---
 
 # Leçons
+
+## 2026-11-07 - Module ws-service : structure AGENT.md et classes SOLID
+
+- **Type :** rule
+- **Leçon :** Un nouveau module de ws-service suit AGENT.md section 3 (src/modules/<domaine>/ avec controllers, gateways, guards, dto/request, services, repositories/interfaces et repositories/redis, domain). Le controleur HTTP et le gateway socket ne font que du transport ; les regles vont dans des services de cas d'usage et des objets du domaine ; Redis est derriere des interfaces de repository injectees par jeton (une interface par preoccupation : autorisation, position, cadence). Correction de Victor sur ws-service#54 (2026-11-07) : un module plat src/live/ avec un service Redis fourre-tout et la logique metier dans le gateway a ete refuse.[^src-fe4a226a]
+- **Consigné par :** Victor
 
 ## 2026-11-06 - ranking.ready est partage par les deux listes : le type de liste est ajoute dans originalPayload
 
@@ -251,3 +260,4 @@ sources:
 [^src-7386448c]: post-processors-runner/post-processor-user/src/core/services/badge-evaluator.service.ts
 [^src-6047c95e]: post-processors-runner/post-processor-user/src/core/clients/post-author.resolver.ts
 [^src-faf8fc8a]: post-processors-runner/post-processor-user/src/config/custom-config.ts
+[^src-fe4a226a]: AGENT.md
