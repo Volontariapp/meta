@@ -19,20 +19,20 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-28T23:37:26Z"
-    digest: a2a21b3fd446e19d
+    at: "2026-11-07T15:27:45Z"
+    digest: f00ff3a6c5d9d71c
   - by: claude-code/agent
-    at: "2026-11-01T16:31:56Z"
-    digest: f9376622b891cce2
+    at: "2026-11-07T15:32:13Z"
+    digest: 9bae38756510c312
   - by: claude-code/agent
-    at: "2026-11-07T14:21:18Z"
-    digest: df0c119d58209b78
+    at: "2026-11-07T15:34:32Z"
+    digest: b48ec88eaae14f12
   - by: claude-code/agent
-    at: "2026-11-07T14:27:57Z"
-    digest: c02cc211cbd90e1c
+    at: "2026-11-07T15:49:18Z"
+    digest: 588cb1216d7d8ddb
   - by: claude-code/agent
-    at: "2026-11-07T14:45:05Z"
-    digest: 840bbb064bf2226e
+    at: "2026-11-07T15:55:35Z"
+    digest: f42f7925a6ae2c42
 sources:
   - id: c4
     resource: docs/architecture/C4-Deployment-And-Infrastructure.md
@@ -133,8 +133,15 @@ Pour éviter les crash-loops au démarrage du pod, injecter l'initContainer stan
   - Microservices `ms-*` : Requests 100m / 128Mi, Limits 500m / 256Mi.
   - Runners outbox / post-processors : Requests 50m / 64Mi, Limits 200m / 128Mi.
   - Workers Node.js : Request 96Mi, Limit 192Mi (ne jamais fixer 96Mi de limit : risque d'OOMKill avéré).
+- **Limits CPU x4 (2026-11-07)** : toutes les `limits.cpu` (apps, runners, bases Postgres, Redis, Neo4j) ont été multipliées par 4 ; les `requests` sont inchangées car le cluster n'a qu'un nœud de 8 CPU (requests à 44 %). Les valeurs ci-dessus pour les limits CPU sont donc à lire x4. Le quota `prod` passe à `limits.cpu: 56` (l'api-gateway à 6 pods en prend 12 à elle seule) et `limits.memory: 28Gi` (à 18Gi, un redémarrage du nœud bloquait la création de `redis-master` : les anciens pods `Unknown` comptent dans le quota, `kubectl describe statefulset` montre alors `exceeded quota`) ; il faut le recalculer à chaque ajout de composant ou de `maxReplicas`. Monter les requests suppose d'abord d'ajouter un nœud worker K3s.
 - **Broker d'Outbox (`REDIS_HOST`)** :
   - Tout `deployment-outbox.yaml` doit pointer vers `redis-master` (broker global du mesh). Ne jamais brancher une outbox sur un Redis local isolé.
+
+### 4. Haute disponibilité et autoscaling (modèle : `api-gateway`) :
+- Le load balancer est Traefik (Ingress vers le Service ClusterIP, répartition sur les endpoints des pods prêts) : aucun LB à ajouter.
+- `deploy/apps/base/api-gateway/` : pas de champ `replicas` dans le Deployment (l'HPA le pilote, sinon ArgoCD se bat avec lui), `hpa.yaml` (min 3, max 6, CPU 70 % seul, scale-down stabilisé 300 s ; pas de métrique mémoire : elle se mesure contre la request et dépasse toujours 80 % sur un pod Node, d'où un scale-up parasite jusqu'au quota), `pdb.yaml` (`minAvailable: 2`), `readinessProbe`, `preStop: sleep 10`, `maxUnavailable: 0` et `topologySpreadConstraints` par nœud.
+- Le `ResourceQuota` de `prod` (requests CPU 6, limits CPU 10) plafonne `maxReplicas` : recalculer avant d'augmenter.
+- L'HPA exige metrics-server (livré par défaut avec K3s) et des `requests` sur chaque conteneur.
 
 ---
 

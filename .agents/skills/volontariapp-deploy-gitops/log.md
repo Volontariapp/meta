@@ -2,6 +2,11 @@
 
 ## 2026-11-07
 
+- **Vérification** - quota prod limits.cpu 56 (claude-code/agent)
+- **Vérification** - quota prod limits.memory 28Gi (claude-code/agent)
+- **Vérification** - limits CPU x4, quota limits.cpu 40 (claude-code/agent)
+- **Vérification** - HPA api-gateway: CPU seul, metrique memoire retiree (claude-code/agent)
+- **Vérification** - api-gateway HA: HPA 3-6, PDB, readiness, replicas pilotes par l'HPA (claude-code/agent)
 - **Vérification** - Fix port et URL api-gateway pour traffic-simulator (claude-code/agent)
 - **Vérification** - Ajout de l'application ArgoCD prod-traffic-simulator et son overlay (claude-code/agent)
 - **Vérification** - Ajout du sous-module traffic-simulator et de sa NetworkPolicy (claude-code/agent)
