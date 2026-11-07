@@ -2,6 +2,7 @@
 
 ## 2026-11-07
 
+- **Vérification** - limits CPU x4, quota limits.cpu 40 (claude-code/agent)
 - **Vérification** - Ajout overlay prod traffic-simulator (claude-code/agent)
 
 ## 2026-10-21

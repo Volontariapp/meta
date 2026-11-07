@@ -2,6 +2,7 @@
 
 ## 2026-11-07
 
+- **Vérification** - limits CPU x4, quota limits.cpu 40 (claude-code/agent)
 - **Vérification** - relu: HPA hors perimetre, aucun changement (claude-code/agent)
 - **Vérification** - relu: aucun changement requis, replicas/HPA hors perimetre (claude-code/agent)
 - **Vérification** - Fix port et URL api-gateway pour traffic-simulator (claude-code/agent)

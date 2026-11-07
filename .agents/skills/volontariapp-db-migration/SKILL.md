@@ -18,9 +18,6 @@ generated:
   at: "2026-10-12T11:56:30Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-30T12:24:33Z"
-    digest: a54b076ffe78093d
-  - by: claude-code/agent
     at: "2026-11-01T16:23:06Z"
     digest: 20ce5bb2eb406974
   - by: claude-code/agent
@@ -32,6 +29,9 @@ verified:
   - by: claude-code/agent
     at: "2026-11-06T14:04:00Z"
     digest: a6bfa42cee9dd9ef
+  - by: claude-code/agent
+    at: "2026-11-07T15:34:34Z"
+    digest: 65868a898ae28556
 sources:
   - id: sync-mig
     kind: local_file

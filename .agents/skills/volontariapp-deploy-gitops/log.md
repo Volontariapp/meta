@@ -2,6 +2,7 @@
 
 ## 2026-11-07
 
+- **Vérification** - limits CPU x4, quota limits.cpu 40 (claude-code/agent)
 - **Vérification** - HPA api-gateway: CPU seul, metrique memoire retiree (claude-code/agent)
 - **Vérification** - api-gateway HA: HPA 3-6, PDB, readiness, replicas pilotes par l'HPA (claude-code/agent)
 - **Vérification** - Fix port et URL api-gateway pour traffic-simulator (claude-code/agent)

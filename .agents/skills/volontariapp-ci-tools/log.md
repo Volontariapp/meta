@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-07
+
+- **Vérification** - limits CPU x4, quota limits.cpu 40 (claude-code/agent)
+
 ## 2026-11-06
 
 - **Leçon** - Assertion « n'est pas compté » dans un E2E: utiliser un utilisateur-barrière (rule) (claude-code/agent)

@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-07
+
+- **Vérification** - limits CPU x4, quota limits.cpu 40 (claude-code/agent)
+
 ## 2026-11-06
 
 - **Vérification** - Migration AddBadgePointsAndProgressDedup (domain-user puis copie byte-identique dans ms-user): ordre sous la regle du STOP, validation sur Postgres jetable, entites a declarer. (claude-code/agent)
