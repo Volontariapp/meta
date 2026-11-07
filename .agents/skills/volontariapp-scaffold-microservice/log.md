@@ -2,6 +2,8 @@
 
 ## 2026-11-07
 
+- **Vérification** - relu: HPA hors perimetre, aucun changement (claude-code/agent)
+- **Vérification** - relu: aucun changement requis, replicas/HPA hors perimetre (claude-code/agent)
 - **Vérification** - Fix port et URL api-gateway pour traffic-simulator (claude-code/agent)
 - **Vérification** - Ajout application ArgoCD traffic-simulator (claude-code/agent)
 - **Vérification** - Ajout du sous-module traffic-simulator dans deploy (claude-code/agent)
