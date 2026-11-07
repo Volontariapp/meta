@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-11-07
+
+- **Vérification** - Correction d'une phrase non verifiee sur le delai du gather (claude-code/agent)
+- **Vérification** - Echec Neo4j de EventCreatedPostProcessor relance (retry puis DLQ), regle de non-avalement etendue a la creation (claude-code/agent)
+- **Leçon** - Echec Neo4j d'un post-processor: retry puis DLQ au lieu d'une perte silencieuse (rule) (claude-code/agent)
+
 ## 2026-11-04
 
 - **Vérification** - runners ci.yml: notify-ready job added (CI only, skill content unaffected) (claude-code/agent)

@@ -53,20 +53,9 @@ sources:
     title: SAGA_GATHER_COMPLETION_MAPPING
 verified:
   - by: claude-code/agent
-    at: "2026-10-30T10:56:24Z"
-    digest: 750265fe9ab9040f
-  - by: claude-code/agent
-    at: "2026-10-30T11:45:18Z"
-    digest: 4cd316afb08e2d0e
-  - by: claude-code/agent
-    at: "2026-11-01T16:28:55Z"
-    digest: 01bc26f08ac0b5ea
-  - by: claude-code/agent
     at: "2026-11-01T20:03:31Z"
     digest: c217f4c9b47cbcb2
   - by: claude-code/agent
-    at: "2026-11-04T13:14:01Z"
-    digest: 864e7be1b3e04ae6
     at: "2026-11-04T21:25:05Z"
     digest: 5c089446c1791e43
   - by: claude-code/agent
@@ -75,6 +64,9 @@ verified:
   - by: claude-code/agent
     at: "2026-11-04T21:36:01Z"
     digest: cf5b1e66e231ffa7
+  - by: claude-code/agent
+    at: "2026-11-07T23:14:10Z"
+    digest: db5e5e420344c900
 ---
 
 # Guide : Implémenter un Flux Asynchrone End-to-End
@@ -252,7 +244,8 @@ Chaque domaine impacté possède son propre post-processor dans `post-processors
            // Émission éventuelle du feedback de succès
          } catch (error) {
            this.logger.error(`Failed processing event`, { messageId, error });
-           // Émission du feedback d'échec pour compensation (Saga)
+           // Émission du feedback d'échec pour compensation (Saga), puis `throw error` pour laisser
+           // BatchPostProcessor rejouer le lot (backoff) puis l'envoyer en DLQ ; sans relance le message est acquitté
          }
        }
      }
@@ -316,7 +309,7 @@ Lorsque plusieurs post-processors travaillent en parallèle (ex : `post-processo
 - [ ] **Gestion des Sagas :** Si un post-processor échoue dans un scatter-gather, émettre l'événement `*_FAILED` pour que les autres processeurs effectuent leur rollback logique.
 - [ ] **Toujours `getEventStreamName` dans les options de post-processor :** L'outbox pusher préfixe systématiquement les flux par `stream:`. Le provider d'options d'un post-processor DOIT obligatoirement faire `streamName: getEventStreamName(Streams.MON_STREAM)`.
 - [ ] **Fan-out vers plusieurs domaines :** `event-queue.pusher.ts` fait un `XADD` par stream de `targetServices`. Un événement lu par plusieurs services (ex: `user.deleted`) exige donc UN stream par consommateur (`Streams.USER_DELETED_POST`, `USER_DELETED_EVENT`, `USER_DELETED_STORAGE`, `SOCIAL_USER`, plus `USER_DELETED` pour `ws-service`). Les événements de complétion partagent le stream de feedback WS (`WS_USER_DELETED_FEEDBACK`), avec un consumer group distinct par classe de processor côté `ws-service`.
-- [ ] **Ne pas avaler les erreurs d'un post-processor de purge :** un `catch` qui logue sans relancer acquitte le message, donc ni retry (`RetryHelper`, 5 tentatives) ni DLQ, et le gather reste `PENDING` sans timeout. Relancer, et émettre `*_DELETION_FAILED` quand les retries sont épuisés. Les purges doivent être idempotentes ("déjà supprimé" = succès).
+- [ ] **Ne pas avaler les erreurs d'un post-processor (purge ET création) :** un `catch` qui logue sans relancer acquitte le message, donc ni retry (`RetryHelper`, 5 tentatives) ni DLQ, et le gather reste `PENDING` sans timeout. Cas réel côté création : `EventCreatedPostProcessor` de `post-processor-social` journalisait l'échec de `createEventsBatch` (deadlock Neo4j), émettait le feedback WebSocket puis acquittait, perdant le nœud `SocialEvent` sans rejeu ; il relance désormais l'erreur avant toute émission, ce qui rend le rejeu sans doublon. Relancer, et émettre `*_DELETION_FAILED` quand les retries sont épuisés. Les purges doivent être idempotentes ("déjà supprimé" = succès).
 - [ ] **Notification utilisateur en push direct (sans gather), modèle `user.badge_awarded` / `user.impact_score_credited` :** le gather ne sert qu'aux sagas où plusieurs services confirment pour un même `correlationId`. Une notification à un seul destinataire n'y touche pas : `gather-registry.ts` et `scatterGather.aggregations` restent inchangés. Sept sites dans `npm-packages` à calquer sur `USER_BADGE_AWARDED` (`grep -rn USER_BADGE_AWARDED packages --include='*.ts'`) : `shared/src/enums/streams.enum.ts`, `messaging/src/events/user/payloads.ts` (enum, interface), `messaging/src/events/index.ts` (import et `EventRegistry`), `messaging/src/websockets/users/{types,payload,mapping}.ts`, `messaging/src/websockets/index.ts` (import et registre). Test à calquer : `messaging/src/test/badge-awarded-messaging.unit.spec.ts`. Reconstruire dans l'ordre `shared` puis `messaging` avant de lancer les tests. Côté `ws-service`, un `BatchPostProcessor` qui appelle `NotificationService.notifyUser`, plus son provider d'options, une constante dans `options/constants.ts`, un export dans `options/index.ts` et l'enregistrement dans `post-processors.module.ts`.
 - [ ] **Champ requis ajouté à un payload d'événement :** les messages déjà présents dans le stream n'ont pas le champ (le parsing est un `JSON.parse(...) as StreamEvent`). Le post-processor doit le détecter, journaliser et ne rien créditer, jamais prendre `0` par défaut. Exemple : `IEventFinishedPayload.awardedImpactScore` (crédit de score par `ImpactScoreCreditModel`, dédup `(event_id, user_id)` dans la même transaction que l'incrément de `users.total_impact_score`). Le crédit a deux chemins (`post-processor-user/src/core/services/impact-score-crediter.service.ts`) : avec `scoringVersion >= 1` dans le payload, le score est calculé par `computeEventScoring` (`@volontariapp/shared`) sur les participants ayant fait leur check-in (`socialClient.getAllEventAttendees`), avec rôle, rang, `formulaVersion` et pool stockés sur le crédit, et des dates absentes ou illisibles donnent la tranche la plus basse sans lire l'horloge (rejeu déterministe) ; sans `scoringVersion`, ancien chemin avec `awardedImpactScore` du payload. Un événement qui n'a ni l'un ni l'autre est ignoré avec un warning.
 - [ ] **Crédit à `event.finished` hors du chemin badges :** `BadgeEvaluator.evaluateParticipantEventFinished` sort tôt quand le user possède déjà les 9 badges de participation. Un crédit placé dans cette méthode ne serait jamais appliqué à ces users.

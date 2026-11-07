@@ -2,6 +2,7 @@
 
 ## 2026-11-07
 
+- **Vérification** - Echec Neo4j de EventCreatedPostProcessor relance (retry puis DLQ), regle de non-avalement etendue a la creation (claude-code/agent)
 - **Leçon** - Module ws-service : structure AGENT.md et classes SOLID (rule) (Victor)
 
 ## 2026-11-06
