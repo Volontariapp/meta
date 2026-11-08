@@ -2,6 +2,8 @@
 
 ## 2026-11-08
 
+- **Vérification** - traffic-simulator: secret scelle traffic-simulator-admin et variables SIMULATOR_ADMIN_*, leçon ajoutee, regles inchangees (claude-code/agent)
+- **Leçon** - Compte technique ADMIN : emails chiffres en base, promouvoir par id, jamais un bot du pool (pitfall) (claude-code/agent)
 - **Leçon** - traffic-simulator : events autour d'une position via LOCAL_CENTERS, pas de lecture de position (decision) (claude)
 
 ## 2026-11-07

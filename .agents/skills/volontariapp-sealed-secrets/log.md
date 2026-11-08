@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-11-08
+
+- **Vérification** - traffic-simulator: secret scelle traffic-simulator-admin et variables SIMULATOR_ADMIN_*, leçon ajoutee, regles inchangees (claude-code/agent)
+- **Leçon** - Sceller par un tube, sans fichier en clair ni valeur dans les arguments (rule) (claude-code/agent)
+
 ## 2026-11-07
 
 - **Vérification** - quota prod limits.cpu 56 (claude-code/agent)

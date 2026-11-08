@@ -39,6 +39,12 @@ sources:
 
 # Leçons
 
+## 2026-11-08 - Compte technique ADMIN : emails chiffres en base, promouvoir par id, jamais un bot du pool
+
+- **Type :** pitfall
+- **Leçon :** Les emails de ms-user sont chiffres au repos (134 caracteres, IV aleatoire) : un WHERE email=... ne trouve rien et un LIKE sur le domaine des bots renvoie 0 sans prouver qu'il n'y a pas de bots. Creer le compte par POST /users depuis un pod du cluster (kubectl exec -i <pod> -- node -e fetch, corps par stdin), recuperer user.id, puis UPDATE users SET role='ADMIN' WHERE id=... AND role='VOLUNTEER' (base ms-user, psql dans ms-user-db-postgresql-0 avec $POSTGRES_PASSWORD expanse dans le conteneur). Ne jamais promouvoir un acteur du simulateur : leur mot de passe Password123!Secure est en dur dans traffic-simulator/src/actors/actor-pool.ts, ce serait un identifiant ADMIN public. Le secret scelle traffic-simulator-admin porte email et password.[^src-d378d88d]
+- **Consigné par :** claude-code/agent
+
 ## 2026-11-08 - traffic-simulator : events autour d'une position via LOCAL_CENTERS, pas de lecture de position
 
 - **Type :** decision

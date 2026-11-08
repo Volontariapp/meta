@@ -16,9 +16,6 @@ generated:
   at: "2026-10-12T12:02:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-21T13:01:48Z"
-    digest: f8afcd1670a2bee3
-  - by: claude-code/agent
     at: "2026-11-07T14:28:09Z"
     digest: f45400d7ad6eba03
   - by: claude-code/agent
@@ -30,6 +27,9 @@ verified:
   - by: claude-code/agent
     at: "2026-11-07T15:55:38Z"
     digest: 1a720d176fbb1d02
+  - by: claude-code/agent
+    at: "2026-11-08T12:28:01Z"
+    digest: c207d1cd393741a6
 sources:
   - id: datadog-doc
     kind: local_file

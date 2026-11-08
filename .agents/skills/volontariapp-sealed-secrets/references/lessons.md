@@ -11,9 +11,18 @@ sources:
   - id: src-926acc09
     resource: deploy/apps/overlays/prod/shared-infra/db-sealed-secret.yaml
     title: deploy/apps/overlays/prod/shared-infra/db-sealed-secret.yaml
+  - id: src-a811a0c7
+    resource: deploy/apps/overlays/prod/traffic-simulator/kustomization.yaml
+    title: deploy/apps/overlays/prod/traffic-simulator/kustomization.yaml
 ---
 
 # Leçons
+
+## 2026-11-08 - Sceller par un tube, sans fichier en clair ni valeur dans les arguments
+
+- **Type :** rule
+- **Leçon :** kubectl create secret generic <nom> -n prod --from-literal=email=... --from-file=password=<fichier 600> --dry-run=client -o yaml | kubeseal --controller-name=sealed-secrets --controller-namespace=kube-system --format=yaml > <nom>-sealed.yaml : aucun secret-temp.yaml a supprimer, et le mot de passe n'apparait dans aucune ligne de commande (ps, historique). Generer le mot de passe dans un fichier umask 077, verifier ensuite avec grep -cF -f <fichier> <sealed>.yaml que le sealed ne contient pas la valeur, puis supprimer le fichier. Exemple : deploy/apps/overlays/prod/traffic-simulator/simulator-admin-sealed-secret.yaml.[^src-a811a0c7]
+- **Consigné par :** claude-code/agent
 
 ## 2026-10-19 - Nouveau service : un wizard de scellement doit passer AVANT le merge de la PR deploy
 
@@ -28,3 +37,4 @@ sources:
 - **Consigné par :** claude-code/agent
 
 [^src-926acc09]: deploy/apps/overlays/prod/shared-infra/db-sealed-secret.yaml
+[^src-a811a0c7]: deploy/apps/overlays/prod/traffic-simulator/kustomization.yaml

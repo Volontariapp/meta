@@ -2,6 +2,7 @@
 
 ## 2026-11-08
 
+- **Vérification** - traffic-simulator: secret scelle traffic-simulator-admin et variables SIMULATOR_ADMIN_*, leçon ajoutee, regles inchangees (claude-code/agent)
 - **Vérification** - api-gateway: route admin ranking ajoutee, la skill ne decrit pas ces fichiers, regles inchangees (claude-code/agent)
 - **Vérification** - contracts: ajout des types Web GetActiveUserLocations, bump patch propage aux dependants, regles inchangees (claude-code/agent)
 - **Vérification** - ms-ranking: handler GetActiveUserLocations ajoute, la skill ne cite aucun de ces fichiers, regles inchangees (claude-code/agent)
