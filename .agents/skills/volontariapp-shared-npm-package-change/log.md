@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-11-08
+
+- **Vérification** - contracts: ajout des types Web GetActiveUserLocations, bump patch propage aux dependants, regles inchangees (claude-code/agent)
+- **Leçon** - Types web de requete et de reponse dans la meme publication (rule) (claude-code/agent)
+- **Vérification** - domain-ranking: ajout de listActiveCells et findUpdatedSince, procedure et regles inchangees (claude-code/agent)
+
 ## 2026-11-07
 
 - **Leçon** - Une seule copie de @volontariapp/database apres un bump de domain-* (pitfall) (Claude)

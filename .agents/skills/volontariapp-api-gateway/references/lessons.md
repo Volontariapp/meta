@@ -50,9 +50,18 @@ sources:
   - id: src-7e80693b
     resource: api-gateway/src/modules/user/user.module.ts
     title: api-gateway/src/modules/user/user.module.ts
+  - id: src-accfa926
+    resource: npm-packages/packages/contracts/src/gateway/ranking/response/ranking.response.ts
+    title: npm-packages/packages/contracts/src/gateway/ranking/response/ranking.response.ts
 ---
 
 # Leçons
+
+## 2026-11-08 - Une route gateway sur donnees d'un domaine : un seul cycle npm-packages
+
+- **Type :** pitfall
+- **Leçon :** Une nouvelle route gateway adossee a un nouveau RPC demande, cote npm-packages, trois choses : le code du domaine (domain-*), les types generes (PR auto de proto-registry) et les types Web de la gateway (contracts/src/gateway/<domaine>). Les poser en deux PR separees coute un cycle merge, release et verrou de plus : sur GetActiveUserLocations, domain-ranking (#307) puis les types Web (#308) ont fait deux cycles. Preparer les types Web dans la meme PR que le code du domaine, avant de rendre la main.[^src-accfa926]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-08 - Une route statique sous /users se declare avant GET /users/:id
 
@@ -200,3 +209,4 @@ sources:
 [^src-553b66ac]: https://github.com/Volontariapp/api-gateway/pull/101
 [^src-82045402]: https://github.com/Volontariapp/api-gateway/pull/106
 [^src-7e80693b]: api-gateway/src/modules/user/user.module.ts
+[^src-accfa926]: npm-packages/packages/contracts/src/gateway/ranking/response/ranking.response.ts

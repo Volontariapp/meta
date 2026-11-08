@@ -1,5 +1,13 @@
 # Historique
 
+## 2026-11-08
+
+- **Vérification** - api-gateway: route admin ranking ajoutee, la skill ne decrit pas ces fichiers, regles inchangees (claude-code/agent)
+- **Vérification** - contracts: ajout des types Web GetActiveUserLocations, bump patch propage aux dependants, regles inchangees (claude-code/agent)
+- **Vérification** - ms-ranking: handler GetActiveUserLocations ajoute, la skill ne cite aucun de ces fichiers, regles inchangees (claude-code/agent)
+- **Vérification** - domain-ranking: ajout de listActiveCells et findUpdatedSince, procedure et regles inchangees (claude-code/agent)
+- **Vérification** - ranking: ajout additif du RPC GetActiveUserLocations, aucune regle ni commande ne change (claude-code/agent)
+
 ## 2026-11-07
 
 - **Vérification** - Relu : bump domain-social et relance d'erreur dans un post-processor, aucune etape du scaffold ne change (claude-code/agent)

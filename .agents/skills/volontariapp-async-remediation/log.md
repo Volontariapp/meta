@@ -2,6 +2,7 @@
 
 ## 2026-11-08
 
+- **Vérification** - contracts: ajout des types Web GetActiveUserLocations, bump patch propage aux dependants, regles inchangees (claude-code/agent)
 - **Vérification** - aucune regle touchee: .yarn/install-state.gz non commites des post-processors et bumps de version de post-processors (claude-code/agent)
 
 ## 2026-11-07

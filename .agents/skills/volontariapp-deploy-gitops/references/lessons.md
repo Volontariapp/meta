@@ -32,9 +32,18 @@ sources:
   - id: src-d378d88d
     resource: deploy/apps/base/traffic-simulator/deployment.yaml
     title: deploy/apps/base/traffic-simulator/deployment.yaml
+  - id: src-9c70d47e
+    resource: traffic-simulator/README.md
+    title: traffic-simulator/README.md
 ---
 
 # Leçons
+
+## 2026-11-08 - traffic-simulator : events autour d'une position via LOCAL_CENTERS, pas de lecture de position
+
+- **Type :** decision
+- **Leçon :** La position d'un utilisateur reel est stockee par ms-ranking arrondie a 1 km et chiffree, sans route de lecture : le simulateur ne peut pas la suivre, les centres se declarent par LOCAL_CENTERS (lat,lng;lat,lng) dans deploy/apps/base/traffic-simulator/deployment.yaml. Les coordonnees d'un event viennent du geocodage ASYNCHRONE de localisationName par post-processor-event, qui ecrase location : ne pas PATCH lat/lng apres creation (course), envoyer une vraie adresse (reverse-geocodage Nominatim). Pool d'acteurs locaux distinct (local.NNNN@), lie par addPeer pour ne pas etre pris pour de vrais utilisateurs. Merger la PR deploy apres le bump d'image.[^src-9c70d47e]
+- **Consigné par :** claude
 
 ## 2026-11-07 - traffic-simulator : tout se regle par variables d'environnement, deploy APRES l'image
 
@@ -116,3 +125,4 @@ sources:
 [^src-0dbb6fe8]: deploy/infrastructure/monitoring/dashboards/request-flow.json
 [^src-cd027dc7]: deploy/apps/base/ms-user/deployment-post-processor.yaml
 [^src-d378d88d]: deploy/apps/base/traffic-simulator/deployment.yaml
+[^src-9c70d47e]: traffic-simulator/README.md
