@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-08
+
+- **Vérification** - aucune regle touchee: .yarn/install-state.gz non commites des post-processors (claude-code/agent)
+
 ## 2026-11-07
 
 - **Vérification** - Echec Neo4j de EventCreatedPostProcessor relance (retry puis DLQ), regle de non-avalement etendue a la creation (claude-code/agent)

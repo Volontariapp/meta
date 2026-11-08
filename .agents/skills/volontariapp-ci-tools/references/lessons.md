@@ -54,6 +54,12 @@ sources:
 
 # Leçons
 
+## 2026-11-08 - Conteneur runner unhealthy en E2E : deux copies de @volontariapp/bridge
+
+- **Type :** pitfall
+- **Leçon :** Le healthcheck des runners est wget sur /health. Un /health qui repond 500 (Postgres provider missing for health-check) vient d un registre de providers en double : en epinglant des versions exactes (bridge-nest 0.3.22, database 3.12.10) sans aligner health-check-nest, l image contenait bridge 1.0.10 en tete et 1.0.11 sous bridge-nest, database et post-processors. Verifier avec find node_modules -path */@volontariapp/bridge/package.json dans l image ; corriger en epinglant bridge, health-check et health-check-nest (0.1.43) ensemble. Reproduction locale hors suite E2E : copier docker-compose.yml dans un dossier temporaire, generer les certificats (scripts/generate-certs.sh), docker compose --profile e2e up -d <service> avec un override platform linux/amd64 pour le seul service applicatif (redis segfault sous qemu amd64 sur Apple Silicon).[^src-5601ca7f]
+- **Consigné par :** claude-code/agent
+
 ## 2026-11-06 - Assertion « n'est pas compté » dans un E2E: utiliser un utilisateur-barrière
 
 - **Type :** rule

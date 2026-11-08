@@ -47,9 +47,27 @@ sources:
   - id: src-82045402
     resource: "https://github.com/Volontariapp/api-gateway/pull/106"
     title: "https://github.com/Volontariapp/api-gateway/pull/106"
+  - id: src-7e80693b
+    resource: api-gateway/src/modules/user/user.module.ts
+    title: api-gateway/src/modules/user/user.module.ts
+  - id: src-accfa926
+    resource: npm-packages/packages/contracts/src/gateway/ranking/response/ranking.response.ts
+    title: npm-packages/packages/contracts/src/gateway/ranking/response/ranking.response.ts
 ---
 
 # Leçons
+
+## 2026-11-08 - Une route gateway sur donnees d'un domaine : un seul cycle npm-packages
+
+- **Type :** pitfall
+- **Leçon :** Une nouvelle route gateway adossee a un nouveau RPC demande, cote npm-packages, trois choses : le code du domaine (domain-*), les types generes (PR auto de proto-registry) et les types Web de la gateway (contracts/src/gateway/<domaine>). Les poser en deux PR separees coute un cycle merge, release et verrou de plus : sur GetActiveUserLocations, domain-ranking (#307) puis les types Web (#308) ont fait deux cycles. Preparer les types Web dans la meme PR que le code du domaine, avant de rendre la main.[^src-accfa926]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-08 - Une route statique sous /users se declare avant GET /users/:id
+
+- **Type :** pitfall
+- **Leçon :** LeaderboardQueryController (GET /users/leaderboard et GET /users/me/rank) est declare avant UserAdminQueryController dans UserModule : l ordre des controleurs decide laquelle de deux routes qui peuvent correspondre repond, et GET /users/:id (admin) prendrait leaderboard pour un identifiant. Un test d integration supertest qui reprend l ordre des controleurs du module, verifie que adminGetUser n est pas appele et couvre les 400 de validation (scope inconnu, limit hors de 1 a 100) protege ce point. Le comportement avec l ordre inverse n a pas ete teste. Le test ecrit (src/test/integration/modules/leaderboard-routing.integration.spec.ts) n est pas encore commite.[^src-7e80693b]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-05 - Avant de declarer une route gateway inutilisee, chercher aussi dans api-gateway/e2e
 
@@ -190,3 +208,5 @@ sources:
 [^src-d47502e1]: api-gateway/package.json
 [^src-553b66ac]: https://github.com/Volontariapp/api-gateway/pull/101
 [^src-82045402]: https://github.com/Volontariapp/api-gateway/pull/106
+[^src-7e80693b]: api-gateway/src/modules/user/user.module.ts
+[^src-accfa926]: npm-packages/packages/contracts/src/gateway/ranking/response/ranking.response.ts

@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-08
+
+- **Vérification** - repos.json: ajout de traffic-simulator (role tooling); aucune regle du skill touchee (claude-code/agent)
+
 ## 2026-10-28
 
 - **Vérification** - trace-flow en deux phases, limite 5 req/min, erreurs en rouge; seuls mes fichiers trace-flow et index.mjs ont change depuis le commit 7e667a4 (claude-code/agent)

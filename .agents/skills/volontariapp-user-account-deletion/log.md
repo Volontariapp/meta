@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-08
+
+- **Vérification** - cascade de badge_point_credits et badge_progress_dedup (FK ON DELETE CASCADE sur users) documentee (claude-code/agent)
+
 ## 2026-11-04
 
 - **Vérification** - marked verified on user request without reviewing the domain-user pagination, scoring and trigger commits by others; content may be outdated (claude-code/agent)

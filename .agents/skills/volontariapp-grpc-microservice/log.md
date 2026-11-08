@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-11-08
+
+- **Vérification** - classement ms-user consigne en lecon (RANK bigint, keyset, fuseau); filtre endAtFrom de ms-event sans nouvelle regle; le probleme source introuvable ms-social/neo4j-schema.initializer.ts vient du checkout local de ms-social sur feat/scoring-event-points, le fichier existe sur origin/main (claude-code/agent)
+- **Leçon** - Classement : RANK() est un bigint, curseur keyset et fuseau de la base (pitfall) (claude-code/agent)
+
 ## 2026-11-06
 
 - **Vérification** - ms-user GetMyBadgeProgress: BadgeProgressService (repositories injectes + fonction pure de shared), constante de methode absente de grpc-helpers (litteral), route me sans userId. (claude-code/agent)

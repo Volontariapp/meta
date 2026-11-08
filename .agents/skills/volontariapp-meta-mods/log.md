@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-08
+
+- **Vérification** - table des evenements des quatre mods reverifiee contre le code; seul changement depuis: ordre des cles de .claude/settings.json (502ed4e) (claude-code/agent)
+
 ## 2026-11-05
 
 - **Vérification** - tsconfig.json par mod (ecrits par le moteur au chargement) commites et documentes (claude-code/agent)

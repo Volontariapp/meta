@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-08
+
+- **Vérification** - AGENTS.md: exemple de chemin du handoff; settings.json: ordre des cles; aucune regle touchee (claude-code/agent)
+
 ## 2026-11-05
 
 - **Vérification** - SKILL_HOOK_MODE (block, quiet, off) pour le hook Stop ; documente dans references/workflow.md (claude-code/agent)

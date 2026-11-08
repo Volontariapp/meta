@@ -18,12 +18,6 @@ generated:
   at: "2026-10-12T11:58:00Z"
 verified:
   - by: claude-code/agent
-    at: "2026-11-04T18:29:00Z"
-    digest: 9a4b986b2ec95a02
-  - by: claude-code/agent
-    at: "2026-11-04T21:34:45Z"
-    digest: 33b9ef4b5b3df65a
-  - by: claude-code/agent
     at: "2026-11-04T21:36:01Z"
     digest: 036777c37dd4f448
   - by: claude-code/agent
@@ -32,6 +26,12 @@ verified:
   - by: claude-code/agent
     at: "2026-11-07T23:14:26Z"
     digest: 2360205de2f7abcd
+  - by: claude-code/agent
+    at: "2026-11-08T12:02:22Z"
+    digest: 9c93894442a0fd6f
+  - by: claude-code/agent
+    at: "2026-11-08T12:07:09Z"
+    digest: 2a04ea25b2d069e3
 sources:
   - id: retry
     kind: local_file

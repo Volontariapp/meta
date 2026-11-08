@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-11-08
+
+- **Leçon** - Une route gateway sur donnees d'un domaine : un seul cycle npm-packages (pitfall) (claude-code/agent)
+- **Vérification** - classement: routes GET /users/leaderboard et GET /users/me/rank, ordre des controleurs avant users/:id, types web de requete a l etape 0 (publies avec les reponses); routes live (PUT/DELETE /live/events/:eventId/sharing) et filtre endAtFrom ajoutes a routes.md; seed live, helper ranking et mocks de test non relus en detail (claude-code/agent)
+- **Leçon** - Une route statique sous /users se declare avant GET /users/:id (pitfall) (claude-code/agent)
+
 ## 2026-11-05
 
 - **Leçon** - Avant de declarer une route gateway inutilisee, chercher aussi dans api-gateway/e2e (pitfall) (claude-code/claude-opus-5-5)

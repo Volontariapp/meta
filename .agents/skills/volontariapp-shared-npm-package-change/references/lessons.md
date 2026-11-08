@@ -68,9 +68,18 @@ sources:
   - id: src-884f50ed
     resource: "https://github.com/Volontariapp/ms-storage/pull/47"
     title: "https://github.com/Volontariapp/ms-storage/pull/47"
+  - id: src-ac621e30
+    resource: npm-packages/packages/contracts/src/gateway/user/request/leaderboard.request.ts
+    title: npm-packages/packages/contracts/src/gateway/user/request/leaderboard.request.ts
 ---
 
 # Leçons
+
+## 2026-11-08 - Types web de requete et de reponse dans la meme publication
+
+- **Type :** rule
+- **Leçon :** yarn check-arch de api-gateway exige aussi qu un DTO de requete implemente une interface de @volontariapp/contracts (forme Partial de la query gRPC, dans packages/contracts/src/gateway/<domaine>/request/). Le classement a livre les reponses (contracts 4.11.0) puis les requetes (4.12.0) en deux fois : un cycle de publication de plus pour 14 packages, environ 15 minutes de CI et de propagation du registre. Mettre les deux dans le meme changeset.[^src-ac621e30]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-07 - Une seule copie de @volontariapp/database apres un bump de domain-*
 
@@ -302,3 +311,4 @@ sources:
 [^src-0d12895f]: https://github.com/Volontariapp/ms-social/pull/65
 [^src-bbec3532]: .claude/hooks/post-edit.sh
 [^src-884f50ed]: https://github.com/Volontariapp/ms-storage/pull/47
+[^src-ac621e30]: npm-packages/packages/contracts/src/gateway/user/request/leaderboard.request.ts

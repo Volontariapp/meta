@@ -44,9 +44,6 @@ sources:
     title: "Scénarios de panne, problèmes P2 et P4"
 verified:
   - by: claude-code/agent
-    at: "2026-10-29T12:13:50Z"
-    digest: d73e705316cfa40d
-  - by: claude-code/agent
     at: "2026-10-29T17:22:26Z"
     digest: f39e9f067a5595fa
   - by: claude-code/agent
@@ -58,6 +55,9 @@ verified:
   - by: claude-code/agent
     at: "2026-11-04T21:24:17Z"
     digest: c5dec9dcd6763cd3
+  - by: claude-code/agent
+    at: "2026-11-08T12:02:24Z"
+    digest: e6d2dea0a9ade67e
 ---
 
 # Trace Async Flow & Diagnostic Runtime
@@ -152,7 +152,7 @@ redis-cli XRANGE <stream>-dlq - + COUNT 20  # messages abandonnés après maxRet
 
 - [ ] Ne jamais supposer qu'un service pousse directement dans Redis : partir de la table outbox de sa base.
 - [ ] Toujours `analyze_impact` avant d'ouvrir un runner, puis SQL, puis Redis, dans cet ordre.
-- [ ] Les runners `outbox-*` (Node pur, sans NestJS) n'ont pas de logique propre : tout est dans `@volontariapp/outbox` et `@volontariapp/database`. Une modification du polling doit garder `FOR UPDATE SKIP LOCKED` : livraison au moins une fois, sans double publication quand le runner est répliqué.
+- [ ] Les runners `outbox-*` (Node pur, sans NestJS) n'ont pas de logique propre : tout est dans `@volontariapp/outbox` et `@volontariapp/database`. Une modification du polling doit garder `FOR UPDATE SKIP LOCKED` : livraison au moins une fois, sans double publication quand le runner est répliqué. Le lot réclamé est trié par `created_at` puis `id` (le `ORDER BY` du sous-select choisit le lot mais n'ordonne pas `UPDATE ... RETURNING`, d'où un tri côté code) : deux lignes écrites dans la même milliseconde sont ordonnées par `id`, pas par ordre d'écriture[^consumer].
 - [ ] Un diagnostic qui révèle un nouveau piège devient une leçon : `evolve.py learn --skill volontariapp-trace-async-flow --kind pitfall`.
 
 [^migrations]: Migrations communes (jobs_outbox, job_audit, event_queue, triggers)
@@ -162,3 +162,4 @@ redis-cli XRANGE <stream>-dlq - + COUNT 20  # messages abandonnés après maxRet
 [^retry]: RetryHelper (DLQ <stream>-dlq)
 [^panne]: Scénarios de panne, problèmes P2 et P4
 [^pp-failed]: JobOutboxFailedPostProcessor (bug P4)
+[^consumer]: OutboxConsumer (FOR UPDATE SKIP LOCKED, PROCESSING)
