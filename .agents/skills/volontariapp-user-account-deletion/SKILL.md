@@ -16,9 +16,6 @@ generated:
   by: claude-code/agent
   at: "2026-10-11T16:59:33Z"
 verified:
-  - by: claude-code/sonnet-5-5
-    at: "2026-10-16T12:24:45Z"
-    digest: a911501d005746f0
   - by: claude-code/agent
     at: "2026-10-17T12:32:08Z"
     digest: f72b7f94d3a033ce
@@ -29,10 +26,15 @@ verified:
     at: "2026-10-30T10:54:45Z"
     digest: b63f31dbf26972ff
   - by: claude-code/agent
-    at: "2026-11-04T15:17:07Z"
     at: "2026-11-04T20:26:39Z"
     digest: 9ff504371c918857
-sources: []
+  - by: claude-code/agent
+    at: "2026-11-08T12:02:24Z"
+    digest: 478b23700fbfdb45
+sources:
+  - id: badge-points-migration
+    resource: ms-user/src/migrations/domain/1793970000000-AddBadgePointsAndProgressDedup.ts
+    title: Migration des points de badges et de la deduplication de progression
 ---
 
 # User Account Deletion
@@ -52,7 +54,7 @@ Ce document spécifie les **invariants de domaine et règles d'architecture** po
 - Ne jamais supprimer un compte avec `IUserRepository.delete` (hérité de `BaseRepository`, `DELETE` physique sans événement).
 - Un user `PENDING_DELETION` doit être refusé au login et au refresh (côté `ms-user`, via `UserEntity.status`).
 - La migration réelle de `status` et `deletion_requested_at` vit dans `ms-user`; `domain-user/src/test/migrations` ne sert qu'aux tests d'intégration.
-- Les lignes de `impact_score_credits` (`ImpactScoreCreditModel`, dédup du crédit de score par `(event_id, user_id)`) ont une FK `ON DELETE CASCADE` sur `users` : `finalizeDeletion` les supprime avec le user, sans purge dédiée. La migration de la table vit dans `ms-user`.
+- Les lignes de `impact_score_credits` (`ImpactScoreCreditModel`, dédup du crédit de score par `(event_id, user_id)`) ont une FK `ON DELETE CASCADE` sur `users` : `finalizeDeletion` les supprime avec le user, sans purge dédiée. La migration de la table vit dans `ms-user`. Il en va de même pour `badge_point_credits` (points crédités par badge, FK `ON DELETE CASCADE` sur `users` et sur `badges`) et `badge_progress_dedup` (déduplication de la progression, FK `ON DELETE CASCADE` sur `users`)[^badge-points-migration].
 - Voir la skill `volontariapp-implement-async-event-flow` pour le gather et les pièges des post-processors de purge.
 
 ## Références
@@ -62,3 +64,5 @@ Ce document spécifie les **invariants de domaine et règles d'architecture** po
 ## Scripts
 
 - Aucun script pour l'instant. Tests: `yarn test` (unitaires) et `yarn test:integration` (Postgres `ms_user` requis) dans `npm-packages/packages/domain-user`.
+
+[^badge-points-migration]: Migration des points de badges et de la deduplication de progression

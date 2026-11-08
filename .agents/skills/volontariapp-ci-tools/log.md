@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-08
+
+- **Leçon** - Conteneur runner unhealthy en E2E : deux copies de @volontariapp/bridge (pitfall) (claude-code/agent)
+
 ## 2026-11-07
 
 - **Vérification** - quota prod limits.cpu 56 (claude-code/agent)

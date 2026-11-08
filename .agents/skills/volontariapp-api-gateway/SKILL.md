@@ -21,9 +21,6 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-10-30T11:56:28Z"
-    digest: be5ca2862e35d8ad
-  - by: claude-code/agent
     at: "2026-11-03T20:40:12Z"
     digest: be5ca2862e35d8ad
   - by: claude-code/agent
@@ -35,6 +32,9 @@ verified:
   - by: claude-code/agent
     at: "2026-11-04T17:55:25Z"
     digest: 36e80228c7f25540
+  - by: claude-code/agent
+    at: "2026-11-08T12:02:21Z"
+    digest: 6e8237e4a9c0e774
 sources:
   - id: gw-claude
     resource: api-gateway/src/modules
@@ -69,6 +69,9 @@ sources:
   - id: check-arch
     resource: api-gateway/scripts/check-dto-architecture.ts
     title: yarn check-arch (regles des DTO)
+  - id: web-requests
+    resource: npm-packages/packages/contracts/src/gateway/user/request/leaderboard.request.ts
+    title: Types web de requete du classement
 ---
 
 # Playbook : Exposer ou Modifier une Route REST Edge (API Gateway)
@@ -92,7 +95,11 @@ Ce playbook doit être exécuté dès qu'une tâche nécessite :
 
 ## Étape 0 : Le type Web du contrat doit exister (sinon, `npm-packages` d'abord)
 
-`yarn check-arch` impose qu'un DTO de **réponse** implémente une interface « Web » de `@volontariapp/contracts` : même forme que le message gRPC, mais avec des `Date` à la place des `Timestamp`. Ces interfaces sont **écrites à la main** dans `npm-packages/packages/contracts/src/gateway/<domaine>/response/*.ts` (seuls les messages gRPC sont générés). Si le type Web n'existe pas, il faut une PR `npm-packages` (ajout seul, changeset minor), sa publication, puis le déverrouillage (règle du STOP) avant d'écrire le DTO. Modèle : `BadgeProgressWeb extends Omit<BadgeProgress, 'awardedAt'> { awardedAt?: Date }` et `GetMyBadgeProgressWebResponse` (`npm-packages#300`).
+`yarn check-arch` impose deux choses[^check-arch] :
+- un DTO de **réponse** implémente une interface « Web » de `@volontariapp/contracts` : même forme que le message gRPC, mais avec des `Date` à la place des `Timestamp`, dans `npm-packages/packages/contracts/src/gateway/<domaine>/response/*.ts` ;
+- un DTO de **requête** implémente lui aussi une interface de `@volontariapp/contracts`, dans `.../gateway/<domaine>/request/*.ts`, de la forme `extends Partial<XxxQuery>`. Quand le REST expose une valeur différente du gRPC (une période en texte `'global' | 'week' | 'month'` là où le gRPC porte un enum), le type Web de requête porte la valeur REST et le DTO la convertit dans `toQuery()`[^web-requests].
+
+Ces interfaces sont **écrites à la main** (seuls les messages gRPC sont générés). Si l'un des deux types manque, il faut une PR `npm-packages` (ajout seul, changeset minor), sa publication, puis le déverrouillage (règle du STOP) avant d'écrire le DTO. **Poser le type de requête et le type de réponse dans la même PR** : le classement les a livrés en deux fois (`contracts` 4.11.0 puis 4.12.0), ce qui a coûté un cycle de publication de plus. Modèle de réponse : `BadgeProgressWeb extends Omit<BadgeProgress, 'awardedAt'> { awardedAt?: Date }` et `GetMyBadgeProgressWebResponse` (`npm-packages#300`).
 
 ## Étape 1 : Spécification du DTO Swagger & Validation
 
@@ -270,3 +277,4 @@ Avant de déclarer la tâche terminée :
 [^errors-nest]: FALLBACK_ACTIVATED (PartialContentError 206)
 [^ws-proxy]: WsProxyMiddleware
 [^check-arch]: yarn check-arch (regles des DTO)
+[^web-requests]: Types web de requete du classement

@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-08
+
+- **Vérification** - ordre du lot de l outbox (created_at puis id) ajoute a la regle de polling; listKind de ranking.ready sans effet sur le diagnostic (claude-code/agent)
+
 ## 2026-11-04
 
 - **Vérification** - 0ad1031d : la reclamation ordonne par created_at puis id ; FOR UPDATE SKIP LOCKED et PROCESSING inchanges (claude-code/agent)

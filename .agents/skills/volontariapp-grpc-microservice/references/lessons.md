@@ -38,9 +38,18 @@ sources:
   - id: src-01460755
     resource: "https://github.com/Volontariapp/ms-event/pull/89"
     title: "https://github.com/Volontariapp/ms-event/pull/89"
+  - id: src-ef70ad8f
+    resource: ms-user/src/modules/user/services/leaderboard.service.ts
+    title: ms-user/src/modules/user/services/leaderboard.service.ts
 ---
 
 # Leçons
+
+## 2026-11-08 - Classement : RANK() est un bigint, curseur keyset et fuseau de la base
+
+- **Type :** pitfall
+- **Leçon :** Dans ms-user, le classement lit en SQL brut sur le DataSource. RANK() OVER (...) revient de pg en chaine : le caster en integer dans la requete. La pagination est keyset sur (points DESC, userId ASC) avec un curseur opaque en base64url, les ex aequo partagent le rang. Les bornes de semaine (lundi 00h00) et de mois (le 1er) sont calculees en heure de Paris avec Intl puis comparees a created_at AT TIME ZONE UTC : cela suppose une session PostgreSQL en UTC, a verifier avec SHOW timezone dans chaque environnement (non verifie en production).[^src-ef70ad8f]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-05 - Le build Docker compile les tests : verifier avec tsc -p tsconfig.json, pas seulement yarn build
 
@@ -118,3 +127,4 @@ sources:
 [^src-80c5990f]: ms-post/src/modules/post/dto/common/pagination.dto.ts
 [^src-89ada337]: ms-social/src/providers/database/neo4j-schema.initializer.ts
 [^src-01460755]: https://github.com/Volontariapp/ms-event/pull/89
+[^src-ef70ad8f]: ms-user/src/modules/user/services/leaderboard.service.ts

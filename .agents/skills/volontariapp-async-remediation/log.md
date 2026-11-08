@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-08
+
+- **Vérification** - aucune regle touchee: .yarn/install-state.gz non commites des post-processors et bumps de version de post-processors (claude-code/agent)
+
 ## 2026-11-07
 
 - **Vérification** - Correction d'une phrase non verifiee sur le delai du gather (claude-code/agent)
