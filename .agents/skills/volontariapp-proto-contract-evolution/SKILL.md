@@ -36,9 +36,6 @@ sources:
     title: "Contrats et évolutions (numérotation, trou du champ 5)"
 verified:
   - by: claude-code/claude-sonnet-5-5
-    at: "2026-10-06T15:34:14Z"
-    digest: fdc49f89e9cb9d16
-  - by: claude-code/claude-sonnet-5-5
     at: "2026-10-06T15:41:59Z"
     digest: 603980fa2fea4e5d
   - by: claude-code/agent
@@ -50,6 +47,9 @@ verified:
   - by: claude-code/agent
     at: "2026-10-30T10:33:27Z"
     digest: f8b99b4837ee3d04
+  - by: claude-code/agent
+    at: "2026-11-08T11:15:19Z"
+    digest: 102e056ce670c3c9
 ---
 
 # Proto Contract Evolution & Cycle de Propagation gRPC

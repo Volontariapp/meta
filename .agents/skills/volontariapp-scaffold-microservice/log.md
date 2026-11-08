@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-08
+
+- **Vérification** - ranking: ajout additif du RPC GetActiveUserLocations, aucune regle ni commande ne change (claude-code/agent)
+
 ## 2026-11-07
 
 - **Vérification** - Relu : bump domain-social et relance d'erreur dans un post-processor, aucune etape du scaffold ne change (claude-code/agent)

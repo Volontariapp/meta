@@ -22,8 +22,8 @@ Le cycle de vie des skills est géré par [volontariapp-skill-evolution](/volont
 | [volontariapp-meta-mods](/volontariapp-meta-mods/SKILL.md) | Mods Claude Code de meta | 2026-11-05 |
 | [volontariapp-meta-scripts](/volontariapp-meta-scripts/SKILL.md) | Scripts et CLI du workspace meta | 2026-10-28 |
 | [volontariapp-pr-tools](/volontariapp-pr-tools/SKILL.md) | Labels et relance de CI sur les PRs (pr-label.sh, pr-retrigger.sh) | 2026-11-04 |
-| [volontariapp-proto-contract-evolution](/volontariapp-proto-contract-evolution/SKILL.md) | Proto Contract Evolution | 2026-10-30 |
-| [volontariapp-scaffold-microservice](/volontariapp-scaffold-microservice/SKILL.md) | Scaffolding d'un Nouveau Microservice gRPC et de ses Runners | 2026-11-07 |
+| [volontariapp-proto-contract-evolution](/volontariapp-proto-contract-evolution/SKILL.md) | Proto Contract Evolution | 2026-11-08 |
+| [volontariapp-scaffold-microservice](/volontariapp-scaffold-microservice/SKILL.md) | Scaffolding d'un Nouveau Microservice gRPC et de ses Runners | 2026-11-08 |
 | [volontariapp-sealed-secrets](/volontariapp-sealed-secrets/SKILL.md) | Gestion des Secrets Scellés GitOps (kubeseal) | 2026-11-07 |
 | [volontariapp-shared-npm-package-change](/volontariapp-shared-npm-package-change/SKILL.md) | Shared NPM Package Change | 2026-11-04 |
 | [volontariapp-skill-evolution](/volontariapp-skill-evolution/SKILL.md) | Évolution des skills (auto-apprentissage) | 2026-11-05 |
