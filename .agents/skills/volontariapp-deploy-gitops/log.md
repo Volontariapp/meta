@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-08
+
+- **Leçon** - traffic-simulator : events autour d'une position via LOCAL_CENTERS, pas de lecture de position (decision) (claude)
+
 ## 2026-11-07
 
 - **Vérification** - Ajout de la lecon traffic-simulator (env, fenetre de sommeil, ordre de merge) (claude-code/agent)
