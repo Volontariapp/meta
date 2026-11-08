@@ -2,6 +2,8 @@
 
 ## 2026-11-08
 
+- **Vérification** - index (status,created_at,id) et purge des tables d'outbox, piege transaction=false, script de propagation des migrations communes (claude-code/agent)
+- **Leçon** - L'historique des lignes terminees dure un jour (rule) (claude-code/agent)
 - **Vérification** - ordre du lot de l outbox (created_at puis id) ajoute a la regle de polling; listKind de ranking.ready sans effet sur le diagnostic (claude-code/agent)
 
 ## 2026-11-04

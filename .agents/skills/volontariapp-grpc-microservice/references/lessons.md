@@ -41,9 +41,18 @@ sources:
   - id: src-ef70ad8f
     resource: ms-user/src/modules/user/services/leaderboard.service.ts
     title: ms-user/src/modules/user/services/leaderboard.service.ts
+  - id: src-0831f8cb
+    resource: ms-social/package.json
+    title: ms-social/package.json
 ---
 
 # Leçons
+
+## 2026-11-08 - yarn up de bridge-nest seul casse /health : health-check-nest en garde une copie
+
+- **Type :** pitfall
+- **Leçon :** ms-social : bridge-nest 0.3.22 avec health-check-nest 0.1.42 (qui epingle bridge-nest 0.3.21 en dur) donne deux copies de NestNeo4jProvider : /health repond Neo4j provider missing et le smoke test ne devient jamais vert. Monter health-check-nest (0.1.43, comme ms-user, ms-event, ms-storage) et errors-nest en meme temps, puis verifier qu il ne reste qu une copie de @volontariapp/bridge-nest dans node_modules.[^src-0831f8cb]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-08 - Classement : RANK() est un bigint, curseur keyset et fuseau de la base
 
@@ -128,3 +137,4 @@ sources:
 [^src-89ada337]: ms-social/src/providers/database/neo4j-schema.initializer.ts
 [^src-01460755]: https://github.com/Volontariapp/ms-event/pull/89
 [^src-ef70ad8f]: ms-user/src/modules/user/services/leaderboard.service.ts
+[^src-0831f8cb]: ms-social/package.json

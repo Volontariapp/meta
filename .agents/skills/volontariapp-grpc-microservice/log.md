@@ -2,6 +2,7 @@
 
 ## 2026-11-08
 
+- **Leçon** - yarn up de bridge-nest seul casse /health : health-check-nest en garde une copie (pitfall) (claude-code/agent)
 - **Vérification** - classement ms-user consigne en lecon (RANK bigint, keyset, fuseau); filtre endAtFrom de ms-event sans nouvelle regle; le probleme source introuvable ms-social/neo4j-schema.initializer.ts vient du checkout local de ms-social sur feat/scoring-event-points, le fichier existe sur origin/main (claude-code/agent)
 - **Leçon** - Classement : RANK() est un bigint, curseur keyset et fuseau de la base (pitfall) (claude-code/agent)
 

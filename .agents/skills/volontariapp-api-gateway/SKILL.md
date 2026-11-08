@@ -21,9 +21,6 @@ generated:
   at: "2026-10-06T08:54:04Z"
 verified:
   - by: claude-code/agent
-    at: "2026-11-03T20:40:26Z"
-    digest: be5ca2862e35d8ad
-  - by: claude-code/agent
     at: "2026-11-03T20:40:37Z"
     digest: be5ca2862e35d8ad
   - by: claude-code/agent
@@ -34,6 +31,9 @@ verified:
     digest: 6e8237e4a9c0e774
   - by: claude-code/agent
     at: "2026-11-08T12:18:23Z"
+    digest: 438a549648dfd54b
+  - by: claude-code/agent
+    at: "2026-11-08T22:50:47Z"
     digest: 438a549648dfd54b
 sources:
   - id: gw-claude

@@ -71,9 +71,18 @@ sources:
   - id: src-ac621e30
     resource: npm-packages/packages/contracts/src/gateway/user/request/leaderboard.request.ts
     title: npm-packages/packages/contracts/src/gateway/user/request/leaderboard.request.ts
+  - id: src-1d1c5bb2
+    resource: .agents/skills/volontariapp-proto-contract-evolution/SKILL.md
+    title: .agents/skills/volontariapp-proto-contract-evolution/SKILL.md
 ---
 
 # Leçons
+
+## 2026-11-08 - Une PR de sync proto peut entrer en conflit de version avec une PR fusionnee avant elle
+
+- **Type :** pitfall
+- **Leçon :** npm-packages#311 (domain-social 0.19.0) a fusionne alors que la PR automatique de sync proto #312 montait le meme paquet a 0.18.8 : conflit sur package.json et CHANGELOG.md. Resolution : fusionner origin/main dans la branche du bot, garder 0.19.1 (0.19.0 est deja en cours de publication) et placer la section de dependances au-dessus de 0.19.0. Le registre repond avec un delai apres Definitive Release : verifier chaque paquet par npm view --prefer-online avant de lever le verrou du STOP.[^src-1d1c5bb2]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-08 - Types web de requete et de reponse dans la meme publication
 
@@ -312,3 +321,4 @@ sources:
 [^src-bbec3532]: .claude/hooks/post-edit.sh
 [^src-884f50ed]: https://github.com/Volontariapp/ms-storage/pull/47
 [^src-ac621e30]: npm-packages/packages/contracts/src/gateway/user/request/leaderboard.request.ts
+[^src-1d1c5bb2]: .agents/skills/volontariapp-proto-contract-evolution/SKILL.md

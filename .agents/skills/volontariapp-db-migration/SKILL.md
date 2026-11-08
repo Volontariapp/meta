@@ -18,9 +18,6 @@ generated:
   at: "2026-10-12T11:56:30Z"
 verified:
   - by: claude-code/agent
-    at: "2026-11-04T21:24:16Z"
-    digest: de82376096d2ce17
-  - by: claude-code/agent
     at: "2026-11-06T14:04:00Z"
     digest: a6bfa42cee9dd9ef
   - by: claude-code/agent
@@ -31,6 +28,9 @@ verified:
     digest: 65868a898ae28556
   - by: claude-code/agent
     at: "2026-11-07T15:55:37Z"
+    digest: 65868a898ae28556
+  - by: claude-code/agent
+    at: "2026-11-08T20:59:18Z"
     digest: 65868a898ae28556
 sources:
   - id: sync-mig
@@ -81,6 +81,7 @@ Utiliser ce playbook pour toute évolution de schéma relationnel PostgreSQL dan
 Identifier le répertoire cible dans le microservice :
 - **Migration Commune** (`ms-*/src/migrations/common/`) :
   - Concerne l'Outbox transactionnelle (`jobs_outbox`, `event_queue`, `job_audit`)[^data-source] ou un trigger SQL de dispatch.
+  - **Script de propagation** : `scripts/push-common-migration.sh <fichier> "<titre du commit>" [--dry-run]` copie la migration dans les neuf emplacements ci-dessous (worktrees neufs sur `origin/main`, md5 contrôlé, commit avec `Co-Authored-By`, push sur `main`). Il s'utilise après publication de `npm-packages` et levée du verrou du STOP (cas de `1794166000000-AddOutboxPollingIndexes`, 2026-11-08, neuf dépôts). Pour suivre la CI ensuite, `gh run list --commit` exige le SHA complet : un SHA court ne renvoie rien.
   - Doit être créée dans un microservice de référence (ex. `ms-user`), puis **copiée à l'identique** (même nom, même contenu, vérifier le md5) dans `src/migrations/common/` de chaque service qui a **sa propre base** : `ms-user`, `ms-social`, `ms-post`, `ms-event`, `ms-storage`, `ms-ranking` **et `ws-service`** (base `ms_ws`, oublié lors de la tâche 2.9 : une colonne ajoutée à `OutboxModel` fait échouer ses écritures tant que la migration manque). `post-processors-runner/post-processor-event` et `workers-runners/worker-event` gardent aussi une copie et utilisent en production la base `ms_event` de `ms-event` (migration déjà appliquée), **mais leur CI reconstruit une base neuve depuis leurs propres migrations** (`global-setup` de `worker-event` : drop du schéma puis `runMigrations`) : sans la copie, `column EventQueueModel.traceparent does not exist` (constaté sur workers-runners#16). Copier aussi la nouvelle migration commune dans ces deux dossiers. Pour reproduire la CI en local sans toucher à sa base : `DB_NAME=<base jetable> yarn test:integration`. `yarn meta sync-migrations` ne fait PAS cette propagation inter-services[^sync-mig]. Pour repérer les copies : chercher le nom d'une migration commune existante (`1781000000000-AddCorrelationIdToEventQueue.ts`) sur tout le workspace, hors `deploy/`. Ces trois dossiers ont dérivé (migrations plus anciennes que celles de `ms-*`) : ne copier que la nouvelle migration. Le md5 peut différer sans que le SQL change : la copie de `1781400000000-AddFinishedAndCancelledToEventStateEnum.ts` dans `worker-event` (`workers-runners#50`, dont le message de commit annonce « byte-identically ») a un md5 différent de celle de `ms-event` parce que ses lignes sont recoupées, alors que les requêtes `up`/`down` sont les mêmes (cause probable : le formatage du repo cible, non vérifiée). Si le md5 diffère, comparer les requêtes avec `diff` plutôt que conclure à une dérive. `1792200000000-AddScoringVersionToEvent.ts` est, lui, identique au md5.
 - **Migration Domaine** (`ms-*/src/migrations/domain/`) :
   - Concerne les tables propres au métier (ex. `users`, `badges` dans `ms-user` ; `posts` dans `ms-post`).
@@ -103,7 +104,7 @@ export class AddFeatureColumn1792000000000 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "users" ADD COLUMN "feature_flag" boolean NOT NULL DEFAULT false`,
     );
-    // Indexation concurrente recommandée pour éviter le verrouillage de table
+    // Pas de CONCURRENTLY ici : voir le piège juste après ce bloc
     await queryRunner.query(
       `CREATE INDEX "idx_users_feature_flag" ON "users" ("feature_flag")`,
     );
@@ -115,6 +116,8 @@ export class AddFeatureColumn1792000000000 implements MigrationInterface {
   }
 }
 ```
+
+**Piège : `CREATE INDEX CONCURRENTLY` et `transaction = false` sont refusés.** `CONCURRENTLY` ne s'exécute pas dans une transaction, mais une migration qui déclare `transaction = false` fait lever `ForbiddenTransactionModeOverrideError` quand la source de données exécute toutes les migrations en une transaction, ce qui est le mode par défaut de TypeORM (`migrationsTransactionMode: 'all'`, lu dans `typeorm/migration/MigrationExecutor.js`). Dans ce cas aucun service ne démarre (les migrations tournent dans le conteneur d'init `run-migrations`). Écrire `CREATE INDEX IF NOT EXISTS` dans la transaction : le verrou en écriture dure le temps de la construction, quelques millisecondes sur une table petite. Sur une grosse table, purger ou réduire d'abord, ou changer le mode de transaction des sources de données avant la migration (non fait à ce jour).
 
 ---
 
@@ -202,6 +205,15 @@ docker stop pg-migration-check
 ```
 
 Contrôler aussi les données posées par la migration (`UPDATE` de remplissage) en insérant une ligne de test avant le second `run`.
+
+---
+
+## Tables d'outbox : index et purge (depuis `@volontariapp/database` 3.13.0)
+
+- `event_queue` et `jobs_outbox` portent l'index `(status, created_at, id)` (migration commune `1794166000000-AddOutboxPollingIndexes`, déclaré aussi par `@Index` sur `EventQueueModel` et `JobsOutboxModel`). Il sert la requête de sondage des runners (`WHERE status = 'PENDING' ORDER BY created_at, id LIMIT n FOR UPDATE SKIP LOCKED`) et la purge. Sans lui, chaque sondage lisait toute la table : en novembre 2026, 125 à 245 Mo/s de lectures disque continues sur `ms-ranking-db` ont fait caler la VM entière plusieurs secondes de suite.
+- `OutboxRunner` purge les lignes `COMPLETED` plus vieilles que la rétention (défaut : 1 jour, une passe par heure, lots de 5 000, sur sa propre boucle), et `job_audit` à côté de `jobs_outbox`. Réglage : `OutboxRunnerConfig.purge` (`enabled`, `retentionMs`, `intervalMs`, `batchSize`), tous optionnels. Les lignes `PENDING`, `PROCESSING` et `FAILED` ne sont jamais supprimées. Conséquence : l'historique des lignes terminées ne dépasse pas un jour (voir `volontariapp-trace-async-flow`).
+- `job_audit` n'a pas d'index `(status, created_at)` : sa purge trie les lignes `COMPLETED` (environ 200 000 à ce jour) à chaque passe, une lecture ponctuelle de l'ordre de 100 Mo observée à la première passe. À indexer si elle gêne.
+- Pour une nouvelle requête de sondage ou de purge sur une table qui grossit, vérifier le plan (`EXPLAIN`) : un `Seq Scan` sur une table d'outbox est le signal à traiter.
 
 ---
 

@@ -1,5 +1,9 @@
 # Historique des skills
 
+## 2026-11-08
+
+- **Nouvelle skill** - [volontariapp-load-ramp](/volontariapp-load-ramp/SKILL.md) - Montée en charge : rampe, enregistreurs et lecture des résultats (claude-code/agent)
+
 ## 2026-11-05
 
 - **Nouvelle skill** - [volontariapp-meta-mods](/volontariapp-meta-mods/SKILL.md) - Mods Claude Code de meta (claude-code/agent)

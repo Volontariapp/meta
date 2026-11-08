@@ -2,6 +2,8 @@
 
 ## 2026-11-08
 
+- **Vérification** - session du 2026-11-08 soir : GetSearchExclusions en un appel, rampe events-list-app, plafond 200 req/s sur 14 vCPU, label docker-and-e2e, conflit de sync proto (claude-code/agent)
+- **Leçon** - Les exclusions de recherche d evenements passent par un seul appel GetSearchExclusions (decision) (claude-code/agent)
 - **Vérification** - routes: ajout du module ranking dont GET /ranking/admin/active-locations (admin: true + Roles, role reverifie par ms-ranking) (claude-code/agent)
 - **Leçon** - Une route gateway sur donnees d'un domaine : un seul cycle npm-packages (pitfall) (claude-code/agent)
 - **Vérification** - classement: routes GET /users/leaderboard et GET /users/me/rank, ordre des controleurs avant users/:id, types web de requete a l etape 0 (publies avec les reponses); routes live (PUT/DELETE /live/events/:eventId/sharing) et filtre endAtFrom ajoutes a routes.md; seed live, helper ranking et mocks de test non relus en detail (claude-code/agent)

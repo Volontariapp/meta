@@ -36,9 +36,6 @@ sources:
     title: Pipeline réutilisable npm-packages (ci-tools)
 verified:
   - by: claude-code/agent
-    at: "2026-11-01T20:03:31Z"
-    digest: 7ce1c85a68a336b1
-  - by: claude-code/agent
     at: "2026-11-02T11:07:22Z"
     digest: a449048c4609013e
   - by: claude-code/agent
@@ -49,6 +46,9 @@ verified:
     digest: 292021b063207bff
   - by: claude-code/agent
     at: "2026-11-08T12:07:09Z"
+    digest: 94f91136a88eb724
+  - by: claude-code/agent
+    at: "2026-11-08T22:50:47Z"
     digest: 94f91136a88eb724
 ---
 

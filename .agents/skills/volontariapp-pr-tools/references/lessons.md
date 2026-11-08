@@ -18,6 +18,12 @@ sources:
 
 # Leçons
 
+## 2026-11-08 - ci-docker echoue expres sans le label docker-and-e2e
+
+- **Type :** rule
+- **Leçon :** Le job ci-docker des microservices et de la gateway echoue avec le message "The docker-and-e2e label is missing. If you want the PR to be mergeable, add the tag to run the full CI" (constate sur ms-social#69 et api-gateway#115, 5 min 10 s). Poser le label avec scripts/pr-label.sh puis relancer le job echoue avec gh run rerun <id> --failed, sans commit. Le journal se lit par gh api --allow-escape-sequences repos/<org>/<repo>/actions/jobs/<id>/logs.[^src-8cc65ece]
+- **Consigné par :** claude-code/agent
+
 ## 2026-11-07 - CI complete des depots back : label puis rerun
 
 - **Type :** command

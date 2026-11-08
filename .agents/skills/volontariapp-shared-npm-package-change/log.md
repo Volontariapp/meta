@@ -2,6 +2,8 @@
 
 ## 2026-11-08
 
+- **Vérification** - session du 2026-11-08 soir : GetSearchExclusions en un appel, rampe events-list-app, plafond 200 req/s sur 14 vCPU, label docker-and-e2e, conflit de sync proto (claude-code/agent)
+- **Leçon** - Une PR de sync proto peut entrer en conflit de version avec une PR fusionnee avant elle (pitfall) (claude-code/agent)
 - **Vérification** - contracts: ajout des types Web GetActiveUserLocations, bump patch propage aux dependants, regles inchangees (claude-code/agent)
 - **Leçon** - Types web de requete et de reponse dans la meme publication (rule) (claude-code/agent)
 - **Vérification** - domain-ranking: ajout de listActiveCells et findUpdatedSince, procedure et regles inchangees (claude-code/agent)

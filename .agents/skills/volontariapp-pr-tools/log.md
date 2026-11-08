@@ -1,5 +1,10 @@
 # Historique
 
+## 2026-11-08
+
+- **Vérification** - session du 2026-11-08 soir : GetSearchExclusions en un appel, rampe events-list-app, plafond 200 req/s sur 14 vCPU, label docker-and-e2e, conflit de sync proto (claude-code/agent)
+- **Leçon** - ci-docker echoue expres sans le label docker-and-e2e (rule) (claude-code/agent)
+
 ## 2026-11-07
 
 - **Leçon** - CI complete des depots back : label puis rerun (command) (Claude)

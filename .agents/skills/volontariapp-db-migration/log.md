@@ -1,5 +1,12 @@
 # Historique
 
+## 2026-11-08
+
+- **Vérification** - index (status,created_at,id) et purge des tables d'outbox, piege transaction=false, script de propagation des migrations communes (claude-code/agent)
+- **Leçon** - Les tables d'outbox ont un index de sondage et une purge (rule) (claude-code/agent)
+- **Leçon** - Propager une migration commune en une commande (command) (claude-code/agent)
+- **Leçon** - transaction=false est refuse par TypeORM en mode 'all' (pitfall) (claude-code/agent)
+
 ## 2026-11-07
 
 - **Vérification** - quota prod limits.cpu 56 (claude-code/agent)

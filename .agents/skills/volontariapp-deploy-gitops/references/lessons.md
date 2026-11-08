@@ -35,9 +35,18 @@ sources:
   - id: src-9c70d47e
     resource: traffic-simulator/README.md
     title: traffic-simulator/README.md
+  - id: src-07f93892
+    resource: deploy/apps/overlays/prod/ms-social/kustomization.yaml
+    title: deploy/apps/overlays/prod/ms-social/kustomization.yaml
 ---
 
 # Leçons
+
+## 2026-11-08 - ms-social en prod : 512Mi et 2 replicas (deploy#67)
+
+- **Type :** decision
+- **Leçon :** ms-social etait OOMKilled a 256Mi (123Mi au repos). Limite memoire du conteneur applicatif a 512Mi dans la base, 2 replicas dans l overlay prod comme ms-post. Le second replica ne recoit du trafic que sur de nouvelles connexions gRPC (ClusterIP) : un deploiement de la gateway renouvelle ses connexions. Le build complet de l overlay prod echoue en local sur le chart Helm de db-postgres : valider la base avec kustomize build et un bloc replicas.[^src-07f93892]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-08 - Compte technique ADMIN : emails chiffres en base, promouvoir par id, jamais un bot du pool
 
@@ -132,3 +141,4 @@ sources:
 [^src-cd027dc7]: deploy/apps/base/ms-user/deployment-post-processor.yaml
 [^src-d378d88d]: deploy/apps/base/traffic-simulator/deployment.yaml
 [^src-9c70d47e]: traffic-simulator/README.md
+[^src-07f93892]: deploy/apps/overlays/prod/ms-social/kustomization.yaml

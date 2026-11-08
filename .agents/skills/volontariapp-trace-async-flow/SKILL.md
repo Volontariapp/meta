@@ -44,9 +44,6 @@ sources:
     title: "Scénarios de panne, problèmes P2 et P4"
 verified:
   - by: claude-code/agent
-    at: "2026-10-29T17:22:26Z"
-    digest: f39e9f067a5595fa
-  - by: claude-code/agent
     at: "2026-11-04T18:28:32Z"
     digest: 1384b4fa258ad16f
   - by: claude-code/agent
@@ -57,6 +54,9 @@ verified:
     digest: c5dec9dcd6763cd3
   - by: claude-code/agent
     at: "2026-11-08T12:02:24Z"
+    digest: e6d2dea0a9ade67e
+  - by: claude-code/agent
+    at: "2026-11-08T20:59:18Z"
     digest: e6d2dea0a9ade67e
 ---
 
@@ -120,6 +120,8 @@ FROM event_queue WHERE type = '<type>' ORDER BY created_at DESC LIMIT 20;
 | `event_queue` en `COMPLETED`, aucun effet | Consommateur : groupe du stream, filtre `shouldProcess`, DLQ |
 
 `jobs_outbox` passe `COMPLETED` dès le push vers BullMQ[^dispatcher], pas après l'exécution : seul `job_audit` dit si le job a tourné.
+
+**Fenêtre d'historique : un jour.** Depuis `@volontariapp/database` 3.13.0 (déployé le 2026-11-08), `OutboxRunner` supprime les lignes `COMPLETED` de `event_queue`, `jobs_outbox` et `job_audit` plus vieilles qu'un jour (réglable par `OutboxRunnerConfig.purge`). Une requête sur un événement ou un job terminé plus ancien ne trouvera rien : « aucune ligne » veut alors dire « purgée », pas « jamais émis ». Les lignes `PENDING`, `PROCESSING` et `FAILED` sont conservées, donc une ligne coincée reste visible (en novembre 2026, 2 `PROCESSING` et 4 `FAILED` du 7 novembre 15:36 étaient toujours dans `event_queue` de `ms-ranking`, non investiguées). Avant cette purge, `ms-ranking` accumulait environ 248 000 lignes `COMPLETED` par table, y compris dans `jobs_outbox` alors que `JobOutboxSuccessPostProcessor` devrait les supprimer : la raison n'a pas été cherchée.
 
 ## 4. Redis Streams et pièges connus
 

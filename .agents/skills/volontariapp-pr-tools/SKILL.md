@@ -17,6 +17,9 @@ verified:
   - by: claude-code/agent
     at: "2026-11-04T13:24:50Z"
     digest: "6196382522911491"
+  - by: claude-code/agent
+    at: "2026-11-08T22:50:47Z"
+    digest: "6196382522911491"
 sources: []
 ---
 
@@ -31,7 +34,7 @@ Quand il faut poser ou retirer le même label sur plusieurs PRs de plusieurs dé
 | Label | Effet | Qui le pose |
 | :--- | :--- | :--- |
 | `notify-discord` | Opt-in : une PR humaine verte et mergeable déclenche UN message Discord (`ci-tools/.github/workflows/pr-ready-notify.yml`). Les PRs Dependabot sont notifiées sans label. | Toi, avant la fin de la CI |
-| `docker-and-e2e` | Sans lui, la CI des microservices ne passe pas (constaté par l'utilisateur sur ms-user#78 ; le mécanisme exact n'a pas été relu dans `ci-tools`). Présent aussi dans les runners, qui ne s'en servent pas. | Toi |
+| `docker-and-e2e` | Sans lui, le job `ci-docker` échoue exprès avec « The 'docker-and-e2e' label is missing. If you want the PR to be mergeable, add the tag to run the full CI » (journal lu sur ms-social#69 et api-gateway#115, après 5 min 10 s). Après avoir posé le label, relancer le job avec `gh run rerun <id> --failed`, sans commit. Présent aussi dans les runners, qui ne s'en servent pas. | Toi |
 | `discord-notified` | Marque « déjà notifiée » (dédup). | **Le workflow lui-même**, jamais à la main |
 
 ## Poser ou retirer des labels : `scripts/pr-label.sh`

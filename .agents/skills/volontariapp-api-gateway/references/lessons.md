@@ -53,9 +53,18 @@ sources:
   - id: src-accfa926
     resource: npm-packages/packages/contracts/src/gateway/ranking/response/ranking.response.ts
     title: npm-packages/packages/contracts/src/gateway/ranking/response/ranking.response.ts
+  - id: src-2d6c8b48
+    resource: api-gateway/src/modules/event/services/event-social-filter.service.ts
+    title: api-gateway/src/modules/event/services/event-social-filter.service.ts
 ---
 
 # Leçons
+
+## 2026-11-08 - Les exclusions de recherche d evenements passent par un seul appel GetSearchExclusions
+
+- **Type :** decision
+- **Leçon :** EventSocialFilterService.resolve appelle ParticipationQueryService.GetSearchExclusions une seule fois (quatre drapeaux exclude*), plafonne a 1000 identifiants avec des drapeaux de troncature, au lieu de cinq lectures paginees. Pas d appel sans drapeau. Le chemin amis (GetRecommendedEventIds) est inchange. Une erreur ms-social n est pas avalee. HiddenUsersService reste utilise par ranked-feed.service.ts. Deploiement : ms-social avant la gateway, sinon UNIMPLEMENTED.[^src-2d6c8b48]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-08 - Une route gateway sur donnees d'un domaine : un seul cycle npm-packages
 
@@ -210,3 +219,4 @@ sources:
 [^src-82045402]: https://github.com/Volontariapp/api-gateway/pull/106
 [^src-7e80693b]: api-gateway/src/modules/user/user.module.ts
 [^src-accfa926]: npm-packages/packages/contracts/src/gateway/ranking/response/ranking.response.ts
+[^src-2d6c8b48]: api-gateway/src/modules/event/services/event-social-filter.service.ts
