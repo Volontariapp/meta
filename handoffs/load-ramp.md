@@ -100,9 +100,11 @@ Tout est dans la skill `volontariapp-load-ramp` : commande de la rampe, `jq` par
 - Un hook refuse emoji et tirets cadratins dans les messages de commit et de PR, y compris la ligne d'attribution (écrire « Generated with [Claude Code](https://claude.com/claude-code) » sans emoji).
 - Ne jamais lancer l'E2E en local. Commits au format `type(scope): ...` avec la ligne `Co-Authored-By` demandée par la session.
 
-## 10. Worktrees à supprimer
+## 10. Worktrees
 
-Supprimés à la clôture : ceux des PR fusionnées (`ts-load-realistic`, `deploy-social-mem`, `proto-search-exclusions`, `npm-search-exclusions`, `npm-sync-proto-conflicts`, `ms-social-exclusions`, `gateway-exclusions`, `npm-outbox-purge`, `outbox-runners-purge`, `outbox-index-*`, `ppr-jobs-outbox`). **À conserver : `deploy-resume-simulator`** tant que `deploy#66` n'est pas fusionnée.
+Supprimés à la clôture (travail fusionné et poussé, 18 worktrees) : ceux des PR du chantier, dont `outbox-index-*`, `npm-outbox-purge`, `outbox-runners-purge`, `ppr-jobs-outbox`, `deploy-social-mem`, `proto-search-exclusions`, `npm-search-exclusions`, `npm-sync-proto-conflicts`, `ms-social-exclusions`, `gateway-exclusions`.
+
+**À conserver pour l'instant** : `deploy-resume-simulator` (PR `deploy#66` ouverte) et `ts-load-realistic` (il contient `load-report-app.json` et `load-report-app-high.json`, les rapports de rampe de Victor, non suivis ; les copier ailleurs avant de le supprimer).
 
 ## 11. Skills à appeler
 
