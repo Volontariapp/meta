@@ -17,9 +17,30 @@ sources:
   - id: src-800cc0ea
     resource: traffic-simulator/src/load/load-runner.ts
     title: traffic-simulator/src/load/load-runner.ts
+  - id: src-84d4712d
+    resource: "https://github.com/Volontariapp/docs/pull/19"
+    title: "https://github.com/Volontariapp/docs/pull/19"
 ---
 
 # Leçons
+
+## 2026-11-09 - Lancer yarn load sans invite, depuis n'importe quel dossier
+
+- **Type :** command
+- **Leçon :** LOAD_CONFIRM=false coupe la confirmation par palier (traffic-simulator src/load/load-config.ts). Utiliser yarn --cwd /Users/victoragahi/Developer/meta/traffic-simulator load et un LOAD_REPORT_PATH absolu : depuis un autre dossier, yarn load echoue (script introuvable). Eviter les minutes de la tache ms-storage-purge (*/15 : :00, :15, :30, :45), qui fait lire minio.[^src-84d4712d]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-09 - kubectl logs -l ne renvoie que 10 lignes par pod
+
+- **Type :** pitfall
+- **Leçon :** Avec un selecteur (-l), kubectl logs applique --tail=10 par defaut : un comptage d'erreurs sur les ms-* peut sortir vide a tort. Toujours ajouter --tail=-1 (et --max-log-requests) pour compter des erreurs pendant un palier.[^src-84d4712d]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-09 - Effondrement a faible CPU : la VM relit son disque faute de memoire
+
+- **Type :** pitfall
+- **Leçon :** Signe : des pods qui ne lisent jamais (traefik, coredns, agent Datadog, argocd) lisent 20 a 80 Mo/s dans disk.log, le noeud reste a 26-30 % de CPU, la gateway renvoie des 504 (deadline 2 s) et les ms-* n'ont aucune erreur. 2026-11-09 : effondrement a 200 req/s avec 11,8 Gi de VM et environ 2 Go disponibles. Avant de lire un palier comme un plafond CPU, comparer disk.log a un palier sain (aucune lecture) et relever majorPageFaults et availableBytes via kubectl get --raw /api/v1/nodes/<noeud>/proxy/stats/summary.[^src-84d4712d]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-08 - Compter les pods apres chaque palier : l HPA ajoute des pods froids
 
@@ -48,3 +69,4 @@ sources:
 [^src-7b42dd73]: traffic-simulator/src/load/load-request.ts
 [^src-32ad0128]: traffic-simulator/src/load/load-config.ts
 [^src-800cc0ea]: traffic-simulator/src/load/load-runner.ts
+[^src-84d4712d]: https://github.com/Volontariapp/docs/pull/19

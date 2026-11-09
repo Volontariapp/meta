@@ -100,6 +100,31 @@ sudo iostat -x -t 1 > /tmp/iostat.log 2>&1 &
 
 Attention : ces commandes se lancent sur la VM (Linux), pas sur le Mac (macOS n'a ni `/proc` ni `nf_conntrack`, et `grep` y est parfois un alias de `rg`).
 
+## Profil CPU d'un pod Node (sans redéployer)
+
+Pour savoir où part le CPU d'un service Node (gateway, `ms-*`) : un profil de 30 s pendant une charge stable. Le processus Node est le PID 1 du conteneur (`ENTRYPOINT ["node"]`), donc `SIGUSR1` y active l'inspecteur, qui n'écoute que sur la boucle locale du pod ; seul un `kubectl port-forward` l'atteint. Le profileur échantillonne à 1 ms et ajoute quelques pour cent de CPU à ce seul pod pendant la capture.
+
+1. Choisir un pod et activer l'inspecteur (`kubectl exec` dans un pod de production : le classificateur peut le refuser, ne pas le contourner) :
+
+```bash
+POD=$(kubectl -n prod get pods -l app=api-gateway -o name | head -1)
+kubectl -n prod exec "$POD" -- sh -c 'kill -USR1 1'
+kubectl -n prod port-forward "$POD" 9229:9229 &
+```
+
+2. Lancer une charge stable (rampe à un seul palier, par exemple `LOAD_STEPS="150" LOAD_STEP_SECONDS=120`), attendre 20 s de chauffe, puis capturer :
+
+```bash
+node .agents/skills/volontariapp-load-ramp/scripts/capture-cpu-profile.mjs 30 gateway.cpuprofile
+node .agents/skills/volontariapp-load-ramp/scripts/analyze-cpuprofile.mjs gateway.cpuprofile 25
+```
+
+3. Nettoyer : arrêter le `port-forward`, puis supprimer le pod profilé (`kubectl -n prod delete "$POD"`), car l'inspecteur reste ouvert jusqu'au redémarrage du processus. Le Deployment le recrée.
+
+Lecture : `analyze-cpuprofile.mjs` range le temps occupé par famille (notre code, gRPC `grpc-js`, protobuf, JWT et cryptographie, validation et DTO, logger, Nest, Express, Node natif, ramasse-miettes). Un appel à `JSON.stringify` ou `JSON.parse` apparaît soit dans « natif / sans source », soit dans la fonction appelante. La signature RSA tourne dans le pool de threads de libuv, hors du fil principal : elle n'apparaît pas dans ce profil. Le fichier s'ouvre aussi dans Chrome DevTools (onglet Performance, « Load profile »).
+
+Règle de décision utilisée le 2026-11-08 pour Go : plus de la moitié du temps dans gRPC, protobuf, JSON et ramasse-miettes (coût inhérent à Node) oriente vers un portage ; plus de la moitié dans notre code, la validation ou le logger oriente vers une optimisation en Node, moins chère.
+
 ## Lire un palier
 
 - **Comparer ce que voit le client et ce que voit Traefik.** Les deux ont concordé sur toutes les mesures : le retard n'est pas introduit par le Mac ni par Cloudflare.
@@ -153,6 +178,8 @@ Avant l'index et la purge des tables d'outbox (npm-packages#310), le 200 s'effon
 - `scripts/record-ramp.sh <dossier> [relevés]` : lance les trois enregistreurs côté cluster.
 - `scripts/traefik-percentiles.py <journal> <début> <fin> [--series]` : répartition de latence et débit vus par Traefik.
 - `scripts/disk-read-rate.py <échantillons> [nœud]` : lectures et écritures disque par pod.
+- `scripts/capture-cpu-profile.mjs [secondes] [sortie] [hôte:port]` : profil CPU d'un processus Node dont l'inspecteur est ouvert (Node 22 ou plus, sans dépendance).
+- `scripts/analyze-cpuprofile.mjs <profil> [nombre]` : part du temps CPU par famille et fonctions les plus chaudes.
 
 [^runner]: traffic-simulator/src/load/load-runner.ts
 [^abort]: traffic-simulator/src/load/abort-policy.ts

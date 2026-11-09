@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-11-09
+
+- **Leçon** - Lancer yarn load sans invite, depuis n'importe quel dossier (command) (claude-code/agent)
+- **Leçon** - kubectl logs -l ne renvoie que 10 lignes par pod (pitfall) (claude-code/agent)
+- **Leçon** - Effondrement a faible CPU : la VM relit son disque faute de memoire (pitfall) (claude-code/agent)
+
 ## 2026-11-08
 
 - **Vérification** - session du 2026-11-08 soir : GetSearchExclusions en un appel, rampe events-list-app, plafond 200 req/s sur 14 vCPU, label docker-and-e2e, conflit de sync proto (claude-code/agent)

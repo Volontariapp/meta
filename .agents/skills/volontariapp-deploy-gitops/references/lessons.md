@@ -38,9 +38,18 @@ sources:
   - id: src-07f93892
     resource: deploy/apps/overlays/prod/ms-social/kustomization.yaml
     title: deploy/apps/overlays/prod/ms-social/kustomization.yaml
+  - id: src-772b9af9
+    resource: "https://github.com/Volontariapp/deploy/commit/1c49d05e4ae72c01c2366e8a185f2ff61747a79c"
+    title: "https://github.com/Volontariapp/deploy/commit/1c49d05e4ae72c01c2366e8a185f2ff61747a79c"
 ---
 
 # Leçons
+
+## 2026-11-09 - Bump d'image dans deploy dans le desordre quand deux PR sont fusionnees coup sur coup
+
+- **Type :** pitfall
+- **Leçon :** Chaque run CI de main d'un service pousse son propre SHA dans deploy (job Deploy Repo Submodule Push). Si deux PR du meme depot sont fusionnees a quelques secondes d'intervalle, le run du commit le plus ancien peut finir apres celui du plus recent et remettre l'ancienne image (2026-11-09 : ms-event fd907aa a ecrase 10d69a5, deploy 1c49d05 apres e10d3b8). Apres une serie de fusions, comparer l'image de deploy origin/main avec le dernier commit de main du service ; sinon relancer le job Deploy Repo Submodule Push du run du dernier commit (gh run rerun <run> --job <job>).[^src-772b9af9]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-08 - ms-social en prod : 512Mi et 2 replicas (deploy#67)
 
@@ -142,3 +151,4 @@ sources:
 [^src-d378d88d]: deploy/apps/base/traffic-simulator/deployment.yaml
 [^src-9c70d47e]: traffic-simulator/README.md
 [^src-07f93892]: deploy/apps/overlays/prod/ms-social/kustomization.yaml
+[^src-772b9af9]: https://github.com/Volontariapp/deploy/commit/1c49d05e4ae72c01c2366e8a185f2ff61747a79c

@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-09
+
+- **Leçon** - Bump d'image dans deploy dans le desordre quand deux PR sont fusionnees coup sur coup (pitfall) (claude-code/agent)
+
 ## 2026-11-08
 
 - **Leçon** - ms-social en prod : 512Mi et 2 replicas (deploy#67) (decision) (claude-code/agent)
