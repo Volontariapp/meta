@@ -1,0 +1,30 @@
+# Prompt pour le sous-agent de deploiement (montee en charge, phase 1)
+
+A lancer apres la fusion de npm-packages#313, la `Definitive Release` verte et `npm view` des 4 versions.
+
+You roll out a published npm change across the Volontariapp service repos (workspace /Users/victoragahi/Developer/meta; read /Users/victoragahi/Developer/meta/AGENTS.md first, rules there are mandatory: no `any`, no `as unknown as`, kebab-case, no emojis, no em-dashes, never run E2E locally).
+
+Context: today every service logs at `debug` in production because `config.logger.level` is never passed to the Logger. `@volontariapp/config@3.5.0` now exports `configureLogger(loggerConfig, extra?)` which validates the level and calls `Logger.setDefaultConfig({ format, minLevel, ...extra })`. `@volontariapp/logger@0.5.0` now reads the default `minLevel` at print time, so loggers created at import time also follow it. `@volontariapp/contracts-nest@3.5.0` adds gRPC channel options (client round_robin load balancing, server max connection age 5 min) inside `getGrpcOptions`; no call site change is needed for it, only the version bump. `@volontariapp/domain-post@3.11.0` adds a `{ knownTotal }` option to `PostService.listPosts(page, limit, authorId, readerId, options)` that skips the COUNT query.
+
+ms-post only, in a separate commit of the same PR: bump `@volontariapp/domain-post@^3.11.0` and cache the posts-list total 10 s. A bounded TTL map provider (capacity 2000, oldest first eviction, injectable clock) in a kebab-case file. Key: `${authorId ?? '*'}|${mode}` where mode is `self` when authorId equals the reader id (that path ignores knownTotal anyway), `reader:<readerId>` when there is a reader, `anon` otherwise (the count depends on the reader: own posts with pending media are visible to their author only). On a hit call listPosts with `{ knownTotal }`, on a miss call it without and store `result.total`. Never cache on error. Unit tests: hit, miss, expiry, eviction, key per reader. Controller: ms-post src/modules/post/controllers/post.query.controller.ts listPosts.
+
+For EACH repo below, in a fresh worktree from origin/main (`git -C <repo> fetch origin && git -C <repo> worktree add /Users/victoragahi/Developer/meta/.worktrees/<repo>-logger-level -b perf/logger-level-wiring origin/main`, then `yarn install`):
+1. `yarn up @volontariapp/config@^3.5.0 @volontariapp/logger@^0.5.0` and, if the repo (or a workspace in it) depends on it, `@volontariapp/contracts-nest@^3.5.0`. In monorepos (workers-runners, post-processors-runner, outbox-runners) bump every workspace that declares the dependency (`yarn up` from the root handles all workspaces). After install check `yarn why @volontariapp/logger` shows a single version; if a stale nested copy remains (another @volontariapp package pins an older one), bump that package too or report it.
+2. Replace each `Logger.setDefaultConfig({ format: X.logger.format, ...rest })` call with `configureLogger(X.logger, { ...rest })` (or `configureLogger(X.logger)` when there is no extra key), imported from `@volontariapp/config`. Keep the other keys exactly (ws-service passes `masking: LIVE_LOG_MASKING`, outbox runners pass `context`). Call sites on origin/main:
+   - api-gateway src/main.ts:44 ; ms-user src/main.ts:31 ; ms-social src/main.ts:27 ; ms-event src/main.ts:30 ; ms-post src/main.ts:27 ; ms-ranking src/main.ts:28 ; ms-storage src/main.ts:28 and src/commands/request-file-purge.ts:8 ; ws-service src/main.ts:32
+   - workers-runners: worker-event/src/app.module.ts:43, worker-post/src/app.module.ts:26, worker-ranking/src/config/logger.ts:4, worker-social/src/app.module.ts:42, worker-storage/src/app.module.ts:24, worker-user/src/app.module.ts:43
+   - post-processors-runner: post-processor-{event,post,ranking,social,storage,user}/src/config/config.module.ts:9
+   - outbox-runners: outbox-{event,post,ranking,social,storage,user,ws}/src/index.ts (around lines 21-24)
+   Also, where a `new Logger({...})` in main.ts passes `format` explicitly, leave it.
+2b. Production level: in api-gateway, ms-user, ms-social, ms-event, ms-post and ws-service, `config/production.config.json` has `logger.level: "warn"`. Change it to `"info"` (decision of the Lead Dev: info first; warn would drop every info line once the level is wired). Leave every other config file as is.
+3. Unit tests that assert on debug/info log output may now be filtered by the test config (`logger.level: error` in test.config.json). If a unit test fails for that reason, fix the test setup (for example set the level in the test), never weaken production code.
+4. Run per repo: typecheck (`yarn tsc --noEmit` or the repo script), `yarn lint`, unit tests (`yarn test` or `yarn test:unit`; NEVER the e2e suite). For monorepos run them in every changed workspace.
+5. Commit `perf(logger): wire the configured log level` (body: why, versions bumped) ending with:
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_01NbcNapXyoS9qenCsKQguqo
+6. Delivery:
+   - api-gateway: push the branch and open a PR to main (`gh pr create`), body ending with "Generated with [Claude Code](https://claude.com/claude-code)", a blank line, then https://claude.ai/code/session_01NbcNapXyoS9qenCsKQguqo . Add the label `docker-and-e2e`. Do NOT merge it.
+   - every other repo: push the branch, open a PR the same way, add label `docker-and-e2e`, wait for CI green (`gh pr checks <n> --watch`), then merge with `gh pr merge <n> --squash --delete-branch`. If merge is refused because a review is required, do NOT use --admin: leave it open and report it. If CI fails, read the log (`gh run view <id> --log-failed`), fix, push again. If ci-docker fails only because of the missing label, re-run with `gh run rerun <id> --failed` after adding the label.
+Do NOT edit npm-packages, proto-registry or deploy. Do not touch files unrelated to this change.
+
+Final report (under 350 words): per repo, PR URL, CI state, merged or not, anything odd (nested logger copies, failing tests and how fixed).
