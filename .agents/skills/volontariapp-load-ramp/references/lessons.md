@@ -30,6 +30,12 @@ sources:
 
 # Leçons
 
+## 2026-11-10 - async-recorder : un redis-cli par cle prend 23 s par releve
+
+- **Type :** pitfall
+- **Leçon :** La premiere version lancait type, xinfo stream et xinfo groups par cle via redis-cli : environ 23 s par releve au lieu de 10 (L8 du 2026-11-10). Un seul script Lua EVAL_RO par releve (SCAN TYPE stream, XINFO, LLEN, ZCARD) prend moins d une seconde ; la boucle deduit la duree du releve de l attente.[^src-bd24daba]
+- **Consigné par :** claude-code/agent
+
 ## 2026-11-10 - L application lit ranking, posts et events sont des replis
 
 - **Type :** pitfall
