@@ -2,6 +2,8 @@
 
 ## 2026-11-10
 
+- **Vérification** - async-recorder.sh en un seul EVAL_RO par releve, cadence de 10 s tenue (claude-code/agent)
+- **Leçon** - async-recorder : un redis-cli par cle prend 23 s par releve (pitfall) (claude-code/agent)
 - **Vérification** - Modes routes et app, ecritures du pool load et nettoyage, profil d attaque, sonde WebSocket, async-recorder.sh, chiffres separes par mode (traffic-simulator #11 a #16) (claude-code/agent)
 - **Leçon** - L application lit ranking, posts et events sont des replis (pitfall) (claude-code/agent)
 - **Leçon** - XINFO GROUPS lag n est pas fiable sur nos streams (pitfall) (claude-code/agent)
