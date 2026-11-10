@@ -16,7 +16,7 @@ Le cycle de vie des skills est géré par [volontariapp-skill-evolution](/volont
 | [volontariapp-grpc-microservice](/volontariapp-grpc-microservice/SKILL.md) | Implémenter ou Modifier un RPC gRPC | 2026-11-08 |
 | [volontariapp-implement-async-event-flow](/volontariapp-implement-async-event-flow/SKILL.md) | Implement Async Event Flow | 2026-11-08 |
 | [volontariapp-implement-async-job-flow](/volontariapp-implement-async-job-flow/SKILL.md) | Implement Async Job Flow | 2026-11-08 |
-| [volontariapp-load-ramp](/volontariapp-load-ramp/SKILL.md) | Montée en charge : rampe, enregistreurs et lecture des résultats | 2026-11-08 |
+| [volontariapp-load-ramp](/volontariapp-load-ramp/SKILL.md) | Montée en charge : rampe, enregistreurs et lecture des résultats | 2026-11-10 |
 | [volontariapp-logger](/volontariapp-logger/SKILL.md) | Logger partagé : masquage et corrélation de traces | 2026-10-29 |
 | [volontariapp-mesh-mcp](/volontariapp-mesh-mcp/SKILL.md) | mesh-mcp | 2026-11-05 |
 | [volontariapp-mesh-mcp-verification](/volontariapp-mesh-mcp-verification/SKILL.md) | Verification des anomalies mesh-mcp | 2026-10-12 |
