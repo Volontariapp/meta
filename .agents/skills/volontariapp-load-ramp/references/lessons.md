@@ -20,9 +20,27 @@ sources:
   - id: src-84d4712d
     resource: "https://github.com/Volontariapp/docs/pull/19"
     title: "https://github.com/Volontariapp/docs/pull/19"
+  - id: src-bd24daba
+    resource: .agents/skills/volontariapp-load-ramp/scripts/async-recorder.sh
+    title: .agents/skills/volontariapp-load-ramp/scripts/async-recorder.sh
+  - id: src-3b2b636e
+    resource: "https://github.com/Volontariapp/traffic-simulator/pull/12"
+    title: "https://github.com/Volontariapp/traffic-simulator/pull/12"
 ---
 
 # Leçons
+
+## 2026-11-10 - L application lit ranking, posts et events sont des replis
+
+- **Type :** pitfall
+- **Leçon :** nativapp lit l accueil sur GET /ranking/feed (use-home-screen.ts:60) et le swipe sur GET /ranking/events (use-swipe-screen.ts:60) ; /posts et /events ne partent qu en repli (206, echec, liste vide). Le mode routes de yarn load ne touche donc jamais ms-ranking : pour dire ce que tient l application, mesurer en LOAD_MODE=app.[^src-3b2b636e]
+- **Consigné par :** claude-code/agent
+
+## 2026-11-10 - XINFO GROUPS lag n est pas fiable sur nos streams
+
+- **Type :** pitfall
+- **Leçon :** Le champ lag reste a 12-146 sur des groupes a jour (last-delivered-id egal a last-generated-id), streams tronques a environ 10 000 entrees. Mesurer le retard par l age (last-generated-id moins last-delivered-id), comme async-recorder.sh (behind_ms).[^src-bd24daba]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-09 - Lancer yarn load sans invite, depuis n'importe quel dossier
 
@@ -70,3 +88,5 @@ sources:
 [^src-32ad0128]: traffic-simulator/src/load/load-config.ts
 [^src-800cc0ea]: traffic-simulator/src/load/load-runner.ts
 [^src-84d4712d]: https://github.com/Volontariapp/docs/pull/19
+[^src-bd24daba]: .agents/skills/volontariapp-load-ramp/scripts/async-recorder.sh
+[^src-3b2b636e]: https://github.com/Volontariapp/traffic-simulator/pull/12

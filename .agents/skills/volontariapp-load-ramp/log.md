@@ -1,5 +1,11 @@
 # Historique
 
+## 2026-11-10
+
+- **Vérification** - Modes routes et app, ecritures du pool load et nettoyage, profil d attaque, sonde WebSocket, async-recorder.sh, chiffres separes par mode (traffic-simulator #11 a #16) (claude-code/agent)
+- **Leçon** - L application lit ranking, posts et events sont des replis (pitfall) (claude-code/agent)
+- **Leçon** - XINFO GROUPS lag n est pas fiable sur nos streams (pitfall) (claude-code/agent)
+
 ## 2026-11-09
 
 - **Leçon** - Lancer yarn load sans invite, depuis n'importe quel dossier (command) (claude-code/agent)
