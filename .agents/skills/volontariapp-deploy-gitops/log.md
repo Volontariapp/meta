@@ -1,5 +1,9 @@
 # Historique
 
+## 2026-11-10
+
+- **Leçon** - Une variable d'environnement de deploy n'est lue que si custom-env-vars.json la lie (pitfall) (claude-code/agent)
+
 ## 2026-11-09
 
 - **Leçon** - Bump d'image dans deploy dans le desordre quand deux PR sont fusionnees coup sur coup (pitfall) (claude-code/agent)

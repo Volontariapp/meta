@@ -41,9 +41,18 @@ sources:
   - id: src-772b9af9
     resource: "https://github.com/Volontariapp/deploy/commit/1c49d05e4ae72c01c2366e8a185f2ff61747a79c"
     title: "https://github.com/Volontariapp/deploy/commit/1c49d05e4ae72c01c2366e8a185f2ff61747a79c"
+  - id: src-bbb3c048
+    resource: deploy/apps/base/ms-post/deployment-outbox.yaml
+    title: deploy/apps/base/ms-post/deployment-outbox.yaml
 ---
 
 # Leçons
+
+## 2026-11-10 - Une variable d'environnement de deploy n'est lue que si custom-env-vars.json la lie
+
+- **Type :** pitfall
+- **Leçon :** Les runners et services chargent leur configuration par @volontariapp/config (loadConfig) : seule une variable citée dans config/custom-env-vars.json du dépôt applicatif est lue. OUTBOX_MAX_IDLE_INTERVAL_MS était posée sur les sept deployment-outbox.yaml sans aucun lien, donc ignorée (défaut 5000 ms du code). Avant de changer une valeur dans deploy, vérifier le lien avec git -C <repo> grep <VAR> origin/main -- '*/config/custom-env-vars.json'.[^src-bbb3c048]
+- **Consigné par :** claude-code/agent
 
 ## 2026-11-09 - Bump d'image dans deploy dans le desordre quand deux PR sont fusionnees coup sur coup
 
@@ -152,3 +161,4 @@ sources:
 [^src-9c70d47e]: traffic-simulator/README.md
 [^src-07f93892]: deploy/apps/overlays/prod/ms-social/kustomization.yaml
 [^src-772b9af9]: https://github.com/Volontariapp/deploy/commit/1c49d05e4ae72c01c2366e8a185f2ff61747a79c
+[^src-bbb3c048]: deploy/apps/base/ms-post/deployment-outbox.yaml
